@@ -70,6 +70,86 @@ export default function ElektroinstalacePage() {
           </div>
         </div>
       </section>
+   {/* Technical Support Section - Professional & Trustworthy */}
+   <section className="py-32 bg-gradient-to-br from-[#1B5D93] via-[#2D78AD] to-[#49A3D7] text-white relative overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-[#3D8FC4]/20 to-transparent rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-tl from-[#196097]/20 to-transparent rounded-full blur-3xl"></div>
+
+        <div className="container relative z-10">
+          <div className="max-w-6xl mx-auto">
+            {/* Professional header */}
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full text-sm font-medium mb-6 border border-white/30">
+                <Shield className="w-5 h-5" />
+                <span>Certifikovaná technická podpora</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+                Jsme tu pro vás
+                <span className="block text-white/90 font-normal"></span>
+              </h2>
+              <p className="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
+                Naši certifikovaní technici jsou připraveni řešit vaše požadavky ve všední dny od 8:00 do 20:00.
+                <span className="font-semibold text-white"> Elektropohotovost Opava a okolí do 25km .
+                  </span> Pokud se jedná o akutní poruchu, garantujeme opravu nejpozději do 72 hodin od zavolání. V některých případech i do 24 hodin.
+              </p>
+            </div>
+
+            {/* Professional contact card */}
+            <div className="bg-white/15 backdrop-blur-md rounded-3xl p-8 border border-white/30 shadow-2xl max-w-4xl mx-auto mb-12">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                {/* Phone contact */}
+                <div className="text-center lg:text-left">
+                  <div className="relative inline-block mb-4">
+                    <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
+                      <Phone className="h-8 w-8 text-white" />
+                    </div>
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-400 rounded-full flex items-center justify-center">
+                      <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
+                    </div>
+                  </div>
+                                  <div className="text-white font-bold text-2xl mb-2">+420 735 014 112</div>
+                <div className="text-white/80 text-sm">Hlavní linka</div>
+                <div className="text-green-400 text-sm font-medium mt-2">✓ Elektropohotovost Opava</div>
+                <div className="text-green-400 text-sm font-medium">✓ Opravy do 24 hodin</div>
+                </div>
+
+                {/* Working hours */}
+                <div className="text-center lg:text-right">
+                  <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto lg:mr-0 lg:ml-auto mb-4">
+                    <Clock className="h-8 w-8 text-white" />
+                  </div>
+                  <div className="text-white font-bold text-lg mb-2">Po - Pá: 8:00 - 20:00</div>
+                  <div className="text-green-400 text-sm font-medium mt-2">✓ Pohotovostní servis</div>
+                </div>
+              </div>
+            </div>
+
+
+
+            {/* CTA Button */}
+            <div className="text-center">
+              <Button
+                asChild
+                size="lg"
+                className="bg-white text-[#1B5D93] hover:bg-gray-50 px-12 py-6 rounded-2xl font-bold text-xl shadow-2xl hover:shadow-3xl hover:scale-105 transition-all duration-300 border-0"
+              >
+                <Link href="/kontakt" className="flex items-center gap-3">
+                  <Phone className="w-6 h-6" />
+                  <span>POHOTOVOSTNÍ LINKA</span>
+                  <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
+                </Link>
+              </Button>
+              {/* Button glow effect */}
+              <div className="absolute -inset-2 bg-gradient-to-r from-white/40 to-white/30 rounded-2xl blur-xl opacity-0 hover:opacity-100 transition-opacity duration-300 -z-10"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+
+
 
       {/* Důvody proč elektroinstalace */}
       <section className="py-20 bg-gradient-to-b from-muted/30 to-background">
@@ -1057,7 +1137,7 @@ export default function ElektroinstalacePage() {
       <section id="kontakt" className="py-20">
         <div className="container">
           <div className="max-w-4xl mx-auto">
-            <ContactForm
+            <CompleteContactSection
               title="Poptávka elektroinstalace"
               subtitle="Vyplnťte formulář a my vám připravíme nabídku na míru vašemu projektu."
               source="elektroinstalace-page"

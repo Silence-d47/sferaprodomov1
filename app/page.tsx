@@ -1,4 +1,4 @@
-"use client"
+`use client`
 import React from "react"
 import Image from "next/image"
 import Link from "next/link"
@@ -13,6 +13,7 @@ import { Shield, Clock, Phone, CheckCircle, Users, CreditCard, Calendar, Headpho
 import FloatingIndicator from "@/components/ui/floating-indicator"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
+import { ChevronDown, Quote } from "lucide-react"
 
 // Hero carousel data - editovatelné v CMS
 const heroSlides = [
@@ -53,7 +54,7 @@ const featureCards = [
   {
     icon: <CheckCircle className="w-8 h-8" />,
     title: "Platba po realizaci",
-    description: "Zaplatíte až bude instalace hotová.",
+    description: "Zaplatíte vždy až za odvedenou práci, nebo dodaný materiál.",
   },
   {
     icon: <Calendar className="w-8 h-8" />,
@@ -71,7 +72,7 @@ const featureCards = [
   },   {
     icon: <Heart className="w-8 h-8" />,
     title: "Spolupráce nekončí fakturou",
-    description: "Staráme se o vás po celou životnost klimatizace.",
+    description: "Zakládáme si na dlouhodobé důvěře. Proto jsme Vám k dispozici po celou dobu životnosti námi dodaných zařízení.",
   },
 ]
 
@@ -82,7 +83,7 @@ const services = [
     title: "Klimatizace",
     description: "Profesionální instalace klimatizací všech značek s nadstandardním servisem",
     iconSrc: "/hub/klimatizace.svg",
-    features: ["Montáž do 14 dnů", "Platba až po spuštění", "5 let záruka", "24/7 servis"],
+    features: ["Montáž do 14 dnů", "bez akontace", "až 5 let záruka"],
     isPopular: true
   },
   {
@@ -145,46 +146,28 @@ const featuredReferences = [
     isTopReference: true,
   },
 ]
-
+// Pomocný komponent pro karty s hodnotami (aby kód zůstal čistý)
+// Design přesně kopíruje styl karet z "Nadstandardní servis"
+function ValueCard  ({ icon, title, description, iconBgColor, iconColor }: { icon: React.ReactNode, title: string, description: string, iconBgColor: string, iconColor: string }) {
+  return (
+    <div className="bg-white p-6 rounded-xl border border-slate-200/80 shadow-sm text-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+      <div className="flex justify-center mb-4">
+        <div className={`h-14 w-14 rounded-full flex items-center justify-center ${iconBgColor}`}>
+          {icon}
+        </div>
+      </div>
+      <h3 className="text-lg font-bold text-slate-800 mb-2">{title}</h3>
+      <p className="text-slate-600 text-sm leading-relaxed">{description}</p>
+    </div>
+  )
+}
 export default function HomePage() {
   return (
     <div className="flex flex-col">
       {/* Unified Hero Section */}
       <UnifiedHero slides={heroSlides} />
-
       {/* Service Hub Banner */}
       <ServiceHub />
-
-      {/* Emergency Service Banner */}
-      <section className="bg-gradient-to-r from-red-600 to-red-700 text-white py-4 relative overflow-hidden">
-        {/* Background decorative elements */}
-        <div className="absolute top-0 left-0 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
-        <div className="absolute bottom-0 right-0 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
-        
-        <div className="container relative z-10">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                <Zap className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <div className="font-bold text-lg">24h ELEKTRO POHOTOVOST</div>
-                <div className="text-white/90 text-sm">Opava a okolí do 25km • Opravy do 24 hodin</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="text-right">
-                <div className="text-2xl font-bold">+420 735 014 112</div>
-                <div className="text-white/80 text-sm">Non-stop linka</div>
-              </div>
-              <div className="bg-white text-red-600 px-4 py-2 rounded text-sm font-bold">
-                NONSTOP
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Logo Carousel - Brand Partners */}
       <section className="relative">
         {/* Text positioned to overlap with divider */}
@@ -199,8 +182,7 @@ export default function HomePage() {
         </div>
         
         {/* Organic Wave Divider */}
-        <OrganicWaveDivider />
-        
+       <OrganicWaveDivider />
         {/* Logo Carousel */}
         <div className="pt-0">
           <LogoCarousel
@@ -210,7 +192,69 @@ export default function HomePage() {
           />
         </div>
       </section>
+      {/* Our Story Section */}
+      <section id="nas-pribeh" className="bg-white py-20 sm:py-28 overflow-hidden">
+      <div className="container mx-auto px-4">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+          {/* --- LEVÁ ČÁST: VIZUÁL --- */}
+          <div className="relative">
+            {/* Dekorativní tvary v pozadí */}
+            <div className="absolute -top-12 -left-16 w-72 h-72 bg-blue-50 rounded-full opacity-60 blur-xl"></div>
+            <div className="absolute -bottom-12 -right-12 w-80 h-80 bg-slate-100 rounded-full opacity-70 blur-2xl"></div>
+            
+            <div className="relative z-10">
+              {/* Zde vložte fotku jednatele nebo týmu */}
+              <Image
+                src="/images/hendrich_jaroslav.jpg" 
+                alt="Jaroslav Hendrich, jednatel společnosti SFERA PRO DOMOV"
+                width={500}
+                height={600}
+                className="rounded-2xl shadow-2xl object-cover w-full h-auto max-h-[600px] ring-8 ring-white/50"
+              />
+            </div>
+          </div>
 
+          {/* --- PRAVÁ ČÁST: PŘÍBĚH --- */}
+          <div className="relative z-20">
+            <div className="inline-block bg-blue-100 text-blue-600 font-semibold px-4 py-1.5 rounded-full text-sm mb-4">
+              Náš příběh
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-800 mb-6 leading-tight">
+              Děláme věci tak, jak je považujeme za správné.
+            </h2>
+            
+            <Quote className="w-16 h-16 text-blue-100 mb-4" fill="currentColor" />
+
+            <div className="text-slate-600 space-y-4 text-base leading-relaxed">
+              <p>
+                Máme za sebou roky zkušeností, kde jsme se naučili řemeslo, ale taky viděli, co nám vadilo: ústup od poctivosti a snaha ušetřit na nesprávných místech.
+              </p>
+              <p className="font-medium text-slate-700">
+                Právě proto jsme založili SFERA PRO DOMOV. Firmu, která stojí na férovosti, kvalitě a respektu k lidem, kterým pomáháme. Chceme být důkazem, že nejlepší cesta vede přes dlouhodobou spolupráci a spokojenost, která je pro nás tou nejlepší vizitkou.
+              </p>
+            </div>
+
+            {/* Podpis */}
+            <div className="mt-8 pt-6 border-t border-slate-200">
+              <p className="font-bold text-slate-800">Jaroslav Hendrich</p>
+              <p className="text-sm text-slate-500">Jednatel společnosti SFERA PRO DOMOV s.r.o.</p>
+            </div>
+            
+            {/* Bonus: Elegantní rozbalení pro zvědavce */}
+            <details className="group mt-8 text-sm">
+                <summary className="text-blue-600 font-semibold cursor-pointer list-none flex items-center gap-2">
+                    <span>V čem jsme jiní a kam míříme?</span>
+                    <ChevronDown className="h-4 w-4 transition-transform duration-300 group-open:rotate-180" />
+                </summary>
+                <div className="mt-4 text-slate-500 space-y-3 prose prose-sm max-w-none">
+                    <p>Naše ambice nejsou malé. Chceme, aby telefonní číslo, které od nás máte, platilo i po letech. Ať už řešíte nový kotel, klimatizaci, nebo potřebujete poradit s fotovoltaikou, jsme tu pro vás. Rádi vám ukážeme, jak vypadá poctivá práce, za kterou si stojíme.</p>
+                </div>
+            </details>
+
+          </div>
+        </div>
+      </div>
+    </section>
       {/* About Us Section */}
       <section className="py-32 bg-white relative overflow-hidden">
         <div className="container">
@@ -227,6 +271,8 @@ export default function HomePage() {
               </Link>
             </Button>
           </div>
+
+
 
           {/* Main content - two columns layout with divider */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative">
@@ -315,8 +361,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-
       {/* Services Section */}
       <section className="relative py-24 bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="container">
@@ -391,42 +435,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       {/* Team expertise section */}
       <section className="py-24 bg-white relative overflow-hidden">
-        {/* Emergency Service Ribbon */}
-        <div className="absolute top-0 left-0 right-0 z-20">
-          <div className="bg-gradient-to-r from-red-600 to-red-700 text-white py-3 relative overflow-hidden">
-            {/* Animated background elements */}
-            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-red-500/20 to-red-600/20 animate-pulse"></div>
-            <div className="absolute top-0 left-0 w-32 h-32 bg-white/10 rounded-full blur-xl animate-bounce" style={{ animationDelay: '0s' }}></div>
-            <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full blur-xl animate-bounce" style={{ animationDelay: '1s' }}></div>
-            
-            <div className="container relative z-10">
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center animate-pulse">
-                    <Zap className="h-4 w-4 text-white" />
-                  </div>
-                  <div>
-                    <div className="font-bold text-lg">24h ELEKTRO POHOTOVOST</div>
-                    <div className="text-white/90 text-sm">Opava a okolí do 25km • Opravy do 24 hodin od zavolání</div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="text-right">
-                    <div className="text-xl font-bold">+420 735 014 112</div>
-                    <div className="text-white/80 text-xs">Non-stop linka</div>
-                  </div>
-                  <div className="bg-white text-red-600 px-3 py-1 rounded text-sm font-bold animate-pulse">
-                    NONSTOP
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="text-left mt-16">
@@ -441,11 +451,14 @@ export default function HomePage() {
                 </span>
               </h2>
               <p className="text-xl text-gray-600 leading-relaxed mb-8">
-                Důraz na jistotu a spolehlivost. Že se nám dovoláte, nebudeme se schovávat, problém vždy vyřešíme.
-              </p>
+              Víme, jak je frustrující, když něco nefunguje a vy se nemůžete dovolat nikomu, kdo by to opravil. 
+              <span className="block bg-gradient-to-r from-[#1B5D93] to-[#49A3D7] bg-clip-text text-transparent">
+                My se schovávat nebudeme.
+                </span>
+              Vždy jsme na telefonu, abychom Vám poradili a problém odstranili co nejdříve. Akutní poruchy řešíme do 3 dnů, v některých případech i do 24h.              </p>
               <div className="flex items-center gap-4">
                 <div className="w-12 h-1 bg-gradient-to-r from-[#1B5D93] to-[#49A3D7] rounded-full"></div>
-                <span className="text-sm text-gray-400 font-medium">Stavíme na férovém přístupu a dlouhodobé spolupráci
+                <span className="text-md text-gray-400 font-medium">Férový přístup a dlouhodobá spolupráce
                 </span>
               </div>
             </div>
@@ -472,7 +485,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       {/* Feature Cards Section */}
       <section className="bg-gradient-to-br from-[#f8f9fa] via-white to-[#3D8FC4]/10 pt-24 pb-32 relative overflow-hidden">
         {/* Background decorative elements */}
@@ -531,86 +543,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-
-
-      {/* Technical Support Section - Professional & Trustworthy */}
-      <section className="py-32 bg-gradient-to-br from-[#1B5D93] via-[#2D78AD] to-[#49A3D7] text-white relative overflow-hidden">
-        {/* Background decorative elements */}
-        <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-[#3D8FC4]/20 to-transparent rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-tl from-[#196097]/20 to-transparent rounded-full blur-3xl"></div>
-
-        <div className="container relative z-10">
-          <div className="max-w-6xl mx-auto">
-            {/* Professional header */}
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full text-sm font-medium mb-6 border border-white/30">
-                <Shield className="w-5 h-5" />
-                <span>Certifikovaná technická podpora</span>
-              </div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-                Jsme tu pro vás
-                <span className="block text-white/90 font-normal"></span>
-              </h2>
-              <p className="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
-                Naši certifikovaní technici jsou připraveni řešit vaše požadavky kdykoliv. 
-                <span className="font-semibold text-white">Elektropohotovost Opava a okolí do 25km</span> s garantovanými opravami do 24 hodin od zavolání.
-              </p>
-            </div>
-
-            {/* Professional contact card */}
-            <div className="bg-white/15 backdrop-blur-md rounded-3xl p-8 border border-white/30 shadow-2xl max-w-4xl mx-auto mb-12">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                {/* Phone contact */}
-                <div className="text-center lg:text-left">
-                  <div className="relative inline-block mb-4">
-                    <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
-                      <Phone className="h-8 w-8 text-white" />
-                    </div>
-                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-400 rounded-full flex items-center justify-center">
-                      <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
-                    </div>
-                  </div>
-                                  <div className="text-white font-bold text-2xl mb-2">+420 735 014 112</div>
-                <div className="text-white/80 text-sm">Hlavní linka</div>
-                <div className="text-green-400 text-sm font-medium mt-2">✓ Elektropohotovost Opava</div>
-                <div className="text-green-400 text-sm font-medium">✓ Opravy do 24 hodin</div>
-                </div>
-
-                {/* Working hours */}
-                <div className="text-center lg:text-right">
-                  <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto lg:mr-0 lg:ml-auto mb-4">
-                    <Clock className="h-8 w-8 text-white" />
-                  </div>
-                  <div className="text-white font-bold text-lg mb-2">Po - Pá: 8:00 - 20:00</div>
-                  <div className="text-white/80 text-sm">So: 9:00 - 16:00</div>
-                  <div className="text-green-400 text-sm font-medium mt-2">✓ Non-stop servis</div>
-                </div>
-              </div>
-            </div>
-
-
-
-            {/* CTA Button */}
-            <div className="text-center">
-              <Button
-                asChild
-                size="lg"
-                className="bg-white text-[#1B5D93] hover:bg-gray-50 px-12 py-6 rounded-2xl font-bold text-xl shadow-2xl hover:shadow-3xl hover:scale-105 transition-all duration-300 border-0"
-              >
-                <Link href="/kontakt" className="flex items-center gap-3">
-                  <CheckCircle className="w-6 h-6" />
-                  <span>Nezávazná konzultace</span>
-                  <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
-                </Link>
-              </Button>
-              {/* Button glow effect */}
-              <div className="absolute -inset-2 bg-gradient-to-r from-white/40 to-white/30 rounded-2xl blur-xl opacity-0 hover:opacity-100 transition-opacity duration-300 -z-10"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Reference Section - Centered design */}
       <section className="py-32 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
         {/* Background decorative elements */}
@@ -656,194 +588,16 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* CTA Section - Profesionální výzva k akci */}
-      <section className="py-32 bg-gradient-to-br from-[#1B5D93] via-[#2D78AD] to-[#49A3D7] text-white relative overflow-hidden">
-        {/* Background decorative elements */}
-        <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-[#3D8FC4]/20 to-transparent rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-tl from-[#196097]/20 to-transparent rounded-full blur-3xl"></div>
-        <div className="container relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-              Potřebujete klimatizační řešení?
-            </h2>
-            <p className="text-xl text-white/90 mb-12 leading-relaxed">
-              Kontaktujte nás pro profesionální konzultaci a nezávaznou cenovou nabídku.
-              Naši odborníci vám navrhnou optimální řešení pro vaše potřeby.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
-              <Button
-                size="lg"
-                asChild
-                className="bg-white text-[#1B5D93] hover:bg-gray-50 px-8 py-4 rounded-lg font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300"
-              >
-                <Link href="/kontakt" className="flex items-center gap-2">
-                  <span>Nezávazná poptávka</span>
-                  <ArrowRight className="h-5 w-5" />
-                </Link>
-              </Button>
-
-              <div className="flex items-center gap-3">
-                <Phone className="h-5 w-5 text-white/80" />
-                <Link
-                  href="tel:+420735014112"
-                  className="text-lg font-semibold hover:text-white transition-colors duration-300"
-                >
-                  +420 735 014 112
-                </Link>
-              </div>
-            </div>
-
-            {/* Professional trust indicators */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-8 border-t border-white/30">
-              <div className="text-center">
-                <CheckCircle className="h-8 w-8 text-white/80 mx-auto mb-3" />
-                <div className="font-semibold mb-1">Nezávazná konzultace</div>
-                <div className="text-sm text-white/70">Zcela zdarma</div>
-              </div>
-              <div className="text-center">
-                <Clock className="h-8 w-8 text-white/80 mx-auto mb-3" />
-                <div className="font-semibold mb-1">Rychlá odezva</div>
-                <div className="text-sm text-white/70">Do 24 hodin</div>
-              </div>
-              <div className="text-center">
-                <Shield className="h-8 w-8 text-white/80 mx-auto mb-3" />
-                <div className="font-semibold mb-1">5 let záruky</div>
-                <div className="text-sm text-white/70">Na všechny práce</div>
-              </div>
-            </div>
-          </div>
+      {/* Modern Contact Section */}
+      <section id="kontakt" className="py-20 md:py-32 bg-slate-100/70">
+        <div className="container mx-auto px-4">
+          <ContactForm 
+            source="homepage-main" 
+            showTrustBadges={true} 
+            customHeading="Máte dotaz nebo zájem o naše služby?"
+          />
         </div>
       </section>
-
-      {/* Commitment text section */}
-      <section className="py-20 bg-gray-50">
-        <div className="container">
-          <div className="max-w-4xl mx-auto text-center">
-            {/* Horizontal divider */}
-            <div className="w-full h-px bg-gradient-to-r from-transparent via-[#3D8FC4] to-transparent mb-16"></div>
-
-            {/* Commitment text */}
-            <div className="mb-8">
-              <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
-                Naše práce ale <span className="font-bold text-[#1B5D93]">montáží nekončí</span>. Když se něco pokazí, <span className="font-semibold text-gray-900">nepřestaneme brát telefony</span>. Naopak – <span className="font-bold text-[#1B5D93]">servis a opravy řešíme rychle a přednostně</span>, protože víme, jak frustrující může být, když se firma po instalaci odmlčí. <span className="font-bold text-gray-900">My stojíme za svou prací dlouhodobě</span>. Jsme vám k dispozici <span className="font-semibold text-[#1B5D93]">během realizace i po ní</span> – ať už se jedná o <span className="font-medium text-gray-800">konzultaci, údržbu nebo pomoc s čímkoli dalším</span>.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Form Section - Professional & Trustworthy */}
-      <section className="py-32 bg-gradient-to-br from-gray-50 to-blue-50">
-        <div className="container">
-          <div className="max-w-6xl mx-auto">
-            {/* Professional header */}
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 bg-[#1B5D93]/10 text-[#1B5D93] px-6 py-3 rounded-full text-sm font-medium mb-6 border border-[#1B5D93]/20">
-                <CheckCircle className="w-5 h-5" />
-                <span>Profesionální konzultace</span>
-              </div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-                Kontaktujte nás
-              </h2>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                Naši certifikovaní odborníci vám připraví nezávaznou nabídku přesně na míru vašich potřeb.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-              {/* Left side - Professional benefits */}
-              <div className="space-y-8">
-                <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
-                  <div className="flex items-start gap-6">
-                    <div className="w-14 h-14 bg-gradient-to-br from-[#1B5D93] to-[#2D78AD] rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Clock className="h-7 w-7 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-gray-900 mb-3 text-lg">Rychlá odezva</h3>
-                      <p className="text-gray-600 leading-relaxed">Odpovídáme do 24 hodin, většinou ještě týž den. Naši technici jsou připraveni kdykoliv.</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
-                  <div className="flex items-start gap-6">
-                    <div className="w-14 h-14 bg-gradient-to-br from-[#1B5D93] to-[#2D78AD] rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Users className="h-7 w-7 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-gray-900 mb-3 text-lg">Individuální přístup</h3>
-                      <p className="text-gray-600 leading-relaxed">Každý projekt řešíme podle konkrétních požadavků zákazníka. Personalizované řešení pro vaše potřeby.</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
-                  <div className="flex items-start gap-6">
-                    <div className="w-14 h-14 bg-gradient-to-br from-[#1B5D93] to-[#2D78AD] rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Shield className="h-7 w-7 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-gray-900 mb-3 text-lg">Bez závazků</h3>
-                      <p className="text-gray-600 leading-relaxed">Konzultace a cenová nabídka jsou zcela zdarma a bez závazků. Žádné skryté poplatky.</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Professional contact info */}
-                <div className="bg-gradient-to-br from-[#1B5D93] to-[#2D78AD] rounded-2xl p-8 text-white shadow-xl">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-                      <Phone className="h-5 w-5 text-white" />
-                    </div>
-                    <h3 className="font-bold text-xl">Přímý kontakt</h3>
-                  </div>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-4">
-                      <Phone className="h-5 w-5 text-white/80" />
-                      <Link href="tel:+420735014112" className="text-lg font-semibold hover:text-white transition-colors">
-                        +420 735 014 112
-                      </Link>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <Clock className="h-5 w-5 text-white/80" />
-                      <span className="text-white/90">Po-Pá 8:00-20:00 | So 9:00-16:00</span>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <CheckCircle className="h-5 w-5 text-green-400" />
-                      <span className="text-green-400 font-medium">✓ Non-stop technická podpora</span>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <Zap className="h-5 w-5 text-green-400" />
-                      <span className="text-green-400 font-medium">✓ Elektropohotovost Opava do 25km</span>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <Clock className="h-5 w-5 text-green-400" />
-                      <span className="text-green-400 font-medium">✓ Opravy do 24 hodin od zavolání</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right side - Professional Contact Form */}
-              <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 flex items-center justify-center">
-                <div className="w-full max-w-md">
-                  <ContactForm
-                    title="Nezávazná konzultace"
-                    subtitle="Vyplňte formulář a získejte profesionální nabídku na míru"
-                    source="homepage"
-                    colorTheme="blue"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      
-      {/* Floating Emergency Indicator */}
-      <FloatingIndicator />
     </div>
   )
-}
+  }

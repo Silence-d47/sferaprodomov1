@@ -1,80 +1,58 @@
 "use client"
 
 import Link from "next/link"
-
 import type React from "react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
-import { Loader2, Shield, Clock, Award, CheckCircle } from "lucide-react"
+import { Loader2, Shield, Clock, Award, CheckCircle, Mail, Phone, MapPin, ArrowRight } from "lucide-react"
 
-type ColorTheme = 'blue' | 'green' | 'purple' | 'orange' | 'yellow'
+// Tento komponent je nyní menší a čistší
+function TrustBadge({ icon: Icon, title, subtitle, theme }: { icon: any, title: string, subtitle: string, theme: any }) {
+  return (
+    <div className="flex items-center gap-4">
+      <div className={`flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center bg-gradient-to-br ${theme.gradient}`}>
+        <Icon className="h-6 w-6 text-white" />
+      </div>
+      <div>
+        <p className="font-bold text-slate-800">{title}</p>
+        <p className="text-sm text-slate-500">{subtitle}</p>
+      </div>
+    </div>
+  )
+}
 
+// Props zůstávají stejné pro zpětnou kompatibilitu
 interface ContactFormProps {
   title?: string
   subtitle?: string
-  source?: string // Pro měřitelnost různých reklam
-  colorTheme?: ColorTheme
+  source?: string
   customHeading?: string
   showTrustBadges?: boolean
 }
 
 export function ContactForm({ 
-  title = "Kontaktujte nás", 
-  subtitle, 
+  title = "Napište nám", 
+  subtitle = "Rádi vám připravíme nabídku na míru.", 
   source = "general",
-  colorTheme = 'blue',
   customHeading,
   showTrustBadges = true 
 }: ContactFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { toast } = useToast()
 
-  // Color theme configurations
-  const themeConfig = {
-    blue: {
-      primary: 'text-[#1B5D93]',
-      primaryBg: 'bg-gradient-to-r from-[#1B5D93] to-[#2D78AD]',
-      primaryHover: 'hover:from-[#2D78AD] hover:to-[#49A3D7]',
-      focus: 'focus:border-[#1B5D93]',
-      gradient: 'from-[#1B5D93] to-[#2D78AD]'
-    },
-    green: {
-      primary: 'text-green-600',
-      primaryBg: 'bg-green-600',
-      primaryHover: 'hover:bg-green-700',
-      focus: 'focus:border-green-600',
-      gradient: 'from-green-600 to-emerald-600'
-    },
-    purple: {
-      primary: 'text-purple-600',
-      primaryBg: 'bg-purple-600',
-      primaryHover: 'hover:bg-purple-700',
-      focus: 'focus:border-purple-600',
-      gradient: 'from-purple-600 to-violet-600'
-    },
-    orange: {
-      primary: 'text-orange-600',
-      primaryBg: 'bg-orange-600',
-      primaryHover: 'hover:bg-orange-700',
-      focus: 'focus:border-orange-600',
-      gradient: 'from-orange-600 to-red-600'
-    },
-    yellow: {
-      primary: 'text-yellow-600',
-      primaryBg: 'bg-yellow-500',
-      primaryHover: 'hover:bg-yellow-600',
-      focus: 'focus:border-yellow-500',
-      gradient: 'from-yellow-500 to-amber-600'
-    }
+  // Zjednodušená barevná schémata, hlavní barva je modrá
+  const theme = {
+    primary: 'text-blue-600',
+    primaryBg: 'bg-blue-600',
+    primaryHover: 'hover:bg-blue-700',
+    focus: 'focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500',
+    gradient: 'from-blue-600 to-blue-500'
   }
-
-  const theme = themeConfig[colorTheme]
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -87,22 +65,20 @@ export function ContactForm({
       phone: formData.get("phone"),
       service: formData.get("service"),
       message: formData.get("message"),
-      source: source, // Pro tracking různých formulářů
+      source: source,
     }
 
     try {
-      // Zde by byla integrace s CMS/backend
       await new Promise((resolve) => setTimeout(resolve, 1500))
-
       toast({
-        title: "Zpráva odeslána!",
-        description: "Děkujeme za vaši poptávku. Ozveme se vám do 24 hodin.",
+        title: "Poptávka úspěšně odeslána!",
+        description: "Děkujeme, brzy se vám ozveme s dalšími kroky.",
       })
       ;(e.target as HTMLFormElement).reset()
     } catch (error) {
       toast({
-        title: "Chyba při odesílání",
-        description: "Zkuste to prosím znovu nebo nás kontaktujte telefonicky.",
+        title: "Něco se pokazilo",
+        description: "Formulář se nepodařilo odeslat. Zkuste to prosím znovu.",
         variant: "destructive",
       })
     } finally {
@@ -111,157 +87,106 @@ export function ContactForm({
   }
 
   return (
-    <div className="space-y-8">
-      {/* Custom Heading Section */}
-      {customHeading && (
-        <div className="text-center">
-          <h2 className={`text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r ${theme.gradient} bg-clip-text text-transparent`}>
-            {customHeading}
-          </h2>
+    <div className="bg-slate-50/70 rounded-3xl p-4 sm:p-8">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
+        
+        {/* --- LEVÁ ČÁST: Informace a důvěra --- */}
+        <div className="lg:col-span-2 space-y-10 pt-4">
+          <div>
+            <h2 className="text-3xl font-bold text-slate-800">{customHeading || "Nezávazná poptávka"}</h2>
+            <p className="mt-2 text-slate-600 leading-relaxed">
+              Vyplňte formulář a my se vám ozveme do 24 hodin s řešením na míru. Nebo nám rovnou zavolejte.
+            </p>
+          </div>
+          
+          {/* Kontaktní údaje */}
+          <div className="space-y-4">
+            <a href="tel:+420735014112" className="flex items-center gap-4 group">
+              <Phone className="h-5 w-5 text-blue-500" />
+              <span className="font-medium text-slate-700 group-hover:text-blue-600 transition-colors">+420 735 014 112</span>
+            </a>
+            <a href="mailto:info@sfera-pro-domov.cz" className="flex items-center gap-4 group">
+              <Mail className="h-5 w-5 text-blue-500" />
+              <span className="font-medium text-slate-700 group-hover:text-blue-600 transition-colors">info@sfera-pro-domov.cz</span>
+            </a>
+            <div className="flex items-center gap-4">
+              <MapPin className="h-5 w-5 text-blue-500" />
+              <span className="font-medium text-slate-700">Nákladní 471/32, Opava</span>
+            </div>
+          </div>
+          
+          {/* Trust Badges - nový, čistší styl */}
+          {showTrustBadges && (
+            <div className="space-y-6 pt-6 border-t border-slate-200">
+              <TrustBadge icon={CheckCircle} title="Nezávazná konzultace" subtitle="Zdarma a bez závazků" theme={theme} />
+              <TrustBadge icon={Clock} title="Rychlá odpověď" subtitle="Reagujeme do 24 hodin" theme={theme} />
+              <TrustBadge icon={Award} title="Prodloužená záruka" subtitle="Až 5 let na naše instalace" theme={theme} />
+            </div>
+          )}
         </div>
-      )}
-      
-      {/* Trust Badges */}
-      {showTrustBadges && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-100">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#1B5D93] to-[#2D78AD] rounded-lg flex items-center justify-center mx-auto mb-2">
-              <CheckCircle className="h-5 w-5 text-white" />
-            </div>
-            <p className="text-sm font-medium text-gray-900">Zdarma</p>
-            <p className="text-xs text-gray-600">konzultace</p>
-          </div>
-          <div className="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-100">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#1B5D93] to-[#2D78AD] rounded-lg flex items-center justify-center mx-auto mb-2">
-              <Clock className="h-5 w-5 text-white" />
-            </div>
-            <p className="text-sm font-medium text-gray-900">24h</p>
-            <p className="text-xs text-gray-600">odpověď</p>
-          </div>
-          <div className="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-100">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#1B5D93] to-[#2D78AD] rounded-lg flex items-center justify-center mx-auto mb-2">
-              <Award className="h-5 w-5 text-white" />
-            </div>
-            <p className="text-sm font-medium text-gray-900">5 let</p>
-            <p className="text-xs text-gray-600">záruka</p>
-          </div>
-          <div className="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-100">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#1B5D93] to-[#2D78AD] rounded-lg flex items-center justify-center mx-auto mb-2">
-              <Shield className="h-5 w-5 text-white" />
-            </div>
-            <p className="text-sm font-medium text-gray-900">GDPR</p>
-            <p className="text-xs text-gray-600">ochrana</p>
-          </div>
-        </div>
-      )}
-      
-      <Card className="shadow-xl border-0 bg-white">
-        <CardHeader className="text-center pb-6">
-          <CardTitle className="text-2xl font-bold text-[#1B5D93]">{title}</CardTitle>
-          {subtitle && <p className="text-gray-600 mt-2">{subtitle}</p>}
-        </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="name" className="text-sm font-medium">
-                Jméno a příjmení *
-              </Label>
-              <Input
-                id="name"
-                name="name"
-                required
-                className={`border-gray-200 ${theme.focus}`}
-                placeholder="Jan Novák"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium">
-                Email *
-              </Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                required
-                className={`border-gray-200 ${theme.focus}`}
-                placeholder="jan@email.cz"
-              />
-            </div>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="phone" className="text-sm font-medium">
-                Telefon *
-              </Label>
-              <Input
-                id="phone"
-                name="phone"
-                type="tel"
-                required
-                className={`border-gray-200 ${theme.focus}`}
-                placeholder="+420 123 456 789"
-              />
+        {/* --- PRAVÁ ČÁST: Formulář --- */}
+        <div className="lg:col-span-3 bg-white p-8 sm:p-10 rounded-2xl shadow-lg">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="name">Jméno a příjmení</Label>
+                <Input id="name" name="name" required placeholder="Jan Novák" className={theme.focus} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="phone">Telefon</Label>
+                <Input id="phone" name="phone" type="tel" required placeholder="+420 123 456 789" className={theme.focus} />
+              </div>
             </div>
+            
             <div className="space-y-2">
-              <Label htmlFor="service" className="text-sm font-medium">
-                Služba
-              </Label>
+              <Label htmlFor="email">E-mail</Label>
+              <Input id="email" name="email" type="email" required placeholder="vas@email.cz" className={theme.focus} />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="service">O co máte zájem?</Label>
               <Select name="service">
-                <SelectTrigger className={`border-gray-200 ${theme.focus}`}>
-                  <SelectValue placeholder="Vyberte službu" />
-                </SelectTrigger>
+                <SelectTrigger className={theme.focus}><SelectValue placeholder="Vyberte službu" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="klimatizace">Klimatizace</SelectItem>
                   <SelectItem value="tepelna-cerpadla">Tepelná čerpadla</SelectItem>
                   <SelectItem value="rekuperace">Rekuperace</SelectItem>
                   <SelectItem value="elektroinstalace">Elektroinstalace</SelectItem>
-                  <SelectItem value="servis">Servis</SelectItem>
-                  <SelectItem value="jine">Jiné</SelectItem>
+                  <SelectItem value="fotovoltaika">Fotovoltaika</SelectItem>
+                  <SelectItem value="servis">Servis a revize</SelectItem>
+                  <SelectItem value="jine">Jiný dotaz</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="message" className="text-sm font-medium">
-              Zpráva *
-            </Label>
-            <Textarea
-              id="message"
-              name="message"
-              rows={4}
-              required
-              className={`border-gray-200 ${theme.focus} resize-none`}
-              placeholder="Popíšte nám váš požadavek..."
-            />
-          </div>
+            <div className="space-y-2">
+              <Label htmlFor="message">Vaše zpráva</Label>
+              <Textarea id="message" name="message" rows={5} placeholder="Popište nám stručně vaši představu, na co se máme zaměřit, nebo na co se chcete zeptat..." className={`${theme.focus} resize-y`} />
+            </div>
 
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full bg-gradient-to-r from-[#1B5D93] to-[#2D78AD] hover:from-[#2D78AD] hover:to-[#49A3D7] text-white py-3 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
-          >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Odesílání...
-              </>
-            ) : (
-              "Odeslat nezávaznou poptávku"
-            )}
-          </Button>
+            <div className="pt-2">
+              <Button type="submit" disabled={isSubmitting} className={`w-full ${theme.primaryBg} ${theme.primaryHover} text-white font-bold py-3 text-base rounded-lg shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 flex items-center justify-center gap-2`}>
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    Odesílám...
+                  </>
+                ) : (
+                  <>
+                    Odeslat nezávaznou poptávku
+                    <ArrowRight className="h-5 w-5" />
+                  </>
+                )}
+              </Button>
+            </div>
 
-          <p className="text-xs text-gray-500 text-center">
-            Odesláním souhlasíte se zpracováním osobních údajů podle{" "}
-            <Link href="/gdpr" className="text-[#1B5D93] hover:underline">
-              GDPR
-            </Link>
-          </p>
-        </form>
-      </CardContent>
-    </Card>
+            <p className="text-xs text-slate-500 text-center pt-2">
+              Odesláním formuláře souhlasíte s našimi <Link href="/gdpr" className="font-medium text-slate-600 hover:text-blue-600 underline">zásadami ochrany os. údajů</Link>.
+            </p>
+          </form>
+        </div>
+      </div>
     </div>
   )
 }

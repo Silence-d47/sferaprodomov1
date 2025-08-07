@@ -27,7 +27,7 @@ export function Header() {
         {/* SFERA DOMOV - Left */}
         <div className="flex-1">
           <Link href="/" className="flex items-center">
-            <span className="text-white text-lg font-bold drop-shadow-lg">SFERA DOMOV</span>
+            <span className="text-white text-xl font-semibold drop-shadow-lg">SFÉRA PRO DOMOV.CZ</span>
           </Link>
         </div>
 
