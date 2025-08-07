@@ -155,8 +155,8 @@ const getSourceIcon = (source: string) => {
   }
 }
 
-export default function ReferenceDetailPage({ params }: ReferenceDetailPageProps) {
-  const reference = referenceData[params.slug]
+export default async function ReferenceDetailPage({ params }: ReferenceDetailPageProps) {
+  const reference = referenceData[(await params).slug]
 
   if (!reference) {
     notFound()

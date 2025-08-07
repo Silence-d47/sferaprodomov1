@@ -145,7 +145,7 @@ export default function TepelnaCerpadlaPage() {
             fill
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-green-500 via-emerald-500 to-teal-600 opacity-90" />
+          <div className="absolute inset-0 bg-gradient-to-br from-green-600 via-emerald-600 to-teal-600 opacity-90" />
         </div>
         <div className="relative z-10 flex items-center h-full">
           <div className="container">
@@ -157,14 +157,14 @@ export default function TepelnaCerpadlaPage() {
                 za vytápění.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" asChild className="bg-white text-green-500 hover:bg-green-50">
+                <Button size="lg" asChild className="bg-white text-green-700 hover:bg-green-100">
                   <Link href="#kontakt">Nezávazná poptávka</Link>
                 </Button>
                 <Button
                   size="lg"
                   variant="outline"
                   asChild
-                  className="border-white text-white hover:bg-white hover:text-green-500 bg-transparent"
+                  className="border-white text-white hover:bg-white hover:text-black bg-transparent"
                 >
                   <Link href="#modely">Nejprodávanější modely</Link>
                 </Button>
@@ -182,7 +182,7 @@ export default function TepelnaCerpadlaPage() {
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Moderní, ekologické a ekonomické řešení pro vytápění vašeho domova.
             </p>
-            <div className="w-24 h-1 bg-green-500 mx-auto mt-6"></div>
+            <div className="w-24 h-1 bg-primary mx-auto mt-6"></div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -191,10 +191,10 @@ export default function TepelnaCerpadlaPage() {
                 <div className="mb-6">
                   <ServiceIcon
                     icon={reason.icon}
-                    className="mx-auto w-16 h-16 bg-green-500/10 text-green-500 group-hover:bg-green-500 group-hover:text-white transition-all duration-300"
+                    className="mx-auto w-16 h-16 bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300"
                   />
                 </div>
-                <h3 className="font-bold text-lg mb-3 text-green-500">{reason.title}</h3>
+                <h3 className="font-bold text-lg mb-3 text-primary">{reason.title}</h3>
                 <p className="text-muted-foreground leading-relaxed">{reason.description}</p>
               </div>
             ))}
@@ -210,25 +210,25 @@ export default function TepelnaCerpadlaPage() {
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Vyberte si typ podle vašich potřeb a možností pozemku.
             </p>
-            <div className="w-24 h-1 bg-green-500 mx-auto mt-6"></div>
+            <div className="w-24 h-1 bg-primary mx-auto mt-6"></div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {heatPumpTypes.map((type, index) => (
               <div
                 key={index}
-                className="bg-white rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 border-t-4 border-green-500"
+                className="bg-white rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 border-t-4 border-primary"
               >
                 <div className="text-center mb-6">
-                  <ServiceIcon icon={type.icon} className="mx-auto w-16 h-16 bg-green-500/10 text-green-500 mb-4" />
-                  <h3 className="font-bold text-xl text-green-500">{type.title}</h3>
+                  <ServiceIcon icon={type.icon} className="mx-auto w-16 h-16 bg-primary/10 text-primary mb-4" />
+                  <h3 className="font-bold text-xl text-primary">{type.title}</h3>
                 </div>
                 <p className="text-muted-foreground mb-6 text-center">{type.description}</p>
                 <div className="space-y-3">
                   <h4 className="font-semibold text-sm">Výhody:</h4>
                   {type.advantages.map((advantage, idx) => (
                     <div key={idx} className="flex items-center text-sm">
-                      <CheckCircle className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
+                      <CheckCircle className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
                       {advantage}
                     </div>
                   ))}
@@ -240,22 +240,20 @@ export default function TepelnaCerpadlaPage() {
       </section>
 
       {/* Nejprodávanější modely */}
-      <section id="modely" className="py-20 bg-gradient-to-b from-white to-green-50">
+      <section id="modely" className="py-20 bg-muted/30">
         <div className="container">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900">Naše nejprodávanější tepelná čerpadla</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Naše nejprodávanější tepelná čerpadla</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
               Ověřené modely s nejvyšší účinností a spolehlivostí od předních světových výrobců.
             </p>
-            <div className="w-24 h-1 bg-green-500 mx-auto mb-8"></div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <PDFDownloadButton
                 url="/katalogy/tepelna-cerpadla-kompletni-katalog.pdf"
                 filename="sfera-tepelna-cerpadla-katalog.pdf"
                 title="Stáhnout náš katalog"
-                className="bg-green-500 hover:bg-green-500/90"
               />
-              <Button variant="outline" asChild className="border-green-500 text-green-500 hover:bg-green-500 hover:text-white">
+              <Button variant="outline" asChild>
                 <Link href="/reference?kategorie=tepelna-cerpadla">Naše realizace</Link>
               </Button>
             </div>
@@ -263,17 +261,15 @@ export default function TepelnaCerpadlaPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {bestSellingModels.map((product, index) => (
-              <ProductCard key={index} {...product} colorTheme="green" />
+              <ProductCard key={index} {...product} />
             ))}
           </div>
 
-          <div className="text-center mt-16">
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-green-100 max-w-2xl mx-auto">
-              <p className="text-gray-600 mb-6 text-lg">Potřebujete poradit s výběrem vhodného typu?</p>
-              <Button asChild size="lg" className="bg-green-500 hover:bg-green-500/90">
-                <Link href="/kontakt">Bezplatná konzultace</Link>
-              </Button>
-            </div>
+          <div className="text-center mt-12">
+            <p className="text-muted-foreground mb-4">Potřebujete poradit s výběrem vhodného typu?</p>
+            <Button asChild variant="outline" size="lg">
+              <Link href="/kontakt">Bezplatná konzultace</Link>
+            </Button>
           </div>
         </div>
       </section>
@@ -284,13 +280,13 @@ export default function TepelnaCerpadlaPage() {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold mb-6">Kompletní služby tepelných čerpadel</h2>
-              <div className="w-24 h-1 bg-green-500 mx-auto"></div>
+              <div className="w-24 h-1 bg-primary mx-auto"></div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
               {/* Proces instalace */}
               <div>
-                <h3 className="text-2xl font-bold mb-8 text-green-500">Proces instalace</h3>
+                <h3 className="text-2xl font-bold mb-8 text-primary">Proces instalace</h3>
                 <div className="space-y-6">
                   {[
                     {
@@ -320,7 +316,7 @@ export default function TepelnaCerpadlaPage() {
                     },
                   ].map((item, index) => (
                     <div key={index} className="flex items-start space-x-4">
-                      <div className="w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">
+                      <div className="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">
                         {item.step}
                       </div>
                       <div>
@@ -334,22 +330,22 @@ export default function TepelnaCerpadlaPage() {
 
               {/* Výhody a úspory */}
               <div>
-                <h3 className="text-2xl font-bold mb-8 text-green-500">Úspory a výhody</h3>
+                <h3 className="text-2xl font-bold mb-8 text-primary">Úspory a výhody</h3>
                 <div className="space-y-6">
-                  <div className="bg-green-500/5 p-6 rounded-lg border-l-4 border-green-500">
+                  <div className="bg-primary/5 p-6 rounded-lg border-l-4 border-primary">
                     <h4 className="font-bold text-lg mb-3">Roční úspora nákladů</h4>
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
                         <span>Oproti plynovému kotli:</span>
-                        <span className="font-semibold text-green-500">až 60%</span>
+                        <span className="font-semibold text-primary">až 60%</span>
                       </div>
                       <div className="flex justify-between">
                         <span>Oproti elektrokotli:</span>
-                        <span className="font-semibold text-green-500">až 75%</span>
+                        <span className="font-semibold text-primary">až 75%</span>
                       </div>
                       <div className="flex justify-between">
                         <span>Oproti uhlí:</span>
-                        <span className="font-semibold text-green-500">až 50%</span>
+                        <span className="font-semibold text-primary">až 50%</span>
                       </div>
                     </div>
                   </div>
@@ -364,7 +360,7 @@ export default function TepelnaCerpadlaPage() {
                       "Tichý provoz",
                     ].map((benefit, index) => (
                       <div key={index} className="flex items-center">
-                        <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                        <CheckCircle className="h-5 w-5 text-primary mr-3 flex-shrink-0" />
                         <span>{benefit}</span>
                       </div>
                     ))}
@@ -377,19 +373,19 @@ export default function TepelnaCerpadlaPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-green-500 text-white">
+      <section className="py-20 bg-primary text-primary-foreground">
         <div className="container text-center">
           <h2 className="text-4xl font-bold mb-6">Zajímá vás tepelné čerpadlo?</h2>
-          <p className="text-xl mb-8 max-w-3xl mx-auto text-green-200">
+          <p className="text-xl mb-8 max-w-3xl mx-auto">
             Získejte bezplatnou konzultaci a výpočet úspor. Pomůžeme vám vybrat ideální řešení pro váš dům.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Button size="lg" variant="secondary" asChild className="bg-white text-green-500 hover:bg-green-50">
+            <Button size="lg" variant="secondary" asChild className="bg-white text-primary hover:bg-gray-100">
               <Link href="#kontakt">Bezplatná konzultace</Link>
             </Button>
             <div className="flex items-center gap-3 text-lg">
               <span>nebo zavolejte:</span>
-              <Link href="tel:+420123456789" className="font-bold hover:text-green-200">
+              <Link href="tel:+420123456789" className="font-bold hover:underline">
                 +420 123 456 789
               </Link>
             </div>

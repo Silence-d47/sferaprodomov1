@@ -141,7 +141,7 @@ export default function KlimatizacePage() {
             fill
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-500 via-cyan-400 to-sky-300 opacity-90" />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600 opacity-90" />
         </div>
         <div className="relative z-10 flex items-center h-full">
           <div className="container">
@@ -155,14 +155,14 @@ export default function KlimatizacePage() {
                 zboží, platba až po spuštění.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" asChild className="bg-white text-blue-500 hover:bg-blue-50">
+                <Button size="lg" asChild className="bg-white text-blue-600 hover:bg-blue-50">
                   <Link href="#kontakt">Nezávazná poptávka</Link>
                 </Button>
                 <Button
                   size="lg"
                   variant="outline"
                   asChild
-                  className="border-white text-white hover:bg-white hover:text-blue-500 bg-transparent"
+                  className="border-white text-white hover:bg-white hover:text-blue-600 bg-transparent"
                 >
                   <Link href="#modely">Nejprodávanější modely</Link>
                 </Button>
@@ -180,7 +180,7 @@ export default function KlimatizacePage() {
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Rychlost, kvalita a spolehlivost. To jsou naše hlavní přednosti.
             </p>
-            <div className="w-24 h-1 bg-blue-500 mx-auto mt-6"></div>
+            <div className="w-24 h-1 bg-blue-600 mx-auto mt-6"></div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -189,10 +189,10 @@ export default function KlimatizacePage() {
                 <div className="mb-6">
                   <ServiceIcon
                     icon={reason.icon}
-                    className="mx-auto w-16 h-16 bg-blue-500/10 text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300"
+                    className="mx-auto w-16 h-16 bg-blue-600/10 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300"
                   />
                 </div>
-                <h3 className="font-bold text-lg mb-3 text-blue-500">{reason.title}</h3>
+                <h3 className="font-bold text-lg mb-3 text-blue-600">{reason.title}</h3>
                 <p className="text-muted-foreground leading-relaxed">{reason.description}</p>
               </div>
             ))}
@@ -208,15 +208,15 @@ export default function KlimatizacePage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
               Vybírali jsme pro vás ty nejlepší klimatizace na trhu. Každý model prošel našimi testy.
             </p>
-            <div className="w-24 h-1 bg-blue-500 mx-auto mb-8"></div>
+            <div className="w-24 h-1 bg-blue-600 mx-auto mb-8"></div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <PDFDownloadButton
                 url="/katalogy/klimatizace-kompletni-katalog.pdf"
                 filename="sfera-klimatizace-katalog.pdf"
                 title="Stáhnout náš katalog"
-                className="bg-blue-500 hover:bg-blue-600/90"
+                className="bg-blue-600 hover:bg-blue-600/90"
               />
-              <Button variant="outline" asChild className="border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white">
+              <Button variant="outline" asChild className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white">
                 <Link href="/reference?kategorie=klimatizace">Naše realizace</Link>
               </Button>
             </div>
@@ -224,14 +224,14 @@ export default function KlimatizacePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {bestSellingModels.map((product, index) => (
-              <ProductCard key={index} {...product} colorTheme="blue" />
+              <ProductCard key={index} {...product} />
             ))}
           </div>
 
           <div className="text-center mt-16">
             <div className="bg-white rounded-2xl p-8 shadow-lg border border-blue-100 max-w-2xl mx-auto">
               <p className="text-gray-600 mb-6 text-lg">Nenašli jste vhodný model? Máme jich mnohem více!</p>
-              <Button asChild size="lg" className="bg-blue-500 hover:bg-blue-600/90">
+              <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-600/90">
                 <Link href="/kontakt">Poraďte mi s výběrem</Link>
               </Button>
             </div>
@@ -248,7 +248,7 @@ export default function KlimatizacePage() {
               <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-6">
                 Od konzultace přes instalaci až po dlouhodobý servis. Vše pod jednou střechou.
               </p>
-              <div className="w-24 h-1 bg-blue-500 mx-auto"></div>
+              <div className="w-24 h-1 bg-blue-600 mx-auto"></div>
             </div>
 
             {/* Services Grid */}
@@ -258,37 +258,37 @@ export default function KlimatizacePage() {
                   icon: CheckCircle,
                   title: "Bezplatná konzultace",
                   description: "Návrh řešení na míru vašich potřeb a prostoru",
-                  color: "bg-blue-500"
+                  color: "bg-blue-600"
                 },
                 {
                   icon: Shield,
                   title: "Profesionální instalace",
                   description: "Certifikovanými techniky s dlouholetou praxí",
-                  color: "bg-blue-500"
+                  color: "bg-blue-600"
                 },
                 {
                   icon: Award,
                   title: "Uvedení do provozu",
                   description: "Včetně zaškolení a předání dokumentace",
-                  color: "bg-blue-500"
+                  color: "bg-blue-600"
                 },
                 {
                   icon: Clock,
                   title: "Pravidelný servis",
                   description: "Prodloužení životnosti a optimální výkon",
-                  color: "bg-blue-500"
+                  color: "bg-blue-600"
                 },
                 {
                   icon: CheckCircle,
                   title: "Rychlé opravy",
                   description: "Servisní zásah do 7 dnů od nahlášení",
-                  color: "bg-blue-500"
+                  color: "bg-blue-600"
                 },
                 {
                   icon: Shield,
                   title: "Záruka a podpora",
                   description: "24 měsíců záruka + technická podpora",
-                  color: "bg-blue-500"
+                  color: "bg-blue-600"
                 }
               ].map((service, index) => (
                 <div key={index} className="group">
@@ -308,7 +308,7 @@ export default function KlimatizacePage() {
             {/* Types of Air Conditioning */}
             <div className="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-gray-100 mb-16">
               <div className="text-center mb-12">
-                <h3 className="text-2xl md:text-3xl font-bold mb-4 text-blue-500">Typy klimatizací</h3>
+                <h3 className="text-2xl md:text-3xl font-bold mb-4 text-blue-600">Typy klimatizací</h3>
                 <p className="text-gray-600 text-lg">Nabízíme kompletní řadu klimatizačních systémů pro každou potřebu</p>
               </div>
               
@@ -337,13 +337,13 @@ export default function KlimatizacePage() {
                 ].map((type, index) => (
                   <div key={index} className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-2xl border border-blue-100">
                     <div className="flex items-start mb-4">
-                      <div className="w-3 h-3 bg-blue-500 rounded-full mt-2 mr-4 flex-shrink-0"></div>
+                      <div className="w-3 h-3 bg-blue-600 rounded-full mt-2 mr-4 flex-shrink-0"></div>
                       <div>
                         <h4 className="font-bold text-lg text-gray-900 mb-2">{type.title}</h4>
                         <p className="text-gray-600 mb-4">{type.description}</p>
                         <div className="flex flex-wrap gap-2">
                           {type.features.map((feature, featureIndex) => (
-                            <span key={featureIndex} className="px-3 py-1 bg-blue-100 text-blue-600 text-sm rounded-full">
+                            <span key={featureIndex} className="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full">
                               {feature}
                             </span>
                           ))}
@@ -356,10 +356,10 @@ export default function KlimatizacePage() {
             </div>
 
             {/* Installation Process */}
-            <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-3xl p-8 md:p-12 text-white">
+            <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-3xl p-8 md:p-12 text-white">
               <div className="text-center mb-12">
                 <h3 className="text-2xl md:text-3xl font-bold mb-4">Proces instalace krok za krokem</h3>
-                <p className="text-blue-200 text-lg">Transparentní proces od první konzultace po uvedení do provozu</p>
+                <p className="text-blue-100 text-lg">Transparentní proces od první konzultace po uvedení do provozu</p>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
@@ -372,7 +372,7 @@ export default function KlimatizacePage() {
                 ].map((item, index) => (
                   <div key={index} className="text-center group">
                     <div className="relative mb-4">
-                      <div className="w-16 h-16 bg-white text-blue-500 rounded-2xl flex items-center justify-center font-bold text-xl mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                      <div className="w-16 h-16 bg-white text-blue-600 rounded-2xl flex items-center justify-center font-bold text-xl mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
                         {item.icon}
                       </div>
                       {index < 4 && (
@@ -389,14 +389,14 @@ export default function KlimatizacePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-blue-500 text-white">
+      <section className="py-20 bg-blue-600 text-white">
         <div className="container text-center">
           <h2 className="text-4xl font-bold mb-6">Potřebujete klimatizaci?</h2>
-          <p className="text-xl mb-8 max-w-3xl mx-auto text-blue-200">
+          <p className="text-xl mb-8 max-w-3xl mx-auto text-blue-100">
             Kontaktujte nás pro bezplatnou konzultaci. Připravíme vám nabídku přesně na míru.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Button size="lg" variant="secondary" asChild className="bg-white text-blue-500 hover:bg-blue-50">
+            <Button size="lg" variant="secondary" asChild className="bg-white text-blue-600 hover:bg-blue-50">
               <Link href="#kontakt">Nezávazná poptávka</Link>
             </Button>
             <div className="flex items-center gap-3 text-lg">

@@ -38,11 +38,11 @@ export function ContactForm({
   // Color theme configurations
   const themeConfig = {
     blue: {
-      primary: 'text-blue-600',
-      primaryBg: 'bg-blue-600',
-      primaryHover: 'hover:bg-blue-700',
-      focus: 'focus:border-blue-600',
-      gradient: 'from-blue-600 to-cyan-600'
+      primary: 'text-[#1B5D93]',
+      primaryBg: 'bg-gradient-to-r from-[#1B5D93] to-[#2D78AD]',
+      primaryHover: 'hover:from-[#2D78AD] hover:to-[#49A3D7]',
+      focus: 'focus:border-[#1B5D93]',
+      gradient: 'from-[#1B5D93] to-[#2D78AD]'
     },
     green: {
       primary: 'text-green-600',
@@ -124,23 +124,31 @@ export function ContactForm({
       {/* Trust Badges */}
       {showTrustBadges && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="text-center p-4 bg-white rounded-lg shadow-sm border">
-            <CheckCircle className={`h-8 w-8 ${theme.primary} mx-auto mb-2`} />
+          <div className="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+            <div className="w-10 h-10 bg-gradient-to-br from-[#1B5D93] to-[#2D78AD] rounded-lg flex items-center justify-center mx-auto mb-2">
+              <CheckCircle className="h-5 w-5 text-white" />
+            </div>
             <p className="text-sm font-medium text-gray-900">Zdarma</p>
             <p className="text-xs text-gray-600">konzultace</p>
           </div>
-          <div className="text-center p-4 bg-white rounded-lg shadow-sm border">
-            <Clock className={`h-8 w-8 ${theme.primary} mx-auto mb-2`} />
+          <div className="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+            <div className="w-10 h-10 bg-gradient-to-br from-[#1B5D93] to-[#2D78AD] rounded-lg flex items-center justify-center mx-auto mb-2">
+              <Clock className="h-5 w-5 text-white" />
+            </div>
             <p className="text-sm font-medium text-gray-900">24h</p>
             <p className="text-xs text-gray-600">odpověď</p>
           </div>
-          <div className="text-center p-4 bg-white rounded-lg shadow-sm border">
-            <Award className={`h-8 w-8 ${theme.primary} mx-auto mb-2`} />
+          <div className="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+            <div className="w-10 h-10 bg-gradient-to-br from-[#1B5D93] to-[#2D78AD] rounded-lg flex items-center justify-center mx-auto mb-2">
+              <Award className="h-5 w-5 text-white" />
+            </div>
             <p className="text-sm font-medium text-gray-900">5 let</p>
             <p className="text-xs text-gray-600">záruka</p>
           </div>
-          <div className="text-center p-4 bg-white rounded-lg shadow-sm border">
-            <Shield className={`h-8 w-8 ${theme.primary} mx-auto mb-2`} />
+          <div className="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+            <div className="w-10 h-10 bg-gradient-to-br from-[#1B5D93] to-[#2D78AD] rounded-lg flex items-center justify-center mx-auto mb-2">
+              <Shield className="h-5 w-5 text-white" />
+            </div>
             <p className="text-sm font-medium text-gray-900">GDPR</p>
             <p className="text-xs text-gray-600">ochrana</p>
           </div>
@@ -149,8 +157,8 @@ export function ContactForm({
       
       <Card className="shadow-xl border-0 bg-white">
         <CardHeader className="text-center pb-6">
-          <CardTitle className={`text-2xl ${theme.primary}`}>{title}</CardTitle>
-          {subtitle && <p className="text-muted-foreground mt-2">{subtitle}</p>}
+          <CardTitle className="text-2xl font-bold text-[#1B5D93]">{title}</CardTitle>
+          {subtitle && <p className="text-gray-600 mt-2">{subtitle}</p>}
         </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -233,7 +241,7 @@ export function ContactForm({
           <Button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full ${theme.primaryBg} ${theme.primaryHover} text-white py-3 text-lg font-semibold`}
+            className="w-full bg-gradient-to-r from-[#1B5D93] to-[#2D78AD] hover:from-[#2D78AD] hover:to-[#49A3D7] text-white py-3 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
           >
             {isSubmitting ? (
               <>
@@ -245,9 +253,9 @@ export function ContactForm({
             )}
           </Button>
 
-          <p className="text-xs text-muted-foreground text-center">
+          <p className="text-xs text-gray-500 text-center">
             Odesláním souhlasíte se zpracováním osobních údajů podle{" "}
-            <Link href="/gdpr" className={`${theme.primary} hover:underline`}>
+            <Link href="/gdpr" className="text-[#1B5D93] hover:underline">
               GDPR
             </Link>
           </p>

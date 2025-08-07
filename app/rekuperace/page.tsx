@@ -175,7 +175,7 @@ export default function RekuperacePage() {
             fill
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-500 via-violet-500 to-indigo-600 opacity-90" />
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-violet-600 to-indigo-600 opacity-90" />
         </div>
         <div className="relative z-10 flex items-center h-full">
           <div className="container">
@@ -212,7 +212,7 @@ export default function RekuperacePage() {
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Moderní domy jsou těsné, což způsobuje problémy s vlhkostí a kvalitou vzduchu. Rekuperace je řešení.
             </p>
-            <div className="w-24 h-1 bg-purple-500 mx-auto mt-6"></div>
+            <div className="w-24 h-1 bg-primary mx-auto mt-6"></div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -221,10 +221,10 @@ export default function RekuperacePage() {
                 <div className="mb-6">
                   <ServiceIcon
                     icon={reason.icon}
-                    className="mx-auto w-16 h-16 bg-purple-500/10 text-purple-500 group-hover:bg-purple-500 group-hover:text-white transition-all duration-300"
+                    className="mx-auto w-16 h-16 bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300"
                   />
                 </div>
-                <h3 className="font-bold text-lg mb-3 text-purple-500">{reason.title}</h3>
+                <h3 className="font-bold text-lg mb-3 text-primary">{reason.title}</h3>
                 <p className="text-muted-foreground leading-relaxed">{reason.description}</p>
               </div>
             ))}
@@ -240,25 +240,25 @@ export default function RekuperacePage() {
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Vyberte si řešení podle typu objektu a vašich potřeb.
             </p>
-            <div className="w-24 h-1 bg-purple-500 mx-auto mt-6"></div>
+            <div className="w-24 h-1 bg-primary mx-auto mt-6"></div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {recuperationTypes.map((type, index) => (
               <div
                 key={index}
-                className="bg-white rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 border-t-4 border-purple-500"
+                className="bg-white rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 border-t-4 border-primary"
               >
                 <div className="text-center mb-6">
-                  <ServiceIcon icon={type.icon} className="mx-auto w-16 h-16 bg-purple-500/10 text-purple-500 mb-4" />
-                  <h3 className="font-bold text-xl text-purple-500">{type.title}</h3>
+                  <ServiceIcon icon={type.icon} className="mx-auto w-16 h-16 bg-primary/10 text-primary mb-4" />
+                  <h3 className="font-bold text-xl text-primary">{type.title}</h3>
                 </div>
                 <p className="text-muted-foreground mb-6 text-center">{type.description}</p>
                 <div className="space-y-3">
                   <h4 className="font-semibold text-sm">Výhody:</h4>
                   {type.advantages.map((advantage, idx) => (
                     <div key={idx} className="flex items-center text-sm">
-                      <CheckCircle className="h-4 w-4 text-purple-500 mr-2 flex-shrink-0" />
+                      <CheckCircle className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
                       {advantage}
                     </div>
                   ))}
@@ -270,22 +270,20 @@ export default function RekuperacePage() {
       </section>
 
       {/* Nejprodávanější modely */}
-      <section id="modely" className="py-20 bg-gradient-to-b from-white to-purple-50">
+      <section id="modely" className="py-20 bg-muted/30">
         <div className="container">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Naše nejprodávanější rekuperační jednotky</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
               Ověřené modely s nejvyšší účinností rekuperace od předních evropských výrobců.
             </p>
-            <div className="w-24 h-1 bg-purple-500 mx-auto mb-8"></div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <PDFDownloadButton
                 url="/katalogy/rekuperace-kompletni-katalog.pdf"
                 filename="sfera-rekuperace-katalog.pdf"
                 title="Stáhnout náš katalog"
-                className="bg-purple-500 hover:bg-purple-500/90"
               />
-              <Button variant="outline" asChild className="border-purple-500 text-purple-500 hover:bg-purple-500 hover:text-white">
+              <Button variant="outline" asChild>
                 <Link href="/reference?kategorie=rekuperace">Naše realizace</Link>
               </Button>
             </div>
@@ -293,13 +291,13 @@ export default function RekuperacePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {bestSellingModels.map((product, index) => (
-              <ProductCard key={index} {...product} colorTheme="purple" />
+              <ProductCard key={index} {...product} />
             ))}
           </div>
 
           <div className="text-center mt-12">
             <p className="text-muted-foreground mb-4">Nevíte, kterou jednotku vybrat? Pomůžeme vám!</p>
-            <Button asChild className="bg-purple-500 hover:bg-purple-500/90" size="lg">
+            <Button asChild variant="outline" size="lg">
               <Link href="/kontakt">Bezplatná konzultace</Link>
             </Button>
           </div>
@@ -312,15 +310,15 @@ export default function RekuperacePage() {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold mb-6">Jak rekuperace funguje?</h2>
-              <div className="w-24 h-1 bg-purple-500 mx-auto"></div>
+              <div className="w-24 h-1 bg-primary mx-auto"></div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div>
-                <h3 className="text-2xl font-bold mb-6 text-purple-500">Princip funkce</h3>
+                <h3 className="text-2xl font-bold mb-6 text-primary">Princip funkce</h3>
                 <div className="space-y-6">
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 text-sm">
+                    <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 text-sm">
                       1
                     </div>
                     <div>
@@ -331,7 +329,7 @@ export default function RekuperacePage() {
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 text-sm">
+                    <div className="w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 text-sm">
                       2
                     </div>
                     <div>
@@ -342,7 +340,7 @@ export default function RekuperacePage() {
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 text-sm">
+                    <div className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 text-sm">
                       3
                     </div>
                     <div>
@@ -353,7 +351,7 @@ export default function RekuperacePage() {
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 text-sm">
+                    <div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 text-sm">
                       4
                     </div>
                     <div>
@@ -366,8 +364,8 @@ export default function RekuperacePage() {
                 </div>
               </div>
 
-              <div className="bg-purple-500/5 p-8 rounded-lg border border-purple-500/20">
-                <h3 className="text-2xl font-bold mb-6 text-purple-500">Výhody pro vaše zdraví</h3>
+              <div className="bg-primary/5 p-8 rounded-lg">
+                <h3 className="text-2xl font-bold mb-6 text-primary">Výhody pro vaše zdraví</h3>
                 <div className="space-y-4">
                   {[
                     "Odstranění alergenů a prachových částic",
@@ -380,7 +378,7 @@ export default function RekuperacePage() {
                     "Tichý provoz - nerušený odpočinek",
                   ].map((benefit, index) => (
                     <div key={index} className="flex items-center">
-                      <CheckCircle className="h-5 w-5 text-purple-500 mr-3 flex-shrink-0" />
+                      <CheckCircle className="h-5 w-5 text-primary mr-3 flex-shrink-0" />
                       <span>{benefit}</span>
                     </div>
                   ))}
@@ -392,20 +390,20 @@ export default function RekuperacePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-purple-500 text-white">
+      <section className="py-20 bg-primary text-primary-foreground">
         <div className="container text-center">
           <h2 className="text-4xl font-bold mb-6">Investujte do svého zdraví</h2>
-          <p className="text-xl mb-8 max-w-3xl mx-auto text-purple-200">
-            Rekuperace není jen o úsporě energie, ale především o kvalitě života. Získejte bezplatnou konzultaci a návrh
+          <p className="text-xl mb-8 max-w-3xl mx-auto">
+            Rekuperace není jen o úspoře energie, ale především o kvalitě života. Získejte bezplatnou konzultaci a návrh
             řešení.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Button size="lg" variant="secondary" asChild className="bg-white text-purple-500 hover:bg-purple-50">
+            <Button size="lg" variant="secondary" asChild className="bg-white text-primary hover:bg-gray-100">
               <Link href="#kontakt">Bezplatná konzultace</Link>
             </Button>
             <div className="flex items-center gap-3 text-lg">
               <span>nebo zavolejte:</span>
-              <Link href="tel:+420123456789" className="font-bold hover:text-purple-200">
+              <Link href="tel:+420123456789" className="font-bold hover:underline">
                 +420 123 456 789
               </Link>
             </div>

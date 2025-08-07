@@ -28,19 +28,17 @@ export function LogoCarousel({
   const duplicatedLogos = [...logos, ...logos, ...logos, ...logos, ...logos]
 
   return (
-    <section className="carousel-section">
+    <section className="carousel-section bg-gray-50 relative overflow-hidden">
+      
       <style jsx>{`
         .carousel-section {
-          padding: 3rem 0;
-          background: transparent;
-          backdrop-filter: none;
-          border-top: none;
-          border-bottom: none;
-          overflow: hidden;
+          padding: 1rem 0;
+          overflow: visible;
           width: 100vw;
           margin-left: calc(-50vw + 50%);
           position: relative;
-          filter: blur(0.3px);
+          filter: blur(0px);
+          background: #f9fafb;
         }
         @keyframes scroll {
           0% {
@@ -74,7 +72,7 @@ export function LogoCarousel({
           bottom: 0;
           width: 5rem;
           background: linear-gradient(to right, transparent);
-          z-index: 10;
+          z-index: 0;
         }
         .fade-right {
           position: absolute;
@@ -87,15 +85,9 @@ export function LogoCarousel({
         }
       `}</style>
       
-      <div className="w-full px-4 relative">
-        {/* Blue gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-50/20 to-transparent pointer-events-none"></div>
+      <div className="w-full px14 relative">
         
-        <div className="text-center mb-8 max-w-4xl mx-auto relative z-10">
-          <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">
-            Důvěřují nám přední značky
-          </p>
-        </div>
+
         
         <div className="relative overflow-hidden w-full">
           {/* Gradient fade edges */}
@@ -116,7 +108,7 @@ export function LogoCarousel({
                   alt={`${logo.name} logo`}
                   width={logo.name === 'Nordstar' ? 192 : 128}
                   height={logo.name === 'Nordstar' ? 96 : 64}
-                  className="max-w-full max-h-full object-contain filter brightness-0 opacity-60 hover:brightness-100 hover:opacity-100 transition-all duration-300"
+                  className="max-w-full max-h-full object-contain filter brightness-0 opacity-60 hover:opacity-100 transition-all duration-300"
                   priority={index < logos.length}
                 />
               </div>

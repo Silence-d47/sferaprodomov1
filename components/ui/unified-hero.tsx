@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { EnhancedSectionDivider } from '@/components/ui/enhanced-section-divider';
-import { CheckCircle, Zap, Clock, Calculator, Phone, Star, Users, Award } from 'lucide-react';
+import { CheckCircle, Zap, Clock, Calculator, Phone, Star, Users, Award, Heart } from 'lucide-react';
 
 interface HeroSlide {
   id: string;
