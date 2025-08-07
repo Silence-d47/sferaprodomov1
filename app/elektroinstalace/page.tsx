@@ -1137,11 +1137,10 @@ export default function ElektroinstalacePage() {
       <section id="kontakt" className="py-20">
         <div className="container">
           <div className="max-w-4xl mx-auto">
-            <CompleteContactSection
+            <ContactForm
               title="Poptávka elektroinstalace"
               subtitle="Vyplnťte formulář a my vám připravíme nabídku na míru vašemu projektu."
               source="elektroinstalace-page"
-              colorTheme="orange"
               customHeading="Nechťe si vypočítat nabídku"
             />
           </div>
