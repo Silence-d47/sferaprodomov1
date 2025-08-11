@@ -20,8 +20,8 @@ export function Footer() {
             </p>
             {/* Klíčové výhody - přehlednější seznam */}
             <ul className="space-y-3 text-sm">
-              <li className="flex items-center gap-3"><Shield className="h-5 w-5 text-green-400 flex-shrink-0" /><span className="text-gray-200">Prodloužená záruka 5 let</span></li>
-              <li className="flex items-center gap-3"><Award className="h-5 w-5 text-yellow-400 flex-shrink-0" /><span className="text-gray-200">Státem certifikovaní technici</span></li>
+              <li className="flex items-center gap-3"><Shield className="h-5 w-5 text-green-400 flex-shrink-0" /><span className="text-gray-200">záruka na práci 2 roky</span></li>
+              <li className="flex items-center gap-3"><Award className="h-5 w-5 text-yellow-400 flex-shrink-0" /><span className="text-gray-200">Certifikovaný specialisté</span></li>
               <li className="flex items-center gap-3"><Users className="h-5 w-5 text-blue-400 flex-shrink-0" /><span className="text-gray-200">Přes 120 spokojených zákazníků</span></li>
               <li className="flex items-center gap-3"><CheckCircle className="h-5 w-5 text-green-400 flex-shrink-0" /><span className="text-gray-200">Realizace do 14 dnů</span></li>
             </ul>
@@ -65,7 +65,7 @@ export function Footer() {
                 <MapPin className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
                 <div>
                   <div className="font-medium text-white">Nákladní 471/32, Opava</div>
-                  <div className="text-sm text-gray-400">Po-Pá: 8:00–17:00</div>
+                  <div className="text-sm text-gray-400">Po - Pá 8:00 - 20:00</div>
                 </div>
               </div>
             </div>
@@ -121,7 +121,7 @@ export function Footer() {
       <div className="bg-black/20 py-4">
         <div className="container">
           <div className="flex flex-col sm:flex-row justify-between items-center text-sm text-gray-400 gap-2">
-            <p>&copy; {new Date().getFullYear()} SFÉRA PRO DOMOV s.r.o. | IČO: 12345678</p>
+            <p>&copy; {new Date().getFullYear()} SFÉRA PRO DOMOV s.r.o. | IČO: 21089230</p>
             <div className="flex items-center gap-x-4">
               <Link href="/obchodni-podminky" className="hover:text-white transition-colors">Obchodní podmínky</Link>
               <span className="text-gray-600">|</span>

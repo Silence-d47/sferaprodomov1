@@ -17,8 +17,8 @@ export function TopBar() {
               src="/logo-sfera.svg" 
               alt="Sfera" 
               width={120} 
-              height={41} 
-              className="h-8 w-auto filter brightness-0 invert" 
+              height={60} 
+              className="h-12 w-auto filter brightness-0 invert" 
             />
           </Link>
           
@@ -34,8 +34,8 @@ export function TopBar() {
             {/* Phone */}
             <div className="flex items-center space-x-2">
               <Phone className="w-4 h-4" />
-              <Link href="tel:+420123456789" className="hover:underline">
-                +420 123 456 789
+              <Link href="tel:+420735014112" className="hover:underline">
+                +420 735 014 112
               </Link>
             </div>
             
@@ -51,30 +51,26 @@ export function TopBar() {
         {/* Right side - CTA and Ratings */}
         <div className="flex items-center space-x-6">
           {/* Google Rating */}
-                      <div className="flex items-center space-x-2">
-              <div className="flex space-x-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-              <div className="w-5 h-5 bg-white/30 rounded-sm flex items-center justify-center">
-                <span className="text-xs text-white font-bold">G</span>
-              </div>
-            </div>
+          <div className="flex items-center space-x-2 bg-white/40 backdrop-blur-sm rounded-lg p-2">
+            <Image 
+              src="/google.png" 
+              alt="Google" 
+              width={120} 
+              height={40} 
+              className="h-10 w-auto" 
+            />
+          </div>
           
           {/* Seznam Rating */}
-                      <div className="flex items-center space-x-2">
-              <div className="flex space-x-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-              <div className="w-5 h-5 bg-white/30 rounded-sm flex items-center justify-center">
-                <span className="text-xs text-white font-bold">S</span>
-              </div>
-            </div>
-          
-
+          <div className="flex items-center space-x-2 bg-white/40 backdrop-blur-sm rounded-lg p-2">
+            <Image 
+              src="/firmycz.svg" 
+              alt="Seznam.cz" 
+              width={120} 
+              height={40} 
+              className="h-10 w-auto" 
+            />
+          </div>
         </div>
       </div>
     </div>

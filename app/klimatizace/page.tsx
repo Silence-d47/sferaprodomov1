@@ -6,6 +6,7 @@ import { ProductCard } from "@/components/ui/product-card" // Předpokládám, �
 import { ContactForm } from "@/components/ui/contact-form" // Použijeme náš nový, lepší formulář
 import { PDFDownloadButton } from "@/components/ui/pdf-download-button"
 import { Badge } from "@/components/ui/badge"
+import { ThemeProvider } from "@/components/theme-provider"
 import { 
   Shield, 
   Clock, 
@@ -16,7 +17,9 @@ import {
   Quote,
   ChevronRight,
   Wrench,
-  Users
+  Users,
+  Home,
+  Building
 } from "lucide-react"
 
 // Důvody proč jsme nejlepší volba
@@ -25,6 +28,32 @@ const whyChooseUs = [
   { icon: Users, title: "Certifikovaní technici", description: "Práci provádí pouze kvalifikovaní a proškolení odborníci." },
   { icon: Shield, title: "Záruka a rychlý servis", description: "Až 5 let záruka na vybrané modely a servisní zásah do 7 dnů." },
   { icon: CheckCircle, title: "Platba po realizaci", description: "U nás platíte až po dokončení práce a odzkoušení systému." },
+]
+
+// Typy klimatizací - nová sekce
+const acTypes = [
+  {
+    icon: Home,
+    title: "Nástěnné klimatizace",
+    description: "Ideální pro jednotlivé místnosti. Snadná instalace, nenáročný montážní zásah a rychlé chlazení/ohřev konkrétního prostoru.",
+    advantages: [
+      "Rychlá instalace (1 den)",
+      "Nízká hmotnost venkovní jednotky",
+      "Možnost instalace do paneláku i rodinného domu",
+      "Nejrozšířenější typ na trhu"
+    ]
+  },
+  {
+    icon: Building,
+    title: "Multisplit systémy",
+    description: "Jedna venkovní jednotka pro více vnitřních jednotek. Perfektní pro celý dům nebo byt s více místnostmi.",
+    advantages: [
+      "Ekonomické řešení pro více místností",
+      "Možnost individuální regulace",
+      "Jednodušší instalace (jedna venkovní jednotka)",
+      "Nižší provozní náklady"
+    ]
+  }
 ]
 
 // 8 nejprodávanějších modelů
@@ -158,19 +187,18 @@ const references = [
 ];
 
 export default function KlimatizacePageRefined() {
-  const primaryColor = "#2563EB"; // Vaše hlavní modrá (Tailwind blue-600) - pro konzistenci
-
   return (
-    <div className="bg-white text-slate-800">
+    <ThemeProvider theme="klimatizace">
+      <div className="bg-white text-slate-800">
      <section className="relative h-[90vh] min-h-[600px] flex items-center text-white">
         <div className="absolute inset-0">
           <Image src="/images/klimatizace_hero.jpg" alt="Interiér s klimatizací" fill priority className="object-cover" />
           {/* Tmavší gradient pro výrazný kontrast */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-slate-900/60 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-blue-900/70 via-transparent to-black"></div>
         </div>
         <div className="relative z-10 container">
           <div className="max-w-3xl">
-            <Badge variant="outline" className="mb-4 bg-white/10 border-white/30 text-white backdrop-blur-sm">
+            <Badge variant="outline" className="mb-4 bg-blue-500/40 text-blue-500 border-blue-500/30 text-white">
               Klimatizace pro váš domov i firmu
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight [text-shadow:_0_2px_8px_rgb(0_0_0_/_50%)]">
@@ -181,10 +209,10 @@ export default function KlimatizacePageRefined() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               {/* Tlačítka s lepším kontrastem */}
-              <Button size="lg" asChild className="bg-white text-blue-700 font-semibold hover:bg-blue-50 shadow-lg">
+                              <Button size="lg" asChild className="bg-blue-500 text-white font-semibold hover:bg-blue-600 shadow-lg">
                 <Link href="#kontakt">Získat nezávaznou nabídku</Link>
               </Button>
-              <Button size="lg" variant="outline" asChild className="border-white/50 bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm">
+              <Button size="lg" variant="outline" asChild className="border-blue-500/50 bg-blue-500/10 text-white hover:bg-blue-100/50 backdrop-blur-sm">
                 <Link href="#modely">Prohlédnout modely</Link>
               </Button>
             </div>
@@ -193,7 +221,7 @@ export default function KlimatizacePageRefined() {
       </section>
 
       {/* --- SEKCE PROČ MY (WHY CHOOSE US) --- */}
-      <section className="py-20 sm:py-28 bg-slate-50/70">
+      <section className="py-20 sm:py-28 bg-blue-50/70">
         <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Proč si pro klimatizaci vybrat právě nás?</h2>
@@ -217,12 +245,45 @@ export default function KlimatizacePageRefined() {
         </div>
       </section>
 
+         {/* --- SEKCE TYPY KLIMATIZACÍ --- */}
+         <section className="py-20 sm:py-28 bg-white">
+          <div className="container">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">Jaký typ klimatizace je pro vás?</h2>
+              <p className="text-lg text-slate-600">
+                Každý dům a každá místnost je jiná. Pomůžeme vám vybrat řešení, které bude přesně odpovídat vašim potřebám a možnostem.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {acTypes.map((type, index) => (
+                <div key={index} className="bg-slate-50/70 rounded-2xl p-8 flex flex-col border border-slate-200/80 hover:shadow-xl transition-shadow duration-300">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="flex-shrink-0 h-16 w-16 rounded-full flex items-center justify-center bg-blue-500/10">
+                      <type.icon className="h-8 w-8 text-blue-500" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-slate-800">{type.title}</h3>
+                  </div>
+                  <p className="text-slate-600 mb-6 flex-grow">{type.description}</p>
+                  <div className="space-y-3 mt-auto">
+                    {type.advantages.map((advantage, idx) => (
+                      <div key={idx} className="flex items-center text-sm">
+                        <CheckCircle className="h-5 w-5 text-blue-500 mr-2 flex-shrink-0" />
+                        <span className="text-slate-700">{advantage}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
          {/* --- SEKCE NEJPRODÁVANĚJŠÍCH MODELŮ (OPRAVENO) --- */}
-         <section id="modely" className="py-20 sm:py-28 bg-slate-50/70">
-        <div className="container">
+         <section id="modely" className="py-20 sm:py-28 bg-blue-50/70">
+          <div className="container">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Naše nejprodávanější modely</h2>
-            <p className="text-lg text-slate-600">
+            <p className="text-lg text-muted-foreground">
               Prohlédněte si výběr ověřených klimatizací od předních světových výrobců.
             </p>
           </div>
@@ -316,6 +377,251 @@ export default function KlimatizacePageRefined() {
       
             
 
+      {/* FAQ - Modernized */}
+      <section className="py-20 bg-gradient-to-br from-blue-50/30 via-white to-blue-50/50 relative overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-10 w-32 h-32 bg-blue-100 rounded-full opacity-20 blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-40 h-40 bg-blue-200 rounded-full opacity-20 blur-3xl"></div>
+        </div>
+        
+        <div className="container relative z-10">
+          <div className="text-center mb-16">
+            <div className="flex items-center justify-center mb-6">
+              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mr-4">
+                <span className="text-white font-bold text-lg">?</span>
+              </div>
+              <Badge className="bg-blue-100 text-blue-800 px-4 py-2">
+                FAQ
+              </Badge>
+            </div>
+            <h2 className="text-3xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">
+              Často kladené otázky
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+              Vše co potřebujete vědět o klimatizacích - odpovědi od expertů
+            </p>
+            <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-blue-700 mx-auto mt-8"></div>
+          </div>
+
+          <div className="max-w-5xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-8">
+              {/* Levý sloupec */}
+              <div className="space-y-6">
+                <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-blue-500">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                      Q
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg mb-3 text-blue-500">Jak klimatizace funguje?</h3>
+                      <p className="text-muted-foreground mb-4">
+                        Klimatizace odvádí teplo z interiéru do exteriéru pomocí chladiva:
+                      </p>
+                      <div className="space-y-2">
+                        <div className="flex items-center">
+                          <CheckCircle className="h-5 w-5 text-blue-500 mr-3" />
+                          <span>Vnitřní jednotka nasává teplý vzduch z místnosti</span>
+                        </div>
+                        <div className="flex items-center">
+                          <CheckCircle className="h-5 w-5 text-blue-500 mr-3" />
+                          <span>Chladivo vnitřní jednotky absorbujte teplo</span>
+                        </div>
+                        <div className="flex items-center">
+                          <CheckCircle className="h-5 w-5 text-blue-500 mr-3" />
+                          <span>Kompresor stlačuje chladivo a zvyšuje jeho teplotu</span>
+                        </div>
+                        <div className="flex items-center">
+                          <CheckCircle className="h-5 w-5 text-blue-500 mr-3" />
+                          <span>Venkovní jednotka odvádí teplo ven</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-blue-500">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                      Q
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg mb-3 text-blue-500">Jaký je rozdíl mezi split a multisplit systémem?</h3>
+                      <div className="space-y-3 mb-4">
+                        <div className="p-3 bg-blue-50 rounded">
+                          <p className="font-medium text-blue-700 mb-1">Split systém</p>
+                          <ul className="text-sm space-y-1">
+                            <li>• Jedna vnitřní a venkovní jednotka</li>
+                            <li>• Ideální pro jednu místnost</li>
+                            <li>• Nižší investice</li>
+                            <li>• Snadná instalace</li>
+                          </ul>
+                        </div>
+                        <div className="p-3 bg-blue-50 rounded">
+                          <p className="font-medium text-blue-700 mb-1">Multisplit systém</p>
+                          <ul className="text-sm space-y-1">
+                            <li>• Jedna venkovní a více vnitřních jednotek</li>
+                            <li>• Ideální pro více místností</li>
+                            <li>• Úspora na venkovních jednotkách</li>
+                            <li>• Centrální ovládání</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-blue-500">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                      Q
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg mb-3 text-blue-500">Jak často je potřeba údržba klimatizace?</h3>
+                      <div className="space-y-3 mb-4">
+                        <div className="flex items-center">
+                          <CheckCircle className="h-5 w-5 text-blue-500 mr-3" />
+                          <span><strong>Filtry:</strong> 1-3 měsíce</span>
+                        </div>
+                        <div className="flex items-center">
+                          <CheckCircle className="h-5 w-5 text-blue-500 mr-3" />
+                          <span><strong>Čištění vnitřní jednotky:</strong> 1x ročně</span>
+                        </div>
+                        <div className="flex items-center">
+                          <CheckCircle className="h-5 w-5 text-blue-500 mr-3" />
+                          <span><strong>Servis venkovní jednotky:</strong> 1x ročně</span>
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        Pravidelná údržba zajišťuje efektivní provoz a dlouhou životnost.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-blue-500">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                      Q
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg mb-3 text-blue-500">Lze klimatizaci kombinovat s jinými systémy?</h3>
+                      <p className="text-muted-foreground mb-4">
+                        Ano, klimatizace lze kombinovat s různými systémy:
+                      </p>
+                      <div className="grid grid-cols-2 gap-2 text-sm">
+                        <div className="flex items-center">
+                          <Wrench className="h-4 w-4 text-blue-500 mr-2" />
+                          <span>FV panely</span>
+                        </div>
+                        <div className="flex items-center">
+                          <Wrench className="h-4 w-4 text-blue-500 mr-2" />
+                          <span>Nabíječky elektromobilů</span>
+                        </div>
+                        <div className="flex items-center">
+                          <Wrench className="h-4 w-4 text-blue-500 mr-2" />
+                          <span>Rekuperace</span>
+                        </div>
+                        <div className="flex items-center">
+                          <Wrench className="h-4 w-4 text-blue-500 mr-2" />
+                          <span>Podlahové vytápění</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Pravý sloupec */}
+              <div className="space-y-6">
+
+                <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-blue-500">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                      Q
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg mb-3 text-blue-500">Jaký je energetický štítek klimatizace?</h3>
+                      <p className="text-muted-foreground mb-4">
+                        Energetický štítek označuje účinnost klimatizace:
+                      </p>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center p-2 bg-blue-50 rounded">
+                          <span className="font-medium">Třída A++:</span>
+                          <span className="text-blue-500 font-bold">Nejúčinnější</span>
+                        </div>
+                        <div className="flex justify-between items-center p-2 bg-blue-50 rounded">
+                          <span className="font-medium">Třída A+:</span>
+                          <span className="text-blue-500 font-bold">Velmi účinná</span>
+                        </div>
+                        <div className="flex justify-between items-center p-2 bg-blue-50 rounded">
+                          <span className="font-medium">Třída A:</span>
+                          <span className="text-blue-500 font-bold">Účinná</span>
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground mt-3">
+                        Doporučujeme volit klimatizace třídy A++ nebo A+ pro maximální úspory.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-blue-500">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                      Q
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg mb-3 text-blue-500">Jak hlásí klimatizace?</h3>
+                      <p className="text-muted-foreground mb-4">
+                        Moderní klimatizace jsou tiché:
+                      </p>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center p-2 bg-blue-50 rounded">
+                          <span className="font-medium">Vnitřní jednotka:</span>
+                          <span className="text-blue-500 font-bold">20-30 dB(A)</span>
+                        </div>
+                        <div className="flex justify-between items-center p-2 bg-blue-50 rounded">
+                          <span className="font-medium">Venkovní jednotka:</span>
+                          <span className="text-blue-500 font-bold">45-55 dB(A)</span>
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground mt-3">
+                        Pro srovnání: normální konverzace = 60 dB(A), tichý šepot = 30 dB(A)
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-blue-500">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                      Q
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg mb-3 text-blue-500">Jaká je záruka na klimatizace?</h3>
+                      <div className="space-y-3 mb-4">
+                        <div className="flex justify-between items-center p-3 bg-green-50 rounded">
+                          <span className="font-medium">Práce a montáž:</span>
+                          <span className="text-green-600 font-bold">5 let</span>
+                        </div>
+                        <div className="flex justify-between items-center p-3 bg-blue-50 rounded">
+                          <span className="font-medium">Jednotky:</span>
+                          <span className="text-blue-600 font-bold">dle výrobce (3-7 let)</span>
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        V případě jakýchkoli problémů jsme k dispozici 24/7. Záruka je na všechny práce a materiály.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* --- SEKCE KONTAKTNÍ FORMULÁŘ --- */}
       <section id="kontakt" className="py-20 sm:py-28 bg-slate-50/70">
         <div className="container">
@@ -327,5 +633,6 @@ export default function KlimatizacePageRefined() {
       </section>
 
     </div>
+    </ThemeProvider>
   )
 }

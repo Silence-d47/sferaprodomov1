@@ -26,22 +26,27 @@ export function Header() {
       <div className="container flex h-18 items-center justify-between px-8">
         {/* SFERA DOMOV - Left */}
         <div className="flex-1">
-          <Link href="/" className="flex items-center">
-            <span className="text-white text-xl font-semibold drop-shadow-lg">SFÉRA PRO DOMOV.CZ</span>
+          <Link href="/" className="flex flex-col items-start">
+            <span className="text-white text-4xl font-semibold drop-shadow-lg leading-tight">S F É R A</span>
+            <span className="text-white text-xl font-semibold drop-shadow-lg leading-none mt-0.5">PRO DOMOV.CZ</span>
           </Link>
         </div>
 
         {/* Desktop Navigation - Right side */}
         <div className="flex-1 flex justify-end">
-          <nav className="hidden lg:flex items-center space-x-6">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="text-sm font-normal text-white drop-shadow-lg px-4 py-2 rounded-lg whitespace-nowrap"
-              >
-                {item.name}
-              </Link>
+          <nav className="hidden lg:flex items-center space-x-4 mt-2">
+            {navigation.map((item, index) => (
+              <div key={item.name} className="flex items-center">
+                <Link
+                  href={item.href}
+                  className="text-sm font-normal text-white drop-shadow-lg px-2 py-1 rounded-lg whitespace-nowrap transition-all duration-300 hover:text-blue-200 hover:scale-105"
+                >
+                  {item.name}
+                </Link>
+                {index < navigation.length - 1 && (
+                  <span className="text-white/60 mx-1">|</span>
+                )}
+              </div>
             ))}
           </nav>
         </div>

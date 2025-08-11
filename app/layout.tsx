@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="cs" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+        <ThemeProvider theme="default">
           <TopBar />
           <Header />
           <main className="min-h-screen">{children}</main>

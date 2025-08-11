@@ -260,27 +260,6 @@ export default function ReferencePage() {
       {/* Organic Wave Divider */}
       <OrganicWaveDivider />
 
-      {/* Logo Section - Prominentní umístění pod hero */}
-      <section className="py-16 bg-gradient-to-br from-[#f8f9fa] via-white to-blue-50/30">
-        <div className="container">
-          <div className="text-center">
-            <div className="flex items-center justify-center mb-8">
-              <Image 
-                src="/logo/logo.svg" 
-                alt="Sfera logo" 
-                width={120} 
-                height={120} 
-                className="drop-shadow-lg" 
-              />
-            </div>
-
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Profesionální řešení pro váš komfort s více než 15letou tradicí a stovkami spokojených zákazníků
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* Map Section - Modernized */}
       <section id="reference-mapa" className="py-20 bg-gradient-to-br from-[#f8f9fa] via-white to-blue-50/30 relative overflow-hidden">
         {/* Background decorative elements */}
@@ -298,40 +277,20 @@ export default function ReferencePage() {
               </Badge>
             </div>
             <h2 className="text-3xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-              Kde všude jsme realizovali
-            </h2>
+Chcete být naši další referencí?            </h2>
             <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-              Naše reference pokrývají celou Českou republiku. Za posledních 15 let jsme úspěšně dokončili 
-              projekty ve všech krajích a získali si důvěru stovek spokojených klientů.
+              Naše pověst nás předchází napříč Moravskoslezským krajem. Děkujeme!
             </p>
             <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-cyan-600 mx-auto mt-8"></div>
           </div>
-      
-            
-            {/* Map - Center */}
-            <div className="relative">
-              <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100 relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-cyan-50/50 z-10"></div>
-                <Image 
-                  src="/mapa/mapa.png" 
-                  alt="Mapa referencí" 
-                  width={800} 
-                  height={600} 
-                  className="w-full h-auto relative z-20" 
-                />
-
-              </div>
-              
-         
-            </div>
             
           
           {/* Bottom CTA */}
           <div className="text-center mt-16">
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 max-w-2xl mx-auto">
-              <h3 className="text-2xl font-bold mb-4">Hledáte kvalitní řešení ve vašem kraji?</h3>
+              <h3 className="text-2xl font-bold mb-4">Hledáte kvalitní řešení a spolehlivou firmu?</h3>
               <p className="text-gray-600 mb-6">
-                Bez ohledu na to, kde se nacházíte, jsme připraveni realizovat váš projekt s maximální profesionalitou.
+                Jsme připraveni realizovat váš projekt s maximální profesionalitou.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button className="bg-blue-600 hover:bg-blue-700" asChild>
@@ -359,12 +318,12 @@ export default function ReferencePage() {
             <div className="flex items-center justify-center mb-6">
               <Award className="h-8 w-8 text-yellow-500 mr-3" />
               <Badge className="bg-yellow-100 text-yellow-800 px-4 py-2">
-                TOP Reference
+                TOP reference
               </Badge>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Naše nejlepší projekty</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Tyto projekty představují vrchol naší práce a jsou důkazem našich schopností
+              Tyto projekty jsou naši pýchou. 
             </p>
             <div className="w-24 h-1 bg-blue-600 mx-auto mt-6"></div>
           </div>
@@ -456,10 +415,9 @@ export default function ReferencePage() {
       <section className="py-20 bg-white">
         <div className="container">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Další naše projekty</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Projekty</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Chronologicky řazené podle data dokončení - každý projekt s péčí a profesionalitou
-            </p>
+              Každý projekt je pro nás důležitý a zaslouží si naši veškerou a plnou pozornost. Také i proto se všechny projekty u nás zůstávají v našem paměti. Vy si je můžete prohlédnout níže.</p>
             <div className="w-24 h-1 bg-blue-600 mx-auto mt-6"></div>
           </div>
 
@@ -527,11 +485,11 @@ export default function ReferencePage() {
             <div className="mb-8">
               <Award className="h-16 w-16 text-yellow-400 mx-auto mb-4" />
               <Badge className="bg-white/20 text-white border-white/20 px-4 py-2 mb-6">
-                Staňte se naší další referencí
+              Děkujeme našim klientům za hodnocení.
               </Badge>
             </div>
             <h2 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
-              Připojte se k našim spokojeným zákazníkům
+            Staňte se naší další referencí
             </h2>
             <p className="text-xl text-blue-100 mb-8 leading-relaxed max-w-3xl mx-auto">
               Máte projekt, který by mohl být naší další úspěšnou referencí? 
@@ -554,17 +512,17 @@ export default function ReferencePage() {
               <div className="text-center">
                 <CheckCircle className="h-12 w-12 text-green-400 mx-auto mb-4" />
                 <h3 className="font-semibold text-lg mb-2">Garantovaná kvalita</h3>
-                <p className="text-blue-100 text-sm">Každý projekt s 5letou zárukou</p>
+                <p className="text-blue-100 text-sm">Každý projekt se zárukou na práci i materiál</p>
               </div>
               <div className="text-center">
                 <Users className="h-12 w-12 text-yellow-400 mx-auto mb-4" />
                 <h3 className="font-semibold text-lg mb-2">Zkušený tým</h3>
-                <p className="text-blue-100 text-sm">15+ let praxe v oboru</p>
+                <p className="text-blue-100 text-sm">Náš tým se účastní pravidelných školení a přezkoušení z oboru</p>
               </div>
               <div className="text-center">
                 <Award className="h-12 w-12 text-orange-400 mx-auto mb-4" />
-                <h3 className="font-semibold text-lg mb-2">Certifikace</h3>
-                <p className="text-blue-100 text-sm">Všechny potřebné certifikace</p>
+                <h3 className="font-semibold text-lg mb-2">Certifikáty</h3>
+                <p className="text-blue-100 text-sm">Jsme certifikovaným týmem v oboru a řídíme se normami ISO 9001 a 14001</p>
               </div>
             </div>
           </div>

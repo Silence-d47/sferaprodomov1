@@ -32,13 +32,13 @@ export function LogoCarousel({
       
       <style jsx>{`
         .carousel-section {
-          padding: 1rem 0;
+          padding: 3rem 0;
           overflow: visible;
           width: 100vw;
           margin-left: calc(-50vw + 50%);
           position: relative;
           filter: blur(0px);
-          background: #f9fafb;
+          background:rgba(229, 229, 230, 0.68);
         }
         @keyframes scroll {
           0% {
@@ -85,7 +85,7 @@ export function LogoCarousel({
         }
       `}</style>
       
-      <div className="w-full px14 relative">
+      <div className="w-auto px- relative">
         
 
         
@@ -95,12 +95,12 @@ export function LogoCarousel({
           <div className="fade-right"></div>
           
           {/* Scrolling logos container */}
-          <div className="scrolling-logos items-center gap-20">
+          <div className="scrolling-logos items-center gap-15">
             {duplicatedLogos.map((logo, index) => (
               <div
                 key={`${logo.name}-${index}`}
                 className={`flex-shrink-0 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 mx-8 ${
-                  logo.name === 'Nordstar' ? 'w-48 h-24' : 'w-32 h-16'
+                  logo.name === 'Nordstar' ? 'w-48 h-24' : 'w-48 h-24'
                 }`}
               >
                 <Image

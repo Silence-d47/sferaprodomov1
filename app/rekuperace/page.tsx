@@ -1,144 +1,40 @@
+// Importy inspirované moderním designem
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ProductCard } from "@/components/ui/product-card"
-import { ContactForm } from "@/components/ui/contact-form"
+import { ProductCard } from "@/components/ui/product-card" 
+import { ContactForm } from "@/components/ui/contact-form3" 
 import { PDFDownloadButton } from "@/components/ui/pdf-download-button"
-import { ServiceIcon } from "@/components/ui/service-icon"
 import { Badge } from "@/components/ui/badge"
-import { Wind, Heart, Leaf, Shield, CheckCircle, Home, Building, Factory } from "lucide-react"
+import { ThemeProvider } from "@/components/theme-provider"
+import { 
+  Shield, 
+  Clock, 
+  Award, 
+  CheckCircle, 
+  ArrowRight, 
+  Phone, 
+  Quote,
+  ChevronRight,
+  Wind,      // Pro čerstvý vzduch
+  Heart,     // Pro zdraví
+  Droplets,  // Pro vlhkost
+  Wallet,    // Pro úspory
+  Users,
+  Home,
+  Building,
+  Factory,
+  Wrench
+} from "lucide-react"
 
-// Důvody proč rekuperace
-const whyRecuperation = [
-  {
-    icon: Heart,
-    title: "Zdravé bydlení",
-    description: "Čerstvý vzduch bez otevírání oken, filtrované alergeny a pyl.",
-  },
-  {
-    icon: Leaf,
-    title: "Úspora energie až 90%",
-    description: "Rekuperace tepla ze vzduchu snižuje náklady na vytápění.",
-  },
-  {
-    icon: Wind,
-    title: "Stálé větrání",
-    description: "24/7 přívod čerstvého vzduchu bez průvanu a hluku.",
-  },
-  {
-    icon: Shield,
-    title: "Ochrana před vlhkostí",
-    description: "Prevence plísní a kondenzace, zdravé vnitřní klima.",
-  },
-]
+// Import pro dynamické barvy
 
-// Nejprodávanější rekuperační jednotky
-const bestSellingModels = [
-  {
-    title: "Zehnder ComfoAir Q350",
-    description: "Prémiová rekuperační jednotka s nejvyšší účinností a tichým provozem.",
-    image: "/placeholder.svg?height=300&width=300&text=Zehnder+Q350",
-    features: [
-      "Účinnost rekuperace 95%",
-      "Průtok vzduchu 350 m³/h",
-      "Tichý provoz 25 dB(A)",
-      "ComfoConnect ovládání",
-      "Bypass pro letní provoz",
-    ],
-    isRecommended: true,
-    catalogUrl: "/katalogy/zehnder-comfoair.pdf",
-  },
-  {
-    title: "Atrea Duplex ECV5",
-    description: "Česká kvalita s pokročilými funkcemi a snadnou údržbou.",
-    image: "/placeholder.svg?height=300&width=300&text=Atrea+Duplex",
-    features: [
-      "Účinnost rekuperace 93%",
-      "Průtok vzduchu 500 m³/h",
-      "RD5 regulace",
-      "Protiproudý výměník",
-      "Snadná údržba",
-    ],
-    catalogUrl: "/katalogy/atrea-duplex.pdf",
-  },
-  {
-    title: "Jablotron Futura",
-    description: "Kompaktní jednotka s inteligentním řízením a vysokou účinností.",
-    image: "/placeholder.svg?height=300&width=300&text=Jablotron+Futura",
-    features: [
-      "Účinnost rekuperace 92%",
-      "Průtok vzduchu 280 m³/h",
-      "MyJablotron aplikace",
-      "Kompaktní rozměry",
-      "Automatické řízení",
-    ],
-    catalogUrl: "/katalogy/jablotron-futura.pdf",
-  },
-  {
-    title: "Systemair SAVE VTR 300",
-    description: "Švédská kvalita s rotačním výměníkem a vysokou účinností.",
-    image: "/placeholder.svg?height=300&width=300&text=Systemair+SAVE",
-    features: [
-      "Rotační výměník",
-      "Účinnost rekuperace 85%",
-      "Průtok vzduchu 300 m³/h",
-      "Modbus komunikace",
-      "Robustní konstrukce",
-    ],
-    catalogUrl: "/katalogy/systemair-save.pdf",
-  },
-  {
-    title: "Daikin VAM800FB",
-    description: "Profesionální řešení s pokročilými filtry a tichým provozem.",
-    image: "/placeholder.svg?height=300&width=300&text=Daikin+VAM",
-    features: [
-      "Účinnost rekuperace 90%",
-      "Průtok vzduchu 800 m³/h",
-      "HEPA filtry",
-      "Inteligentní řízení",
-      "Nízká spotřeba energie",
-    ],
-    catalogUrl: "/katalogy/daikin-vam.pdf",
-  },
-  {
-    title: "Brink Renovent Excellent 300",
-    description: "Holandská preciznost s inovativními funkcemi pro maximální komfort.",
-    image: "/placeholder.svg?height=300&width=300&text=Brink+Renovent",
-    features: [
-      "Účinnost rekuperace 95%",
-      "Průtok vzduchu 300 m³/h",
-      "Enthalpický výměník",
-      "Brink HOME aplikace",
-      "Automatické filtry",
-    ],
-    catalogUrl: "/katalogy/brink-renovent.pdf",
-  },
-  {
-    title: "Salda RIRS 350 PE EKO 3.0",
-    description: "Litevská kvalita s vynikajícím poměrem cena/výkon.",
-    image: "/placeholder.svg?height=300&width=300&text=Salda+RIRS",
-    features: [
-      "Účinnost rekuperace 91%",
-      "Průtok vzduchu 350 m³/h",
-      "SmartTouch ovládání",
-      "Protiproudý výměník",
-      "Nízké provozní náklady",
-    ],
-    catalogUrl: "/katalogy/salda-rirs.pdf",
-  },
-  {
-    title: "Vents VUT 300 H",
-    description: "Ekonomické řešení s dobrými parametry pro menší objekty.",
-    image: "/placeholder.svg?height=300&width=300&text=Vents+VUT",
-    features: [
-      "Účinnost rekuperace 87%",
-      "Průtok vzduchu 300 m³/h",
-      "Jednoduché ovládání",
-      "Kompaktní design",
-      "Dostupná cena",
-    ],
-    catalogUrl: "/katalogy/vents-vut.pdf",
-  },
+// Důvody, proč si vybrat rekuperaci (v novém stylu)
+const whyChooseUs = [
+  { icon: Heart, title: "Zdravější bydlení", description: "Filtrovaný vzduch bez alergenů, prachu a pylu pro celou rodinu." },
+  { icon: Wallet, title: "Úspora nákladů až 30 %", description: "Rekuperace tepla výrazně snižuje náklady na vytápění v zimě." },
+  { icon: Droplets, title: "Konec plísní a vlhkosti", description: "Efektivně odvádí vlhkost a brání vzniku plísní a rosení oken." },
+  { icon: Wind, title: "Komfort bez kompromisů", description: "Stále čerstvý vzduch bez nutnosti větrání, průvanu a hluku z ulice." },
 ]
 
 // Typy rekuperačních systémů
@@ -146,283 +42,642 @@ const recuperationTypes = [
   {
     icon: Home,
     title: "Centrální rekuperace",
-    description: "Jedna jednotka pro celý dům s rozvodem potrubí",
-    advantages: ["Nejvyšší účinnost", "Centrální řízení", "Optimální pro novostavby"],
+    description: "Jedna centrální jednotka zajišťuje větrání celého domu či bytu pomocí systému rozvodů vzduchu. Ideální pro novostavby.",
+    advantages: ["Nejvyšší účinnost a komfort", "Tichý provoz", "Komplexní řešení", "Možnost chlazení a vlhčení"],
   },
   {
     icon: Building,
     title: "Decentralizovaná rekuperace",
-    description: "Jednotlivé jednotky pro každou místnost",
-    advantages: ["Snadná instalace", "Vhodné pro rekonstrukce", "Nezávislé řízení místností"],
+    description: "Jednotlivé jednotky se instalují přímo do obvodových zdí konkrétních místností. Vhodné pro rekonstrukce a byty.",
+    advantages: ["Jednoduchá instalace bez potrubí", "Nižší pořizovací náklady", "Řešení pro jednotlivé místnosti", "Flexibilita"],
   },
   {
     icon: Factory,
-    title: "Průmyslová rekuperace",
-    description: "Velkokapacitní systémy pro komerční objekty",
-    advantages: ["Vysoké průtoky", "Robustní konstrukce", "Úspora provozních nákladů"],
+    title: "Komerční a průmyslová",
+    description: "Výkonné systémy navržené pro kanceláře, restaurace, školy a výrobní haly, kde je kladen důraz na velký objem výměny vzduchu.",
+    advantages: ["Vysoký vzduchový výkon", "Robustní a spolehlivá konstrukce", "Splnění hygienických norem", "Výrazná úspora provozních nákladů"],
+  }
+]
+
+// 8 nejprodávanějších modelů (data ponechána, upraveny slugy pro URL)
+const bestSellingModels = [
+  {
+    slug: 'zehnder-comfoair-q350',
+    title: "Zehnder ComfoAir Q350",
+    description: "Prémiová jednotka s nejvyšší účinností rekuperace tepla a vlhkosti na trhu.",
+    image: "/placeholder.svg?height=300&width=300&text=Zehnder+Q350",
+    features: ["Účinnost až 96%", "Entalpický výměník", "Ovládání přes aplikaci", "Letní bypass", "Extrémně tichý provoz"],
+    isRecommended: true,
+    catalogUrl: "/katalogy/zehnder-comfoair.pdf",
+  },
+  {
+    slug: 'atrea-duplex-ecv5',
+    title: "Atrea Duplex ECV5",
+    description: "Osvědčená česká kvalita s vysokou účinností a pokročilou regulací.",
+    image: "/placeholder.svg?height=300&width=300&text=Atrea+Duplex",
+    features: ["Účinnost až 93%", "Regulace RD5", "Protiproudý výměník", "Týdenní program", "Snadná údržba"],
+    catalogUrl: "/katalogy/atrea-duplex.pdf",
+  },
+  {
+    slug: 'jablotron-futura',
+    title: "Jablotron Futura",
+    description: "Inteligentní rekuperace s možností chlazení a řízením podle CO₂.",
+    image: "/placeholder.svg?height=300&width=300&text=Jablotron+Futura",
+    features: ["Aktivní rekuperace s TČ", "Chlazení v létě", "Aplikace MyJablotron", "CO₂ čidla v ceně", "Kompaktní rozměry"],
+    catalogUrl: "/katalogy/jablotron-futura.pdf",
+  },
+  {
+    slug: 'systemair-save-vtr-300',
+    title: "Systemair SAVE VTR 300",
+    description: "Švédská spolehlivost s rotačním výměníkem, ideální do chladných podmínek.",
+    image: "/placeholder.svg?height=300&width=300&text=Systemair+SAVE",
+    features: ["Rotační výměník tepla", "Účinnost až 86%", "Vestavěný vlhkostní senzor", "Modbus komunikace", "Robustní konstrukce"],
+    catalogUrl: "/katalogy/systemair-save.pdf",
   },
 ]
 
-export default function RekuperacePage() {
+// Ukázkové reference pro rekuperaci
+const references = [
+  {
+    slug: 'novostavba-olomouc-rekuperace',
+    image: "/images/reference/novostavba-olomouc.jpg",
+    quote: "V naší nové dřevostavbě byla rekuperace nutností. Tým ze Sféry pro domov odvedl perfektní práci od projektu až po realizaci. Doma máme stále čerstvý vzduch a v zimě jsme výrazně ušetřili na topení.",
+    customer: "Rodina Novotných, Olomouc",
+    project: "Instalace centrální rekuperace Zehnder"
+  },
+  {
+    slug: 'rekonstrukce-bytu-ostrava',
+    image: "/images/reference/byt-ostrava-rekuperace.jpg",
+    quote: "Měli jsme v bytě problém s plísní a vlhkostí. Po instalaci decentrální rekuperace se vše vyřešilo. Technici byli rychlí, čistotní a vše nám skvěle vysvětlili. Velká spokojenost.",
+    customer: "Paní Králová, Ostrava",
+    project: "Instalace decentrální rekuperace"
+  },
+  {
+    slug: 'kancelare-frydek-mistek',
+    image: "/images/reference/kancelare-frydek-mistek.jpg",
+    quote: "Pro naše nové kanceláře jsme potřebovali zajistit kvalitní vzduch pro zaměstnance. Rekuperační systém funguje skvěle, je tichý a v létě oceňujeme i možnost nočního předchlazení.",
+    customer: "IT Firma s.r.o., Frýdek-Místek",
+    project: "Komerční rekuperace pro kanceláře"
+  },
+];
+
+export default function RekuperacePageRefined() {
   return (
-    <div className="flex flex-col bg-white">
-      {/* Hero Section */}
-      <section className="relative h-[500px]">
-        <div className="absolute inset-0">
-          <Image
-            src="/placeholder.svg?height=500&width=1200&text=Rekuperace+Hero"
-            alt="Rekuperační systémy"
-            fill
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-violet-600 to-indigo-600 opacity-90" />
-        </div>
-        <div className="relative z-10 flex items-center h-full">
-          <div className="container">
-            <div className="max-w-3xl text-white">
-              <Badge className="mb-4 bg-white/20 text-white border-white/20">Rekuperace</Badge>
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight drop-shadow-lg">Rekuperace pro zdravé bydlení</h1>
-              <p className="text-xl mb-8 leading-relaxed drop-shadow-lg">
-                Čerstvý vzduch 24/7 s úsporou energie až 90%. Filtrované alergeny, žádné průvany, tichý provoz.
-                Investice do vašeho zdraví.
+    <ThemeProvider theme="rekuperace">
+      <div className="bg-white text-purple-800">
+        <section className="relative h-[90vh] min-h-[600px] flex items-center text-white">
+          <div className="absolute inset-0">
+            <Image src="/images/rekuperace.webp" alt="Interiér s vývodem rekuperace" fill priority className="object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-purple-900 via-transparent to-black"></div>
+          </div>
+          <div className="relative z-10 container">
+            <div className="max-w-3xl">
+              <Badge variant="outline" className="mb-6 bg-purple-500/10 border-purple-500/30 text-white ">
+                Řízené větrání s rekuperací tepla
+              </Badge>
+              <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight [text-shadow:_0_2px_8px_rgb(0_0_0_/_50%)] text-white-70">
+                Dýchejte doma zdravě a čistě
+              </h1>
+              <p className="text-lg md:text-xl text-white mb-8 max-w-2xl [text-shadow:_0_1px_4px_rgb(0_0_0_/_40%)]">
+                Zajistíme vám stálý přísun čerstvého, filtrovaného vzduchu bez ztráty tepla. Řekněte sbohem alergenům, vlhkosti a plísním.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" asChild className="bg-white text-purple-700 hover:bg-purple-100">
-                  <Link href="#kontakt">Nezávazná poptávka</Link>
+                <Button size="lg" asChild className="bg-white text-violet-900 font-semibold hover:bg-white/40 shadow-lg">
+                  <Link href="#kontakt">Získat nezávaznou nabídku</Link>
                 </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  asChild
-                  className="border-white text-white hover:bg-white hover:text-purple-700 bg-transparent"
-                >
-                  <Link href="#modely">Nejprodávanější modely</Link>
+                <Button size="lg" variant="outline" asChild className="border-purple-500/50 bg-white/10 text-purple-200 hover:bg-white/20 backdrop-blur-sm">
+                  <Link href="#modely">Prohlédnout jednotky</Link>
                 </Button>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Důvody proč rekuperace */}
-      <section className="py-20 bg-gradient-to-b from-muted/30 to-background">
-        <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Proč rekuperace?</h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Moderní domy jsou těsné, což způsobuje problémy s vlhkostí a kvalitou vzduchu. Rekuperace je řešení.
-            </p>
-            <div className="w-24 h-1 bg-primary mx-auto mt-6"></div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {whyRecuperation.map((reason, index) => (
-              <div key={index} className="text-center group">
-                <div className="mb-6">
-                  <ServiceIcon
-                    icon={reason.icon}
-                    className="mx-auto w-16 h-16 bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300"
-                  />
-                </div>
-                <h3 className="font-bold text-lg mb-3 text-primary">{reason.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{reason.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Typy rekuperačních systémů */}
-      <section className="py-20">
-        <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Typy rekuperačních systémů</h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Vyberte si řešení podle typu objektu a vašich potřeb.
-            </p>
-            <div className="w-24 h-1 bg-primary mx-auto mt-6"></div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {recuperationTypes.map((type, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 border-t-4 border-primary"
-              >
-                <div className="text-center mb-6">
-                  <ServiceIcon icon={type.icon} className="mx-auto w-16 h-16 bg-primary/10 text-primary mb-4" />
-                  <h3 className="font-bold text-xl text-primary">{type.title}</h3>
-                </div>
-                <p className="text-muted-foreground mb-6 text-center">{type.description}</p>
-                <div className="space-y-3">
-                  <h4 className="font-semibold text-sm">Výhody:</h4>
-                  {type.advantages.map((advantage, idx) => (
-                    <div key={idx} className="flex items-center text-sm">
-                      <CheckCircle className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
-                      {advantage}
+        <section className="py-20 sm:py-28 bg-slate-50/70">
+          <div className="container">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">Proč je rekuperace klíčová pro moderní bydlení?</h2>
+              <p className="text-lg text-slate-600">
+                V dnešních utěsněných domech je řízené větrání jediný způsob, jak zajistit zdravé a komfortní prostředí.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {whyChooseUs.map((reason) => (
+                <div key={reason.title} className="bg-white p-6 rounded-xl border border-purple-200/80 text-center transition-all duration-300 hover:shadow-lg hover:-translate-1">
+                  <div className="flex justify-center mb-4">
+                    <div className="h-14 w-14 rounded-full flex items-center justify-center bg-purple-200">
+                      <reason.icon className="h-7 w-7 text-purple-800" />
                     </div>
-                  ))}
+                  </div>
+                  <h3 className="text-lg font-bold text-purple-800 mb-2">{reason.title}</h3>
+                  <p className="text-slate-600 text-sm leading-relaxed">{reason.description}</p>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+        
+        <section className="py-20 sm:py-28 bg-white">
+          <div className="container">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">Jaký systém rekuperace je pro vás?</h2>
+              <p className="text-lg text-slate-600">
+                Ať už stavíte nový dům, rekonstruujete byt, nebo vybavujete kancelář, máme pro vás ideální řešení.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {recuperationTypes.map((type, index) => (
+                <div key={index} className="bg-purple-50/70 rounded-2xl p-8 flex flex-col border border-purple-200/80 hover:shadow-xl transition-shadow duration-300">
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="flex-shrink-0 h-16 w-16 rounded-full flex items-center justify-center bg-purple-200">
+                            <type.icon className="h-8 w-8 text-purple-800" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-slate-800">{type.title}</h3>
+                    </div>
+                    <p className="text-slate-600 mb-6 flex-grow">{type.description}</p>
+                    <div className="space-y-3 mt-auto">
+                      {type.advantages.map((advantage, idx) => (
+                        <div key={idx} className="flex items-center text-sm">
+                          <CheckCircle className="h-5 w-5 text-purple-800 mr-2 flex-shrink-0" />
+                          <span className="text-slate-700">{advantage}</span>
+                        </div>
+                      ))}
+                    </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
-      {/* Nejprodávanější modely */}
-      <section id="modely" className="py-20 bg-muted/30">
-        <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Naše nejprodávanější rekuperační jednotky</h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-              Ověřené modely s nejvyšší účinností rekuperace od předních evropských výrobců.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <section id="modely" className="py-20 sm:py-28 bg-muted/70">
+          <div className="container">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">Naše nejprodávanější rekuperační jednotky</h2>
+              <p className="text-lg text-muted-foreground">
+                Nabízíme výběr prověřených jednotek od předních evropských výrobců, které zaručují vysokou účinnost a spolehlivost.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+              {bestSellingModels.map((product, index) => (
+                <ProductCard theme="rekuperace" key={index} {...product} />
+              ))}
+            </div>
+            <div className="mt-16 text-center">
               <PDFDownloadButton
                 url="/katalogy/rekuperace-kompletni-katalog.pdf"
                 filename="sfera-rekuperace-katalog.pdf"
-                title="Stáhnout náš katalog"
+                title="Stáhnout kompletní katalog"
               />
-              <Button variant="outline" asChild>
-                <Link href="/reference?kategorie=rekuperace">Naše realizace</Link>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-20 sm:py-28 bg-purple-100/50 text-black">
+          <div className="container">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black">Od návrhu po čistý vzduch v 5 krocích</h2>
+              <p className="text-lg text-black">
+                Náš proces je transparentní a navržený tak, aby pro vás byl co nejjednodušší a nejpohodlnější.
+              </p>
+            </div>
+            <div className="relative max-w-5xl mx-auto">
+              <div className="hidden md:block absolute top-8 left-0 w-full h-0.5 bg-violet-700"></div>
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-8 relative">
+                {[
+                  { step: "Poptávka a analýza", icon: "1" },
+                  { step: "Projekt a návrh", icon: "2" },
+                  { step: "Cenová nabídka", icon: "3" },
+                  { step: "Odborná montáž", icon: "4" },
+                  { step: "Regulace a servis", icon: "5" },
+                ].map((item, index) => (
+                  <div key={index} className="text-center">
+                    <div className="relative w-16 h-16 bg-purple-800 border-2 border-purple-700 rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4 transition-all duration-300 group-hover:border-primary">
+                      <span className="text-white/90">{item.icon}</span>
+                    </div>
+                    <p className="font-semibold text-sm text-black leading-tight">{item.step}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-20 sm:py-28 bg-white">
+          <div className="container">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">Co říkají naši zákazníci</h2>
+              <p className="text-lg text-black">
+                Spokojenost našich klientů je pro nás nejlepší referencí. Podívejte se na ukázky naší práce.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {references.map((ref, index) => (
+                <div key={index} className="bg-slate-50/70 rounded-2xl p-1 flex flex-col border border-slate-200/80">
+                  <div className="relative h-56 w-full">
+                    <Image src={ref.image} alt={ref.project} layout="fill" objectFit="cover" className="rounded-t-2xl" />
+                  </div>
+                  <div className="p-6 flex-grow flex flex-col">
+                    <Quote className="w-8 h-8 text-primary/20 mb-4 flex-shrink-0" fill="currentColor" />
+                    <p className="text-slate-600 italic mb-6 flex-grow">"{ref.quote}"</p>
+                    <div className="mt-auto pt-5 border-t border-slate-200">
+                      <p className="font-bold text-slate-800">{ref.customer}</p>
+                      <p className="text-sm text-slate-500">{ref.project}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            <div className="text-center mt-16">
+              <Button asChild size="lg" variant="outline" className="border-slate-300 hover:bg-slate-100">
+                <Link href="/reference">
+                  Zobrazit všechny realizace <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
               </Button>
             </div>
           </div>
+        </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {bestSellingModels.map((product, index) => (
-              <ProductCard key={index} {...product} />
-            ))}
-          </div>
-
-          <div className="text-center mt-12">
-            <p className="text-muted-foreground mb-4">Nevíte, kterou jednotku vybrat? Pomůžeme vám!</p>
-            <Button asChild variant="outline" size="lg">
-              <Link href="/kontakt">Bezplatná konzultace</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Jak rekuperace funguje */}
-      <section className="py-20">
-        <div className="container">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">Jak rekuperace funguje?</h2>
-              <div className="w-24 h-1 bg-primary mx-auto"></div>
+        <section className="py-20 sm:py-28 bg-purple-50/70">
+          <div className="container">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">Jak funguje rekuperace?</h2>
+              <p className="text-lg text-slate-600">
+                Pochopte principy řízeného větrání s rekuperací tepla a zjistěte, proč je to nejefektivnější způsob větrání moderních domů.
+              </p>
             </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <div>
-                <h3 className="text-2xl font-bold mb-6 text-primary">Princip funkce</h3>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="space-y-8">
                 <div className="space-y-6">
-                  <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 text-sm">
-                      1
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-8 h-8 bg-purple-200 rounded-full flex items-center justify-center">
+                      <span className="text-purple-800 font-bold">1</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-2">Přívod čerstvého vzduchu</h4>
-                      <p className="text-muted-foreground">
-                        Venkovní vzduch je nasáván a filtrován od prachových částic a alergenů.
+                      <h3 className="text-xl font-bold text-purple-800 mb-2">Přívod čerstvého vzduchu</h3>
+                      <p className="text-slate-600">
+                        Venkovní vzduch je nasáván do rekuperační jednotky, kde prochází filtrací. Hrubé nečistoty, pyl a alergeny jsou zachyceny ve filtrech.
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 text-sm">
-                      2
+                  
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-8 h-8 bg-purple-200 rounded-full flex items-center justify-center">
+                      <span className="text-purple-800 font-bold">2</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-2">Odvod odpadního vzduchu</h4>
-                      <p className="text-muted-foreground">
-                        Teplý vzduch z interiéru je odváděn ven přes výměník tepla.
+                      <h3 className="text-xl font-bold text-purple-800 mb-2">Výměna tepla</h3>
+                      <p className="text-slate-600">
+                        V tepelném výměníku se setkávají proudy čerstvého a odpadního vzduchu. Teplo z teplého odpadního vzduchu se předává studenému čerstvému vzduchu - aniž by se proudy smíchaly.
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 text-sm">
-                      3
+                  
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-8 h-8 bg-purple-200 rounded-full flex items-center justify-center">
+                      <span className="text-purple-800 font-bold">3</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-2">Rekuperace tepla</h4>
-                      <p className="text-muted-foreground">
-                        Teplo z odpadního vzduchu se přenáší na čerstvý vzduch (až 95% účinnost).
+                      <h3 className="text-xl font-bold text-purple-800 mb-2">Distribuce vzduchu</h3>
+                      <p className="text-slate-600">
+                        Předehřátý čerstvý vzduch je rozváděn do obytných místností (obývák, ložnice), zatímco odpadní vzduch je odsáván z vlhkých prostor (koupelna, kuchyň).
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 text-sm">
-                      4
+                  
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-8 h-8 bg-purple-200 rounded-full flex items-center justify-center">
+                      <span className="text-purple-800 font-bold">4</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-2">Distribuce do místností</h4>
-                      <p className="text-muted-foreground">
-                        Předehřátý čerstvý vzduch je rozváděn do obytných místností.
+                      <h3 className="text-xl font-bold text-purple-800 mb-2">Odvod odpadního vzduchu</h3>
+                      <p className="text-slate-600">
+                        Spotřebovaný vzduch je po předání tepla vyveden ven. Díky rekuperaci se ztratí pouze 5-15% tepla místo 100% při klasickém větrání okny.
                       </p>
                     </div>
                   </div>
                 </div>
-              </div>
-
-              <div className="bg-primary/5 p-8 rounded-lg">
-                <h3 className="text-2xl font-bold mb-6 text-primary">Výhody pro vaše zdraví</h3>
-                <div className="space-y-4">
-                  {[
-                    "Odstranění alergenů a prachových částic",
-                    "Optimální vlhkost vzduchu (40-60%)",
-                    "Prevence plísní a kondenzace",
-                    "Lepší spánek díky čerstvému vzduchu",
-                    "Snížení rizika respiračních onemocnění",
-                    "Eliminace pachů z vaření a kouření",
-                    "Konstantní teplota bez průvanů",
-                    "Tichý provoz - nerušený odpočinek",
-                  ].map((benefit, index) => (
-                    <div key={index} className="flex items-center">
-                      <CheckCircle className="h-5 w-5 text-primary mr-3 flex-shrink-0" />
-                      <span>{benefit}</span>
+                
+                <div className="bg-slate-50 rounded-xl p-6">
+                  <h4 className="text-lg font-bold text-slate-800 mb-3">Klíčové výhody procesu:</h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="flex items-center text-sm">
+                      <CheckCircle className="h-5 w-5 text-purple-800 mr-2 flex-shrink-0" />
+                      <span>Úspora tepla až 95%</span>
                     </div>
-                  ))}
+                    <div className="flex items-center text-sm">
+                      <CheckCircle className="h-5 w-5 text-purple-800 mr-2 flex-shrink-0" />
+                      <span>Filtrovaný vzduch</span>
+                    </div>
+                    <div className="flex items-center text-sm">
+                      <CheckCircle className="h-5 w-5 text-purple-800 mr-2 flex-shrink-0" />
+                      <span>Konstantní teplota</span>
+                    </div>
+                    <div className="flex items-center text-sm">
+                      <CheckCircle className="h-5 w-5 text-purple-800 mr-2 flex-shrink-0" />
+                      <span>Kontrola vlhkosti</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="lg:pl-8">
+                <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-8 border border-purple-200">
+                  <div className="space-y-6">
+                    <div className="text-center">
+                      <h4 className="text-xl font-bold text-purple-800 mb-4">Princip rekuperace tepla</h4>
+                    </div>
+                    
+                    {/* Schematické znázornění */}
+                    <div className="relative">
+                      <div className="grid grid-cols-2 gap-4 mb-6">
+                        <div className="text-center">
+                          <div className="bg-blue-100 rounded-lg p-4 mb-2">
+                            <Wind className="h-8 w-8 text-blue-600 mx-auto mb-2" />
+                            <p className="text-sm font-semibold text-blue-800">Čerstvý vzduch</p>
+                            <p className="text-xs text-blue-600">-5°C → +18°C</p>
+                          </div>
+                        </div>
+                        <div className="text-center">
+                          <div className="bg-red-100 rounded-lg p-4 mb-2">
+                            <Wind className="h-8 w-8 text-red-600 mx-auto mb-2" />
+                            <p className="text-sm font-semibold text-red-800">Odpadní vzduch</p>
+                            <p className="text-xs text-red-600">+22°C → +2°C</p>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="text-center">
+                        <div className="bg-primary/10 rounded-lg p-4">
+                          <Heart className="h-8 w-8 text-primary mx-auto mb-2" />
+                          <p className="text-sm font-semibold text-slate-800">Tepelný výměník</p>
+                          <p className="text-xs text-slate-600">Účinnost až 96%</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="text-center">
+                      <Badge variant="outline" className="bg-green-50 border-green-200 text-green-800">
+                        Úspora energie: 85-95%
+                      </Badge>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-primary text-primary-foreground">
-        <div className="container text-center">
-          <h2 className="text-4xl font-bold mb-6">Investujte do svého zdraví</h2>
-          <p className="text-xl mb-8 max-w-3xl mx-auto">
-            Rekuperace není jen o úspoře energie, ale především o kvalitě života. Získejte bezplatnou konzultaci a návrh
-            řešení.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Button size="lg" variant="secondary" asChild className="bg-white text-primary hover:bg-gray-100">
-              <Link href="#kontakt">Bezplatná konzultace</Link>
-            </Button>
-            <div className="flex items-center gap-3 text-lg">
-              <span>nebo zavolejte:</span>
-              <Link href="tel:+420123456789" className="font-bold hover:underline">
-                +420 123 456 789
-              </Link>
+        {/* FAQ - Modernized */}
+        <section className="py-20 bg-gradient-to-br from-purple-50/30 via-white to-purple-50/50 relative overflow-hidden">
+          {/* Background decorative elements */}
+          <div className="absolute inset-0">
+            <div className="absolute top-20 left-10 w-32 h-32 bg-purple-100 rounded-full opacity-20 blur-3xl"></div>
+            <div className="absolute bottom-20 right-10 w-40 h-40 bg-purple-200 rounded-full opacity-20 blur-3xl"></div>
+          </div>
+          
+          <div className="container relative z-10">
+            <div className="text-center mb-16">
+              <div className="flex items-center justify-center mb-6">
+                <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mr-4">
+                  <span className="text-white font-bold text-lg">?</span>
+                </div>
+                <Badge className="bg-purple-100 text-purple-800 px-4 py-2">
+                  FAQ
+                </Badge>
+              </div>
+              <h2 className="text-3xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-purple-500 to-purple-700 bg-clip-text text-transparent">
+                Často kladené otázky
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+                Vše co potřebujete vědět o rekuperačních systémech - odpovědi od expertů
+              </p>
+              <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-purple-700 mx-auto mt-8"></div>
+            </div>
+
+            <div className="max-w-5xl mx-auto">
+              <div className="grid lg:grid-cols-2 gap-8">
+                {/* Levý sloupec */}
+                <div className="space-y-6">
+                  <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-500">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                        Q
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg mb-3 text-purple-500">Jak rekuperace funguje a jaký má princip?</h3>
+                        <p className="text-muted-foreground mb-4">
+                          Rekuperace je systém řízeného větrání s využitím tepla odpadního vzduchu. Princip je jednoduchý:
+                        </p>
+                        <div className="space-y-2">
+                          <div className="flex items-center">
+                            <CheckCircle className="h-5 w-5 text-purple-500 mr-3" />
+                            <span>Čerstvý vzduch z venku je přiváděn do interiéru</span>
+                          </div>
+                          <div className="flex items-center">
+                            <CheckCircle className="h-5 w-5 text-purple-500 mr-3" />
+                            <span>Odpadní vzduch z interiéru je odváděn ven</span>
+                          </div>
+                          <div className="flex items-center">
+                            <CheckCircle className="h-5 w-5 text-purple-500 mr-3" />
+                            <span>V tepelném výměníku dochází k předání tepla mezi proudy</span>
+                          </div>
+                          <div className="flex items-center">
+                            <CheckCircle className="h-5 w-5 text-purple-500 mr-3" />
+                            <span>Čerstvý vzduch se předehřeje a odpadní se předchlazuje</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-500">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                        Q
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg mb-3 text-purple-500">Jaká je účinnost rekuperace?</h3>
+                        <div className="space-y-3 mb-4">
+                          <div className="flex justify-between items-center p-2 bg-purple-50 rounded">
+                            <span className="font-medium">Průměrná účinnost:</span>
+                            <span className="text-purple-500 font-bold">85-95%</span>
+                          </div>
+                          <div className="flex justify-between items-center p-2 bg-purple-50 rounded">
+                            <span className="font-medium">Prémiové modely:</span>
+                            <span className="text-purple-500 font-bold">až 96%</span>
+                          </div>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          Účinnost závisí na kvalitě výměníku a regulace. Moderní jednotky dokážou zachytit až 96% tepla z odpadního vzduchu.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-500">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                        Q
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg mb-3 text-purple-500">Kdy je nutná údržba rekuperace?</h3>
+                        <div className="space-y-3 mb-4">
+                          <div className="flex items-center">
+                            <CheckCircle className="h-5 w-5 text-purple-500 mr-3" />
+                            <span><strong>Filtry:</strong> 3-6 měsíců</span>
+                          </div>
+                          <div className="flex items-center">
+                            <CheckCircle className="h-5 w-5 text-purple-500 mr-3" />
+                            <span><strong>Výměník:</strong> 1x ročně</span>
+                          </div>
+                          <div className="flex items-center">
+                            <CheckCircle className="h-5 w-5 text-purple-500 mr-3" />
+                            <span><strong>Ventilátory:</strong> Kontrola 1x ročně</span>
+                          </div>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          Pravidelná údržba zajišťuje maximální účinnost a životnost systému.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-500">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                        Q
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg mb-3 text-purple-500">Lze rekuperaci kombinovat s jinými systémy?</h3>
+                        <p className="text-muted-foreground mb-4">
+                          Ano, rekuperaci lze kombinovat s různými systémy:
+                        </p>
+                        <div className="grid grid-cols-2 gap-2 text-sm">
+                          <div className="flex items-center">
+                            <Wrench className="h-4 w-4 text-purple-500 mr-2" />
+                            <span>FV panely</span>
+                          </div>
+                          <div className="flex items-center">
+                            <Wrench className="h-4 w-4 text-purple-500 mr-2" />
+                            <span>Nabíječky elektromobilů</span>
+                          </div>
+                          <div className="flex items-center">
+                            <Wrench className="h-4 w-4 text-purple-500 mr-2" />
+                            <span>Podlahové vytápění</span>
+                          </div>
+                          <div className="flex items-center">
+                            <Wrench className="h-4 w-4 text-purple-500 mr-2" />
+                            <span>Chladící systémy</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Pravý sloupec */}
+                <div className="space-y-6">
+
+                  <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-500">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                        Q
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg mb-3 text-purple-500">Jaký je rozdíl mezi centrální a decentrální rekuperací?</h3>
+                        <div className="space-y-3 mb-4">
+                          <div className="p-3 bg-purple-50 rounded">
+                            <p className="font-medium text-purple-700 mb-1">Centrální rekuperace</p>
+                            <ul className="text-sm space-y-1">
+                              <li>• Jedna jednotka pro celý dům</li>
+                              <li>• Potrubní systém ve zdech</li>
+                              <li>• Ideální pro novostavby</li>
+                              <li>• Vyšší účinnost</li>
+                            </ul>
+                          </div>
+                          <div className="p-3 bg-purple-50 rounded">
+                            <p className="font-medium text-purple-700 mb-1">Decentrální rekuperace</p>
+                            <ul className="text-sm space-y-1">
+                              <li>• Jednotky v obvodových stěnách</li>
+                              <li>• Bez potrubí</li>
+                              <li>• Vhodné pro rekonstrukce</li>
+                              <li>• Nižší investice</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-500">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                        Q
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg mb-3 text-purple-500">Jak hlásí rekuperace?</h3>
+                        <p className="text-muted-foreground mb-4">
+                          Moderní rekuperační jednotky jsou extrémně tiché:
+                        </p>
+                        <div className="space-y-2">
+                          <div className="flex justify-between items-center p-2 bg-purple-50 rounded">
+                            <span className="font-medium">Průměrný provoz:</span>
+                            <span className="text-purple-500 font-bold">25-35 dB(A)</span>
+                          </div>
+                          <div className="flex justify-between items-center p-2 bg-purple-50 rounded">
+                            <span className="font-medium">V noci:</span>
+                            <span className="text-purple-500 font-bold">19-25 dB(A)</span>
+                          </div>
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-3">
+                          Pro srovnání: normální konverzace = 60 dB(A), tichý šepot = 30 dB(A)
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-500">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                        Q
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg mb-3 text-purple-500">Jaká je záruka na rekuperační systémy?</h3>
+                        <div className="space-y-3 mb-4">
+                          <div className="flex justify-between items-center p-3 bg-green-50 rounded">
+                            <span className="font-medium">Práce a montáž:</span>
+                            <span className="text-green-600 font-bold">5 let</span>
+                          </div>
+                          <div className="flex justify-between items-center p-3 bg-blue-50 rounded">
+                            <span className="font-medium">Jednotky:</span>
+                            <span className="text-blue-600 font-bold">dle výrobce (5-10 let)</span>
+                          </div>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          V případě jakýchkoli problémů jsme k dispozici 24/7. Záruka je na všechny práce a materiály.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Contact Form */}
-      <section id="kontakt" className="py-20">
-        <div className="container">
-          <div className="max-w-4xl mx-auto">
+        <section id="kontakt" className="py-20 sm:py-28 bg-slate-50/70">
+          <div className="container">
             <ContactForm
-              title="Poptávka rekuperace"
-              subtitle="Vyplňte formulář a my vám připravíme návrh rekuperačního systému pro váš dům."
+              customHeading="Získejte nabídku na míru"
+              subtitle="Nechte nám na sebe kontakt a my se vám obratem ozveme. Navrhneme vám nejlepší řešení řízeného větrání pro váš dům či byt."
               source="rekuperace-page"
             />
           </div>
-        </div>
-      </section>
-    </div>
+        </section>
+      </div>
+    </ThemeProvider>
   )
 }

@@ -1,6 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
+import { ArrowLeft } from 'lucide-react'
 
 interface BlogPostPageProps {
   params: {
@@ -74,41 +76,38 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-100">
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-[#1B5D93] via-[#196097] to-[#49A3D7]">
-        <div className="container">
+      <section className="py-20 bg-gradient-to-br from-[#1B5D93] via-[#196097] to-[#49A3D7] relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[length:20px_20px]"></div>
+        <div className="container relative z-10">
           <div className="max-w-4xl mx-auto text-white">
-            <div className="flex items-center gap-2 mb-6">
+            <Badge className="mb-4 bg-white/20 text-white border-white/20 px-4 py-2">
+              Blog článek
+            </Badge>
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+              {post.title}
+            </h1>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between text-white/90 gap-2 mb-6">
+              <span className="font-medium">Autor: {post.author}</span>
+              <span>{new Date(post.publishedAt).toLocaleDateString('cs-CZ')}</span>
+            </div>
+            <div className="flex flex-wrap gap-2">
               {post.categories?.map((category: string) => (
                 <Badge key={category} className="bg-white/20 text-white border-white/20">
                   {category}
                 </Badge>
               ))}
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              {post.title}
-            </h1>
-            <div className="flex items-center justify-between text-white/80">
-              <span>Autor: {post.author}</span>
-              <span>{new Date(post.publishedAt).toLocaleDateString('cs-CZ')}</span>
-            </div>
           </div>
         </div>
       </section>
 
       {/* Article Content */}
-      <section className="py-20">
+      <section className="py-16">
         <div className="container">
           <div className="max-w-4xl mx-auto">
-            <Card className="p-8">
-              <CardHeader>
-                <CardTitle className="text-2xl mb-4">{post.title}</CardTitle>
-                <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                  <span>Autor: {post.author}</span>
-                  <span>{new Date(post.publishedAt).toLocaleDateString('cs-CZ')}</span>
-                </div>
-              </CardHeader>
+            <Card className="p-8 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl shadow-lg">
               <CardContent>
                 <div 
                   className="prose prose-lg max-w-none"
@@ -116,6 +115,40 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 />
               </CardContent>
             </Card>
+            
+            <div className="mt-8 text-center">
+              <Link 
+                href="/blog" 
+                className="inline-flex items-center gap-2 text-[#1B5D93] hover:text-[#196097] font-medium transition-colors duration-200"
+              >
+                <ArrowLeft className="h-5 w-5" />
+                Zpět na blog
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Related Articles CTA */}
+      <section className="py-16 bg-gradient-to-r from-[#1B5D93] to-[#196097] text-white">
+        <div className="container text-center max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold mb-4">Zajímá vás více informací?</h2>
+          <p className="text-xl mb-8 max-w-2xl mx-auto text-white/90">
+            Podívejte se na další články v našem blogu nebo nás kontaktujte pro konzultaci
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link 
+              href="/blog" 
+              className="inline-block bg-white text-[#1B5D93] px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors duration-300 text-center"
+            >
+              Více článků
+            </Link>
+            <Link 
+              href="/kontakt" 
+              className="inline-block bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white/10 transition-colors duration-300 text-center"
+            >
+              Kontaktujte nás
+            </Link>
           </div>
         </div>
       </section>

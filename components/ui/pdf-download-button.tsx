@@ -42,7 +42,7 @@ export function PDFDownloadButton({
       onClick={handleDownload}
       variant="outline"
       size="sm"
-      className={cn("gap-1 border-primary/20 hover:bg-primary/5 text-xs", className)}
+      className={cn("gap-1 border-primary/20 text-primary hover:bg-primary/5 text-xs", className)}
     >
       <Download className={height} />
       {title}

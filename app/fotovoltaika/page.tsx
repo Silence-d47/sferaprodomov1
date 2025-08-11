@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { ThemeProvider } from "@/components/theme-provider"
 import { 
   Sun, 
   ArrowRight,
@@ -10,7 +11,8 @@ import {
 
 export default function FotovoltaikaPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <ThemeProvider theme="fotovoltaika">
+      <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative h-[600px]">
         <div className="absolute inset-0">
@@ -100,5 +102,6 @@ export default function FotovoltaikaPage() {
         </div>
       </section>
     </div>
+    </ThemeProvider>
   )
 }

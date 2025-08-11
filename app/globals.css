@@ -327,12 +327,14 @@ header button:focus-visible {
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 210 100% 32%; /* Sfera blue #1B5D93 */
+    /* Dynamic primary colors - will be overridden by theme provider */
+    --primary: 210 100% 32%; /* Default Sfera blue #1B5D93 */
     --primary-foreground: 210 40% 98%;
     --secondary: 210 40% 96%;
     --secondary-foreground: 222.2 84% 4.9%;
     --muted: 210 40% 96%;
     --muted-foreground: 215.4 16.3% 46.9%;
+    /* Dynamic accent colors - will be overridden by theme provider */
     --accent: 210 40% 96%;
     --accent-foreground: 222.2 84% 4.9%;
     --destructive: 0 84.2% 60.2%;
@@ -372,6 +374,42 @@ header button:focus-visible {
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Theme-specific gradient utilities */
+@layer utilities {
+  .theme-klimatizace .bg-theme-gradient {
+    @apply bg-gradient-to-br from-blue-500 to-blue-600;
+  }
+  
+  .theme-tepelna-cerpadla .bg-theme-gradient {
+    @apply bg-gradient-to-br from-green-500 to-green-600;
+  }
+  
+  .theme-elektroinstalace .bg-theme-gradient {
+    @apply bg-gradient-to-br from-orange-400 via-orange-500 to-red-400;
+  }
+  
+  .theme-rekuperace .bg-theme-gradient {
+    @apply bg-gradient-to-br from-violet-500 to-violet-600;
+  }
+  
+  .theme-fotovoltaika .bg-theme-gradient {
+    @apply bg-gradient-to-br from-yellow-500 to-amber-600;
+  }
+  
+  /* Primary color utilities using CSS variables */
+  .text-theme-primary {
+    color: hsl(var(--primary));
+  }
+  
+  .bg-theme-primary {
+    background-color: hsl(var(--primary));
+  }
+  
+  .border-theme-primary {
+    border-color: hsl(var(--primary));
   }
 }
 
