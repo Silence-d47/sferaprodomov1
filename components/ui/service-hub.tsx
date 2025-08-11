@@ -72,11 +72,11 @@ const ServiceHub: React.FC<ServiceHubProps> = ({ onServiceChange, activeService 
   };
 
   return (
-    <div className={`fixed left-1/2 transform -translate-x-1/2 bottom-10 z-20 transition-all duration-500 ${
-      isScrolled ? 'scale-75' : 'scale-100'
+    <div className={`fixed left-1/2 transform -translate-x-1/2 bottom-4 md:bottom-10 z-20 transition-all duration-500 ${
+      isScrolled ? 'scale-100 md:scale-75' : 'scale-100'
     }`}>
-      <div className={`flex items-center gap-6 p-8 bg-white/25 backdrop-blur-3xl border border-white/40 rounded-3xl shadow-[0_25px_50px_rgba(0,0,0,0.35),0_0_0_1px_rgba(255,255,255,0.1)_inset] transition-all duration-300 ${
-        isScrolled && !hoveredService ? 'h-16' : hoveredService ? 'h-56' : 'h-32'
+      <div className={`flex items-center gap-1 md:gap-6 p-2 md:p-8 bg-white/25 backdrop-blur-3xl border border-white/40 rounded-2xl md:rounded-3xl shadow-[0_25px_50px_rgba(0,0,0,0.35),0_0_0_1px_rgba(255,255,255,0.1)_inset] transition-all duration-300 ${
+        isScrolled && !hoveredService ? 'h-20 md:h-16' : hoveredService ? 'h-20 md:h-56' : 'h-20 md:h-32'
       }`}>
         {services.map((service) => (
           <div
@@ -84,7 +84,7 @@ const ServiceHub: React.FC<ServiceHubProps> = ({ onServiceChange, activeService 
             className={`
               relative flex flex-col items-center justify-center rounded-2xl cursor-pointer
               transition-all duration-300 ease-out text-white
-              ${isScrolled && !hoveredService ? 'w-12 h-12' : hoveredService === service.id ? 'w-48 h-44' : 'w-32 h-28'}
+              ${isScrolled && !hoveredService ? 'w-10 h-10 md:w-12 md:h-12' : hoveredService === service.id ? 'w-12 h-12 md:w-48 md:h-44' : 'w-12 h-12 md:w-32 md:h-28'}
               hover:transform hover:-translate-y-1 hover:scale-105
               ${hoveredService === service.id 
                 ? `${service.hoverColor} shadow-[0_0_20px_rgba(0,0,0,0.3)]` 

@@ -28,7 +28,7 @@ export default function KontaktPage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section - konzistentní s ostatními stránkami */}
-      <section className="relative h-[600px] bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600">
+      <section className="relative h-[80vh] md:h-[90vh] min-h-[500px] md:min-h-[600px] flex items-center bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600">
         <div className="absolute inset-0">
           <Image 
             src="/placeholder.svg?height=600&width=1200&text=Kontakt+Hero" 
@@ -37,7 +37,7 @@ export default function KontaktPage() {
             className="object-cover opacity-20" 
           />
         </div>
-        <div className="relative z-10 container h-full flex items-center">
+        <div className="relative z-10 container px-4 md:px-6">
           <div className="max-w-4xl text-white">
             <div className="flex items-center mb-6">
               <Image 

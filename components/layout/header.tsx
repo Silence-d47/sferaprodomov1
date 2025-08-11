@@ -22,13 +22,13 @@ export function Header() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <header className="absolute left-0 right-0 z-50 mx-4 bg-transparent backdrop-blur-none top-20">
-      <div className="container flex h-18 items-center justify-between px-8">
+    <header className="absolute left-0 right-0 z-50 mx-2 md:mx-4 bg-transparent backdrop-blur-none top-20 md:top-24">
+      <div className="container flex h-16 md:h-18 items-center justify-between px-4 md:px-8">
         {/* SFERA DOMOV - Left */}
         <div className="flex-1">
           <Link href="/" className="flex flex-col items-start">
-            <span className="text-white text-4xl font-semibold drop-shadow-lg leading-tight">S F É R A</span>
-            <span className="text-white text-xl font-semibold drop-shadow-lg leading-none mt-0.5">PRO DOMOV.CZ</span>
+            <span className="text-white text-2xl md:text-4xl font-semibold drop-shadow-lg leading-tight">S F É R A</span>
+            <span className="text-white text-sm md:text-xl font-semibold drop-shadow-lg leading-none mt-0.5">PRO DOMOV.CZ</span>
           </Link>
         </div>
 
@@ -60,13 +60,13 @@ export function Header() {
                 <span className="sr-only">Toggle menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-white/95 backdrop-blur-md border-l border-gray-200/50">
-              <nav className="flex flex-col space-y-2 mt-8">
+            <SheetContent side="right" className="w-[280px] sm:w-[350px] bg-white/95 backdrop-blur-md border-l border-gray-200/50">
+              <nav className="flex flex-col space-y-1 mt-6">
                 {navigation.map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}
-                    className="text-lg font-medium text-gray-700 transition-all duration-300 hover:text-gray-900 hover:bg-gray-100/30 py-3 px-4 rounded-lg"
+                    className="text-base font-medium text-gray-700 transition-all duration-300 hover:text-gray-900 hover:bg-gray-100/30 py-3 px-3 rounded-lg border-b border-gray-100 last:border-b-0"
                     onClick={() => setIsOpen(false)}
                   >
                     {item.name}

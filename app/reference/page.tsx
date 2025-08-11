@@ -202,7 +202,7 @@ export default function ReferencePage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section - konzistentní s hlavní stránkou */}
-      <section className="relative h-[500px] bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600">
+      <section className="relative h-[80vh] md:h-[90vh] min-h-[500px] md:min-h-[600px] flex items-center bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600">
         <div className="absolute inset-0">
           <Image 
             src="/placeholder.svg?height=500&width=1200&text=Reference+Hero" 
@@ -211,10 +211,10 @@ export default function ReferencePage() {
             className="object-cover opacity-20" 
           />
         </div>
-        <div className="relative z-10 container h-full">
-          <div className="grid lg:grid-cols-12 gap-8 items-center h-full">
+        <div className="relative z-10 container px-4 md:px-6">
+          <div className="grid lg:grid-cols-12 gap-4 md:gap-8 items-center">
             {/* Left side - Content */}
-            <div className="lg:col-span-8 text-white">
+            <div className="lg:col-span-8 text-white flex flex-col justify-center">
               <Badge className="bg-white/20 text-white border-white/20 text-sm px-3 py-1 mb-6 inline-block">
                 Naše reference
               </Badge>

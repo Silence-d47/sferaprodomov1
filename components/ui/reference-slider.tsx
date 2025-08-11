@@ -44,7 +44,7 @@ export function ReferenceSlider({ references }: ReferenceSliderProps) {
           style={{ transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)` }}
         >
           {references.map((reference) => (
-            <div key={reference.id} className="w-1/3 flex-shrink-0 px-3">
+            <div key={reference.id} className="w-full md:w-1/2 lg:w-1/3 flex-shrink-0 px-2 md:px-3">
               <Card className="h-full group hover:shadow-xl transition-all duration-300 border-0 bg-white overflow-hidden">
                 <CardContent className="p-0">
                   <div className="aspect-video relative overflow-hidden">

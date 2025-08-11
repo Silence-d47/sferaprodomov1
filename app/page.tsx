@@ -248,15 +248,15 @@ export default function HomePage() {
               </p>
             </div>
             {/* Right side - Enhanced logo */}
-            <div className="relative">
+            <div className="relative flex justify-center lg:justify-end">
               {/* Enhanced logo with effects */}
-              <div className="relative z-10">
+              <div className="relative z-10 w-full max-w-[400px] md:max-w-[500px] lg:max-w-[600px]">
                 <Image
                   src="/logo/logo.svg"
                   alt="Sfera logo"
                   width={600}
                   height={600}
-                  className="w-[600px] h-[600px] object-cover drop-shadow-xl"
+                  className="w-full h-auto object-contain drop-shadow-xl"
                   style={{
                     filter: 'drop-shadow(0 10px 20px rgba(120, 193, 241, 0.57))'
                   }}

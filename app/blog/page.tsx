@@ -49,13 +49,21 @@ const allCategories = Array.from(new Set(mockPosts.flatMap(post => post.categori
 export default function BlogPage() {
   return (
     <div className="min-h-screen bg-white">
-      {/* Professional Hero Section */}
-      <section className="py-16 bg-white border-b border-gray-200">
-        <div className="container max-w-6xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Blog</h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Odborné články, praktické rady a aktuální informace z oblasti klimatizace, tepelných čerpadel a elektroinstalací
+      {/* Hero Section - konzistentní s ostatními stránkami */}
+      <section className="relative h-[80vh] md:h-[90vh] min-h-[500px] md:min-h-[600px] flex items-center bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-[url('/placeholder.svg?height=500&width=1200&text=Blog+Hero')] opacity-10"></div>
+        </div>
+        <div className="relative z-10 container px-4 md:px-6">
+          <div className="max-w-4xl text-white">
+            <Badge className="bg-white/20 text-white border-white/20 text-sm px-3 py-1 mb-6 inline-block">
+              Náš blog
+            </Badge>
+            <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">
+              Odborné články a praktické rady
+            </h1>
+            <p className="text-lg md:text-xl text-white/90 mb-8 max-w-3xl leading-relaxed">
+              Aktuální informace z oblasti klimatizace, tepelných čerpadel a elektroinstalací od našich expertů
             </p>
           </div>
         </div>

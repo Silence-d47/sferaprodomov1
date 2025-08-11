@@ -125,27 +125,27 @@ export default function RekuperacePageRefined() {
   return (
     <ThemeProvider theme="rekuperace">
       <div className="bg-white text-purple-800">
-        <section className="relative h-[90vh] min-h-[600px] flex items-center text-white">
+        <section className="relative h-[70vh] md:h-[90vh] min-h-[500px] md:min-h-[600px] flex items-center text-white">
           <div className="absolute inset-0">
             <Image src="/images/rekuperace.webp" alt="Interiér s vývodem rekuperace" fill priority className="object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-purple-900 via-transparent to-black"></div>
           </div>
-          <div className="relative z-10 container">
+          <div className="relative z-10 container px-4 md:px-6">
             <div className="max-w-3xl">
-              <Badge variant="outline" className="mb-6 bg-purple-500/10 border-purple-500/30 text-white ">
+              <Badge variant="outline" className="mb-4 md:mb-6 bg-purple-500/10 border-purple-500/30 text-white text-xs md:text-sm">
                 Řízené větrání s rekuperací tepla
               </Badge>
-              <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight [text-shadow:_0_2px_8px_rgb(0_0_0_/_50%)] text-white-70">
+              <h1 className="text-3xl md:text-6xl font-bold mb-3 md:mb-4 leading-tight [text-shadow:_0_2px_8px_rgb(0_0_0_/_50%)] text-white-70">
                 Dýchejte doma zdravě a čistě
               </h1>
-              <p className="text-lg md:text-xl text-white mb-8 max-w-2xl [text-shadow:_0_1px_4px_rgb(0_0_0_/_40%)]">
+              <p className="text-base md:text-xl text-white mb-6 md:mb-8 max-w-2xl [text-shadow:_0_1px_4px_rgb(0_0_0_/_40%)]">
                 Zajistíme vám stálý přísun čerstvého, filtrovaného vzduchu bez ztráty tepla. Řekněte sbohem alergenům, vlhkosti a plísním.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" asChild className="bg-white text-violet-900 font-semibold hover:bg-white/40 shadow-lg">
+              <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
+                <Button size="lg" asChild className="bg-white text-violet-900 font-semibold hover:bg-white/40 shadow-lg text-sm md:text-base">
                   <Link href="#kontakt">Získat nezávaznou nabídku</Link>
                 </Button>
-                <Button size="lg" variant="outline" asChild className="border-purple-500/50 bg-white/10 text-purple-200 hover:bg-white/20 backdrop-blur-sm">
+                <Button size="lg" variant="outline" asChild className="border-purple-500/50 bg-white/10 text-purple-200 hover:bg-white/20 backdrop-blur-sm text-sm md:text-base">
                   <Link href="#modely">Prohlédnout jednotky</Link>
                 </Button>
               </div>
@@ -153,51 +153,51 @@ export default function RekuperacePageRefined() {
           </div>
         </section>
 
-        <section className="py-20 sm:py-28 bg-slate-50/70">
-          <div className="container">
-            <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Proč je rekuperace klíčová pro moderní bydlení?</h2>
-              <p className="text-lg text-slate-600">
+        <section className="py-12 md:py-20 lg:py-28 bg-slate-50/70">
+          <div className="container px-4 md:px-6">
+            <div className="text-center max-w-3xl mx-auto mb-8 md:mb-16">
+              <h2 className="text-2xl md:text-4xl font-bold mb-3 md:mb-4">Proč je rekuperace klíčová pro moderní bydlení?</h2>
+              <p className="text-base md:text-lg text-slate-600">
                 V dnešních utěsněných domech je řízené větrání jediný způsob, jak zajistit zdravé a komfortní prostředí.
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
               {whyChooseUs.map((reason) => (
-                <div key={reason.title} className="bg-white p-6 rounded-xl border border-purple-200/80 text-center transition-all duration-300 hover:shadow-lg hover:-translate-1">
-                  <div className="flex justify-center mb-4">
-                    <div className="h-14 w-14 rounded-full flex items-center justify-center bg-purple-200">
-                      <reason.icon className="h-7 w-7 text-purple-800" />
+                <div key={reason.title} className="bg-white p-4 md:p-6 rounded-lg md:rounded-xl border border-purple-200/80 text-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                  <div className="flex justify-center mb-3 md:mb-4">
+                    <div className="h-12 md:h-14 w-12 md:w-14 rounded-full flex items-center justify-center bg-purple-200">
+                      <reason.icon className="h-6 md:h-7 w-6 md:w-7 text-purple-800" />
                     </div>
                   </div>
-                  <h3 className="text-lg font-bold text-purple-800 mb-2">{reason.title}</h3>
-                  <p className="text-slate-600 text-sm leading-relaxed">{reason.description}</p>
+                  <h3 className="text-base md:text-lg font-bold text-purple-800 mb-2">{reason.title}</h3>
+                  <p className="text-slate-600 text-xs md:text-sm leading-relaxed">{reason.description}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
         
-        <section className="py-20 sm:py-28 bg-white">
-          <div className="container">
-            <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Jaký systém rekuperace je pro vás?</h2>
-              <p className="text-lg text-slate-600">
+        <section className="py-12 md:py-20 lg:py-28 bg-white">
+          <div className="container px-4 md:px-6">
+            <div className="text-center max-w-3xl mx-auto mb-8 md:mb-16">
+              <h2 className="text-2xl md:text-4xl font-bold mb-3 md:mb-4">Jaký systém rekuperace je pro vás?</h2>
+              <p className="text-base md:text-lg text-slate-600">
                 Ať už stavíte nový dům, rekonstruujete byt, nebo vybavujete kancelář, máme pro vás ideální řešení.
               </p>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
               {recuperationTypes.map((type, index) => (
-                <div key={index} className="bg-purple-50/70 rounded-2xl p-8 flex flex-col border border-purple-200/80 hover:shadow-xl transition-shadow duration-300">
-                    <div className="flex items-center gap-4 mb-4">
-                        <div className="flex-shrink-0 h-16 w-16 rounded-full flex items-center justify-center bg-purple-200">
-                            <type.icon className="h-8 w-8 text-purple-800" />
+                <div key={index} className="bg-purple-50/70 rounded-xl md:rounded-2xl p-4 md:p-8 flex flex-col border border-purple-200/80 hover:shadow-xl transition-shadow duration-300">
+                    <div className="flex items-center gap-3 md:gap-4 mb-3 md:mb-4">
+                        <div className="flex-shrink-0 h-12 md:h-16 w-12 md:w-16 rounded-full flex items-center justify-center bg-purple-200">
+                            <type.icon className="h-6 md:h-8 w-6 md:w-8 text-purple-800" />
                         </div>
-                        <h3 className="text-2xl font-bold text-slate-800">{type.title}</h3>
+                        <h3 className="text-lg md:text-2xl font-bold text-slate-800">{type.title}</h3>
                     </div>
-                    <p className="text-slate-600 mb-6 flex-grow">{type.description}</p>
-                    <div className="space-y-3 mt-auto">
+                    <p className="text-slate-600 mb-4 md:mb-6 flex-grow text-sm md:text-base">{type.description}</p>
+                    <div className="space-y-2 md:space-y-3 mt-auto">
                       {type.advantages.map((advantage, idx) => (
-                        <div key={idx} className="flex items-center text-sm">
+                        <div key={idx} className="flex items-center text-xs md:text-sm">
                           <CheckCircle className="h-5 w-5 text-purple-800 mr-2 flex-shrink-0" />
                           <span className="text-slate-700">{advantage}</span>
                         </div>
@@ -209,20 +209,20 @@ export default function RekuperacePageRefined() {
           </div>
         </section>
 
-        <section id="modely" className="py-20 sm:py-28 bg-muted/70">
-          <div className="container">
-            <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Naše nejprodávanější rekuperační jednotky</h2>
-              <p className="text-lg text-muted-foreground">
-                Nabízíme výběr prověřených jednotek od předních evropských výrobců, které zaručují vysokou účinnost a spolehlivost.
+        <section id="modely" className="py-12 md:py-20 lg:py-28 bg-muted/70">
+          <div className="container px-4 md:px-6">
+            <div className="text-center max-w-3xl mx-auto mb-8 md:mb-16">
+              <h2 className="text-2xl md:text-4xl font-bold mb-3 md:mb-4">Naše nejprodávanější rekuperační jednotky</h2>
+              <p className="text-base md:text-lg text-muted-foreground">
+                Nabízíme výběr prověřených jednotek od předních evropských výrobců, které zaručují vysokou účinnost a spolehlivos.
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
               {bestSellingModels.map((product, index) => (
-                <ProductCard theme="rekuperace" key={index} {...product} />
+                <ProductCard key={index} {...product} />
               ))}
             </div>
-            <div className="mt-16 text-center">
+            <div className="mt-8 md:mt-16 text-center">
               <PDFDownloadButton
                 url="/katalogy/rekuperace-kompletni-katalog.pdf"
                 filename="sfera-rekuperace-katalog.pdf"
@@ -232,17 +232,17 @@ export default function RekuperacePageRefined() {
           </div>
         </section>
 
-        <section className="py-20 sm:py-28 bg-purple-100/50 text-black">
-          <div className="container">
-            <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black">Od návrhu po čistý vzduch v 5 krocích</h2>
-              <p className="text-lg text-black">
+        <section className="py-12 md:py-20 lg:py-28 bg-purple-100/50 text-black">
+          <div className="container px-4 md:px-6">
+            <div className="text-center max-w-3xl mx-auto mb-8 md:mb-16">
+              <h2 className="text-2xl md:text-4xl font-bold mb-3 md:mb-4 text-black">Od návrhu po čistý vzduch v 5 krocích</h2>
+              <p className="text-base md:text-lg text-black">
                 Náš proces je transparentní a navržený tak, aby pro vás byl co nejjednodušší a nejpohodlnější.
               </p>
             </div>
             <div className="relative max-w-5xl mx-auto">
               <div className="hidden md:block absolute top-8 left-0 w-full h-0.5 bg-violet-700"></div>
-              <div className="grid grid-cols-1 md:grid-cols-5 gap-8 relative">
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-8 relative">
                 {[
                   { step: "Poptávka a analýza", icon: "1" },
                   { step: "Projekt a návrh", icon: "2" },
@@ -251,10 +251,10 @@ export default function RekuperacePageRefined() {
                   { step: "Regulace a servis", icon: "5" },
                 ].map((item, index) => (
                   <div key={index} className="text-center">
-                    <div className="relative w-16 h-16 bg-purple-800 border-2 border-purple-700 rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4 transition-all duration-300 group-hover:border-primary">
+                    <div className="relative w-12 md:w-16 h-12 md:h-16 bg-purple-800 border-2 border-purple-700 rounded-full flex items-center justify-center font-bold text-lg md:text-xl mx-auto mb-3 md:mb-4 transition-all duration-300 group-hover:border-primary">
                       <span className="text-white/90">{item.icon}</span>
                     </div>
-                    <p className="font-semibold text-sm text-black leading-tight">{item.step}</p>
+                    <p className="font-semibold text-xs md:text-sm text-black leading-tight">{item.step}</p>
                   </div>
                 ))}
               </div>
@@ -262,22 +262,22 @@ export default function RekuperacePageRefined() {
           </div>
         </section>
 
-        <section className="py-20 sm:py-28 bg-white">
-          <div className="container">
-            <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Co říkají naši zákazníci</h2>
-              <p className="text-lg text-black">
+        <section className="py-12 md:py-20 lg:py-28 bg-white">
+          <div className="container px-4 md:px-6">
+            <div className="text-center max-w-3xl mx-auto mb-8 md:mb-16">
+              <h2 className="text-2xl md:text-4xl font-bold mb-3 md:mb-4">Co říkají naši zákazníci</h2>
+              <p className="text-base md:text-lg text-black">
                 Spokojenost našich klientů je pro nás nejlepší referencí. Podívejte se na ukázky naší práce.
               </p>
             </div>
             
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
               {references.map((ref, index) => (
-                <div key={index} className="bg-slate-50/70 rounded-2xl p-1 flex flex-col border border-slate-200/80">
-                  <div className="relative h-56 w-full">
-                    <Image src={ref.image} alt={ref.project} layout="fill" objectFit="cover" className="rounded-t-2xl" />
+                <div key={index} className="bg-slate-50/70 rounded-xl md:rounded-2xl p-1 flex flex-col border border-slate-200/80">
+                  <div className="relative h-48 md:h-56 w-full">
+                    <Image src={ref.image} alt={ref.project} layout="fill" objectFit="cover" className="rounded-t-xl md:rounded-t-2xl" />
                   </div>
-                  <div className="p-6 flex-grow flex flex-col">
+                  <div className="p-4 md:p-6 flex-grow flex flex-col">
                     <Quote className="w-8 h-8 text-primary/20 mb-4 flex-shrink-0" fill="currentColor" />
                     <p className="text-slate-600 italic mb-6 flex-grow">"{ref.quote}"</p>
                     <div className="mt-auto pt-5 border-t border-slate-200">

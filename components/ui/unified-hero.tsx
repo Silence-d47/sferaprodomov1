@@ -82,7 +82,7 @@ export function UnifiedHero() {
   }, []);
 
   return (
-    <section className="relative h-screen overflow-hidden">
+    <section className="relative h-screen min-h-[600px] overflow-hidden">
       {/* Kontejner pro posuvná pozadí */}
       <div className="absolute inset-0">
         {SLIDES.map((slide, index) => (
@@ -102,17 +102,17 @@ export function UnifiedHero() {
 
       {/* Hlavní obsah a statická karta */}
       <div className="relative z-10 h-full flex items-center justify-center">
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-4xl mx-auto text-center">
             {/* STATICKÁ KARTA - Funguje jako maska (okno) */}
-            <div className="bg-white/[0.08] backdrop-blur-2xl rounded-3xl p-8 md:p-12 lg:p-16 shadow-2xl border border-white/10 relative overflow-hidden">
+            <div className="bg-white/[0.08] backdrop-blur-2xl rounded-2xl md:rounded-3xl p-6 md:p-12 lg:p-16 shadow-2xl border border-white/10 relative overflow-hidden mx-2">
               
               {/* Kontejner pro posuvný OBSAH uvnitř karty */}
-              <div className="relative" style={{ minHeight: '65vh' }}>
+              <div className="relative min-h-[80vh] md:min-h-[70vh] flex items-center justify-center">
                 {SLIDES.map((slideData, index) => (
                   <div
                     key={slideData.id}
-                    className="absolute inset-0 transition-opacity duration-700 ease-in-out flex flex-col justify-center"
+                    className="absolute inset-0 transition-opacity duration-700 ease-in-out flex flex-col justify-center px-4 py-8"
                     style={{
                       opacity: index === currentSlide ? 1 : 0,
                       pointerEvents: index === currentSlide ? 'auto' : 'none',
@@ -124,48 +124,48 @@ export function UnifiedHero() {
                       <span className="text-white/90 font-medium">Garance kvality a spolehlivosti</span>
                     </div>
 
-                    <div className="space-y-4 mb-8">
-                      <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight">
+                    <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
+                      <h1 className="text-3xl md:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight">
                         {slideData.title}
                       </h1>
-                      <p className="text-xl md:text-2xl lg:text-3xl text-blue-100 font-light leading-relaxed">
+                      <p className="text-lg md:text-2xl lg:text-3xl text-blue-100 font-light leading-relaxed">
                         {slideData.subtitle}
                       </p>
                     </div>
 
-                    <p className="text-lg md:text-xl text-white/80 leading-relaxed mb-10 max-w-2xl mx-auto">
+                    <p className="text-base md:text-xl text-white/80 leading-relaxed mb-6 md:mb-10 max-w-2xl mx-auto px-2">
                       {slideData.description}
                     </p>
 
-                    <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-12">
+                    <div className="flex flex-wrap justify-center gap-2 md:gap-4 mb-8 md:mb-12">
                       {slideData.features.map((feature, idx) => (
-                        <div key={idx} className="bg-white/10 backdrop-blur-md rounded-full px-4 md:px-6 py-2 md:py-3 border border-white/20 hover:bg-white/15 transition-all duration-300">
-                          <span className="text-white font-medium text-sm md:text-base">{feature}</span>
+                        <div key={idx} className="bg-white/10 backdrop-blur-md rounded-full px-3 md:px-6 py-2 md:py-3 border border-white/20 hover:bg-white/15 transition-all duration-300">
+                          <span className="text-white font-medium text-xs md:text-base">{feature}</span>
                         </div>
                       ))}
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-lg mx-auto">
-                      <Button asChild size="lg" className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 px-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] border-0">
-                        <Link href="/kontakt" className="flex items-center justify-center space-x-3">
-                          <Calculator className="w-5 h-5" />
-                          <span>Nezávazná nabídka</span>
+                    <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center max-w-lg mx-auto px-2">
+                      <Button asChild size="lg" className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 md:py-4 px-6 md:px-8 rounded-xl md:rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] border-0">
+                        <Link href="/kontakt" className="flex items-center justify-center space-x-2 md:space-x-3">
+                          <Calculator className="w-4 md:w-5 h-4 md:h-5" />
+                          <span className="text-sm md:text-base">Nezávazná nabídka</span>
                         </Link>
                       </Button>
-                      <Button asChild size="lg" className="flex-1 bg-white/15 hover:bg-white/25 text-white font-bold py-4 px-8 rounded-2xl border border-white/30 hover:border-white/40 transition-all duration-300 backdrop-blur-md hover:scale-[1.02]">
-                        <Link href={`tel:${slideData.phoneNumber}`} className="flex items-center justify-center space-x-3">
-                          <Phone className="w-5 h-5" />
-                          <span>Zavolejte nám</span>
+                      <Button asChild size="lg" className="flex-1 bg-white/15 hover:bg-white/25 text-white font-bold py-3 md:py-4 px-6 md:px-8 rounded-xl md:rounded-2xl border border-white/30 hover:border-white/40 transition-all duration-300 backdrop-blur-md hover:scale-[1.02]">
+                        <Link href={`tel:${slideData.phoneNumber}`} className="flex items-center justify-center space-x-2 md:space-x-3">
+                          <Phone className="w-4 md:w-5 h-4 md:h-5" />
+                          <span className="text-sm md:text-base">Zavolejte nám</span>
                         </Link>
                       </Button>
                     </div>
                     
 
-                    <div className="mt-8 pt-6 border-t border-white/10">
-                      <p className="text-white/60 text-sm mb-2">Nebo nám zavolejte přímo:</p>
+                    <div className="mt-6 md:mt-8 pt-4 md:pt-6 border-t border-white/10">
+                      <p className="text-white/60 text-xs md:text-sm mb-2">Nebo nám zavolejte přímo:</p>
                       <a 
                         href={`tel:${slideData.phoneNumber}`} 
-                        className="text-xl md:text-2xl font-bold text-white hover:text-orange-300 transition-colors duration-300"
+                        className="text-lg md:text-2xl font-bold text-white hover:text-orange-300 transition-colors duration-300"
                       >
                         {slideData.phoneNumber}
                       </a>
@@ -180,7 +180,7 @@ export function UnifiedHero() {
       </div>
 
       {/* Navigační tečky */}
-      <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 flex space-x-4 z-20">
+      <div className="absolute bottom-16 md:bottom-20 left-1/2 transform -translate-x-1/2 flex space-x-3 md:space-x-4 z-20">
         {SLIDES.map((_, index) => (
           <button
             key={index}
