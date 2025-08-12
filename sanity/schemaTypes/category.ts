@@ -2,12 +2,12 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'category',
-  title: 'Category',
+  title: 'Kategorie',
   type: 'document',
   fields: [
     defineField({
       name: 'title',
-      title: 'Title',
+      title: 'Název',
       type: 'string',
     }),
     defineField({
@@ -21,21 +21,21 @@ export default defineType({
     }),
     defineField({
       name: 'description',
-      title: 'Description',
+      title: 'Popis',
       type: 'text',
     }),
     defineField({
       name: 'color',
-      title: 'Color',
+      title: 'Barva',
       type: 'string',
       options: {
         list: [
-          {title: 'Blue', value: 'blue'},
-          {title: 'Green', value: 'green'},
-          {title: 'Purple', value: 'purple'},
-          {title: 'Orange', value: 'orange'},
-          {title: 'Red', value: 'red'},
-          {title: 'Yellow', value: 'yellow'},
+          {title: 'Modrá', value: 'blue'},
+          {title: 'Zelená', value: 'green'},
+          {title: 'Fialová', value: 'purple'},
+          {title: 'Oranžová', value: 'orange'},
+          {title: 'Červená', value: 'red'},
+          {title: 'Žlutá', value: 'yellow'},
         ],
       },
     }),

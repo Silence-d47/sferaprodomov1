@@ -2,28 +2,28 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'testimonial',
-  title: 'Testimonial',
+  title: 'Zkušenosti klientů',
   type: 'document',
   fields: [
     defineField({
       name: 'clientName',
-      title: 'Client Name',
+      title: 'Jméno nebo název',
       type: 'string',
       validation: Rule => Rule.required(),
     }),
     defineField({
       name: 'clientTitle',
-      title: 'Client Title/Position',
+      title: 'role zákazníka',
       type: 'string',
     }),
     defineField({
       name: 'clientCompany',
-      title: 'Client Company',
+      title: 'firma zákazníka',
       type: 'string',
     }),
     defineField({
       name: 'clientImage',
-      title: 'Client Photo',
+      title: 'obrázek zákazníka',
       type: 'image',
       options: {
         hotspot: true,
@@ -31,21 +31,21 @@ export default defineType({
     }),
     defineField({
       name: 'quote',
-      title: 'Testimonial Quote',
+      title: 'citace zkušenosti (s úvozovkama, ten hlavní text)',
       type: 'text',
       rows: 6,
       validation: Rule => Rule.required(),
     }),
     defineField({
       name: 'rating',
-      title: 'Rating',
+      title: 'hodnocení',
       type: 'number',
       validation: Rule => Rule.min(1).max(5),
       initialValue: 5,
     }),
     defineField({
       name: 'service',
-      title: 'Service Category',
+      title: 'Kategorie služby',
       type: 'string',
       options: {
         list: [
@@ -59,34 +59,34 @@ export default defineType({
     }),
     defineField({
       name: 'projectReference',
-      title: 'Related Project Reference',
+      title: 'Patří k projektu z referencí',
       type: 'reference',
       to: {type: 'projectReference'},
     }),
     defineField({
       name: 'location',
-      title: 'Location',
+      title: 'Místo',
       type: 'string',
     }),
     defineField({
       name: 'dateCompleted',
-      title: 'Project Completion Date',
+      title: 'Datum dokončení',
       type: 'date',
     }),
     defineField({
       name: 'isFeatured',
-      title: 'Featured Testimonial',
+      title: 'zobrazit v náhledech zkušeností?',
       type: 'boolean',
       initialValue: false,
     }),
     defineField({
       name: 'order',
-      title: 'Display Order',
+      title: 'Zobrazit pořadí',
       type: 'number',
     }),
     defineField({
       name: 'isActive',
-      title: 'Active',
+      title: 'aktivní',
       type: 'boolean',
       initialValue: true,
     }),
@@ -94,7 +94,7 @@ export default defineType({
   orderings: [
     {
       title: 'Order',
-      name: 'orderAsc',
+      name: 'Seřadit vzestupně',
       by: [
         {field: 'order', direction: 'asc'}
       ]

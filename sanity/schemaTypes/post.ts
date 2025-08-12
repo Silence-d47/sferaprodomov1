@@ -2,12 +2,12 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'post',
-  title: 'Post',
+  title: 'článek',
   type: 'document',
   fields: [
     defineField({
       name: 'title',
-      title: 'Title',
+      title: 'článek',
       type: 'string',
       validation: Rule => Rule.required(),
     }),
@@ -23,13 +23,13 @@ export default defineType({
     }),
     defineField({
       name: 'author',
-      title: 'Author',
+      title: 'Autor',
       type: 'reference',
       to: {type: 'author'},
     }),
     defineField({
       name: 'mainImage',
-      title: 'Main image',
+      title: 'Hlavní obrázek',
       type: 'image',
       options: {
         hotspot: true,
@@ -37,35 +37,35 @@ export default defineType({
     }),
     defineField({
       name: 'categories',
-      title: 'Categories',
+      title: 'Kategorie',
       type: 'array',
       of: [{type: 'reference', to: {type: 'category'}}],
     }),
     defineField({
       name: 'publishedAt',
-      title: 'Published at',
+      title: 'Publikováno',
       type: 'datetime',
     }),
     defineField({
       name: 'excerpt',
-      title: 'Excerpt',
+      title: 'úvod',
       type: 'text',
       rows: 4,
     }),
     defineField({
       name: 'body',
-      title: 'Body',
+      title: 'Tělo',
       type: 'blockContent',
     }),
     defineField({
       name: 'readingTime',
-      title: 'Reading Time (minutes)',
+      title: 'Přečteno za (minut)',
       type: 'number',
       initialValue: 5,
     }),
     defineField({
       name: 'featured',
-      title: 'Featured Post',
+      title: 'Nejnovější články',
       type: 'boolean',
       initialValue: false,
     }),
@@ -76,12 +76,12 @@ export default defineType({
       fields: [
         {
           name: 'metaTitle',
-          title: 'Meta Title',
+          title: 'Meta nadpis',
           type: 'string',
         },
         {
           name: 'metaDescription',
-          title: 'Meta Description',
+          title: 'Meta popis',
           type: 'text',
           rows: 3,
         },

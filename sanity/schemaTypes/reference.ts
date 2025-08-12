@@ -2,12 +2,12 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'projectReference',
-  title: 'Project Reference',
+  title: 'Reference',
   type: 'document',
   fields: [
     defineField({
       name: 'title',
-      title: 'Title',
+      title: 'Název',
       type: 'string',
       validation: Rule => Rule.required(),
     }),
@@ -23,13 +23,13 @@ export default defineType({
     }),
     defineField({
       name: 'description',
-      title: 'Description',
+      title: 'Popis',
       type: 'text',
       rows: 4,
     }),
     defineField({
       name: 'image',
-      title: 'Main Image',
+      title: 'Úvodní obrázek',
       type: 'image',
       options: {
         hotspot: true,
@@ -37,7 +37,7 @@ export default defineType({
     }),
     defineField({
       name: 'gallery',
-      title: 'Image Gallery',
+      title: 'Galerie',
       type: 'array',
       of: [{
         type: 'image',
@@ -46,7 +46,7 @@ export default defineType({
     }),
     defineField({
       name: 'category',
-      title: 'Category',
+      title: 'Kategorie',
       type: 'string',
       options: {
         list: [
@@ -61,127 +61,127 @@ export default defineType({
     }),
     defineField({
       name: 'location',
-      title: 'Location',
+      title: 'Místo',
       type: 'string',
     }),
     defineField({
       name: 'year',
-      title: 'Year Completed',
+      title: 'Rok dokončení',
       type: 'string',
     }),
     defineField({
       name: 'rating',
-      title: 'Rating',
+      title: 'Hodnocení',
       type: 'number',
       validation: Rule => Rule.min(1).max(5),
       initialValue: 5,
     }),
     defineField({
       name: 'highlights',
-      title: 'Project Highlights',
+      title: 'Hlavní body projektu',
       type: 'array',
       of: [{type: 'string'}],
     }),
     defineField({
       name: 'savings',
-      title: 'Savings/Benefits',
+      title: 'Výhody / Úspora',
       type: 'string',
     }),
     defineField({
       name: 'isFeatured',
-      title: 'Featured Reference',
+      title: 'Obsahuje referenci',
       type: 'boolean',
       initialValue: false,
     }),
     defineField({
       name: 'isTopReference',
-      title: 'Top Reference',
+      title: 'Top reference',
       type: 'boolean',
       initialValue: false,
     }),
     defineField({
       name: 'projectDetails',
-      title: 'Project Details',
+      title: 'Detaily projektu',
       type: 'object',
       fields: [
         {
           name: 'clientType',
-          title: 'Client Type',
+          title: 'Typ zákazníka',
           type: 'string',
           options: {
             list: [
-              {title: 'Residential', value: 'residential'},
-              {title: 'Commercial', value: 'commercial'},
-              {title: 'Industrial', value: 'industrial'},
+              {title: 'Soukromý', value: 'residential'},
+              {title: 'Komerční', value: 'commercial'},
+              {title: 'Průmyslový', value: 'industrial'},
             ],
           },
         },
         {
           name: 'projectSize',
-          title: 'Project Size (m²)',
+          title: 'Rozsah projektu (m²)',
           type: 'number',
         },
         {
           name: 'duration',
-          title: 'Project Duration (days)',
+          title: 'Doba trvání prací (dny)',
           type: 'number',
         },
         {
           name: 'teamSize',
-          title: 'Team Size',
+          title: 'Počet členů týmu',
           type: 'number',
         },
       ],
     }),
     defineField({
       name: 'testimonial',
-      title: 'Client Testimonial',
+      title: 'Zákazníkova zkušenost',
       type: 'object',
       fields: [
         {
           name: 'quote',
-          title: 'Quote',
+          title: 'Citace',
           type: 'text',
           rows: 4,
         },
         {
           name: 'clientName',
-          title: 'Client Name',
+          title: 'Jméno zákazníka',
           type: 'string',
         },
         {
           name: 'clientTitle',
-          title: 'Client Title/Position',
+          title: 'Pozice zákazníka',
           type: 'string',
         },
       ],
     }),
     defineField({
       name: 'technicalSpecs',
-      title: 'Technical Specifications',
+      title: 'Technické specifikace',
       type: 'array',
       of: [{
         type: 'object',
         fields: [
-          {name: 'label', title: 'Label', type: 'string'},
-          {name: 'value', title: 'Value', type: 'string'},
+          {name: 'label', title: 'Označení', type: 'string'},
+          {name: 'value', title: 'Hodnota', type: 'string'},
         ],
       }],
     }),
     defineField({
       name: 'beforeAfter',
-      title: 'Before/After Images',
+      title: 'Před/Po fotky',
       type: 'object',
       fields: [
         {
           name: 'before',
-          title: 'Before Image',
+          title: 'Před',
           type: 'image',
           options: {hotspot: true},
         },
         {
           name: 'after',
-          title: 'After Image',
+          title: 'Po',
           type: 'image',
           options: {hotspot: true},
         },
@@ -194,12 +194,12 @@ export default defineType({
       fields: [
         {
           name: 'metaTitle',
-          title: 'Meta Title',
+          title: 'Meta nazev',
           type: 'string',
         },
         {
           name: 'metaDescription',
-          title: 'Meta Description',
+          title: 'Meta popis',
           type: 'text',
           rows: 3,
         },

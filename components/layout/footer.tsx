@@ -121,12 +121,15 @@ export function Footer() {
       <div className="bg-black/20 py-3 md:py-4">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col sm:flex-row justify-between items-center text-xs md:text-sm text-gray-400 gap-2 md:gap-4">
-            <p className="text-center sm:text-left">&copy; {new Date().getFullYear()} SFÉRA PRO DOMOV s.r.o. | IČO: 21089230</p>
+            <p className="text-center sm:text-left">@fsk &copy; {new Date().getFullYear()} SFÉRA PRO DOMOV s.r.o. | IČO: 21089230</p>
             <div className="flex items-center gap-x-2 md:gap-x-4 text-xs md:text-sm">
               <Link href="/obchodni-podminky" className="hover:text-white transition-colors whitespace-nowrap">Obchodní podmínky</Link>
               <span className="text-gray-600">|</span>
               <Link href="/gdpr" className="hover:text-white transition-colors whitespace-nowrap">Ochrana údajů</Link>
+              <span className="text-gray-600">|</span>
+              <Link href="/cookies" className="hover:text-white transition-colors whitespace-nowrap">Cookies</Link>
             </div>
+                
           </div>
         </div>
       </div>

@@ -6,47 +6,21 @@ import { Button } from '@/components/ui/button';
 import { EnhancedSectionDivider } from '@/components/ui/enhanced-section-divider';
 import { Calculator, Phone, Shield } from 'lucide-react';
 
-interface HeroSlide {
+export interface UnifiedHeroSlide {
   id: string;
   title: string;
-  subtitle: string;
-  description: string;
+  subtitle?: string;
+  description?: string;
   bgImage: string;
-  features: string[];
-  phoneNumber: string; // Přidáno pro dynamické telefonní číslo, pokud by se lišilo
+  features?: string[];
+  phoneNumber?: string;
 }
 
-const SLIDES: HeroSlide[] = [
-  {
-    id: "klimatizace",
-    title: "Klimatizace",
-    subtitle: "Dokonalý komfort po celý rok",
-    description: "Profesionální instalace a servis klimatizačních systémů s garancí kvality a dlouhodobé spokojenosti.",
-    bgImage: "/images/klima_homepage_hero.png",
-    features: ["Úspora až 40%", "Záruka 5 let", "Servis 24/7", "Certifikace"],
-    phoneNumber: "+420 735 014 112"
-  },
-  {
-    id: "tepelna-cerpadla",
-    title: "Tepelná čerpadla",
-    subtitle: "Ekologické vytápění budoucnosti",
-    description: "Moderní tepelná čerpadla s nejvyšší efektivitou. Šetrné k životnímu prostředí i vaší peněžence.",
-    bgImage: "/images/tep_cer_homepage_hero.png",
-    features: ["Úspora až 60%", "Třída A+++", "0% emisí", "Dotace až 180k"],
-    phoneNumber: "+420 735 014 112"
-  },
-  {
-    id: "rekuperace",
-    title: "Rekuperace",
-    subtitle: "Čerstvý vzduch bez tepelných ztrát",
-    description: "Systémy rekuperace pro zdravé bydlení. Čistý vzduch s minimální spotřebou energie.",
-    bgImage: "/images/rekuperace_homepage_hero.png",
-    features: ["95% účinnost", "30% úspora", "Čistý vzduch", "Tichý provoz"],
-    phoneNumber: "+420 735 014 112"
-  },
-];
+interface UnifiedHeroProps {
+  slides: UnifiedHeroSlide[];
+}
 
-export function UnifiedHero() {
+export function UnifiedHero({ slides }: UnifiedHeroProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [parallaxOffset, setParallaxOffset] = useState(0);
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
@@ -54,7 +28,7 @@ export function UnifiedHero() {
   const startAutoPlay = () => {
     stopAutoPlay();
     autoPlayRef.current = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
+      setCurrentSlide((prev) => (prev + 1) % Math.max(slides.length, 1));
     }, 7000);
   };
 
@@ -73,7 +47,7 @@ export function UnifiedHero() {
   useEffect(() => {
     startAutoPlay();
     return () => stopAutoPlay();
-  }, []);
+  }, [slides?.length]);
 
   useEffect(() => {
     const handleScroll = () => setParallaxOffset(window.scrollY * 0.5);
@@ -85,7 +59,7 @@ export function UnifiedHero() {
     <section className="relative h-screen min-h-[600px] overflow-hidden">
       {/* Kontejner pro posuvná pozadí */}
       <div className="absolute inset-0">
-        {SLIDES.map((slide, index) => (
+        {slides.map((slide, index) => (
           <div
             key={slide.id}
             className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-1000 ease-in-out"
@@ -109,7 +83,7 @@ export function UnifiedHero() {
               
               {/* Kontejner pro posuvný OBSAH uvnitř karty */}
               <div className="relative min-h-[80vh] md:min-h-[70vh] flex items-center justify-center">
-                {SLIDES.map((slideData, index) => (
+                {slides.map((slideData, index) => (
                   <div
                     key={slideData.id}
                     className="absolute inset-0 transition-opacity duration-700 ease-in-out flex flex-col justify-center px-4 py-8"
@@ -128,17 +102,21 @@ export function UnifiedHero() {
                       <h1 className="text-3xl md:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight">
                         {slideData.title}
                       </h1>
-                      <p className="text-lg md:text-2xl lg:text-3xl text-blue-100 font-light leading-relaxed">
-                        {slideData.subtitle}
-                      </p>
+                      {slideData.subtitle && (
+                        <p className="text-lg md:text-2xl lg:text-3xl text-blue-100 font-light leading-relaxed">
+                          {slideData.subtitle}
+                        </p>
+                      )}
                     </div>
 
-                    <p className="text-base md:text-xl text-white/80 leading-relaxed mb-6 md:mb-10 max-w-2xl mx-auto px-2">
-                      {slideData.description}
-                    </p>
+                    {slideData.description && (
+                      <p className="text-base md:text-xl text-white/80 leading-relaxed mb-6 md:mb-10 max-w-2xl mx-auto px-2">
+                        {slideData.description}
+                      </p>
+                    )}
 
                     <div className="flex flex-wrap justify-center gap-2 md:gap-4 mb-8 md:mb-12">
-                      {slideData.features.map((feature, idx) => (
+                      {(slideData.features || []).map((feature, idx) => (
                         <div key={idx} className="bg-white/10 backdrop-blur-md rounded-full px-3 md:px-6 py-2 md:py-3 border border-white/20 hover:bg-white/15 transition-all duration-300">
                           <span className="text-white font-medium text-xs md:text-base">{feature}</span>
                         </div>
@@ -153,7 +131,7 @@ export function UnifiedHero() {
                         </Link>
                       </Button>
                       <Button asChild size="lg" className="flex-1 bg-white/15 hover:bg-white/25 text-white font-bold py-3 md:py-4 px-6 md:px-8 rounded-xl md:rounded-2xl border border-white/30 hover:border-white/40 transition-all duration-300 backdrop-blur-md hover:scale-[1.02]">
-                        <Link href={`tel:${slideData.phoneNumber}`} className="flex items-center justify-center space-x-2 md:space-x-3">
+                        <Link href={`tel:${slideData.phoneNumber || '+420735014112'}`} className="flex items-center justify-center space-x-2 md:space-x-3">
                           <Phone className="w-4 md:w-5 h-4 md:h-5" />
                           <span className="text-sm md:text-base">Zavolejte nám</span>
                         </Link>
@@ -164,10 +142,10 @@ export function UnifiedHero() {
                     <div className="mt-6 md:mt-8 pt-4 md:pt-6 border-t border-white/10">
                       <p className="text-white/60 text-xs md:text-sm mb-2">Nebo nám zavolejte přímo:</p>
                       <a 
-                        href={`tel:${slideData.phoneNumber}`} 
+                        href={`tel:${slideData.phoneNumber || '+420735014112'}`} 
                         className="text-lg md:text-2xl font-bold text-white hover:text-orange-300 transition-colors duration-300"
                       >
-                        {slideData.phoneNumber}
+                        {slideData.phoneNumber || '+420 735 014 112'}
                       </a>
                     </div>
                     
@@ -181,7 +159,7 @@ export function UnifiedHero() {
 
       {/* Navigační tečky */}
       <div className="absolute bottom-16 md:bottom-20 left-1/2 transform -translate-x-1/2 flex space-x-3 md:space-x-4 z-20">
-        {SLIDES.map((_, index) => (
+        {slides.map((_, index) => (
           <button
             key={index}
             onClick={() => goToSlide(index)}

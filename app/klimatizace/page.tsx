@@ -1,4 +1,9 @@
 // Importy zůstávají víceméně stejné, jen přidáme pár ikon pro nové designové prvky
+import { client } from "@/lib/sanity.client"
+import { groq } from "next-sanity"
+import { urlForImage } from "@/lib/sanity.image"
+import { CustomPortableText } from "@/lib/sanity.portableText"
+
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -21,6 +26,77 @@ import {
   Home,
   Building
 } from "lucide-react"
+
+interface Product {
+  _id: string;
+  title: string;
+  description: string;
+  image: any; // Sanity vrací obrázek jako objekt
+  features: string[];
+  isRecommended?: boolean;
+  catalogUrl: string; // Prozatím necháváme
+}
+
+const productsQuery = groq`
+  *[_type == "product" && category->slug.current == "klimatizace"] {
+    _id,
+    title,
+    description,
+    image,
+    features,
+    isRecommended,
+    catalogUrl 
+  }
+`
+
+type TestimonialEntry = {
+  clientName: string
+  clientTitle?: string
+  clientCompany?: string
+  clientImageUrl?: string
+  quote: string
+  rating?: number
+  location?: string
+  dateCompleted?: string
+}
+
+const testimonialsQuery = groq`
+  *[_type == "testimonial" && isActive == true && service == "klimatizace"]
+  | order(coalesce(order, 9999) asc, _createdAt desc)[0...9] {
+    clientName,
+    clientTitle,
+    clientCompany,
+    "clientImageUrl": clientImage.asset->url,
+    quote,
+    rating,
+    location,
+    dateCompleted
+  }
+`
+
+type FaqEntry = {
+  question: string
+  answer: any
+}
+
+const faqsQuery = groq`
+  *[_type == "faq" && isActive == true && category in ["klimatizace", "obecne"]]
+  | order(coalesce(order, 9999) asc, _createdAt asc) {
+    question,
+    answer
+  }
+`
+
+
+
+
+
+
+
+
+
+
+
 
 // Důvody proč jsme nejlepší volba
 const whyChooseUs = [
@@ -56,110 +132,6 @@ const acTypes = [
   }
 ]
 
-// 8 nejprodávanějších modelů
-const bestSellingModels = [
-  {
-    slug: 'daikin-emura-ftxj-ms',
-    title: "Daikin Emura FTXJ-MS",
-    description: "Prémiová nástěnná klimatizace s elegantním designem a nejvyšší energetickou účinností.",
-    image: "/placeholder.svg?height=300&width=300&text=Daikin+Emura",
-    features: [
-      "Energetická třída A+++",
-      "Inverterová technologie",
-      "Wi-Fi ovládání",
-      "Tichý provoz 19 dB(A)",
-      "3D proudění vzduchu",
-    ],
-    isRecommended: true,
-    catalogUrl: "/katalogy/daikin-emura.pdf",
-  },
-  {
-    slug: 'mitsubishi-ln25vg',
-    title: "Mitsubishi MSZ-LN25VG",
-    description: "Kompaktní a výkonná klimatizace s pokročilými funkcemi pro maximální komfort.",
-    image: "/placeholder.svg?height=300&width=300&text=Mitsubishi+LN",
-    features: [
-      "Energetická třída A++",
-      "3D i-see senzor",
-      "Plasma Quad filtr",
-      "Rychlé chlazení",
-      "Automatické čištění",
-    ],
-    catalogUrl: "/katalogy/mitsubishi-ln.pdf",
-  },
-  {
-    slug: 'lg-artcool-gallery',
-    title: "LG Artcool Gallery",
-    description: "Designová klimatizace, která se stane ozdobou vašeho interiéru.",
-    image: "/placeholder.svg?height=300&width=300&text=LG+Gallery",
-    features: [
-      "Vyměnitelné designové panely",
-      "Energetická třída A+++",
-      "Dual Inverter technologie",
-      "ThinQ aplikace",
-      "UV nano technologie",
-    ],
-    catalogUrl: "/katalogy/lg-gallery.pdf",
-  },
-  {
-    slug: 'panasonic-etherea',
-    title: "Panasonic Etherea",
-    description: "Prémiová řada s nanoe™ X technologií pro čistý a zdravý vzduch.",
-    image: "/placeholder.svg?height=300&width=300&text=Panasonic+Etherea",
-    features: [
-      "nanoe™ X technologie",
-      "Energetická třída A+++",
-      "Econavi senzory",
-      "Panasonic aplikace",
-      "Aerowings technologie",
-    ],
-    catalogUrl: "/katalogy/panasonic-etherea.pdf",
-  },
-  {
-    slug: 'fujitsu-asyg-keta',
-    title: "Fujitsu ASYG-KETA",
-    description: "Spolehlivá klimatizace s vynikajícím poměrem cena/výkon.",
-    image: "/placeholder.svg?height=300&width=300&text=Fujitsu+KETA",
-    features: ["Energetická třída A++", "DC Inverter", "Human sensor", "Tichý provoz", "Rychlá instalace"],
-    catalogUrl: "/katalogy/fujitsu-keta.pdf",
-  },
-  {
-    slug: 'toshiba-shorai-edge',
-    title: "Toshiba Shorai Edge",
-    description: "Moderní design s pokročilými funkcemi pro inteligentní domácnost.",
-    image: "/placeholder.svg?height=300&width=300&text=Toshiba+Shorai",
-    features: [
-      "Energetická třída A+++",
-      "Toshiba Home AC aplikace",
-      "Pure+ filtr",
-      "Magic Coil technologie",
-      "Hlasové ovládání",
-    ],
-    catalogUrl: "/katalogy/toshiba-shorai.pdf",
-  },
-  {
-    slug: 'samsung-windfree',
-    title: "Samsung WindFree™",
-    description: "Revoluční technologie bez průvanu pro maximální komfort.",
-    image: "/placeholder.svg?height=300&width=300&text=Samsung+WindFree",
-    features: [ 
-      "WindFree™ technologie",
-      "Energetická třída A+++",
-      "SmartThings integrace",
-      "AI Auto Cooling",
-      "Virus Doctor technologie",
-    ],
-    catalogUrl: "/katalogy/samsung-windfree.pdf",
-  },
-  {
-    slug: 'gree-fairy',
-    title: "Gree Fairy",
-    description: "Elegantní klimatizace s vynikajícím poměrem cena/výkon.",
-    image: "/placeholder.svg?height=300&width=300&text=Gree+Fairy",
-    features: ["Energetická třída A++", "G10 Inverter", "WiFi modul", "Cold Plasma filtr", "Tichý provoz"],
-    catalogUrl: "/katalogy/gree-fairy.pdf",
-  },
-]
 
 // Ukázkové reference
 const references = [
@@ -186,7 +158,20 @@ const references = [
   },
 ];
 
-export default function KlimatizacePageRefined() {
+export default async function KlimatizacePageRefined() {
+  const [products, testimonials, faqs] = await Promise.all([
+    client.fetch<Product[]>(productsQuery),
+    client.fetch<TestimonialEntry[]>(testimonialsQuery),
+    client.fetch<FaqEntry[]>(faqsQuery),
+  ])
+
+  const leftDynamicFaqs: FaqEntry[] = []
+  const rightDynamicFaqs: FaqEntry[] = []
+  faqs?.forEach((item, index) => {
+    if (index % 2 === 0) leftDynamicFaqs.push(item)
+    else rightDynamicFaqs.push(item)
+  })
+
   return (
     <ThemeProvider theme="klimatizace">
       <div className="bg-white text-slate-800">
@@ -287,11 +272,19 @@ export default function KlimatizacePageRefined() {
               Prohlédněte si výběr ověřených klimatizací od předních světových výrobců.
             </p>
           </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
-            {bestSellingModels.map((product, index) => (
-              <ProductCard key={index} {...product} />
-            ))}
-          </div>
+            {products.map((product, index) => (
+              <ProductCard key={product._id}
+  title={product.title}
+                  description={product.description}
+                  image={product.image ? urlForImage(product.image).url() : "/placeholder.svg"}
+                  features={product.features || []}
+                  isRecommended={product.isRecommended}
+                  catalogUrl={product.catalogUrl}
+                />
+              ))}
+            </div>
           <div className="mt-8 md:mt-16 text-center">
             <PDFDownloadButton
               url="/katalogy/klimatizace-kompletni-katalog.pdf"
@@ -345,13 +338,44 @@ export default function KlimatizacePageRefined() {
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
-            {references.map((ref, index) => (
-              <div key={index} className="bg-slate-50/70 rounded-xl md:rounded-2xl p-1 flex flex-col border border-slate-200/80">
-                {/* Obrázek nahore */}
+            {(testimonials && testimonials.length > 0 ? testimonials : []).map((t, index) => (
+              <div key={`t-${index}`} className="bg-slate-50/70 rounded-xl md:rounded-2xl p-1 flex flex-col border border-slate-200/80">
                 <div className="relative h-48 md:h-56 w-full">
-                  <Image src={ref.image} alt={ref.project} layout="fill" objectFit="cover" className="rounded-t-xl md:rounded-t-2xl" />
+                  <Image src={t.clientImageUrl || "/placeholder.svg"} alt={t.clientName} fill className="object-cover rounded-t-xl md:rounded-t-2xl" />
                 </div>
-                {/* Textová část dole */}
+                <div className="p-4 md:p-6 flex-grow flex flex-col">
+                  <Quote className="w-6 md:w-8 h-6 md:h-8 text-blue-200 mb-3 md:mb-4 flex-shrink-0" fill="currentColor" />
+                  <p className="text-slate-600 italic mb-4 md:mb-6 flex-grow text-sm md:text-base">"{t.quote}"</p>
+                  <div className="mt-auto pt-3 md:pt-5 border-t border-slate-200">
+                    <p className="font-bold text-slate-800 text-sm md:text-base">{t.clientName}{t.clientTitle ? `, ${t.clientTitle}` : ""}</p>
+                    <p className="text-xs md:text-sm text-slate-500">{t.clientCompany || t.location || ""}</p>
+                  </div>
+                </div>
+
+                {leftDynamicFaqs && leftDynamicFaqs.map((item, idx) => (
+                  <div key={`faq-left-${idx}`} className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-blue-500">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                        Q
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg mb-3 text-blue-500">{item.question}</h3>
+                        <div className="prose prose-sm max-w-none text-slate-700">
+                          <CustomPortableText value={item.answer} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+              </div>
+            ))}
+
+            {(!testimonials || testimonials.length === 0) && references.map((ref, index) => (
+              <div key={`r-${index}`} className="bg-slate-50/70 rounded-xl md:rounded-2xl p-1 flex flex-col border border-slate-200/80">
+                <div className="relative h-48 md:h-56 w-full">
+                  <Image src={ref.image} alt={ref.project} fill className="object-cover rounded-t-xl md:rounded-t-2xl" />
+                </div>
                 <div className="p-4 md:p-6 flex-grow flex flex-col">
                   <Quote className="w-6 md:w-8 h-6 md:h-8 text-blue-200 mb-3 md:mb-4 flex-shrink-0" fill="currentColor" />
                   <p className="text-slate-600 italic mb-4 md:mb-6 flex-grow text-sm md:text-base">"{ref.quote}"</p>
@@ -360,6 +384,23 @@ export default function KlimatizacePageRefined() {
                     <p className="text-xs md:text-sm text-slate-500">{ref.project}</p>
                   </div>
                 </div>
+
+                {rightDynamicFaqs && rightDynamicFaqs.map((item, idx) => (
+                  <div key={`faq-right-${idx}`} className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-blue-500">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                        Q
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg mb-3 text-blue-500">{item.question}</h3>
+                        <div className="prose prose-sm max-w-none text-slate-700">
+                          <CustomPortableText value={item.answer} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
               </div>
             ))}
           </div>
@@ -481,7 +522,7 @@ export default function KlimatizacePageRefined() {
                       <div className="space-y-3 mb-4">
                         <div className="flex items-center">
                           <CheckCircle className="h-5 w-5 text-blue-500 mr-3" />
-                          <span><strong>Filtry:</strong> 1-3 měsíce</span>
+                          <span><strong>servis a dezinfekce:</strong> 1-2x ročně</span>
                         </div>
                         <div className="flex items-center">
                           <CheckCircle className="h-5 w-5 text-blue-500 mr-3" />
@@ -493,7 +534,7 @@ export default function KlimatizacePageRefined() {
                         </div>
                       </div>
                       <p className="text-sm text-muted-foreground">
-                        Pravidelná údržba zajišťuje efektivní provoz a dlouhou životnost.
+                        Pravidelná údržba zahrnuje dezinfekci, diagnostiku, tlakové zkoušky a čištění. Tím je zajištěna efektivita a dlouhá životnost klimatizace.
                       </p>
                     </div>
                   </div>
@@ -546,6 +587,10 @@ export default function KlimatizacePageRefined() {
                         Energetický štítek označuje účinnost klimatizace:
                       </p>
                       <div className="space-y-2">
+                      <div className="flex justify-between items-center p-2 bg-blue-50 rounded">
+                          <span className="font-medium">Třída A+++:</span>
+                          <span className="text-blue-500 font-bold">Nejúčinnější*</span>
+                        </div>
                         <div className="flex justify-between items-center p-2 bg-blue-50 rounded">
                           <span className="font-medium">Třída A++:</span>
                           <span className="text-blue-500 font-bold">Nejúčinnější</span>
@@ -560,8 +605,7 @@ export default function KlimatizacePageRefined() {
                         </div>
                       </div>
                       <p className="text-sm text-muted-foreground mt-3">
-                        Doporučujeme volit klimatizace třídy A++ nebo A+ pro maximální úspory.
-                      </p>
+*A+++ třída u klimatizací bývá často kombinovaná i s topením. V takovém případě je možné čerpat státní dotace 'Nová zelená úsporám'.                       </p>
                     </div>
                   </div>
                 </div>
@@ -572,14 +616,14 @@ export default function KlimatizacePageRefined() {
                       Q
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg mb-3 text-blue-500">Jak hlásí klimatizace?</h3>
+                      <h3 className="font-bold text-lg mb-3 text-blue-500">Je klimatizace hlučná?</h3>
                       <p className="text-muted-foreground mb-4">
                         Moderní klimatizace jsou tiché:
                       </p>
                       <div className="space-y-2">
                         <div className="flex justify-between items-center p-2 bg-blue-50 rounded">
                           <span className="font-medium">Vnitřní jednotka:</span>
-                          <span className="text-blue-500 font-bold">20-30 dB(A)</span>
+                          <span className="text-blue-500 font-bold">17-30 dB(A)</span>
                         </div>
                         <div className="flex justify-between items-center p-2 bg-blue-50 rounded">
                           <span className="font-medium">Venkovní jednotka:</span>
@@ -603,7 +647,7 @@ export default function KlimatizacePageRefined() {
                       <div className="space-y-3 mb-4">
                         <div className="flex justify-between items-center p-3 bg-green-50 rounded">
                           <span className="font-medium">Práce a montáž:</span>
-                          <span className="text-green-600 font-bold">5 let</span>
+                          <span className="text-green-600 font-bold">až 5 let</span>
                         </div>
                         <div className="flex justify-between items-center p-3 bg-blue-50 rounded">
                           <span className="font-medium">Jednotky:</span>
@@ -611,7 +655,7 @@ export default function KlimatizacePageRefined() {
                         </div>
                       </div>
                       <p className="text-sm text-muted-foreground">
-                        V případě jakýchkoli problémů jsme k dispozici 24/7. Záruka je na všechny práce a materiály.
+                        V případě akutní poruchy jsme k dispozici 24/7. Záruka je na všechny práce a materiály.
                       </p>
                     </div>
                   </div>

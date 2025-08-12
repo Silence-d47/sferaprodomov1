@@ -50,27 +50,57 @@ export function TopBar() {
         </div>
 
         {/* Right side - CTA and Ratings */}
-        <div className="flex items-center space-x-2 md:space-x-6 flex-shrink-0">
-          {/* Google Rating */}
-          <div className="hidden sm:flex items-center space-x-2 bg-white/40 backdrop-blur-sm rounded-lg p-1 md:p-2">
-            <Image 
-              src="/google.png" 
-              alt="Google" 
-              width={120} 
-              height={40} 
-              className="h-6 md:h-10 w-auto" 
-            />
-          </div>
-          
-          {/* Seznam Rating */}
-          <div className="hidden md:flex items-center space-x-2 bg-white/40 backdrop-blur-sm rounded-lg p-1 md:p-2">
-            <Image 
-              src="/firmycz.svg" 
-              alt="Seznam.cz" 
-              width={120} 
-              height={40} 
-              className="h-6 md:h-10 w-auto" 
-            />
+        <div className="flex items-center space-x-1 md:space-x-1 flex-shrink-0">
+          <div className="hidden sm:flex items-center space-x-4">
+            {/* Google Rating */}
+            <div className="flex flex-col items-center space-y-1">
+              <Image 
+                src="/google.svg"
+                alt="Google hodnocení"
+                width={84}
+                height={24}
+                className="h-5 w-[84px]"
+                style={{ filter: 'brightness(0) invert(1)' }}
+              />
+              <div className="flex space-x-0.5">
+                {Array(5).fill(0).map((_, i) => (
+                  <Image 
+                    key={`google-star-${i}`}
+                    src="/star.svg"
+                    alt="Hvězda hodnocení"
+                    width={14}
+                    height={14}
+                    className="h-3.5 w-3.5"
+                    style={{ filter: 'invert(86%) sepia(99%) saturate(358%) hue-rotate(354deg) brightness(104%) contrast(102%)' }}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Seznam Rating */}
+            <div className="flex flex-col items-center space-y-1">
+              <Image 
+                src="/seznam.svg"
+                alt="Seznam.cz hodnocení"
+                width={78}
+                height={21}
+                className="h-5 w-[78px]"
+                style={{ filter: 'brightness(0) invert(1)' }}
+              />
+              <div className="flex space-x-0.5">
+                {Array(5).fill(0).map((_, i) => (
+                  <Image 
+                    key={`seznam-star-${i}`}
+                    src="/star.svg"
+                    alt="Hvězda hodnocení"
+                    width={14}
+                    height={14}
+                    className="h-3.5 w-3.5"
+                    style={{ filter: 'invert(86%) sepia(99%) saturate(358%) hue-rotate(354deg) brightness(104%) contrast(102%)' }}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'product',
-  title: 'Product',
+  title: 'Produkt',
   type: 'document',
   fields: [
     defineField({
@@ -23,13 +23,13 @@ export default defineType({
     }),
     defineField({
       name: 'description',
-      title: 'Description',
+      title: 'Popis produktu',
       type: 'text',
       rows: 4,
     }),
     defineField({
       name: 'image',
-      title: 'Product Image',
+      title: 'Hlavní obrázek produktu',
       type: 'image',
       options: {
         hotspot: true,
@@ -37,47 +37,47 @@ export default defineType({
     }),
     defineField({
       name: 'category',
-      title: 'Category',
+      title: 'Kategorie',
       type: 'reference',
       to: {type: 'category'},
     }),
     defineField({
       name: 'features',
-      title: 'Features',
+      title: 'Vlastnosti',
       type: 'array',
       of: [{type: 'string'}],
     }),
     defineField({
       name: 'isRecommended',
-      title: 'Recommended Product',
+      title: 'Doporučujeme!',
       type: 'boolean',
       initialValue: false,
     }),
     defineField({
       name: 'isBestSelling',
-      title: 'Best Selling Product',
+      title: 'Nejprodávanější',
       type: 'boolean',
       initialValue: false,
     }),
     defineField({
       name: 'catalogUrl',
-      title: 'Catalog PDF URL',
+      title: 'odkaz (URL) pro katalog k produktu',
       type: 'url',
       description: 'Legacy field - use files array instead',
     }),
     defineField({
       name: 'files',
-      title: 'Product Files',
+      title: 'Soubory k produktu',
       type: 'array',
       of: [{
         type: 'reference',
         to: {type: 'fileAsset'},
       }],
-      description: 'Datasheets, catalogs, manuals, and other product files',
+      description: 'Datové listy, katalog, manuál a další soubory, které patří k danému produktu',
     }),
     defineField({
       name: 'energyClass',
-      title: 'Energy Class',
+      title: 'Energická třída',
       type: 'string',
       options: {
         list: [
@@ -92,59 +92,59 @@ export default defineType({
     }),
     defineField({
       name: 'specifications',
-      title: 'Technical Specifications',
+      title: 'Technické specifikace',
       type: 'object',
       fields: [
         {
           name: 'power',
-          title: 'Power (kW)',
+          title: 'výkon(kW)',
           type: 'number',
         },
         {
           name: 'coolingCapacity',
-          title: 'Cooling Capacity (kW)',
+          title: 'chladící kapacita(kW)',
           type: 'number',
         },
         {
           name: 'heatingCapacity',
-          title: 'Heating Capacity (kW)',
+          title: 'kapacita výhřevu(kW)',
           type: 'number',
         },
         {
           name: 'noiseLevel',
-          title: 'Noise Level (dB)',
+          title: 'Hlučnost(dB)',
           type: 'number',
         },
         {
           name: 'dimensions',
-          title: 'Dimensions',
+          title: 'Rozměry',
           type: 'object',
           fields: [
-            {name: 'width', title: 'Width (mm)', type: 'number'},
-            {name: 'height', title: 'Height (mm)', type: 'number'},
-            {name: 'depth', title: 'Depth (mm)', type: 'number'},
+            {name: 'width', title: 'Šířka (mm)', type: 'number'},
+            {name: 'height', title: 'Výška (mm)', type: 'number'},
+            {name: 'depth', title: 'Hloubka (mm)', type: 'number'},
           ],
         },
       ],
     }),
     defineField({
       name: 'price',
-      title: 'Price Information',
+      title: 'Informace o ceně',
       type: 'object',
       fields: [
         {
           name: 'basePrice',
-          title: 'Base Price (CZK)',
+          title: 'Základní cena (Kč)',
           type: 'number',
         },
         {
           name: 'installationPrice',
-          title: 'Installation Price (CZK)',
+          title: 'Cena za práci a instalaci (Kč)',
           type: 'number',
         },
         {
           name: 'showPrice',
-          title: 'Show Price on Website',
+          title: 'Zobrazit cenu na stránce',
           type: 'boolean',
           initialValue: false,
         },
@@ -152,13 +152,13 @@ export default defineType({
     }),
     defineField({
       name: 'warranty',
-      title: 'Warranty (years)',
+      title: 'Záruka (roky)',
       type: 'number',
       initialValue: 2,
     }),
     defineField({
       name: 'brand',
-      title: 'Brand',
+      title: 'Značka',
       type: 'string',
       options: {
         list: [
@@ -179,12 +179,12 @@ export default defineType({
       fields: [
         {
           name: 'metaTitle',
-          title: 'Meta Title',
+          title: 'nadpis meta',
           type: 'string',
         },
         {
           name: 'metaDescription',
-          title: 'Meta Description',
+          title: 'popis meta',
           type: 'text',
           rows: 3,
         },

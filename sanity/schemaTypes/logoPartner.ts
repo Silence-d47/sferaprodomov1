@@ -2,18 +2,18 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'logoPartner',
-  title: 'Logo Partner',
+  title: 'Logo partnera',
   type: 'document',
   fields: [
     defineField({
       name: 'name',
-      title: 'Partner Name',
+      title: 'Jméno / název partnera',
       type: 'string',
       validation: Rule => Rule.required(),
     }),
     defineField({
       name: 'logo',
-      title: 'Logo Image',
+      title: 'Logo obrázek',
       type: 'image',
       options: {
         hotspot: true,
@@ -26,38 +26,38 @@ export default defineType({
     }),
     defineField({
       name: 'category',
-      title: 'Partner Category',
+      title: 'Kategorie',
       type: 'string',
       options: {
         list: [
-          {title: 'Brand Partner', value: 'brand'},
-          {title: 'Technology Partner', value: 'technology'},
-          {title: 'Certification', value: 'certification'},
-          {title: 'Supplier', value: 'supplier'},
+          {title: 'partnerství značka', value: 'brand'},
+          {title: 'partnerství technologie', value: 'technology'},
+          {title: 'školící středisko / vzdělávání ', value: 'certification'},
+          {title: 'dodavatel', value: 'supplier'},
         ],
       },
     }),
     defineField({
       name: 'order',
-      title: 'Display Order',
+      title: 'Zobrazit pořadí',
       type: 'number',
     }),
     defineField({
       name: 'isActive',
-      title: 'Active',
+      title: 'Aktivní',
       type: 'boolean',
       initialValue: true,
     }),
     defineField({
       name: 'description',
-      title: 'Description',
+      title: 'Popis',
       type: 'text',
       rows: 3,
     }),
   ],
   orderings: [
     {
-      title: 'Order',
+      title: 'Pořadí',
       name: 'orderAsc',
       by: [
         {field: 'order', direction: 'asc'}

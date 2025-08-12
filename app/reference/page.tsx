@@ -1,11 +1,12 @@
 "use client"
-import React from "react"
+import React, { useMemo } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { OrganicWaveDivider } from "@/components/ui/organic-wave-divider"
+import { EnhancedSectionDivider } from "@/components/ui/enhanced-section-divider"
 import { ShapedSectionHeader } from "@/components/ui/shaped-section-header"
 import { 
   MapPin, 
@@ -23,134 +24,65 @@ import { useState } from "react"
 import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
+import { client } from "@/lib/sanity.client"
+import { groq } from "next-sanity"
+import useSWR from "swr"
 
-// Top 3 featured references
-const featuredReferences = [
-  {
-    id: "rodinny-dum-praha",
-    title: "Rodinný dům Praha",
-    description: "Kompletní klimatizace s tepelným čerpadlem a rekuperací pro maximální komfort.",
-    image: "/placeholder.svg?height=400&width=600&text=TOP+Reference+1",
-    category: "Klimatizace",
-    location: "Praha",
-    year: "2024",
-    rating: 5,
-    highlights: ["Multi-split systém", "Tepelné čerpadlo", "Rekuperace", "Chytrá domácnost"],
-    savings: "65% úspora nákladů",
-    categoryColor: "text-blue-600",
-    categoryBg: "bg-blue-50"
-  },
-  {
-    id: "kancelarsky-komplex-brno",
-    title: "Kancelářský komplex Brno",
-    description: "Centrální klimatizační systém pro 200 zaměstnanců s inteligentním řízením.",
-    image: "/placeholder.svg?height=400&width=600&text=TOP+Reference+2",
-    category: "Komerční",
-    location: "Brno",
-    year: "2024",
-    rating: 5,
-    highlights: ["VRV systém", "Inteligentní řízení", "Monitoring", "Údržba 24/7"],
-    savings: "40% snížení spotřeby",
-    categoryColor: "text-green-600",
-    categoryBg: "bg-green-50"
-  },
-  {
-    id: "wellness-centrum-ostrava",
-    title: "Wellness centrum Ostrava",
-    description: "Speciální klimatizace a rekuperace pro wellness s bazénem a saunou.",
-    image: "/placeholder.svg?height=400&width=600&text=TOP+Reference+3",
-    category: "Rekuperace",
-    location: "Ostrava",
-    year: "2024",
-    rating: 5,
-    highlights: ["Odolnost vlhkosti", "Speciální filtrace", "Tichý provoz", "Úspora energie"],
-    savings: "50% čerstvější vzduch",
-    categoryColor: "text-purple-600",
-    categoryBg: "bg-purple-50"
-  },
-]
+type FeaturedReference = {
+  id: string
+  title: string
+  description?: string
+  image: string
+  category: string
+  location?: string
+  year?: string
+  rating?: number
+  highlights?: string[]
+  savings?: string
+}
 
-// Ostatní reference
-const otherReferences = [
-  {
-    id: "bytovy-dum-cb",
-    title: "Bytový dům České Budějovice",
-    description: "Tepelné čerpadlo a centrální klimatizace pro bytový dům s 24 byty.",
-    image: "/placeholder.svg?height=300&width=400&text=Reference+4",
-    category: "Tepelná čerpadla",
-    location: "České Budějovice",
-    year: "2024",
-    month: "Listopad",
-    rating: 4.8,
-    categoryColor: "text-green-600",
-    categoryBg: "bg-green-50"
-  },
-  {
-    id: "restaurace-praha",
-    title: "Restaurace v centru Prahy",
-    description: "Klimatizace a větrání pro restauraci s kapacitou 100 hostů.",
-    image: "/placeholder.svg?height=300&width=400&text=Reference+5",
-    category: "Větrání",
-    location: "Praha",
-    year: "2024",
-    month: "Říjen",
-    rating: 4.9,
-    categoryColor: "text-blue-600",
-    categoryBg: "bg-blue-50"
-  },
-  {
-    id: "prumyslovy-objekt-plzen",
-    title: "Průmyslový objekt Plzeň",
-    description: "Průmyslová klimatizace a větrání pro výrobní halu.",
-    image: "/placeholder.svg?height=300&width=400&text=Reference+6",
-    category: "Průmyslové",
-    location: "Plzeň",
-    year: "2024",
-    month: "Září",
-    rating: 4.7,
-    categoryColor: "text-orange-600",
-    categoryBg: "bg-orange-50"
-  },
-  {
-    id: "hotel-karlovy-vary",
-    title: "Hotel Karlovy Vary",
-    description: "Kompletní klimatizace a rekuperace pro 4* hotel s 80 pokoji.",
-    image: "/placeholder.svg?height=300&width=400&text=Reference+7",
-    category: "Hotelnictví",
-    location: "Karlovy Vary",
-    year: "2024",
-    month: "Srpen",
-    rating: 4.9,
-    categoryColor: "text-purple-600",
-    categoryBg: "bg-purple-50"
-  },
-  {
-    id: "skolka-liberec",
-    title: "Mateřská škola Liberec",
-    description: "Bezpečná klimatizace a rekuperace pro děti s antibakteriální filtrací.",
-    image: "/placeholder.svg?height=300&width=400&text=Reference+8",
-    category: "Vzdělávání",
-    location: "Liberec",
-    year: "2024",
-    month: "Červenec",
-    rating: 5.0,
-    categoryColor: "text-green-600",
-    categoryBg: "bg-green-50"
-  },
-  {
-    id: "fitness-centrum-olomouc",
-    title: "Fitness centrum Olomouc",
-    description: "Výkonná klimatizace a větrání pro fitness centrum s kardio a posilovnou.",
-    image: "/placeholder.svg?height=300&width=400&text=Reference+9",
-    category: "Sport",
-    location: "Olomouc",
-    year: "2024",
-    month: "Červen",
-    rating: 4.8,
-    categoryColor: "text-blue-600",
-    categoryBg: "bg-blue-50"
+type ListReference = {
+  id: string
+  title: string
+  description?: string
+  image: string
+  category: string
+  location?: string
+  year?: string
+  createdAt?: string
+  rating?: number
+}
+
+const fetcher = (q: string) => client.fetch(q)
+
+const featuredReferencesQuery = groq`
+  *[_type == "projectReference" && isTopReference == true] | order(_createdAt desc)[0...6] {
+    "id": slug.current,
+    title,
+    description,
+    "image": image.asset->url,
+    category,
+    location,
+    year,
+    rating,
+    highlights,
+    savings
   }
-]
+`
+
+const otherReferencesQuery = groq`
+  *[_type == "projectReference"] | order(_createdAt desc) {
+    "id": slug.current,
+    title,
+    description,
+    "image": image.asset->url,
+    category,
+    location,
+    year,
+    rating,
+    "createdAt": _createdAt
+  }
+`
 
 // Custom arrow components for carousel
 const CustomPrevArrow = ({ onClick }: { onClick?: () => void }) => (
@@ -173,6 +105,26 @@ const CustomNextArrow = ({ onClick }: { onClick?: () => void }) => (
 
 export default function ReferencePage() {
   const [currentSlide, setCurrentSlide] = useState(0)
+  const { data: featuredReferences, error: featuredError } = useSWR<FeaturedReference[]>(featuredReferencesQuery, fetcher)
+  const { data: otherReferences, error: otherError } = useSWR<ListReference[]>(otherReferencesQuery, fetcher)
+
+  const categoryStyles = useMemo(() => {
+    return (category: string) => {
+      switch (category) {
+        case 'Klimatizace':
+          return { bg: 'bg-blue-50', text: 'text-blue-600' }
+        case 'Tepelná čerpadla':
+        case 'tepelna-cerpadla':
+          return { bg: 'bg-green-50', text: 'text-green-600' }
+        case 'Rekuperace':
+          return { bg: 'bg-purple-50', text: 'text-purple-600' }
+        case 'Elektroinstalace':
+          return { bg: 'bg-orange-50', text: 'text-orange-600' }
+        default:
+          return { bg: 'bg-gray-50', text: 'text-gray-700' }
+      }
+    }
+  }, [])
 
   // Carousel settings
   const carouselSettings = {
@@ -186,7 +138,7 @@ export default function ReferencePage() {
     pauseOnHover: true,
     prevArrow: <CustomPrevArrow />,
     nextArrow: <CustomNextArrow />,
-    beforeChange: (current: number, next: number) => setCurrentSlide(next),
+    beforeChange: (_: number, next: number) => setCurrentSlide(next),
     customPaging: (i: number) => (
       <div className={`w-3 h-3 rounded-full transition-all duration-300 ${
         i === currentSlide ? 'bg-blue-600' : 'bg-white/50'
@@ -199,13 +151,25 @@ export default function ReferencePage() {
     )
   }
 
+  // Loading states
+  if (featuredError || otherError) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">Chyba při načítání dat</p>
+          <Button onClick={() => window.location.reload()}>Zkusit znovu</Button>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col">
       {/* Hero Section - konzistentní s hlavní stránkou */}
-      <section className="relative h-[80vh] md:h-[90vh] min-h-[500px] md:min-h-[600px] flex items-center bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600">
+      <section className="relative h-[60vh] md:h-[90vh] min-h-[600px] md:min-h-[600px] flex items-center bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600">
         <div className="absolute inset-0">
           <Image 
-            src="/placeholder.svg?height=500&width=1200&text=Reference+Hero" 
+            src="/images/hero_reference.png" 
             alt="Naše reference" 
             fill 
             className="object-cover opacity-20" 
@@ -215,7 +179,7 @@ export default function ReferencePage() {
           <div className="grid lg:grid-cols-12 gap-4 md:gap-8 items-center">
             {/* Left side - Content */}
             <div className="lg:col-span-8 text-white flex flex-col justify-center">
-              <Badge className="bg-white/20 text-white border-white/20 text-sm px-3 py-1 mb-6 inline-block">
+              <Badge className="bg-white/20 text-white border-white/20 text-sm px-4 py-2 mb-6 inline-block">
                 Naše reference
               </Badge>
               <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight drop-shadow-lg">
@@ -246,7 +210,7 @@ export default function ReferencePage() {
               <div className="relative">
                 {/* Decorative background */}
                 <div className="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-full scale-110 animate-pulse"></div>
-                <div className="relative bg-white/20 backdrop-blur-md rounded-full p-8 border border-white/30 shadow-2xl">
+                <div className="relative bg-white/20 backdrop-blur-md rounded-full p-2 border border-white/30 shadow-2xl">
                 </div>
                 {/* Floating elements */}
                 <div className="absolute -top-2 -right-2 w-4 h-4 bg-yellow-400 rounded-full animate-bounce"></div>
@@ -255,13 +219,15 @@ export default function ReferencePage() {
             </div>
           </div>
         </div>
+        
+        {/* Wave Divider positioned at bottom of hero */}
+        <div className="absolute bottom-0 left-0 right-0 z-20">
+          <EnhancedSectionDivider variant="wave" animated={true} height="xl" fromColor="from-blue-600" toColor="to-white" particles={false} />
+        </div>
       </section>
 
-      {/* Organic Wave Divider */}
-      <OrganicWaveDivider />
-
       {/* Map Section - Modernized */}
-      <section id="reference-mapa" className="py-20 bg-gradient-to-br from-[#f8f9fa] via-white to-blue-50/30 relative overflow-hidden">
+      <section id="reference-mapa" className="py-10 bg-gradient-to-br from-[#f8f9fa] via-white to-blue-50/30 relative overflow-hidden">
         {/* Background decorative elements */}
         <div className="absolute inset-0">
           <div className="absolute top-20 left-10 w-32 h-32 bg-blue-100 rounded-full opacity-20 blur-3xl"></div>
@@ -312,7 +278,7 @@ Chcete být naši další referencí?            </h2>
       </section>
 
       {/* Top 3 Reference Carousel */}
-      <section className="py-20 bg-white">
+      <section id="top-reference" className="py-20 bg-white">
         <div className="container">
           <div className="text-center mb-16">
             <div className="flex items-center justify-center mb-6">
@@ -330,79 +296,89 @@ Chcete být naši další referencí?            </h2>
 
           <div className="max-w-6xl mx-auto">
             <div className="relative">
-              <Slider {...carouselSettings}>
-                {featuredReferences.map((reference) => (
-                  <div key={reference.id} className="px-4">
-                    <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-                      <div className="grid lg:grid-cols-2 gap-0">
-                        <div className="relative h-80 lg:h-auto">
-                          <Image
-                            src={reference.image}
-                            alt={reference.title}
-                            fill
-                            className="object-cover"
-                          />
-                          <div className="absolute top-4 left-4">
-                            <Badge className="bg-yellow-500 text-white">
-                              <Star className="h-3 w-3 mr-1" />
-                              TOP
-                            </Badge>
-                          </div>
-                          <div className="absolute top-4 right-4">
-                            <div className="flex items-center bg-white/90 rounded-full px-3 py-1">
-                              {[...Array(5)].map((_, i) => (
-                                <Star key={i} className="h-3 w-3 text-yellow-400 fill-current" />
-                              ))}
-                              <span className="ml-2 text-xs font-medium">{reference.rating}</span>
+              {featuredReferences && featuredReferences.length > 0 ? (
+                <Slider {...carouselSettings}>
+                  {featuredReferences.map((reference) => (
+                    <div key={reference.id} className="px-4">
+                      <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+                        <div className="grid lg:grid-cols-2 gap-0">
+                          <div className="relative h-80 lg:h-auto">
+                            <Image
+                              src={reference.image}
+                              alt={reference.title}
+                              fill
+                              className="object-cover"
+                            />
+                            <div className="absolute top-4 left-4">
+                              <Badge className="bg-yellow-500 text-white">
+                                <Star className="h-3 w-3 mr-1" />
+                                TOP
+                              </Badge>
+                            </div>
+                            <div className="absolute top-4 right-4">
+                              <div className="flex items-center bg-white/90 rounded-full px-3 py-1">
+                                {[...Array(5)].map((_, i) => (
+                                  <Star key={i} className="h-3 w-3 text-yellow-400 fill-current" />
+                                ))}
+                                {reference.rating && (
+                                  <span className="ml-2 text-xs font-medium">{reference.rating}</span>
+                                )}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="p-8 lg:p-12 flex flex-col justify-center">
-                          <div className="flex items-center justify-between mb-4">
-                            <Badge className={`${reference.categoryBg} ${reference.categoryColor} border-0`}>
-                              {reference.category}
-                            </Badge>
-                            <div className="flex items-center text-sm text-muted-foreground">
-                              <MapPin className="h-4 w-4 mr-1" />
-                              {reference.location}
-                              <Calendar className="h-4 w-4 ml-3 mr-1" />
-                              {reference.year}
+                          <div className="p-8 lg:p-12 flex flex-col justify-center">
+                            <div className="flex items-center justify-between mb-4">
+                              <Badge className={`${categoryStyles(reference.category).bg} ${categoryStyles(reference.category).text} border-0`}>
+                                {reference.category}
+                              </Badge>
+                              <div className="flex items-center text-sm text-muted-foreground">
+                                <MapPin className="h-4 w-4 mr-1" />
+                                {reference.location}
+                                <Calendar className="h-4 w-4 ml-3 mr-1" />
+                                {reference.year}
+                              </div>
                             </div>
-                          </div>
-                          <h3 className="text-2xl font-bold mb-4">{reference.title}</h3>
-                          <p className="text-muted-foreground mb-6 leading-relaxed">{reference.description}</p>
-                          
-                          <div className="mb-6">
-                            <h4 className="font-semibold mb-3">Klíčové vlastnosti:</h4>
-                            <div className="grid grid-cols-2 gap-2">
-                              {reference.highlights.map((highlight, index) => (
-                                <div key={index} className="flex items-center text-sm">
-                                  <CheckCircle className="h-4 w-4 text-green-600 mr-2 flex-shrink-0" />
-                                  <span>{highlight}</span>
+                            <h3 className="text-2xl font-bold mb-4">{reference.title}</h3>
+                            <p className="text-muted-foreground mb-6 leading-relaxed">{reference.description}</p>
+                            
+                            <div className="mb-6">
+                              <h4 className="font-semibold mb-3">Klíčové vlastnosti:</h4>
+                              <div className="grid grid-cols-2 gap-2">
+                                {(reference.highlights || []).map((highlight, index) => (
+                                  <div key={index} className="flex items-center text-sm">
+                                    <CheckCircle className="h-4 w-4 text-green-600 mr-2 flex-shrink-0" />
+                                    <span>{highlight}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                            
+                            {reference.savings && (
+                              <div className="bg-green-50 rounded-lg p-4 mb-6">
+                                <div className="flex items-center">
+                                  <Award className="h-5 w-5 text-green-600 mr-2" />
+                                  <span className="font-semibold text-green-800">{reference.savings}</span>
                                 </div>
-                              ))}
-                            </div>
+                              </div>
+                            )}
+                            
+                            <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" asChild>
+                              <Link href={`/reference/${reference.id}`}>
+                                Zobrazit detail projektu
+                                <ArrowRight className="h-4 w-4 ml-2" />
+                              </Link>
+                            </Button>
                           </div>
-                          
-                          <div className="bg-green-50 rounded-lg p-4 mb-6">
-                            <div className="flex items-center">
-                              <Award className="h-5 w-5 text-green-600 mr-2" />
-                              <span className="font-semibold text-green-800">{reference.savings}</span>
-                            </div>
-                          </div>
-                          
-                          <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" asChild>
-                            <Link href={`/reference/${reference.id}`}>
-                              Zobrazit detail projektu
-                              <ArrowRight className="h-4 w-4 ml-2" />
-                            </Link>
-                          </Button>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </Slider>
+                  ))}
+                </Slider>
+              ) : (
+                <div className="text-center py-12">
+                  <p className="text-muted-foreground">Načítání referencí...</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -422,55 +398,61 @@ Chcete být naši další referencí?            </h2>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {otherReferences.map((reference) => (
-              <Card key={reference.id} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white overflow-hidden">
-                <CardContent className="p-0">
-                  <div className="relative h-48 overflow-hidden">
-                    <Image
-                      src={reference.image}
-                      alt={reference.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute top-3 right-3">
-                      <div className="flex items-center bg-white/90 rounded-full px-2 py-1">
-                        <Star className="h-3 w-3 text-yellow-400 fill-current mr-1" />
-                        <span className="text-xs font-medium">{reference.rating}</span>
+            {otherReferences && otherReferences.length > 0 ? (
+              otherReferences.map((reference) => (
+                <Card key={reference.id} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white overflow-hidden">
+                  <CardContent className="p-0">
+                    <div className="relative h-48 overflow-hidden">
+                      <Image
+                        src={reference.image}
+                        alt={reference.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute top-3 right-3">
+                        <div className="flex items-center bg-white/90 rounded-full px-2 py-1">
+                          <Star className="h-3 w-3 text-yellow-400 fill-current mr-1" />
+                          {reference.rating && <span className="text-xs font-medium">{reference.rating}</span>}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center justify-between mb-3">
-                      <Badge className={`${reference.categoryBg} ${reference.categoryColor} border-0 text-xs`}>
-                        {reference.category}
-                      </Badge>
-                      <div className="flex items-center text-xs text-muted-foreground">
-                        <MapPin className="h-3 w-3 mr-1" />
-                        {reference.location}
+                    <div className="p-6">
+                      <div className="flex items-center justify-between mb-3">
+                        <Badge className={`${categoryStyles(reference.category).bg} ${categoryStyles(reference.category).text} border-0 text-xs`}>
+                          {reference.category}
+                        </Badge>
+                        <div className="flex items-center text-xs text-muted-foreground">
+                          <MapPin className="h-3 w-3 mr-1" />
+                          {reference.location}
+                        </div>
                       </div>
+                      <h3 className="font-bold text-lg mb-2 group-hover:text-blue-600 transition-colors">{reference.title}</h3>
+                      <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{reference.description}</p>
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center text-xs text-muted-foreground">
+                          <Calendar className="h-3 w-3 mr-1" />
+                          {reference.year}
+                        </div>
+                        <div className="flex items-center">
+                          <Users className="h-3 w-3 text-blue-600 mr-1" />
+                          <span className="text-xs text-blue-600 font-medium">Realizováno</span>
+                        </div>
+                      </div>
+                      <Button asChild variant="outline" className="w-full group-hover:bg-blue-50 group-hover:border-blue-200 transition-colors">
+                        <Link href={`/reference/${reference.id}`}>
+                          Zobrazit detail
+                          <ArrowRight className="h-3 w-3 ml-2" />
+                        </Link>
+                      </Button>
                     </div>
-                    <h3 className="font-bold text-lg mb-2 group-hover:text-blue-600 transition-colors">{reference.title}</h3>
-                    <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{reference.description}</p>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center text-xs text-muted-foreground">
-                        <Calendar className="h-3 w-3 mr-1" />
-                        {reference.month} {reference.year}
-                      </div>
-                      <div className="flex items-center">
-                        <Users className="h-3 w-3 text-blue-600 mr-1" />
-                        <span className="text-xs text-blue-600 font-medium">Realizováno</span>
-                      </div>
-                    </div>
-                    <Button asChild variant="outline" className="w-full group-hover:bg-blue-50 group-hover:border-blue-200 transition-colors">
-                      <Link href={`/reference/${reference.id}`}>
-                        Zobrazit detail
-                        <ArrowRight className="h-3 w-3 ml-2" />
-                      </Link>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12">
+                <p className="text-muted-foreground">Načítání projektů...</p>
+              </div>
+            )}
           </div>
         </div>
       </section>

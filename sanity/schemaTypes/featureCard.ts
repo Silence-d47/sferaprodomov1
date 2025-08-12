@@ -2,67 +2,67 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'featureCard',
-  title: 'Feature Card',
+  title: 'Nejnovější příspěvek (featureCard)',
   type: 'document',
   fields: [
     defineField({
       name: 'title',
-      title: 'Title',
+      title: 'Názevv',
       type: 'string',
       validation: Rule => Rule.required(),
     }),
     defineField({
       name: 'description',
-      title: 'Description',
+      title: 'Popis',
       type: 'text',
       rows: 4,
     }),
     defineField({
       name: 'icon',
-      title: 'Icon Name',
+      title: 'Název ikony',
       type: 'string',
-      description: 'Lucide React icon name (e.g., CreditCard, CheckCircle, Calendar)',
+      description: 'Název ikony z knihovny Lucide React (např. CreditCard, CheckCircle, Calendar, dohledatelné v dokumentaci k lucide-react)',
     }),
     defineField({
       name: 'iconColor',
-      title: 'Icon Color',
+      title: 'Barva ikonky',
       type: 'string',
-      description: 'Tailwind color classes for icon',
+      description: 'Třída barvy tailwind pro ikonu',
     }),
     defineField({
       name: 'iconBgColor',
-      title: 'Icon Background Color',
+      title: 'Barva pozadí',
       type: 'string',
-      description: 'Tailwind background color classes for icon container',
+      description: 'Třída barvy tailwind pro pozadí ikonky',
     }),
     defineField({
       name: 'category',
-      title: 'Category',
+      title: 'Kategorie',
       type: 'string',
       options: {
         list: [
-          {title: 'Homepage Features', value: 'homepage'},
-          {title: 'Why Choose Us', value: 'why-choose-us'},
-          {title: 'Service Benefits', value: 'service-benefits'},
-          {title: 'Process Steps', value: 'process-steps'},
+          {title: 'Homepage', value: 'homepage'},
+          {title: 'Proč si vybrat nás', value: 'why-choose-us'},
+          {title: 'Nadstandardní servis', value: 'service-benefits'},
+          {title: 'Kroky', value: 'process-steps'},
         ],
       },
     }),
     defineField({
       name: 'order',
-      title: 'Display Order',
+      title: 'Zobrazit pořadí',
       type: 'number',
     }),
     defineField({
       name: 'isActive',
-      title: 'Active',
+      title: 'Aktivní',
       type: 'boolean',
       initialValue: true,
     }),
   ],
   orderings: [
     {
-      title: 'Order',
+      title: 'Pořadí',
       name: 'orderAsc',
       by: [
         {field: 'order', direction: 'asc'}

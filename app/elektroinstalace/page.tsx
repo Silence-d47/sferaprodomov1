@@ -5,6 +5,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { ContactForm } from "@/components/ui/contact-form4"
 import { ThemeProvider } from "@/components/theme-provider"
+import { ReferenceSlider } from "@/components/ui/reference-slider"
+import { client } from "@/lib/sanity.client"
+import { groq } from "next-sanity"
+import { CustomPortableText } from "@/lib/sanity.portableText"
 import { 
   Shield, 
   Clock, 
@@ -31,7 +35,53 @@ import {
   Mail
 } from "lucide-react"
 
-export default function ElektroinstalacePage() {
+type FaqEntry = {
+  question: string
+  answer: any
+}
+
+type ReferenceCard = {
+  id: string
+  title: string
+  description: string
+  image: string
+  category: string
+  location?: string
+  isTopReference?: boolean
+}
+
+const faqsQuery = groq`
+  *[_type == "faq" && isActive == true && category in ["elektroinstalace", "obecne"]]
+  | order(coalesce(order, 9999) asc, _createdAt asc) {
+    question,
+    answer
+  }
+`
+
+const referencesQuery = groq`
+  *[_type == "projectReference" && isActive != false && category == "elektroinstalace"] | order(_createdAt desc)[0...9] {
+    "id": slug.current,
+    title,
+    description,
+    "image": image.asset->url,
+    category,
+    location,
+    isTopReference
+  }
+`
+
+export default async function ElektroinstalacePage() {
+  const [faqs, references] = await Promise.all([
+    client.fetch<FaqEntry[]>(faqsQuery),
+    client.fetch<ReferenceCard[]>(referencesQuery),
+  ])
+
+  const leftDynamicFaqs: FaqEntry[] = []
+  const rightDynamicFaqs: FaqEntry[] = []
+  faqs?.forEach((item, index) => {
+    if (index % 2 === 0) leftDynamicFaqs.push(item)
+    else rightDynamicFaqs.push(item)
+  })
   return (
     <ThemeProvider theme="elektroinstalace">
       <div className="bg-white text-slate-800">
@@ -516,200 +566,12 @@ export default function ElektroinstalacePage() {
             </p>
             <div className="w-24 h-1 bg-orange-500 mx-auto mt-6"></div>
           </div>
-
-          <div className="space-y-16">
-            {/* Příklad 1: Rekonstrukce bytu */}
-            <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-              <div className="p-8">
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <h3 className="text-2xl font-bold text-orange-500 mb-2">Kompletní rekonstrukce bytu 2+1</h3>
-                    <p className="text-muted-foreground">Olomouc • Červen 2024 • Doba realizace: 5 dnů</p>
-                  </div>
-                  <Badge className="bg-orange-500 text-white px-4 py-2">Dokončeno</Badge>
-                </div>
-                
-                <div className="grid lg:grid-cols-2 gap-8 mb-8">
-                  <div>
-                    <h4 className="font-semibold mb-4 text-lg">Výchozí stav - PŘED</h4>
-                    <div className="relative rounded-lg overflow-hidden mb-4">
-                      <div className="h-64 bg-red-50 flex items-center justify-center border-2 border-red-200">
-                        <div className="text-center">
-                          <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-2" />
-                          <p className="text-red-700 font-medium">Stará elektroinstalace</p>
-                          <p className="text-sm text-red-600">Hliníkové rozvody z 80. let</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center text-red-600">
-                        <X className="h-4 w-4 mr-2" />
-                        <span className="text-sm">Zastaralý rozvaděč bez jističů</span>
-                      </div>
-                      <div className="flex items-center text-red-600">
-                        <X className="h-4 w-4 mr-2" />
-                        <span className="text-sm">Hliníkové voodiče - bezpečnostní riziko</span>
-                      </div>
-                      <div className="flex items-center text-red-600">
-                        <X className="h-4 w-4 mr-2" />
-                        <span className="text-sm">Ohořelé zásuvky a spínače</span>
-                      </div>
-                      <div className="flex items-center text-red-600">
-                        <X className="h-4 w-4 mr-2" />
-                        <span className="text-sm">Nedostatečné uzemění</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-semibold mb-4 text-lg">Výsledný stav - PO</h4>
-                    <div className="relative rounded-lg overflow-hidden mb-4">
-                      <div className="h-64 bg-green-50 flex items-center justify-center border-2 border-green-200">
-                        <div className="text-center">
-                          <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-2" />
-                          <p className="text-green-700 font-medium">Moderní instalace</p>
-                          <p className="text-sm text-green-600">Měděné rozvody dle ČSN</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center text-green-600">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        <span className="text-sm">Nový rozvaděč s moderními jističi</span>
-                      </div>
-                      <div className="flex items-center text-green-600">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        <span className="text-sm">Měděné voodiče - maximální bezpečnost</span>
-                      </div>
-                      <div className="flex items-center text-green-600">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        <span className="text-sm">Nové zásuvky a LED osvětlení</span>
-                      </div>
-                      <div className="flex items-center text-green-600">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        <span className="text-sm">Kompletní uzemění a revize</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="border-t pt-6">
-                  <h4 className="font-semibold mb-4">Rozsah prác:</h4>
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <h5 className="font-medium text-orange-500 mb-2">Elektroinstalace</h5>
-                      <ul className="space-y-1 text-sm text-muted-foreground">
-                        <li>• Výměna hlavního rozvaděče</li>
-                        <li>• Nové měděné rozvody</li>
-                        <li>• 15 nových zásuvek</li>
-                        <li>• 8 světelných okruhů</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <h5 className="font-medium text-orange-500 mb-2">Doplňky</h5>
-                      <ul className="space-y-1 text-sm text-muted-foreground">
-                        <li>• Příprava pro kuchyně</li>
-                        <li>• LED osvětlení</li>
-                        <li>• Revize a certifikát</li>
-                        <li>• 2 roky záruka</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-                      {/* Příklad 3: Firemní objekt */}
-            <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-              <div className="p-8">
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <h3 className="text-2xl font-bold text-orange-500 mb-2">Elektroinstalace firemního objektu</h3>
-                    <p className="text-muted-foreground">Ostrava • Září 2024 • Doba realizace: 8 dnů</p>
-                  </div>
-                  <Badge className="bg-orange-500 text-white px-4 py-2">Dokončeno</Badge>
-                </div>
-                
-                <div className="grid lg:grid-cols-2 gap-8 mb-8">
-                  <div>
-                    <h4 className="font-semibold mb-4 text-lg">Výchozí stav - PŘED</h4>
-                    <div className="relative rounded-lg overflow-hidden mb-4">
-                      <div className="h-64 bg-yellow-50 flex items-center justify-center border-2 border-yellow-200">
-                        <div className="text-center">
-                          <AlertTriangle className="h-12 w-12 text-yellow-500 mx-auto mb-2" />
-                          <p className="text-yellow-700 font-medium">Nedostatečná kapacita</p>
-                          <p className="text-sm text-yellow-600">Staré rozvody</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center text-yellow-600">
-                        <AlertTriangle className="h-4 w-4 mr-2" />
-                        <span className="text-sm">Přetížené okruhy</span>
-                      </div>
-                      <div className="flex items-center text-yellow-600">
-                        <AlertTriangle className="h-4 w-4 mr-2" />
-                        <span className="text-sm">Nedostatečný počet zásuvek</span>
-                      </div>
-                      <div className="flex items-center text-yellow-600">
-                        <AlertTriangle className="h-4 w-4 mr-2" />
-                        <span className="text-sm">Chybějící nouzové osvětlení</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-semibold mb-4 text-lg">Moderní řešení - PO</h4>
-                    <div className="relative rounded-lg overflow-hidden mb-4">
-                      <div className="h-64 bg-green-50 flex items-center justify-center border-2 border-green-200">
-                        <div className="text-center">
-                          <Zap className="h-12 w-12 text-green-500 mx-auto mb-2" />
-                          <p className="text-green-700 font-medium">Vysoká kapacita</p>
-                          <p className="text-sm text-green-600">Moderní rozvody</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center text-green-600">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        <span className="text-sm">Nové rozvoděče s rezervou</span>
-                      </div>
-                      <div className="flex items-center text-green-600">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        <span className="text-sm">Dostatečný počet zásuvek</span>
-                      </div>
-                      <div className="flex items-center text-green-600">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        <span className="text-sm">Úsporné LED osvětlení</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="border-t pt-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <h5 className="font-medium text-orange-500 mb-2">Technické parametry</h5>
-                      <ul className="space-y-1 text-sm text-muted-foreground">
-                        <li>• Hlavní přívod 3x63A</li>
-                        <li>• 4 podrozvaděče</li>
-                        <li>• 85 zásuvek</li>
-                        <li>• 25 světelných okruhů</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <h5 className="font-medium text-orange-500 mb-2">Benefity</h5>
-                      <ul className="space-y-1 text-sm text-muted-foreground">
-                        <li>• 50% úspora elektrické energie</li>
-                        <li>• Zvýšení bezpečnosti</li>
-                        <li>• Lepší pracovní prostředí</li>
-                        <li>• Připraveno na budoucnost</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div className="rounded-3xl bg-white/60 p-2 shadow-2xl shadow-slate-900/10 ring-1 ring-gray-200 backdrop-blur-md">
+            {references && references.length > 0 ? (
+              <ReferenceSlider references={references} />
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">Zatím nemáme zveřejněné realizace v této kategorii.</div>
+            )}
           </div>
         </div>
       </section>
@@ -935,6 +797,39 @@ export default function ElektroinstalacePage() {
                     info@sfera-pro-domov.cz
                   </Link>
                 </Button>
+              </div>
+            </div>
+            {/* Dynamické FAQ z CMS - doplnění pod hardcoded část */}
+            <div className="grid lg:grid-cols-2 gap-8 mt-8">
+              <div className="space-y-6">
+                {faqs && faqs.filter((_, i) => i % 2 === 0).map((item, idx) => (
+                  <div key={`faq-left-${idx}`} className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-orange-500">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">Q</div>
+                      <div>
+                        <h3 className="font-bold text-lg mb-3 text-orange-500">{item.question}</h3>
+                        <div className="prose prose-sm max-w-none text-slate-700">
+                          <CustomPortableText value={item.answer} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="space-y-6">
+                {faqs && faqs.filter((_, i) => i % 2 === 1).map((item, idx) => (
+                  <div key={`faq-right-${idx}`} className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-orange-500">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">Q</div>
+                      <div>
+                        <h3 className="font-bold text-lg mb-3 text-orange-500">{item.question}</h3>
+                        <div className="prose prose-sm max-w-none text-slate-700">
+                          <CustomPortableText value={item.answer} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

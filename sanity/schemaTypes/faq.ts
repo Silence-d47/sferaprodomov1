@@ -7,18 +7,18 @@ export default defineType({
   fields: [
     defineField({
       name: 'question',
-      title: 'Question',
+      title: 'Otázka',
       type: 'string',
       validation: Rule => Rule.required(),
     }),
     defineField({
       name: 'answer',
-      title: 'Answer',
+      title: 'Odpověď',
       type: 'blockContent',
     }),
     defineField({
       name: 'category',
-      title: 'Category',
+      title: 'Kategorie',
       type: 'string',
       options: {
         list: [
@@ -33,18 +33,18 @@ export default defineType({
     }),
     defineField({
       name: 'order',
-      title: 'Display Order',
+      title: 'Zobrazit pořadí',
       type: 'number',
     }),
     defineField({
       name: 'isActive',
-      title: 'Active',
+      title: 'Aktivní',
       type: 'boolean',
       initialValue: true,
     }),
     defineField({
       name: 'tags',
-      title: 'Tags',
+      title: 'Tagy',
       type: 'array',
       of: [{type: 'string'}],
     }),

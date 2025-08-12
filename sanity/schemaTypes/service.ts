@@ -2,12 +2,12 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'service',
-  title: 'Service',
+  title: 'Služba',
   type: 'document',
   fields: [
     defineField({
       name: 'title',
-      title: 'Title',
+      title: 'název',
       type: 'string',
       validation: Rule => Rule.required(),
     }),
@@ -23,13 +23,13 @@ export default defineType({
     }),
     defineField({
       name: 'description',
-      title: 'Description',
+      title: 'Popis',
       type: 'text',
       rows: 4,
     }),
     defineField({
       name: 'icon',
-      title: 'Icon Image',
+      title: 'Ikona',
       type: 'image',
       options: {
         hotspot: true,
@@ -37,35 +37,35 @@ export default defineType({
     }),
     defineField({
       name: 'hoverColor',
-      title: 'Hover Color Classes',
+      title: 'Barva hover',
       type: 'string',
-      description: 'Tailwind color classes for hover state',
+      description: 'Tailwind třída pro hover barvu',
     }),
     defineField({
       name: 'link',
-      title: 'Service Page Link',
+      title: 'odkaz na stránku servisu',
       type: 'string',
     }),
     defineField({
       name: 'order',
-      title: 'Display Order',
+      title: 'Zobrazit pořadí',
       type: 'number',
     }),
     defineField({
       name: 'isActive',
-      title: 'Active',
+      title: 'Aktivní',
       type: 'boolean',
       initialValue: true,
     }),
     defineField({
       name: 'features',
-      title: 'Key Features',
+      title: 'Klíčové vlastnosti',
       type: 'array',
       of: [{type: 'string'}],
     }),
     defineField({
       name: 'benefits',
-      title: 'Benefits',
+      title: 'Výhody',
       type: 'array',
       of: [{type: 'string'}],
     }),
@@ -79,7 +79,7 @@ export default defineType({
     }),
     defineField({
       name: 'content',
-      title: 'Page Content',
+      title: 'Obsah stránky',
       type: 'blockContent',
     }),
     defineField({
@@ -89,12 +89,12 @@ export default defineType({
       fields: [
         {
           name: 'metaTitle',
-          title: 'Meta Title',
+          title: 'Meta název',
           type: 'string',
         },
         {
           name: 'metaDescription',
-          title: 'Meta Description',
+          title: 'Meta popis',
           type: 'text',
           rows: 3,
         },

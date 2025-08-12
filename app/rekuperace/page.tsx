@@ -7,6 +7,10 @@ import { ContactForm } from "@/components/ui/contact-form3"
 import { PDFDownloadButton } from "@/components/ui/pdf-download-button"
 import { Badge } from "@/components/ui/badge"
 import { ThemeProvider } from "@/components/theme-provider"
+import { client } from "@/lib/sanity.client"
+import { groq } from "next-sanity"
+import { CustomPortableText } from "@/lib/sanity.portableText"
+import { urlForImage } from "@/lib/sanity.image"
 import { 
   Shield, 
   Clock, 
@@ -121,7 +125,56 @@ const references = [
   },
 ];
 
-export default function RekuperacePageRefined() {
+type TestimonialEntry = {
+  clientName: string
+  clientTitle?: string
+  clientCompany?: string
+  clientImageUrl?: string
+  quote: string
+  rating?: number
+  location?: string
+  dateCompleted?: string
+}
+
+const testimonialsQuery = groq`
+  *[_type == "testimonial" && isActive == true && service == "rekuperace"]
+  | order(coalesce(order, 9999) asc, _createdAt desc)[0...9] {
+    clientName,
+    clientTitle,
+    clientCompany,
+    "clientImageUrl": clientImage.asset->url,
+    quote,
+    rating,
+    location,
+    dateCompleted
+  }
+`
+
+type FaqEntry = {
+  question: string
+  answer: any
+}
+
+const faqsQuery = groq`
+  *[_type == "faq" && isActive == true && category in ["rekuperace", "obecne"]]
+  | order(coalesce(order, 9999) asc, _createdAt asc) {
+    question,
+    answer
+  }
+`
+
+export default async function RekuperacePageRefined() {
+  const [testimonials, faqs] = await Promise.all([
+    client.fetch<TestimonialEntry[]>(testimonialsQuery),
+    client.fetch<FaqEntry[]>(faqsQuery),
+  ])
+
+  const leftDynamicFaqs: FaqEntry[] = []
+  const rightDynamicFaqs: FaqEntry[] = []
+  faqs?.forEach((item, index) => {
+    if (index % 2 === 0) leftDynamicFaqs.push(item)
+    else rightDynamicFaqs.push(item)
+  })
   return (
     <ThemeProvider theme="rekuperace">
       <div className="bg-white text-purple-800">
@@ -218,9 +271,31 @@ export default function RekuperacePageRefined() {
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
-              {bestSellingModels.map((product, index) => (
-                <ProductCard key={index} {...product} />
+              {(await client.fetch<any[]>(
+                groq`*[_type == "product" && category->slug.current == "rekuperace" && isBestSelling == true] | order(_createdAt desc)[0...12] {
+                  title,
+                  description,
+                  image,
+                  features,
+                  isRecommended,
+                  catalogUrl
+                }`
+              )).map((p, idx, arr) => (
+                <ProductCard
+                  key={`best-rek-${idx}`}
+                  title={p.title}
+                  description={p.description || ""}
+                  image={p.image ? urlForImage(p.image).url() : "/placeholder.svg"}
+                  features={p.features || []}
+                  isRecommended={Boolean(p.isRecommended)}
+                  catalogUrl={p.catalogUrl || "#"}
+                />
               ))}
+              {/** Fallback na hardcoded, pokud by query vrátilo prázdno */}
+              {(await client.fetch<number>(groq`count(*[_type == "product" && category->slug.current == "rekuperace" && isBestSelling == true])`)) === 0 &&
+                bestSellingModels.map((product, index) => (
+                  <ProductCard key={`best-fb-${index}`} {...product} />
+                ))}
             </div>
             <div className="mt-8 md:mt-16 text-center">
               <PDFDownloadButton
@@ -272,10 +347,26 @@ export default function RekuperacePageRefined() {
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
-              {references.map((ref, index) => (
-                <div key={index} className="bg-slate-50/70 rounded-xl md:rounded-2xl p-1 flex flex-col border border-slate-200/80">
+              {(testimonials && testimonials.length > 0 ? testimonials : []).map((t, index) => (
+                <div key={`t-${index}`} className="bg-slate-50/70 rounded-xl md:rounded-2xl p-1 flex flex-col border border-slate-200/80">
                   <div className="relative h-48 md:h-56 w-full">
-                    <Image src={ref.image} alt={ref.project} layout="fill" objectFit="cover" className="rounded-t-xl md:rounded-t-2xl" />
+                    <Image src={t.clientImageUrl || "/placeholder.svg"} alt={t.clientName} fill className="object-cover rounded-t-xl md:rounded-t-2xl" />
+                  </div>
+                  <div className="p-4 md:p-6 flex-grow flex flex-col">
+                    <Quote className="w-8 h-8 text-primary/20 mb-4 flex-shrink-0" fill="currentColor" />
+                    <p className="text-slate-600 italic mb-6 flex-grow">"{t.quote}"</p>
+                    <div className="mt-auto pt-5 border-t border-slate-200">
+                      <p className="font-bold text-slate-800">{t.clientName}{t.clientTitle ? `, ${t.clientTitle}` : ""}</p>
+                      <p className="text-sm text-slate-500">{t.clientCompany || t.location || ""}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+              {(!testimonials || testimonials.length === 0) && references.map((ref, index) => (
+                <div key={`r-${index}`} className="bg-slate-50/70 rounded-xl md:rounded-2xl p-1 flex flex-col border border-slate-200/80">
+                  <div className="relative h-48 md:h-56 w-full">
+                    <Image src={ref.image} alt={ref.project} fill className="object-cover rounded-t-xl md:rounded-t-2xl" />
                   </div>
                   <div className="p-4 md:p-6 flex-grow flex flex-col">
                     <Quote className="w-8 h-8 text-primary/20 mb-4 flex-shrink-0" fill="currentColor" />
@@ -359,6 +450,22 @@ export default function RekuperacePageRefined() {
                     </div>
                   </div>
                 </div>
+
+                {leftDynamicFaqs && leftDynamicFaqs.map((item, idx) => (
+                  <div key={`faq-left-${idx}`} className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-500">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                        Q
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg mb-3 text-purple-500">{item.question}</h3>
+                        <div className="prose prose-sm max-w-none text-slate-700">
+                          <CustomPortableText value={item.answer} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
                 
                 <div className="bg-slate-50 rounded-xl p-6">
                   <h4 className="text-lg font-bold text-slate-800 mb-3">Klíčové výhody procesu:</h4>
@@ -381,6 +488,22 @@ export default function RekuperacePageRefined() {
                     </div>
                   </div>
                 </div>
+
+                {rightDynamicFaqs && rightDynamicFaqs.map((item, idx) => (
+                  <div key={`faq-right-${idx}`} className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-500">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                        Q
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg mb-3 text-purple-500">{item.question}</h3>
+                        <div className="prose prose-sm max-w-none text-slate-700">
+                          <CustomPortableText value={item.answer} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
               
               <div className="lg:pl-8">

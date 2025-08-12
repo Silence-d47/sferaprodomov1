@@ -7,6 +7,10 @@ import { ContactForm } from "@/components/ui/contact-form2"
 import { PDFDownloadButton } from "@/components/ui/pdf-download-button"
 import { Badge } from "@/components/ui/badge"
 import { ThemeProvider } from "@/components/theme-provider"
+import { client } from "@/lib/sanity.client"
+import { groq } from "next-sanity"
+import { CustomPortableText } from "@/lib/sanity.portableText"
+import { urlForImage } from "@/lib/sanity.image"
 import { 
   Shield, 
   Clock, 
@@ -70,7 +74,7 @@ const heatPumpTypes = [
   }
 ]
 
-// 8 nejprodávanějších modelů tepelných čerpadel (data ponechána)
+// 8 nejprodávanějších modelů tepelných čerpadel (fallback data)
 const bestSellingModels = [
     {
     slug: 'daikin-altherma-3-h-ht',
@@ -139,7 +143,7 @@ const bestSellingModels = [
   },
 ]
 
-// Ukázkové reference pro tepelná čerpadla
+// Ukázkové reference pro tepelná čerpadla (fallback, když nejsou testimonials v Sanity)
 const references = [
   {
     slug: 'rd-brno-venkov',
@@ -164,7 +168,70 @@ const references = [
   },
 ];
 
-export default function TepelnaCerpadlaPageRefined() {
+type TestimonialEntry = {
+  clientName: string
+  clientTitle?: string
+  clientCompany?: string
+  clientImageUrl?: string
+  quote: string
+  rating?: number
+  location?: string
+  dateCompleted?: string
+}
+
+const testimonialsQuery = groq`
+  *[_type == "testimonial" && isActive == true && service == "tepelna-cerpadla"]
+  | order(coalesce(order, 9999) asc, _createdAt desc)[0...9] {
+    clientName,
+    clientTitle,
+    clientCompany,
+    "clientImageUrl": clientImage.asset->url,
+    quote,
+    rating,
+    location,
+    dateCompleted
+  }
+`
+
+type FaqEntry = {
+  question: string
+  answer: any
+}
+
+const faqsQuery = groq`
+  *[_type == "faq" && isActive == true && category in ["tepelna-cerpadla", "obecne"]]
+  | order(coalesce(order, 9999) asc, _createdAt asc) {
+    question,
+    answer
+  }
+`
+
+export default async function TepelnaCerpadlaPageRefined() {
+  const bestSellingProductsQuery = groq`
+    *[_type == "product" && category->slug.current == "tepelna-cerpadla" && isBestSelling == true] | order(_createdAt desc)[0...12] {
+      _id,
+      title,
+      description,
+      image,
+      features,
+      isRecommended,
+      catalogUrl
+    }
+  `
+
+  const [testimonials, faqs, bestSelling] = await Promise.all([
+    client.fetch<TestimonialEntry[]>(testimonialsQuery),
+    client.fetch<FaqEntry[]>(faqsQuery),
+    client.fetch<any[]>(bestSellingProductsQuery),
+  ])
+
+  const leftDynamicFaqs: FaqEntry[] = []
+  const rightDynamicFaqs: FaqEntry[] = []
+  faqs?.forEach((item, index) => {
+    if (index % 2 === 0) leftDynamicFaqs.push(item)
+    else rightDynamicFaqs.push(item)
+  })
+
   return (
     <ThemeProvider theme="tepelna-cerpadla">
       <div className="bg-white text-slate-800">
@@ -262,8 +329,26 @@ export default function TepelnaCerpadlaPageRefined() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
-            {bestSellingModels.map((product, index) => (
-              <ProductCard key={index} {...product} />
+            {(bestSelling && bestSelling.length > 0
+              ? bestSelling.map((p) => ({
+                  title: p.title as string,
+                  description: (p.description as string) || "",
+                  image: p.image ? urlForImage(p.image as any).url() : "/placeholder.svg",
+                  features: (p.features as string[]) || [],
+                  isRecommended: Boolean(p.isRecommended),
+                  catalogUrl: (p.catalogUrl as string) || "#",
+                }))
+              : bestSellingModels
+            ).map((product, index) => (
+              <ProductCard
+                key={`best-${index}`}
+                title={product.title}
+                description={product.description}
+                image={product.image}
+                features={product.features}
+                isRecommended={product.isRecommended}
+                catalogUrl={product.catalogUrl}
+              />
             ))}
           </div>
           <div className="mt-8 md:mt-16 text-center">
@@ -316,10 +401,26 @@ export default function TepelnaCerpadlaPageRefined() {
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
-            {references.map((ref, index) => (
-              <div key={index} className="bg-slate-50/70 rounded-xl md:rounded-2xl p-1 flex flex-col border border-slate-200/80">
+            {(testimonials && testimonials.length > 0 ? testimonials : []).map((t, index) => (
+              <div key={`t-${index}`} className="bg-slate-50/70 rounded-xl md:rounded-2xl p-1 flex flex-col border border-slate-200/80">
                 <div className="relative h-48 md:h-56 w-full">
-                  <Image src={ref.image} alt={ref.project} layout="fill" objectFit="cover" className="rounded-t-xl md:rounded-t-2xl" />
+                  <Image src={t.clientImageUrl || "/placeholder.svg"} alt={t.clientName} fill className="object-cover rounded-t-xl md:rounded-t-2xl" />
+                </div>
+                <div className="p-4 md:p-6 flex-grow flex flex-col">
+                  <Quote className="w-6 md:w-8 h-6 md:h-8 text-green-700/20 mb-3 md:mb-4 flex-shrink-0" fill="currentColor" />
+                  <p className="text-slate-600 italic mb-4 md:mb-6 flex-grow text-sm md:text-base">"{t.quote}"</p>
+                  <div className="mt-auto pt-3 md:pt-5 border-t border-slate-200">
+                    <p className="font-bold text-slate-800 text-sm md:text-base">{t.clientName}{t.clientTitle ? `, ${t.clientTitle}` : ""}</p>
+                    <p className="text-xs md:text-sm text-slate-500">{t.clientCompany || t.location || ""}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {(!testimonials || testimonials.length === 0) && references.map((ref, index) => (
+              <div key={`r-${index}`} className="bg-slate-50/70 rounded-xl md:rounded-2xl p-1 flex flex-col border border-slate-200/80">
+                <div className="relative h-48 md:h-56 w-full">
+                  <Image src={ref.image} alt={ref.project} fill className="object-cover rounded-t-xl md:rounded-t-2xl" />
                 </div>
                 <div className="p-4 md:p-6 flex-grow flex flex-col">
                   <Quote className="w-6 md:w-8 h-6 md:h-8 text-green-700/20 mb-3 md:mb-4 flex-shrink-0" fill="currentColor" />
@@ -357,6 +458,22 @@ export default function TepelnaCerpadlaPageRefined() {
               <div className="w-10 md:w-12 h-10 md:h-12 bg-green-500 rounded-full flex items-center justify-center mr-3 md:mr-4">
                 <span className="text-white font-bold text-base md:text-lg">?</span>
               </div>
+
+              {leftDynamicFaqs && leftDynamicFaqs.map((item, idx) => (
+                <div key={`faq-left-${idx}`} className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-green-500">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                      Q
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg mb-3 text-green-500">{item.question}</h3>
+                      <div className="prose prose-sm max-w-none text-slate-700">
+                        <CustomPortableText value={item.answer} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
               <Badge className="bg-green-100 text-green-800 px-3 md:px-4 py-1 md:py-2 text-xs md:text-sm">
                 FAQ
               </Badge>
@@ -494,6 +611,22 @@ export default function TepelnaCerpadlaPageRefined() {
                 </div>
               </div>
 
+              {rightDynamicFaqs && rightDynamicFaqs.map((item, idx) => (
+                <div key={`faq-right-${idx}`} className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-green-500">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                      Q
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg mb-3 text-green-500">{item.question}</h3>
+                      <div className="prose prose-sm max-w-none text-slate-700">
+                        <CustomPortableText value={item.answer} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+
               {/* Pravý sloupec */}
               <div className="space-y-6">
 
@@ -531,18 +664,14 @@ export default function TepelnaCerpadlaPageRefined() {
                       Q
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg mb-3 text-green-500">Jak hlásí tepelné čerpadlo?</h3>
+                      <h3 className="font-bold text-lg mb-3 text-green-500">Je tepelné čerpadlo hlučné?</h3>
                       <p className="text-muted-foreground mb-4">
-                        Moderní tepelná čerpadla jsou tichá:
+                        Moderní tepelná čerpadla jsou tichá a naprostá většina telelných čerpadel má pouze venkovní jednotku, uvnitř je tedy hluk zanedbatelný:
                       </p>
                       <div className="space-y-2">
                         <div className="flex justify-between items-center p-2 bg-green-50 rounded">
                           <span className="font-medium">Venkovní jednotka:</span>
                           <span className="text-green-500 font-bold">45-55 dB(A)</span>
-                        </div>
-                        <div className="flex justify-between items-center p-2 bg-green-50 rounded">
-                          <span className="font-medium">Vnitřní jednotka:</span>
-                          <span className="text-green-500 font-bold">35-45 dB(A)</span>
                         </div>
                       </div>
                       <p className="text-sm text-muted-foreground mt-3">
@@ -562,15 +691,15 @@ export default function TepelnaCerpadlaPageRefined() {
                       <div className="space-y-3 mb-4">
                         <div className="flex justify-between items-center p-3 bg-green-50 rounded">
                           <span className="font-medium">Práce a montáž:</span>
-                          <span className="text-green-600 font-bold">5 let</span>
+                          <span className="text-green-600 font-bold">až 5 let</span>
                         </div>
                         <div className="flex justify-between items-center p-3 bg-blue-50 rounded">
                           <span className="font-medium">Jednotky:</span>
                           <span className="text-blue-600 font-bold">dle výrobce (5-10 let)</span>
                         </div>
-                      </div>
+                        </div>
                       <p className="text-sm text-muted-foreground">
-                        V případě jakýchkoli problémů jsme k dispozici 24/7. Záruka je na všechny práce a materiály.
+                        V případě akutní poruchy jsme k dispozici 24/7. Záruka je na všechny práce a materiály.
                       </p>
                     </div>
                   </div>

@@ -2,24 +2,24 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'fileAsset',
-  title: 'File Asset',
+  title: 'Soubory',
   type: 'document',
   fields: [
     defineField({
       name: 'title',
-      title: 'Title',
+      title: 'Název',
       type: 'string',
       validation: Rule => Rule.required(),
     }),
     defineField({
       name: 'description',
-      title: 'Description',
+      title: 'Popis',
       type: 'text',
       rows: 3,
     }),
     defineField({
       name: 'file',
-      title: 'File',
+      title: 'Soubor (pdf, doc, docx, xls, xlsx, ppt, pptx, zip, rar)',
       type: 'file',
       options: {
         accept: '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.rar',
@@ -27,23 +27,23 @@ export default defineType({
     }),
     defineField({
       name: 'fileType',
-      title: 'File Type',
+      title: 'Typ souboru',
       type: 'string',
       options: {
         list: [
-          {title: 'Product Datasheet', value: 'datasheet'},
-          {title: 'Installation Manual', value: 'manual'},
-          {title: 'Catalog', value: 'catalog'},
-          {title: 'Certificate', value: 'certificate'},
-          {title: 'Technical Specification', value: 'specification'},
-          {title: 'Warranty Document', value: 'warranty'},
-          {title: 'Other', value: 'other'},
+          {title: 'Datový list modelu', value: 'datasheet'},
+          {title: 'Návod k instalaci', value: 'manual'},
+          {title: 'Katalog', value: 'catalog'},
+          {title: 'Certifikát', value: 'certificate'},
+          {title: 'Technické údaje', value: 'specification'},
+          {title: 'Záruční list', value: 'warranty'},
+          {title: 'Ostatní', value: 'other'},
         ],
       },
     }),
     defineField({
       name: 'category',
-      title: 'Category',
+      title: 'Kategorie',
       type: 'string',
       options: {
         list: [
@@ -58,11 +58,11 @@ export default defineType({
     }),
     defineField({
       name: 'language',
-      title: 'Language',
+      title: 'Jazyk',
       type: 'string',
       options: {
         list: [
-          {title: 'Czech', value: 'cs'},
+          {title: 'Česky', value: 'cs'},
           {title: 'English', value: 'en'},
           {title: 'German', value: 'de'},
           {title: 'Slovak', value: 'sk'},
@@ -72,25 +72,25 @@ export default defineType({
     }),
     defineField({
       name: 'version',
-      title: 'Version',
+      title: 'Verze',
       type: 'string',
     }),
     defineField({
       name: 'uploadDate',
-      title: 'Upload Date',
+      title: 'datum nahrátí',
       type: 'datetime',
       initialValue: () => new Date().toISOString(),
     }),
     defineField({
       name: 'isPublic',
-      title: 'Public Download',
+      title: 'Ke stažení pro veřejnost?',
       type: 'boolean',
       initialValue: true,
-      description: 'Allow public download without registration',
+      description: 'Povolí veřejné stažení bez nutnosti registrace nebo žádosti adminovi',
     }),
     defineField({
       name: 'downloadCount',
-      title: 'Download Count',
+      title: 'Počet stažení',
       type: 'number',
       initialValue: 0,
       readOnly: true,

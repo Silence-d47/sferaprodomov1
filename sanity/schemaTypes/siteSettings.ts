@@ -2,24 +2,24 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'siteSettings',
-  title: 'Site Settings',
+  title: 'Nastavení stránky',
   type: 'document',
   fields: [
     defineField({
       name: 'title',
-      title: 'Site Title',
+      title: 'Název stránky',
       type: 'string',
       validation: Rule => Rule.required(),
     }),
     defineField({
       name: 'description',
-      title: 'Site Description',
+      title: 'Popis stránky',
       type: 'text',
       rows: 4,
     }),
     defineField({
       name: 'logo',
-      title: 'Site Logo',
+      title: 'Logo',
       type: 'image',
       options: {
         hotspot: true,
@@ -32,28 +32,28 @@ export default defineType({
     }),
     defineField({
       name: 'contact',
-      title: 'Contact Information',
+      title: 'Kontaktní informace',
       type: 'object',
       fields: [
         {
           name: 'phone',
-          title: 'Phone Number',
+          title: 'Telefon',
           type: 'string',
         },
         {
           name: 'email',
-          title: 'Email Address',
+          title: 'Email',
           type: 'string',
         },
         {
           name: 'address',
-          title: 'Address',
+          title: 'Addresa',
           type: 'text',
           rows: 3,
         },
         {
           name: 'openingHours',
-          title: 'Opening Hours',
+          title: 'Otevírací doba',
           type: 'text',
           rows: 4,
         },
@@ -61,7 +61,7 @@ export default defineType({
     }),
     defineField({
       name: 'social',
-      title: 'Social Media',
+      title: 'Socialní sítě',
       type: 'object',
       fields: [
         {
@@ -88,41 +88,41 @@ export default defineType({
     }),
     defineField({
       name: 'ratings',
-      title: 'Company Ratings',
+      title: 'Hodnocení společnosti',
       type: 'object',
       fields: [
         {
           name: 'googleRating',
-          title: 'Google Rating',
+          title: 'Google hodnocení',
           type: 'number',
           validation: Rule => Rule.min(1).max(5),
         },
         {
           name: 'googleReviews',
-          title: 'Number of Google Reviews',
+          title: 'Počet Google hodnocení',
           type: 'number',
         },
         {
           name: 'seznamRating',
-          title: 'Seznam.cz Rating',
+          title: 'Seznam.cz hodnocení',
           type: 'number',
           validation: Rule => Rule.min(1).max(5),
         },
         {
           name: 'seznamReviews',
-          title: 'Number of Seznam Reviews',
+          title: 'Počet hodnocení na Seznam.cz',
           type: 'number',
         },
       ],
     }),
     defineField({
       name: 'companyInfo',
-      title: 'Company Information',
+      title: 'Informace o společnosti',
       type: 'object',
       fields: [
         {
           name: 'companyName',
-          title: 'Company Name',
+          title: 'Jméno společnosti',
           type: 'string',
         },
         {
@@ -137,30 +137,30 @@ export default defineType({
         },
         {
           name: 'foundedYear',
-          title: 'Founded Year',
+          title: 'Založeno',
           type: 'number',
         },
       ],
     }),
     defineField({
       name: 'seo',
-      title: 'Default SEO Settings',
+      title: 'Základní nastavení SEO',
       type: 'object',
       fields: [
         {
           name: 'metaTitle',
-          title: 'Default Meta Title',
+          title: 'Základní Meta název',
           type: 'string',
         },
         {
           name: 'metaDescription',
-          title: 'Default Meta Description',
+          title: 'Základní Meta popis',
           type: 'text',
           rows: 3,
         },
         {
           name: 'ogImage',
-          title: 'Default OG Image',
+          title: 'Default OG obrázek',
           type: 'image',
           options: {hotspot: true},
         },
@@ -168,7 +168,7 @@ export default defineType({
     }),
     defineField({
       name: 'analytics',
-      title: 'Analytics & Tracking',
+      title: 'Analýza a sledování',
       type: 'object',
       fields: [
         {

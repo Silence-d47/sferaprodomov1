@@ -3,11 +3,14 @@
 import React from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { client } from "@/lib/sanity.client"
+import { groq } from "next-sanity"
+import useSWR from "swr"
 import { Button } from "@/components/ui/button"
 import { ReferenceSlider } from "@/components/ui/reference-slider"
 import { ContactForm } from "@/components/ui/contact-form"
 import { OrganicWaveDivider } from "@/components/ui/organic-wave-divider"
-import { UnifiedHero } from "@/components/ui/unified-hero"
+import { UnifiedHero, type UnifiedHeroSlide } from "@/components/ui/unified-hero"
 import { LogoCarousel } from "@/components/ui/logo-carousel"
 import { ServiceHub } from "@/components/ui/service-hub"
 import { Shield, Clock, Phone, CheckCircle, Users, CreditCard, Calendar, HeadphonesIcon, Heart, Star, Award, ArrowRight, ChevronDown, Quote } from "lucide-react"
@@ -15,36 +18,35 @@ import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import { motion } from "framer-motion"
 
+// GROQ dotazy
+const heroSlidesQuery = groq`
+  *[_type == "heroSlide" && isActive == true] | order(order asc) {
+    "id": _id,
+    title,
+    subtitle,
+    description,
+    "bgImage": bgImage.asset->url,
+    features,
+    phoneNumber
+  }
+`
 
-// Hero carousel data - editovatelné v CMS
-const heroSlides = [
-  {
-    type: "intro",
-    title: "Hovno - Váš partner pro dokonalé klima",
-    description:
-      "Profesionální klimatizace, tepelná čerpadla a rekuperace s nadstandardním servisem. Montáž do 14 dnů, platba až po spuštění.",
-    bgColor: "from-blue-600 via-blue-700 to-cyan-600",
-    cta: "Nezávazná poptávka",
-    ctaLink: "/kontakt",
-  },
-  {
-    type: "reference",
-    title: "Rodinný dům Praha - Kompletní klimatizace",
-    description:
-      "Podívejte se na naši nejnovější realizaci. Multi-split klimatizace s tepelným čerpadlem pro maximální komfort.",
-    bgColor: "from-green-600 via-emerald-600 to-teal-600",
-    cta: "Zobrazit referenci",
-    ctaLink: "/reference/rodinny-dum-praha",
-  },
-  {
-    type: "blog",
-    title: "Jak vybrat správnou klimatizaci pro váš domov",
-    description: "Přečtěte si náš nejnovější článek o výběru klimatizace. Praktické tipy a rady od našich expertů.",
-    bgColor: "from-red-600 via-pink-600 to-purple-600",
-    cta: "Číst článek",
-    ctaLink: "/blog/jak-vybrat-klimatizaci",
-  },
-]
+const topReferencesQuery = groq`
+  *[_type == "projectReference" && isTopReference == true] | order(_createdAt desc)[0...6] {
+    "id": slug.current,
+    title,
+    "description": coalesce(description, ""),
+    "image": image.asset->url,
+    category,
+    location,
+    isTopReference
+  }
+`
+
+// SWR fetcher
+const fetcher = (query: string) => client.fetch(query)
+
+
 
 const featureCards = [
   {
@@ -77,7 +79,7 @@ const featureCards = [
   },
 ]
 
-// Services data
+// Services data (ponecháno staticky)
 const services = [
   {
     id: "klimatizace",
@@ -132,36 +134,15 @@ const services = [
     }
 ]
 
-// Top 3 reference - možnost "topovat" v administraci
-const featuredReferences = [
-  {
-    id: "rodinny-dum-praha",
-    title: "Rodinný dům Praha",
-    description: "Kompletní klimatizace s tepelným čerpadlem a rekuperací pro maximální komfort.",
-    image: "/placeholder.svg?height=300&width=400&text=Reference+1",
-    category: "Klimatizace",
-    location: "Praha",
-    isTopReference: true,
-  },
-  {
-    id: "kancelarsky-komplex-brno",
-    title: "Kancelářský komplex Brno",
-    description: "Centrální klimatizační systém pro 200 zaměstnanců s inteligentním řízením.",
-    image: "/placeholder.svg?height=300&width=400&text=Reference+2",
-    category: "Komerční",
-    location: "Brno",
-    isTopReference: true,
-  },
-  {
-    id: "wellness-centrum-ostrava",
-    title: "Wellness centrum Ostrava",
-    description: "Speciální klimatizace a rekuperace pro wellness s bazénem a saunou.",
-    image: "/placeholder.svg?height=300&width=400&text=Reference+3",
-    category: "Rekuperace",
-    location: "Ostrava",
-    isTopReference: true,
-  },
-]
+type TopReference = {
+  id: string
+  title: string
+  description: string
+  image: string
+  category: string
+  location?: string
+  isTopReference?: boolean
+}
 function ValueCard  ({ icon, title, description, iconBgColor, iconColor }: { icon: React.ReactNode, title: string, description: string, iconBgColor: string, iconColor: string }) {
   return (
     <motion.div
@@ -183,6 +164,19 @@ function ValueCard  ({ icon, title, description, iconBgColor, iconColor }: { ico
 }
 
 export default function HomePage() {
+  const { data: slides, error: heroError, isLoading: heroLoading } = useSWR<UnifiedHeroSlide[]>(heroSlidesQuery, fetcher)
+  const { data: topReferences } = useSWR<TopReference[]>(topReferencesQuery, fetcher)
+
+  if (heroLoading) {
+    return <div>Načítání...</div>
+  }
+  if (heroError) {
+    return <div>Chyba při načítání dat.</div>
+  }
+  if (!slides || slides.length === 0) {
+    return <div>Žádná data pro hero sekci.</div>
+  }
+
   return (
     <div className="flex flex-col bg-white text-slate-800">
       {/* Unified Hero Section (tvoje data zůstávají) */}
@@ -190,7 +184,7 @@ export default function HomePage() {
         hidden: {},
         visible: {}
       }}>
-        <UnifiedHero slides ={heroSlides} />
+        <UnifiedHero slides={slides} />
       </motion.div>
       <ServiceHub />
 
@@ -212,7 +206,106 @@ export default function HomePage() {
           />
         </div>
       </section>
+  {/* Naše služby */}
 
+  <section className="relative py-12 bg-gradient-to-br from-gray- to-blue-100">
+          <div className="absolute top-2 right-2 w-64 h-64 bg-gradient-to-bl from-blue-100/30 to-transparent rounded-full blur-2xl"></div>
+          <div className="relative z-2">
+          <div className="text-center">
+            <br />
+            <br />
+            <br />
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 leading-tight">
+                Naše<span className="bg-gradient-to-r from-[#1B5D93] to-[#2D78AD] bg-clip-text text-transparent"> služby</span>
+              </h2>
+              <br />
+              <br />
+              <br />
+              </div>
+            {/* Services Grid */}
+            <div className="flex flex-wrap justify-center items-start gap-12 md:gap-16 max-w-6xl mx-auto">
+              {services.map((service, index) => (
+                <div key={service.id} className="flex justify-center relative w-64 group cursor-pointer">
+                  <div className={`${service.cardColor} p-6 pl-16 w-full text-left shadow-md rounded-lg transition-all duration-500 ease-out group-hover:shadow-2xl group-hover:scale-105 group-hover:-translate-y-2`}>
+                    <h3 className="text-sm font-bold text-gray-700 mb-2 group-hover:text-gray-900 transition-colors duration-300">
+                      {service.title}
+                    </h3>
+                    <p className="text-xs text-gray-600 leading-relaxed mb-4 group-hover:text-gray-700 transition-colors duration-300">
+                      {service.description}
+                    </p>
+                    <a href="#" className="text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200 inline-flex items-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                      Více informací
+                      <svg className="w-3 h-3 ml-1 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </a>
+                  </div>
+                  <div className={`w-16 h-16 ${service.color} flex items-center justify-center shadow-lg rounded-lg absolute -left-4 top-1/2 transform -translate-y-1/2 z-10 transition-all duration-500 ease-out group-hover:scale-110 group-hover:shadow-xl group-hover:-translate-y-3 group-hover:rotate-3`}>
+                    <Image src={service.iconSrc} alt={service.title} width={56} height={56} className={`w-8 h-8 ${service.iconColor} transition-transform duration-300 group-hover:scale-110`} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+    </section>
+    <section className="relative overflow-hidden bg-slate-50 py-24 sm:py-32">
+  {/* Abstraktní vlny na pozadí */}
+  <div className="absolute inset-0 z-0 opacity-40">
+    <svg
+      className="w-full h-full"
+      viewBox="0 0 1440 600"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M0 250 C 300 150, 400 500, 720 400 S 1100 200, 1440 300 V 600 H 0 Z"
+        fill="#E0F2FE" // light sky-100
+      />
+      <path
+        d="M0 350 C 250 450, 500 250, 720 300 S 1000 500, 1440 450 V 600 H 0 Z"
+        fill="#BAE6FD" // light sky-200
+      />
+    </svg>
+  </div>
+
+  <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
+    {/* Hlavička sekce */}
+    <div className="mx-auto max-w-2xl text-center">
+      <div className="inline-flex items-center gap-2 rounded-full bg-blue-100 px-4 py-2 text-sm font-semibold text-blue-800 ring-1 ring-inset ring-blue-200">
+        <Award className="h-4 w-4" />
+        <span>Realizované projekty</span>
+      </div>
+      <h2 className="mt-6 text-4xl font-bold tracking-tighter text-slate-900 sm:text-5xl lg:text-6xl">
+        Naše práce mluví
+        <span className="mt-2 block bg-gradient-to-r from-[#1B5D93] to-[#49A3D7] bg-clip-text text-transparent">
+          za nás
+        </span>
+      </h2>
+      <p className="mt-6 text-lg leading-8 text-gray-600">
+        Každý projekt je pro nás závazkem kvality a preciznosti. Prohlédněte si, jak jsme pomohli našim klientům.
+      </p>
+    </div>
+
+    {/* Karta se sliderem referencí */}
+    <div className="mt-16 sm:mt-20">
+      <div className="rounded-3xl bg-white/60 p-2 shadow-2xl shadow-slate-900/10 ring-1 ring-gray-200 backdrop-blur-md">
+        {topReferences && topReferences.length > 0 && (
+          <ReferenceSlider references={topReferences} />
+        )}
+      </div>
+    </div>
+
+    {/* Tlačítko pro zobrazení všech referencí */}
+    <div className="mt-16 text-center">
+      <Button asChild size="lg" className="group rounded-full bg-gradient-to-r from-[#1B5D93] to-[#2D78AD] px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-[#2D78AD]/40">
+        <Link href="/reference" className="flex items-center gap-3">
+          Všechny naše reference
+          <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+        </Link>
+      </Button>
+    </div>
+  </div>
+</section>
       {/* About Us Section */}
       <section className="py-40 bg-white relative overflow-hidden">
         <div className="container">
@@ -304,38 +397,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-      {/* Naše služby */}
-
-      <section className="relative py-12 bg-gradient-to-br from-gray- to-blue-100">
-          <div className="absolute top-2 right-2 w-64 h-64 bg-gradient-to-bl from-blue-100/30 to-transparent rounded-full blur-2xl"></div>
-          <div className="relative z-2">
-
-            {/* Services Grid */}
-            <div className="flex flex-wrap justify-center items-start gap-12 md:gap-16 max-w-6xl mx-auto">
-              {services.map((service, index) => (
-                <div key={service.id} className="flex justify-center relative w-64 group cursor-pointer">
-                  <div className={`${service.cardColor} p-6 pl-16 w-full text-left shadow-md rounded-lg transition-all duration-500 ease-out group-hover:shadow-2xl group-hover:scale-105 group-hover:-translate-y-2`}>
-                    <h3 className="text-sm font-bold text-gray-700 mb-2 group-hover:text-gray-900 transition-colors duration-300">
-                      {service.title}
-                    </h3>
-                    <p className="text-xs text-gray-600 leading-relaxed mb-4 group-hover:text-gray-700 transition-colors duration-300">
-                      {service.description}
-                    </p>
-                    <a href="#" className="text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200 inline-flex items-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                      Více informací
-                      <svg className="w-3 h-3 ml-1 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </a>
-                  </div>
-                  <div className={`w-16 h-16 ${service.color} flex items-center justify-center shadow-lg rounded-lg absolute -left-4 top-1/2 transform -translate-y-1/2 z-10 transition-all duration-500 ease-out group-hover:scale-110 group-hover:shadow-xl group-hover:-translate-y-3 group-hover:rotate-3`}>
-                    <Image src={service.iconSrc} alt={service.title} width={56} height={56} className={`w-8 h-8 ${service.iconColor} transition-transform duration-300 group-hover:scale-110`} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-    </section>
+    
 
 
 
@@ -504,62 +566,7 @@ export default function HomePage() {
       </section>
 
       {/* References */}
-      <section className="relative overflow-hidden bg-slate-50 py-24 sm:py-32">
-  {/* Abstraktní vlny na pozadí */}
-  <div className="absolute inset-0 z-0 opacity-40">
-    <svg
-      className="w-full h-full"
-      viewBox="0 0 1440 600"
-      preserveAspectRatio="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M0 250 C 300 150, 400 500, 720 400 S 1100 200, 1440 300 V 600 H 0 Z"
-        fill="#E0F2FE" // light sky-100
-      />
-      <path
-        d="M0 350 C 250 450, 500 250, 720 300 S 1000 500, 1440 450 V 600 H 0 Z"
-        fill="#BAE6FD" // light sky-200
-      />
-    </svg>
-  </div>
-
-  <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
-    {/* Hlavička sekce */}
-    <div className="mx-auto max-w-2xl text-center">
-      <div className="inline-flex items-center gap-2 rounded-full bg-blue-100 px-4 py-2 text-sm font-semibold text-blue-800 ring-1 ring-inset ring-blue-200">
-        <Award className="h-4 w-4" />
-        <span>Realizované projekty</span>
-      </div>
-      <h2 className="mt-6 text-4xl font-bold tracking-tighter text-slate-900 sm:text-5xl lg:text-6xl">
-        Naše práce mluví
-        <span className="mt-2 block bg-gradient-to-r from-[#1B5D93] to-[#49A3D7] bg-clip-text text-transparent">
-          za nás
-        </span>
-      </h2>
-      <p className="mt-6 text-lg leading-8 text-gray-600">
-        Každý projekt je pro nás závazkem kvality a preciznosti. Prohlédněte si, jak jsme pomohli našim klientům.
-      </p>
-    </div>
-
-    {/* Karta se sliderem referencí */}
-    <div className="mt-16 sm:mt-20">
-      <div className="rounded-3xl bg-white/60 p-2 shadow-2xl shadow-slate-900/10 ring-1 ring-gray-200 backdrop-blur-md">
-        <ReferenceSlider references={featuredReferences} />
-      </div>
-    </div>
-
-    {/* Tlačítko pro zobrazení všech referencí */}
-    <div className="mt-16 text-center">
-      <Button asChild size="lg" className="group rounded-full bg-gradient-to-r from-[#1B5D93] to-[#2D78AD] px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-[#2D78AD]/40">
-        <Link href="/reference" className="flex items-center gap-3">
-          Všechny naše reference
-          <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-        </Link>
-      </Button>
-    </div>
-  </div>
-</section>
+     
 
       {/* Contact */}
       <section id="kontakt" className="py-20 md:py-32 bg-slate-50">
