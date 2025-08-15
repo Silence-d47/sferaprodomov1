@@ -3,10 +3,6 @@ import { Badge } from '@/components/ui/badge'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, Calendar, User, Clock, BookOpen, ChevronLeft, ChevronRight } from 'lucide-react'
-import { client } from '@/lib/sanity.client'
-import { postQuery, postsQuery } from '@/lib/sanity.queries'
-import { urlForImage } from '@/lib/sanity.image'
-import { CustomPortableText } from '@/lib/sanity.portableText'
 import Image from 'next/image'
 
 interface BlogPostPageProps {
@@ -43,6 +39,8 @@ const categoryColors: Record<string, { bg: string; text: string; border: string 
 // Fetch post data from Sanity
 async function getPostData(slug: string): Promise<Post | null> {
   try {
+    const { client } = await import('@/lib/sanity.client')
+    const { postQuery } = await import('@/lib/sanity.queries')
     const post = await client.fetch<Post>(postQuery, { slug })
     return post
   } catch (error) {
@@ -54,8 +52,10 @@ async function getPostData(slug: string): Promise<Post | null> {
 // Fetch all posts for navigation
 async function getAllPosts(): Promise<Post[]> {
   try {
+    const { client } = await import('@/lib/sanity.client')
+    const { postsQuery } = await import('@/lib/sanity.queries')
     const posts = await client.fetch<Post[]>(postsQuery)
-    return posts.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+    return posts.sort((a: Post, b: Post) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
   } catch (error) {
     console.error('Error fetching posts:', error)
     return []
@@ -87,6 +87,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const getCategoryColor = (category: string) => {
     return categoryColors[category] || categoryColors.default
   }
+
+  // Import Sanity utilities inside the component
+  const { urlForImage } = await import('@/lib/sanity.image')
+  const { CustomPortableText } = await import('@/lib/sanity.portableText')
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-100">
