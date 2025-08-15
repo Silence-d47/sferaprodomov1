@@ -239,7 +239,7 @@ export default function HomePage() {
               </div>
             {/* Services Grid */}
             <div className="flex flex-wrap justify-center items-start gap-12 md:gap-16 max-w-6xl mx-auto">
-              {services.map((service, index) => (
+              {services.map((service) => (
                 <Link key={service.id} href={`/${service.id}`} className="flex justify-center relative w-64 group cursor-pointer">
                   <div className={`${service.cardColor} p-6 pl-16 w-full text-left shadow-md rounded-lg transition-all duration-500 ease-out group-hover:shadow-2xl group-hover:scale-105 group-hover:-translate-y-2`}>
                     <h3 className="text-sm font-bold text-gray-700 mb-2 group-hover:text-gray-900 transition-colors duration-300">
