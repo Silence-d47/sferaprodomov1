@@ -45,6 +45,9 @@ const categoryColors: Record<string, { bg: string; text: string; border: string 
 // Fetch data from Sanity
 async function getBlogData() {
   try {
+    const { client } = await import('@/lib/sanity.client')
+    const { postsQuery, categoriesQuery } = await import('@/lib/sanity.queries')
+    
     const [posts, categories] = await Promise.all([
       client.fetch<Post[]>(postsQuery),
       client.fetch<Category[]>(categoriesQuery)

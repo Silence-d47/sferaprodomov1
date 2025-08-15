@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useParams } from "next/navigation"
@@ -60,10 +60,29 @@ const fetcher = ([_q, _p]: [string, Record<string, any>]) => client.fetch(_q, _p
 export default function ReferenceDetailPage() {
   const params = useParams<{ slug: string }>()
   const slug = params?.slug
-  const { data: reference, error } = useSWR<Reference | null>(slug ? [queryBySlug, { slug }] : null, fetcher)
+  const [reference, setReference] = useState<Reference | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
-  if (error) return <div className="container py-20">Chyba při načítání.</div>
-  if (!reference) return <div className="container py-20">Načítání…</div>
+  // Fetch data on component mount
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!slug) return
+      setIsLoading(true)
+      try {
+        const { client } = await import('@/lib/sanity.client')
+        const data = await client.fetch<Reference>(queryBySlug, { slug })
+        setReference(data)
+      } catch (error) {
+        console.error('Error fetching reference:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchData()
+  }, [slug])
+
+  if (isLoading) return <div className="container py-20">Načítání…</div>
+  if (!reference) return <div className="container py-20">Reference nenalezena.</div>
 
   const showReview = Boolean(reference.testimonial?.quote)
   const showDetails = Boolean(

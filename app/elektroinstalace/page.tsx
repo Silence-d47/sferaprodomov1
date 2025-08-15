@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge"
 import { ContactForm } from "@/components/ui/contact-form4"
 import { ThemeProvider } from "@/components/theme-provider"
 import { ReferenceSlider } from "@/components/ui/reference-slider"
-import { client } from "@/lib/sanity.client"
 import { groq } from "next-sanity"
 import { CustomPortableText } from "@/lib/sanity.portableText"
 import { 
@@ -71,6 +70,9 @@ const referencesQuery = groq`
 `
 
 export default async function ElektroinstalacePage() {
+  // Import Sanity client inside the component
+  const { client } = await import('@/lib/sanity.client')
+  
   const [faqs, references] = await Promise.all([
     client.fetch<FaqEntry[]>(faqsQuery),
     client.fetch<ReferenceCard[]>(referencesQuery),

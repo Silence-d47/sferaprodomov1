@@ -3,7 +3,6 @@
 import React from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { client } from "@/lib/sanity.client"
 import { groq } from "next-sanity"
 import useSWR from "swr"
 import { Button } from "@/components/ui/button"
@@ -43,8 +42,11 @@ const topReferencesQuery = groq`
   }
 `
 
-// SWR fetcher
-const fetcher = (query: string) => client.fetch(query)
+// SWR fetcher with dynamic import
+const fetcher = async (query: string) => {
+  const { client } = await import('@/lib/sanity.client')
+  return client.fetch(query)
+}
 
 
 
@@ -163,7 +165,10 @@ function ValueCard  ({ icon, title, description, iconBgColor, iconColor }: { ico
   )
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  // Import Sanity client inside the component
+
+
   const { data: slides, error: heroError, isLoading: heroLoading } = useSWR<UnifiedHeroSlide[]>(heroSlidesQuery, fetcher)
   const { data: topReferences } = useSWR<TopReference[]>(topReferencesQuery, fetcher)
 

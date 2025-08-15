@@ -1,34 +1,45 @@
-// Importy zůstávají víceméně stejné, jen přidáme pár ikon pro nové designové prvky
-import { client } from "@/lib/sanity.client"
-import { groq } from "next-sanity"
-import { urlForImage } from "@/lib/sanity.image"
-import { CustomPortableText } from "@/lib/sanity.portableText"
-
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ProductCard } from "@/components/ui/product-card" // Předpokládám, že tento komponent je již stylizovaný
-import { ContactForm } from "@/components/ui/contact-form" // Použijeme náš nový, lepší formulář
-import { PDFDownloadButton } from "@/components/ui/pdf-download-button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { ContactForm } from "@/components/ui/contact-form4"
 import { ThemeProvider } from "@/components/theme-provider"
+import { ReferenceSlider } from "@/components/ui/reference-slider"
+import { ProductCard } from "@/components/ui/product-card"
+import { PDFDownloadButton } from "@/components/ui/pdf-download-button"
+import { groq } from "next-sanity"
+import { CustomPortableText } from "@/lib/sanity.portableText"
+import { urlForImage } from "@/lib/sanity.image"
 import { 
   Shield, 
   Clock, 
-  Award, 
   CheckCircle, 
-  ArrowRight, 
-  Phone, 
-  Quote,
-  ChevronRight,
+  Users, 
+  Award,
+  Sparkles,
   Wrench,
-  Users,
+  Zap,
   Home,
   Building,
+  Smartphone,
+  Car,
+  FileText,
+  ArrowRight,
+  Star,
+  MapPin,
+  Calendar,
+  AlertTriangle,
+  X,
+  ToggleLeft,
+  Minus,
+  Phone,
+  Mail,
+  AirVent,
   Split,
   Shuffle,
   Building2,
-  AirVent,
+  Quote
 } from "lucide-react"
 
 interface Product {
@@ -184,6 +195,9 @@ const references = [
 ];
 
 export default async function KlimatizacePageRefined() {
+  // Import Sanity client inside the component
+  const { client } = await import('@/lib/sanity.client')
+  
   const [products, testimonials, faqs] = await Promise.all([
     client.fetch<Product[]>(productsQuery),
     client.fetch<TestimonialEntry[]>(testimonialsQuery),

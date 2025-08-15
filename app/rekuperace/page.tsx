@@ -155,6 +155,16 @@ type FaqEntry = {
   answer: any
 }
 
+type ReferenceCard = {
+  id: string
+  title: string
+  description: string
+  image: string
+  category: string
+  location?: string
+  isTopReference?: boolean
+}
+
 const faqsQuery = groq`
   *[_type == "faq" && isActive == true && category in ["rekuperace", "obecne"]]
   | order(coalesce(order, 9999) asc, _createdAt asc) {
@@ -163,10 +173,25 @@ const faqsQuery = groq`
   }
 `
 
-export default async function RekuperacePageRefined() {
-  const [testimonials, faqs] = await Promise.all([
-    client.fetch<TestimonialEntry[]>(testimonialsQuery),
+const referencesQuery = groq`
+  *[_type == "projectReference" && isActive != false && category == "rekuperace"] | order(_createdAt desc)[0...9] {
+    "id": slug.current,
+    title,
+    description,
+    "image": image.asset->url,
+    category,
+    location,
+    isTopReference
+  }
+`
+
+export default async function RekuperacePage() {
+  // Import Sanity client inside the component
+  const { client } = await import('@/lib/sanity.client')
+  
+  const [faqs, references] = await Promise.all([
     client.fetch<FaqEntry[]>(faqsQuery),
+    client.fetch<ReferenceCard[]>(referencesQuery),
   ])
 
   const leftDynamicFaqs: FaqEntry[] = []
@@ -347,37 +372,25 @@ export default async function RekuperacePageRefined() {
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
-              {(testimonials && testimonials.length > 0 ? testimonials : []).map((t, index) => (
-                <div key={`t-${index}`} className="bg-slate-50/70 rounded-xl md:rounded-2xl p-1 flex flex-col border border-slate-200/80">
-                  <div className="relative h-48 md:h-56 w-full">
-                    <Image src={t.clientImageUrl || "/placeholder.svg"} alt={t.clientName} fill className="object-cover rounded-t-xl md:rounded-t-2xl" />
-                  </div>
-                  <div className="p-4 md:p-6 flex-grow flex flex-col">
-                    <Quote className="w-8 h-8 text-primary/20 mb-4 flex-shrink-0" fill="currentColor" />
-                    <p className="text-slate-600 italic mb-6 flex-grow">"{t.quote}"</p>
-                    <div className="mt-auto pt-5 border-t border-slate-200">
-                      <p className="font-bold text-slate-800">{t.clientName}{t.clientTitle ? `, ${t.clientTitle}` : ""}</p>
-                      <p className="text-sm text-slate-500">{t.clientCompany || t.location || ""}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-
-              {(!testimonials || testimonials.length === 0) && references.map((ref, index) => (
+              {references && references.length > 0 ? references.map((ref, index) => (
                 <div key={`r-${index}`} className="bg-slate-50/70 rounded-xl md:rounded-2xl p-1 flex flex-col border border-slate-200/80">
                   <div className="relative h-48 md:h-56 w-full">
-                    <Image src={ref.image} alt={ref.project} fill className="object-cover rounded-t-xl md:rounded-t-2xl" />
+                    <Image src={ref.image || "/placeholder.svg"} alt={ref.title} fill className="object-cover rounded-t-xl md:rounded-t-2xl" />
                   </div>
                   <div className="p-4 md:p-6 flex-grow flex flex-col">
                     <Quote className="w-8 h-8 text-primary/20 mb-4 flex-shrink-0" fill="currentColor" />
-                    <p className="text-slate-600 italic mb-6 flex-grow">"{ref.quote}"</p>
+                    <p className="text-slate-600 italic mb-6 flex-grow">"{ref.description}"</p>
                     <div className="mt-auto pt-5 border-t border-slate-200">
-                      <p className="font-bold text-slate-800">{ref.customer}</p>
-                      <p className="text-sm text-slate-500">{ref.project}</p>
+                      <p className="font-bold text-slate-800">{ref.title}</p>
+                      <p className="text-sm text-slate-500">{ref.location || ref.category}</p>
                     </div>
                   </div>
                 </div>
-              ))}
+              )) : (
+                <div className="col-span-3 text-center py-12">
+                  <p className="text-slate-500">Zatím nemáme žádné reference pro rekuperaci.</p>
+                </div>
+              )}
             </div>
             
             <div className="text-center mt-16">
@@ -805,5 +818,5 @@ export default async function RekuperacePageRefined() {
         </section>
       </div>
     </ThemeProvider>
-  )
-}
+      )
+  }

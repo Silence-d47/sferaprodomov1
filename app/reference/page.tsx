@@ -1,5 +1,5 @@
 "use client"
-import React, { useMemo } from "react"
+import React, { useMemo, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
@@ -104,9 +104,30 @@ const CustomNextArrow = ({ onClick }: { onClick?: () => void }) => (
 )
 
 export default function ReferencePage() {
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const { data: featuredReferences, error: featuredError } = useSWR<FeaturedReference[]>(featuredReferencesQuery, fetcher)
-  const { data: otherReferences, error: otherError } = useSWR<ListReference[]>(otherReferencesQuery, fetcher)
+  const [featuredReferences, setFeaturedReferences] = useState<FeaturedReference[]>([])
+  const [otherReferences, setOtherReferences] = useState<ListReference[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Fetch data on component mount
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true)
+      try {
+        const { client } = await import('@/lib/sanity.client')
+        const [featured, other] = await Promise.all([
+          client.fetch<FeaturedReference[]>(featuredReferencesQuery),
+          client.fetch<ListReference[]>(otherReferencesQuery)
+        ])
+        setFeaturedReferences(featured)
+        setOtherReferences(other)
+      } catch (error) {
+        console.error('Error fetching references:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchData()
+  }, [])
 
   const categoryStyles = useMemo(() => {
     return (category: string) => {
@@ -152,12 +173,11 @@ export default function ReferencePage() {
   }
 
   // Loading states
-  if (featuredError || otherError) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <p className="text-red-600 mb-4">Chyba při načítání dat</p>
-          <Button onClick={() => window.location.reload()}>Zkusit znovu</Button>
+          <p className="text-gray-600 mb-4">Načítání...</p>
         </div>
       </div>
     )
