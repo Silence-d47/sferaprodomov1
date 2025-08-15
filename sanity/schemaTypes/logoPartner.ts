@@ -2,18 +2,18 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'logoPartner',
-  title: 'Logo partnera',
+  title: 'Logo partner',
   type: 'document',
   fields: [
     defineField({
       name: 'name',
-      title: 'Jméno / název partnera',
+      title: 'Jméno / název partner',
       type: 'string',
       validation: Rule => Rule.required(),
     }),
     defineField({
       name: 'logo',
-      title: 'Logo obrázek',
+      title: 'Logo',
       type: 'image',
       options: {
         hotspot: true,
@@ -21,12 +21,12 @@ export default defineType({
     }),
     defineField({
       name: 'website',
-      title: 'Website URL',
+      title: 'Website URL (pokud existuje)',
       type: 'url',
     }),
     defineField({
       name: 'category',
-      title: 'Kategorie',
+      title: 'Kategorie (typ partnerství)',
       type: 'string',
       options: {
         list: [
@@ -39,12 +39,12 @@ export default defineType({
     }),
     defineField({
       name: 'order',
-      title: 'Zobrazit pořadí',
+      title: 'Pořadí',
       type: 'number',
     }),
     defineField({
       name: 'isActive',
-      title: 'Aktivní',
+      title: 'Zobrazit',
       type: 'boolean',
       initialValue: true,
     }),
@@ -57,7 +57,7 @@ export default defineType({
   ],
   orderings: [
     {
-      title: 'Pořadí',
+        title: 'Sestupné pořadí',
       name: 'orderAsc',
       by: [
         {field: 'order', direction: 'asc'}

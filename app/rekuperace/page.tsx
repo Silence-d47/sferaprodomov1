@@ -185,7 +185,7 @@ export default async function RekuperacePageRefined() {
           </div>
           <div className="relative z-10 container px-4 md:px-6">
             <div className="max-w-3xl">
-              <Badge variant="outline" className="mb-4 md:mb-6 bg-purple-500/10 border-purple-500/30 text-white text-xs md:text-sm">
+              <Badge variant="outline" className="mb-4 md:mb-6 bg-purple-900/10 border-purple-900/30 text-white text-xs md:text-sm">
                 Řízené větrání s rekuperací tepla
               </Badge>
               <h1 className="text-3xl md:text-6xl font-bold mb-3 md:mb-4 leading-tight [text-shadow:_0_2px_8px_rgb(0_0_0_/_50%)] text-white-70">
@@ -198,7 +198,7 @@ export default async function RekuperacePageRefined() {
                 <Button size="lg" asChild className="bg-white text-violet-900 font-semibold hover:bg-white/40 shadow-lg text-sm md:text-base">
                   <Link href="#kontakt">Získat nezávaznou nabídku</Link>
                 </Button>
-                <Button size="lg" variant="outline" asChild className="border-purple-500/50 bg-white/10 text-purple-200 hover:bg-white/20 backdrop-blur-sm text-sm md:text-base">
+                <Button size="lg" variant="outline" asChild className="border-purple-900/50 bg-white/10 text-purple-200 hover:bg-white/20 backdrop-blur-sm text-sm md:text-base">
                   <Link href="#modely">Prohlédnout jednotky</Link>
                 </Button>
               </div>
@@ -404,10 +404,10 @@ export default async function RekuperacePageRefined() {
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
                     <div className="flex-shrink-0 w-8 h-8 bg-purple-200 rounded-full flex items-center justify-center">
-                      <span className="text-purple-800 font-bold">1</span>
+                      <span className="text-purple-900 font-bold">1</span>
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-purple-800 mb-2">Přívod čerstvého vzduchu</h3>
+                      <h3 className="text-xl font-bold text-purple-900 mb-2">Přívod čerstvého vzduchu</h3>
                       <p className="text-slate-600">
                         Venkovní vzduch je nasáván do rekuperační jednotky, kde prochází filtrací. Hrubé nečistoty, pyl a alergeny jsou zachyceny ve filtrech.
                       </p>
@@ -416,10 +416,10 @@ export default async function RekuperacePageRefined() {
                   
                   <div className="flex items-start gap-4">
                     <div className="flex-shrink-0 w-8 h-8 bg-purple-200 rounded-full flex items-center justify-center">
-                      <span className="text-purple-800 font-bold">2</span>
+                      <span className="text-purple-900 font-bold">2</span>
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-purple-800 mb-2">Výměna tepla</h3>
+                      <h3 className="text-xl font-bold text-purple-900 mb-2">Výměna tepla</h3>
                       <p className="text-slate-600">
                         V tepelném výměníku se setkávají proudy čerstvého a odpadního vzduchu. Teplo z teplého odpadního vzduchu se předává studenému čerstvému vzduchu - aniž by se proudy smíchaly.
                       </p>
@@ -428,10 +428,10 @@ export default async function RekuperacePageRefined() {
                   
                   <div className="flex items-start gap-4">
                     <div className="flex-shrink-0 w-8 h-8 bg-purple-200 rounded-full flex items-center justify-center">
-                      <span className="text-purple-800 font-bold">3</span>
+                      <span className="text-purple-900 font-bold">3</span>
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-purple-800 mb-2">Distribuce vzduchu</h3>
+                      <h3 className="text-xl font-bold text-purple-900 mb-2">Distribuce vzduchu</h3>
                       <p className="text-slate-600">
                         Předehřátý čerstvý vzduch je rozváděn do obytných místností (obývák, ložnice), zatímco odpadní vzduch je odsáván z vlhkých prostor (koupelna, kuchyň).
                       </p>
@@ -440,32 +440,16 @@ export default async function RekuperacePageRefined() {
                   
                   <div className="flex items-start gap-4">
                     <div className="flex-shrink-0 w-8 h-8 bg-purple-200 rounded-full flex items-center justify-center">
-                      <span className="text-purple-800 font-bold">4</span>
+                      <span className="text-purple-900 font-bold">4</span>
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-purple-800 mb-2">Odvod odpadního vzduchu</h3>
+                      <h3 className="text-xl font-bold text-purple-900 mb-2">Odvod odpadního vzduchu</h3>
                       <p className="text-slate-600">
                         Spotřebovaný vzduch je po předání tepla vyveden ven. Díky rekuperaci se ztratí pouze 5-15% tepla místo 100% při klasickém větrání okny.
                       </p>
                     </div>
                   </div>
                 </div>
-
-                {leftDynamicFaqs && leftDynamicFaqs.map((item, idx) => (
-                  <div key={`faq-left-${idx}`} className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-500">
-                    <div className="flex items-start space-x-4">
-                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
-                        Q
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-lg mb-3 text-purple-500">{item.question}</h3>
-                        <div className="prose prose-sm max-w-none text-slate-700">
-                          <CustomPortableText value={item.answer} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
                 
                 <div className="bg-slate-50 rounded-xl p-6">
                   <h4 className="text-lg font-bold text-slate-800 mb-3">Klíčové výhody procesu:</h4>
@@ -490,13 +474,13 @@ export default async function RekuperacePageRefined() {
                 </div>
 
                 {rightDynamicFaqs && rightDynamicFaqs.map((item, idx) => (
-                  <div key={`faq-right-${idx}`} className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-500">
+                  <div key={`faq-right-${idx}`} className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-900">
                     <div className="flex items-start space-x-4">
-                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                      <div className="w-8 h-8 bg-purple-900 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
                         Q
                       </div>
                       <div>
-                        <h3 className="font-bold text-lg mb-3 text-purple-500">{item.question}</h3>
+                        <h3 className="font-bold text-lg mb-3 text-purple-900">{item.question}</h3>
                         <div className="prose prose-sm max-w-none text-slate-700">
                           <CustomPortableText value={item.answer} />
                         </div>
@@ -564,51 +548,54 @@ export default async function RekuperacePageRefined() {
           <div className="container relative z-10">
             <div className="text-center mb-16">
               <div className="flex items-center justify-center mb-6">
-                <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mr-4">
+                <div className="w-12 h-12 bg-purple-900 rounded-full flex items-center justify-center mr-4">
                   <span className="text-white font-bold text-lg">?</span>
                 </div>
                 <Badge className="bg-purple-100 text-purple-800 px-4 py-2">
                   FAQ
                 </Badge>
               </div>
-              <h2 className="text-3xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-purple-500 to-purple-700 bg-clip-text text-transparent">
+              <h2 className="text-3xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-purple-800 to-purple-900 bg-clip-text text-transparent">
                 Často kladené otázky
               </h2>
               <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
                 Vše co potřebujete vědět o rekuperačních systémech - odpovědi od expertů
               </p>
-              <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-purple-700 mx-auto mt-8"></div>
+              <div className="w-24 h-1 bg-gradient-to-r from-purple-900 to-purple-700 mx-auto mt-8"></div>
             </div>
 
+
+         
             <div className="max-w-5xl mx-auto">
               <div className="grid lg:grid-cols-2 gap-8">
                 {/* Levý sloupec */}
+         
                 <div className="space-y-6">
-                  <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-500">
+                  <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-900">
                     <div className="flex items-start space-x-4">
-                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                      <div className="w-8 h-8 bg-purple-900 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
                         Q
                       </div>
                       <div>
-                        <h3 className="font-bold text-lg mb-3 text-purple-500">Jak rekuperace funguje a jaký má princip?</h3>
+                        <h3 className="font-bold text-lg mb-3 text-purple-900">Jak rekuperace funguje a jaký má princip?</h3>
                         <p className="text-muted-foreground mb-4">
                           Rekuperace je systém řízeného větrání s využitím tepla odpadního vzduchu. Princip je jednoduchý:
                         </p>
                         <div className="space-y-2">
                           <div className="flex items-center">
-                            <CheckCircle className="h-5 w-5 text-purple-500 mr-3" />
+                            <CheckCircle className="h-5 w-5 text-purple-900 mr-3" />
                             <span>Čerstvý vzduch z venku je přiváděn do interiéru</span>
                           </div>
                           <div className="flex items-center">
-                            <CheckCircle className="h-5 w-5 text-purple-500 mr-3" />
+                            <CheckCircle className="h-5 w-5 text-purple-900 mr-3" />
                             <span>Odpadní vzduch z interiéru je odváděn ven</span>
                           </div>
                           <div className="flex items-center">
-                            <CheckCircle className="h-5 w-5 text-purple-500 mr-3" />
+                            <CheckCircle className="h-5 w-5 text-purple-900 mr-3" />
                             <span>V tepelném výměníku dochází k předání tepla mezi proudy</span>
                           </div>
                           <div className="flex items-center">
-                            <CheckCircle className="h-5 w-5 text-purple-500 mr-3" />
+                            <CheckCircle className="h-5 w-5 text-purple-900 mr-3" />
                             <span>Čerstvý vzduch se předehřeje a odpadní se předchlazuje</span>
                           </div>
                         </div>
@@ -616,21 +603,21 @@ export default async function RekuperacePageRefined() {
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-500">
+                  <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-900">
                     <div className="flex items-start space-x-4">
-                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                      <div className="w-8 h-8 bg-purple-900 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
                         Q
                       </div>
                       <div>
-                        <h3 className="font-bold text-lg mb-3 text-purple-500">Jaká je účinnost rekuperace?</h3>
+                        <h3 className="font-bold text-lg mb-3 text-purple-900">Jaká je účinnost rekuperace?</h3>
                         <div className="space-y-3 mb-4">
                           <div className="flex justify-between items-center p-2 bg-purple-50 rounded">
                             <span className="font-medium">Průměrná účinnost:</span>
-                            <span className="text-purple-500 font-bold">85-95%</span>
+                            <span className="text-purple-900 font-bold">85-95%</span>
                           </div>
                           <div className="flex justify-between items-center p-2 bg-purple-50 rounded">
                             <span className="font-medium">Prémiové modely:</span>
-                            <span className="text-purple-500 font-bold">až 96%</span>
+                            <span className="text-purple-900 font-bold">až 96%</span>
                           </div>
                         </div>
                         <p className="text-sm text-muted-foreground">
@@ -640,24 +627,24 @@ export default async function RekuperacePageRefined() {
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-500">
+                  <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-900">
                     <div className="flex items-start space-x-4">
-                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                      <div className="w-8 h-8 bg-purple-900 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
                         Q
                       </div>
                       <div>
-                        <h3 className="font-bold text-lg mb-3 text-purple-500">Kdy je nutná údržba rekuperace?</h3>
+                        <h3 className="font-bold text-lg mb-3 text-purple-900">Kdy je nutná údržba rekuperace?</h3>
                         <div className="space-y-3 mb-4">
                           <div className="flex items-center">
-                            <CheckCircle className="h-5 w-5 text-purple-500 mr-3" />
+                            <CheckCircle className="h-5 w-5 text-purple-900 mr-3" />
                             <span><strong>Filtry:</strong> 3-6 měsíců</span>
                           </div>
                           <div className="flex items-center">
-                            <CheckCircle className="h-5 w-5 text-purple-500 mr-3" />
+                            <CheckCircle className="h-5 w-5 text-purple-900 mr-3" />
                             <span><strong>Výměník:</strong> 1x ročně</span>
                           </div>
                           <div className="flex items-center">
-                            <CheckCircle className="h-5 w-5 text-purple-500 mr-3" />
+                            <CheckCircle className="h-5 w-5 text-purple-900 mr-3" />
                             <span><strong>Ventilátory:</strong> Kontrola 1x ročně</span>
                           </div>
                         </div>
@@ -668,49 +655,65 @@ export default async function RekuperacePageRefined() {
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-500">
+                  <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-900">
                     <div className="flex items-start space-x-4">
-                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                      <div className="w-8 h-8 bg-purple-900 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
                         Q
                       </div>
                       <div>
-                        <h3 className="font-bold text-lg mb-3 text-purple-500">Lze rekuperaci kombinovat s jinými systémy?</h3>
+                        <h3 className="font-bold text-lg mb-3 text-purple-900">Lze rekuperaci kombinovat s jinými systémy?</h3>
                         <p className="text-muted-foreground mb-4">
                           Ano, rekuperaci lze kombinovat s různými systémy:
                         </p>
                         <div className="grid grid-cols-2 gap-2 text-sm">
                           <div className="flex items-center">
-                            <Wrench className="h-4 w-4 text-purple-500 mr-2" />
+                            <Wrench className="h-4 w-4 text-purple-900 mr-2" />
                             <span>FV panely</span>
                           </div>
                           <div className="flex items-center">
-                            <Wrench className="h-4 w-4 text-purple-500 mr-2" />
+                            <Wrench className="h-4 w-4 text-purple-900 mr-2" />
                             <span>Nabíječky elektromobilů</span>
                           </div>
                           <div className="flex items-center">
-                            <Wrench className="h-4 w-4 text-purple-500 mr-2" />
+                            <Wrench className="h-4 w-4 text-purple-900 mr-2" />
                             <span>Podlahové vytápění</span>
                           </div>
                           <div className="flex items-center">
-                            <Wrench className="h-4 w-4 text-purple-500 mr-2" />
+                            <Wrench className="h-4 w-4 text-purple-900 mr-2" />
                             <span>Chladící systémy</span>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
+                  {leftDynamicFaqs && leftDynamicFaqs.map((item, idx) => (
+                  <div key={`faq-left-${idx}`} className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-900">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-8 h-8 bg-purple-900 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                        Q
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg mb-3 text-purple-900">{item.question}</h3>
+                        <div className="prose prose-sm max-w-none text-slate-700">
+                          <CustomPortableText value={item.answer} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
                 </div>
 
                 {/* Pravý sloupec */}
                 <div className="space-y-6">
 
-                  <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-500">
+                  <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-900">
                     <div className="flex items-start space-x-4">
-                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                      <div className="w-8 h-8 bg-purple-900 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
                         Q
                       </div>
                       <div>
-                        <h3 className="font-bold text-lg mb-3 text-purple-500">Jaký je rozdíl mezi centrální a decentrální rekuperací?</h3>
+                        <h3 className="font-bold text-lg mb-3 text-purple-900">Jaký je rozdíl mezi centrální a decentrální rekuperací?</h3>
                         <div className="space-y-3 mb-4">
                           <div className="p-3 bg-purple-50 rounded">
                             <p className="font-medium text-purple-700 mb-1">Centrální rekuperace</p>
@@ -735,24 +738,24 @@ export default async function RekuperacePageRefined() {
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-500">
+                  <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-900">
                     <div className="flex items-start space-x-4">
-                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                      <div className="w-8 h-8 bg-purple-900 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
                         Q
                       </div>
                       <div>
-                        <h3 className="font-bold text-lg mb-3 text-purple-500">Jak hlásí rekuperace?</h3>
+                        <h3 className="font-bold text-lg mb-3 text-purple-900">Jak hlásí rekuperace?</h3>
                         <p className="text-muted-foreground mb-4">
                           Moderní rekuperační jednotky jsou extrémně tiché:
                         </p>
                         <div className="space-y-2">
                           <div className="flex justify-between items-center p-2 bg-purple-50 rounded">
                             <span className="font-medium">Průměrný provoz:</span>
-                            <span className="text-purple-500 font-bold">25-35 dB(A)</span>
+                            <span className="text-purple-900 font-bold">25-35 dB(A)</span>
                           </div>
                           <div className="flex justify-between items-center p-2 bg-purple-50 rounded">
                             <span className="font-medium">V noci:</span>
-                            <span className="text-purple-500 font-bold">19-25 dB(A)</span>
+                            <span className="text-purple-900 font-bold">19-25 dB(A)</span>
                           </div>
                         </div>
                         <p className="text-sm text-muted-foreground mt-3">
@@ -762,13 +765,13 @@ export default async function RekuperacePageRefined() {
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-500">
+                  <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-900">
                     <div className="flex items-start space-x-4">
-                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+                      <div className="w-8 h-8 bg-purple-900 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
                         Q
                       </div>
                       <div>
-                        <h3 className="font-bold text-lg mb-3 text-purple-500">Jaká je záruka na rekuperační systémy?</h3>
+                        <h3 className="font-bold text-lg mb-3 text-purple-900">Jaká je záruka na rekuperační systémy?</h3>
                         <div className="space-y-3 mb-4">
                           <div className="flex justify-between items-center p-3 bg-green-50 rounded">
                             <span className="font-medium">Práce a montáž:</span>

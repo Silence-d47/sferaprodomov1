@@ -1,456 +1,228 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
 import { ContactForm } from "@/components/ui/contact-form"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { OrganicWaveDivider } from "@/components/ui/organic-wave-divider"
-import { ShapedSectionHeader } from "@/components/ui/shaped-section-header"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Separator } from "@/components/ui/separator"
+import { motion } from "framer-motion"
+import { EnhancedSectionDivider } from "@/components/ui/enhanced-section-divider"
 import { 
   MapPin, 
   Phone, 
   Mail, 
   Clock, 
-  MessageCircle, 
-  Calendar,
-  Star,
-  Shield,
-  Award,
   Users,
   CheckCircle,
-  ArrowRight,
-  Facebook,
-  Instagram,
-  Linkedin
+  Briefcase,
+  Wrench,
+  Zap,
+  Building,
+  ShieldCheck,
+  Rocket
 } from "lucide-react"
 
+// --- DATA ---
+const teamMembers = [
+  {
+    id: "jh",
+    name: "Jaroslav Hendrich",
+    role: "Jednatel společnosti",
+    specialization: "Vedení, obchod, projektové řízení",
+    image: "/images/hendrich_jaroslav.webp",
+    description: "Zakladatel a jednatel společnosti. Specializuje se na komunikaci se zákazníkem a je zkušeným projektovým manažerem.",
+    contact: { phone: "+420 735 014 112", email: "hendrich@sfera-domov.cz" }
+  },
+  {
+    id: "tn",
+    name: "Tomáš Novák",
+    role: "Hlavní technik",
+    specialization: "Klimatizace a rekuperace",
+    image: "/images/tym-sfera.webp",
+    description: "Odborník na instalace klimatizačních systémů a rekuperačních jednotek.",
+    contact: { phone: "+420 735 014 113", email: "novak@sfera-domov.cz" }
+  },
+  {
+    id: "ps",
+    name: "Pavel Svoboda",
+    role: "Specialista na tepelná čerpadla",
+    specialization: "Tepelná čerpadla",
+    image: "/images/tym-sfera.webp",
+    description: "Certifikovaný technik pro tepelná čerpadla s více než 200 realizacemi.",
+    contact: { phone: "+420 735 014 114", email: "svoboda@sfera-domov.cz" }
+  },
+  {
+    id: "mk",
+    name: "Martin Krejčí",
+    role: "Elektrotechnik",
+    specialization: "Elektroinstalace a FVE",
+    image: "/images/tym-sfera.webp",
+    description: "Kvalifikovaný elektrotechnik s oprávněním pro instalace FVE a chytré domácnosti.",
+    contact: { phone: "+420 735 014 115", email: "krejci@sfera-domov.cz" }
+  },
+  {
+    id: "jd",
+    name: "Jiří Dvořák",
+    role: "Servisní technik",
+    specialization: "Servis a údržba",
+    image: "/images/tym-sfera.webp",
+    description: "Zkušený servisní technik pro všechny typy zařízení a pohotovostní služby.",
+    contact: { phone: "+420 735 014 116", email: "dvorak@sfera-domov.cz" }
+  }
+]
+
+// --- SUB-KOMPONENTY ---
+const TeamMemberCard = ({ member }: { member: typeof teamMembers[0] }) => (
+  <Card className="group flex flex-col h-full bg-white text-center transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border border-slate-200/80">
+    <CardHeader className="flex-shrink-0">
+      <Avatar className="w-28 h-28 mx-auto ring-4 ring-white shadow-lg group-hover:ring-blue-100 transition-all duration-300">
+        <AvatarImage src={member.image} alt={member.name} />
+        <AvatarFallback className="bg-slate-200 text-slate-600 text-3xl">{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+      </Avatar>
+    </CardHeader>
+    <CardContent className="flex flex-col flex-grow p-6 pt-2">
+      <CardTitle className="text-xl text-slate-800">{member.name}</CardTitle>
+      <CardDescription className="text-blue-600 font-semibold text-sm mb-4">{member.role}</CardDescription>
+      <p className="text-slate-600 text-sm leading-relaxed mb-4 flex-grow">{member.description}</p>
+      <Badge variant="secondary" className="bg-blue-50 text-blue-700 mx-auto"><Zap className="h-3 w-3 mr-1.5" /> {member.specialization}</Badge>
+      <Separator className="my-4" />
+      <div className="flex gap-2 justify-center">
+        <Button size="sm" asChild className="flex-1 bg-slate-800 hover:bg-slate-900"><Link href={`tel:${member.contact.phone}`}><Phone className="h-4 w-4 mr-2" />Zavolat</Link></Button>
+        <Button size="sm" variant="outline" asChild className="flex-1"><Link href={`mailto:${member.contact.email}`}><Mail className="h-4 w-4 mr-2" />Email</Link></Button>
+      </div>
+    </CardContent>
+  </Card>
+)
+
+const ContactInfoCard = ({ icon, title, value, href }: { icon: React.ReactNode, title: string, value: string, href: string }) => (
+  <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
+    <Link href={href} className="group block rounded-2xl bg-white/10 p-6 backdrop-blur-md border border-white/20 hover:bg-white/20 transition-colors duration-300 h-full">
+      <div className="flex items-center gap-4">
+        <div className="flex-shrink-0 w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">{icon}</div>
+        <div>
+          <p className="text-sm font-semibold text-blue-100">{title}</p>
+          <p className="text-lg font-medium text-white">{value}</p>
+        </div>
+      </div>
+    </Link>
+  </motion.div>
+)
+
+// --- HLAVNÍ KOMPONENTA STRÁNKY ---
 export default function KontaktPage() {
+  const containerVariants = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.1, delayChildren: 0.3 } }
+  }
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+  }
+
   return (
-    <div className="flex flex-col">
-      {/* Hero Section - konzistentní s ostatními stránkami */}
-      <section className="relative h-[80vh] md:h-[90vh] min-h-[500px] md:min-h-[600px] flex items-center bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600">
-        <div className="absolute inset-0">
-          <Image 
-            src="/placeholder.svg?height=600&width=1200&text=Kontakt+Hero" 
-            alt="Kontakt" 
-            fill 
-            className="object-cover opacity-20" 
-          />
+    <div className="bg-slate-50 text-slate-800">
+      {/* --- HERO SEKCE S DIVIDEREM --- */}
+      <section className="relative bg-slate-900 text-white overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Image src="/images/tym-sfera.webp" alt="Tým SFERA PRO DOMOV" fill className="object-cover object-[center_50%] md:object-[center_20%]" quality={80} priority />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/80 via-slate-900/70 to-blue-900/80"></div>
         </div>
-        <div className="relative z-10 container px-4 md:px-6">
-          <div className="max-w-4xl text-white">
-            <div className="flex items-center mb-6">
-              <Image 
-                src="/logo/logo.svg" 
-                alt="Sfera logo" 
-                width={60} 
-                height={60} 
-                className="mr-4" 
-              />
-              <Badge className="bg-white/20 text-white border-white/20 text-sm px-3 py-1">
-                <MessageCircle className="h-4 w-4 mr-2" />
-                Kontakt
-              </Badge>
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight drop-shadow-lg">
-              Jsme tu pro vás
-            </h1>
-            <p className="text-xl text-blue-100 mb-8 leading-relaxed drop-shadow-lg max-w-3xl">
-              Ozvěte se nám s jakýmkoliv dotazem nebo požadavkem. Naši odborníci vám rádi pomohou 
-              s výběrem nejlepšího řešení pro váš domov nebo firmu.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50" asChild>
-                <Link href="#kontaktni-udaje">
-                  <Phone className="h-5 w-5 mr-2" />
-                  Zavolat nyní
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10" asChild>
-                <Link href="#kontaktni-formular">
-                  <Mail className="h-5 w-5 mr-2" />
-                  Napsat email
-                </Link>
-              </Button>
-            </div>
-          </div>
+        <div className="relative z-10 container mx-auto px-6 pt-24 sm:pt-32 lg:pt-40 pb-32 sm:pb-40 lg:pb-48">
+          <motion.div className="max-w-4xl" initial="hidden" animate="visible" variants={containerVariants}>
+            <motion.div variants={itemVariants}><Badge className="bg-white/10 text-white border-white/20 text-sm px-4 py-2 mb-6">Kontaktujte nás</Badge></motion.div>
+            <motion.h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-300" variants={itemVariants}>
+              Spojte se s odborníky, kteří rozumí vašemu domovu.
+            </motion.h1>
+            <motion.p className="text-xl text-slate-300 mb-12 leading-relaxed max-w-3xl" variants={itemVariants}>
+              Ať už máte konkrétní dotaz, nebo jen hledáte správné řešení, náš tým je připraven vám pomoci.
+            </motion.p>
+            <motion.div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" variants={containerVariants}>
+              <ContactInfoCard icon={<Phone className="h-6 w-6 text-white"/>} title="Zavolejte nám" value="+420 735 014 112" href="tel:+420735014112" />
+              <ContactInfoCard icon={<Mail className="h-6 w-6 text-white"/>} title="Napište nám" value="info@sfera-domov.cz" href="mailto:info@sfera-domov.cz" />
+              <ContactInfoCard icon={<MapPin className="h-6 w-6 text-white"/>} title="Hlavní sídlo" value="Nákladní 471/32, Opava" href="#mapa" />
+            </motion.div>
+          </motion.div>
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 z-20">
+          <EnhancedSectionDivider fromColor="from-slate-900" toColor="to-slate-50" />
         </div>
       </section>
 
-      {/* Organic Wave Divider */}
-      <OrganicWaveDivider />
-
-      {/* Trust Indicators */}
-      <section className="py-20 bg-gradient-to-br from-[#f8f9fa] via-white to-blue-50/30">
-        <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Proč si vybrat právě nás?</h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Více než 15 let zkušeností, stovky spokojených zákazníků a profesionální přístup
-            </p>
-            <div className="w-24 h-1 bg-blue-600 mx-auto mt-6"></div>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-            <Card className="text-center shadow-lg border-0 bg-white hover:shadow-xl transition-shadow">
-              <CardContent className="p-8">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Award className="h-8 w-8 text-blue-600" />
-                </div>
-                <h3 className="font-bold text-xl mb-2">15+ let</h3>
-                <p className="text-muted-foreground">zkušeností v oboru</p>
-              </CardContent>
-            </Card>
-            
-            <Card className="text-center shadow-lg border-0 bg-white hover:shadow-xl transition-shadow">
-              <CardContent className="p-8">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Users className="h-8 w-8 text-green-600" />
-                </div>
-                <h3 className="font-bold text-xl mb-2">500+</h3>
-                <p className="text-muted-foreground">spokojených zákazníků</p>
-              </CardContent>
-            </Card>
-            
-            <Card className="text-center shadow-lg border-0 bg-white hover:shadow-xl transition-shadow">
-              <CardContent className="p-8">
-                <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Shield className="h-8 w-8 text-yellow-600" />
-                </div>
-                <h3 className="font-bold text-xl mb-2">5 let</h3>
-                <p className="text-muted-foreground">záruka na práci</p>
-              </CardContent>
-            </Card>
-            
-            <Card className="text-center shadow-lg border-0 bg-white hover:shadow-xl transition-shadow">
-              <CardContent className="p-8">
-                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Star className="h-8 w-8 text-purple-600" />
-                </div>
-                <h3 className="font-bold text-xl mb-2">98%</h3>
-                <p className="text-muted-foreground">spokojenost zákazníků</p>
-              </CardContent>
-            </Card>
-          </div>
+      {/* --- SEKCE NÁŠ TÝM - VYCENTROVANÁ --- */}
+      <section className="py-20 sm:py-28">
+        <div className="container mx-auto px-6">
+          <motion.div className="text-center max-w-3xl mx-auto mb-16" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+            <h2 className="text-base font-semibold text-blue-600 tracking-wider uppercase">Náš Tým</h2>
+            <p className="mt-4 text-4xl md:text-5xl font-extrabold tracking-tighter text-slate-900">Odborníci s vášní pro detail</p>
+            <p className="mt-6 text-lg text-slate-600 leading-8">Každý člen našeho týmu přináší unikátní dovednosti a léta zkušeností. Jsme hrdí na práci, kterou odvádíme.</p>
+          </motion.div>
+          <motion.div className="flex flex-wrap justify-center -m-4" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={containerVariants}>
+            {teamMembers.map((member) => (
+              <motion.div key={member.id} variants={itemVariants} className="w-full sm:w-1/2 lg:w-1/3 p-4">
+                <TeamMemberCard member={member} />
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
-
-      {/* Shaped Section Header */}
-      <ShapedSectionHeader 
-        variant="wave-inverse"
-        animated={true}
-        height="lg"
-        backgroundColor="bg-white"
-        particles={false}
-      />
-
-      {/* Contact Info and Form */}
-      <section id="kontaktni-udaje" className="py-20 bg-white">
-        <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Kontaktujte nás</h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Jsme tu pro vás každý den. Ozvěte se nám jakýmkoliv způsobem, který vám vyhovuje
-            </p>
-            <div className="w-24 h-1 bg-blue-600 mx-auto mt-6"></div>
-          </div>
-          
-          <div className="grid lg:grid-cols-2 gap-16">
-            {/* Contact Information */}
-            <div className="space-y-8">
-              <div className="grid gap-6">
-                <Card className="shadow-xl border-0 bg-white hover:shadow-2xl transition-shadow">
-                  <CardContent className="p-8 flex items-start space-x-6">
-                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <MapPin className="h-6 w-6 text-blue-600" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-bold text-lg mb-2">Naše adresa</h3>
-                      <p className="text-muted-foreground leading-relaxed">
-                        Nákladní 471/32<br />
-                        746 01 Opava<br />
-                        Česká republika
-                      </p>
-                      <Button variant="outline" size="sm" className="mt-4" asChild>
-                        <Link href="#mapa">
-                          <MapPin className="h-4 w-4 mr-2" />
-                          Zobrazit na mapě
-                        </Link>
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="shadow-xl border-0 bg-white hover:shadow-2xl transition-shadow">
-                  <CardContent className="p-8 flex items-start space-x-6">
-                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Phone className="h-6 w-6 text-green-600" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-bold text-lg mb-2">Telefon</h3>
-                      <p className="text-muted-foreground mb-2">+420 735 014 112</p>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        Rychlá odezva, okamžitá konzultace
-                      </p>
-                      <Button size="sm" className="bg-green-600 hover:bg-green-700" asChild>
-                        <Link href="tel:+420735014112">
-                          <Phone className="h-4 w-4 mr-2" />
-                          Zavolat nyní
-                        </Link>
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="shadow-xl border-0 bg-white hover:shadow-2xl transition-shadow">
-                  <CardContent className="p-8 flex items-start space-x-6">
-                    <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Mail className="h-6 w-6 text-orange-600" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-bold text-lg mb-2">Email</h3>
-                      <p className="text-muted-foreground mb-2">info@klima-sfera.cz</p>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        Odpovídme do 24 hodin
-                      </p>
-                      <Button size="sm" className="bg-orange-600 hover:bg-orange-700" asChild>
-                        <Link href="mailto:info@klima-sfera.cz">
-                          <Mail className="h-4 w-4 mr-2" />
-                          Napsat email
-                        </Link>
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="shadow-xl border-0 bg-white hover:shadow-2xl transition-shadow">
-                  <CardContent className="p-8 flex items-start space-x-6">
-                    <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Clock className="h-6 w-6 text-purple-600" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-bold text-lg mb-2">Pracovní doba</h3>
-                      <div className="space-y-1 text-muted-foreground">
-                        <p className="flex justify-between">
-                          <span>Pondělí - Pátek:</span>
-                          <span className="font-medium">8:00 - 17:00</span>
-                        </p>
-                        <p className="flex justify-between">
-                          <span>Sobota:</span>
-                          <span className="font-medium">9:00 - 12:00</span>
-                        </p>
-                        <p className="flex justify-between">
-                          <span>Neděle:</span>
-                          <span className="font-medium">Zavřeno</span>
-                        </p>
-                      </div>
-                      <div className="mt-4 p-3 bg-red-50 rounded-lg">
-                        <p className="text-red-700 font-semibold text-sm flex items-center">
-                          <Shield className="h-4 w-4 mr-2" />
-                          Pohotovost 24/7 pro závazné situace
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-              
-              {/* Social Media */}
-              <Card className="shadow-xl border-0 bg-gradient-to-br from-blue-600 to-cyan-600 text-white">
-                <CardContent className="p-8 text-center">
-                  <h3 className="font-bold text-lg mb-4">Sledujte nás na sociálních sítích</h3>
-                  <div className="flex justify-center space-x-4">
-                    <Button variant="outline" size="sm" className="border-white text-white hover:bg-white/10">
-                      <Facebook className="h-4 w-4" />
-                    </Button>
-                    <Button variant="outline" size="sm" className="border-white text-white hover:bg-white/10">
-                      <Instagram className="h-4 w-4" />
-                    </Button>
-                    <Button variant="outline" size="sm" className="border-white text-white hover:bg-white/10">
-                      <Linkedin className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Contact Form */}
-            <div id="kontaktni-formular">
-              <Card className="shadow-2xl border-0 bg-white">
-                <CardContent className="p-8">
-                  <div className="text-center mb-8">
-                    <h3 className="text-2xl font-bold mb-4">Napište nám</h3>
-                    <p className="text-muted-foreground">
-                      Vyplněte formulář a my se vám ozveme do 24 hodin s nezávaznou nabídkou
-                    </p>
-                  </div>
-                  <ContactForm />
-                  
-                  <div className="mt-8 p-6 bg-blue-50 rounded-xl">
-                    <div className="flex items-center justify-center space-x-6 text-sm text-blue-700">
-                      <div className="flex items-center">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Rychlá odezva
-                      </div>
-                      <div className="flex items-center">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Nezávazná konzultace
-                      </div>
-                      <div className="flex items-center">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Profesionální přístup
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Shaped Section Header */}
-      <ShapedSectionHeader 
-        variant="wave-inverse"
-        animated={true}
-        height="lg"
-        backgroundColor="bg-gradient-to-br from-[#f8f9fa] via-white to-blue-50/30"
-        particles={false}
-      />
-
-      {/* Map Section */}
-      <section id="mapa" className="py-20 bg-gradient-to-br from-[#f8f9fa] via-white to-blue-50/30">
-        <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Kde nás najdete</h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Navštivte nás v našem sídle v Opavě nebo si domluvte schůzku přímo u vás doma
-            </p>
-            <div className="w-24 h-1 bg-blue-600 mx-auto mt-6"></div>
-          </div>
-          
-          <div className="max-w-6xl mx-auto">
-            <Card className="shadow-2xl border-0 bg-white overflow-hidden">
-              <div className="grid lg:grid-cols-3 gap-0">
-                {/* Map */}
-                <div className="lg:col-span-2 relative h-96 lg:h-auto">
-                  <Image 
-                    src="/mapa/mapa.png" 
-                    alt="Mapa - Sfera Opava" 
-                    fill 
-                    className="object-cover" 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                  <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg p-4">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-                        <MapPin className="h-5 w-5 text-white" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-sm">SFERA</p>
-                        <p className="text-xs text-muted-foreground">Nákladní 471/32, Opava</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Info Panel */}
-                <div className="p-8 bg-white">
-                  <h3 className="font-bold text-xl mb-6">Informace o navštěvě</h3>
-                  
-                  <div className="space-y-6">
-                    <div className="flex items-start space-x-3">
-                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <MapPin className="h-4 w-4 text-blue-600" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-sm mb-1">Adresa</p>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
-                          Nákladní 471/32<br />
-                          746 01 Opava
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start space-x-3">
-                      <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <Clock className="h-4 w-4 text-green-600" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-sm mb-1">Otevreno</p>
-                        <p className="text-sm text-muted-foreground">
-                          Po-Pá: 8:00-17:00<br />
-                          So: 9:00-12:00
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start space-x-3">
-                      <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <Calendar className="h-4 w-4 text-orange-600" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-sm mb-1">Doporučení</p>
-                        <p className="text-sm text-muted-foreground">
-                          Domluvte si schůzku předem
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-8 space-y-3">
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700" asChild>
-                      <Link href="tel:+420735014112">
-                        <Phone className="h-4 w-4 mr-2" />
-                        Zavolat a domluvit schůzku
-                      </Link>
-                    </Button>
-                    <Button variant="outline" className="w-full" asChild>
-                      <Link href="https://maps.google.com" target="_blank">
-                        <MapPin className="h-4 w-4 mr-2" />
-                        Otevřít v Google Maps
-                      </Link>
-                    </Button>
-                  </div>
+      
+      {/* --- SEKCE KDE NÁS NAJDETE --- */}
+      <section id="mapa" className="py-20 sm:py-28 bg-white">
+        <div className="container mx-auto px-6">
+           <motion.div className="text-center max-w-3xl mx-auto mb-16" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+            <h2 className="text-base font-semibold text-blue-600 tracking-wider uppercase">Naše působnost</h2>
+            <p className="mt-4 text-4xl md:text-5xl font-extrabold tracking-tighter text-slate-900">Jsme vám nablízku</p>
+            <p className="mt-6 text-lg text-slate-600 leading-8">Naše hlavní sídlo a kanceláře najdete v Opavě a Ostravě. Působíme v celém Moravskoslezském a Olomouckém kraji.</p>
+          </motion.div>
+          <Card className="overflow-hidden shadow-2xl border-slate-200/80">
+            <div className="grid lg:grid-cols-2">
+              <div className="p-8 lg:p-10">
+                <h3 className="text-2xl font-bold mb-6 text-slate-800">Naše pobočky</h3>
+                <div className="space-y-6">
+                  <div className="flex gap-4"><div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center"><Building className="h-6 w-6 text-blue-600" /></div><div><h4 className="font-semibold text-slate-800">Opava - hlavní sídlo</h4><p className="text-slate-600 text-sm">Nákladní 471/32, 746 01</p><p className="text-slate-500 text-xs mt-1">Po-Pá 8:00-17:00</p></div></div>
+                  <div className="flex gap-4"><div className="flex-shrink-0 w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center"><Briefcase className="h-6 w-6 text-green-600" /></div><div><h4 className="font-semibold text-slate-800">Ostrava - kancelář</h4><p className="text-slate-600 text-sm">Čujkovova 1714/21, 702 00</p><p className="text-slate-500 text-xs mt-1">Po-Pá 8:00-20:00</p></div></div>
+                  <div className="flex gap-4"><div className="flex-shrink-0 w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center"><Wrench className="h-6 w-6 text-orange-600" /></div><div><h4 className="font-semibold text-slate-800">Jakartovice & Olomouc - sklady</h4><p className="text-slate-600 text-sm">Technické a materiálové zázemí</p><p className="text-slate-500 text-xs mt-1">Pouze pro interní účely</p></div></div>
                 </div>
               </div>
-            </Card>
-          </div>
+              <div className="h-80 lg:h-auto min-h-[400px]">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2572.7681329243916!2d17.89209587712128!3d49.94165997149959!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4711626245d1c31d%3A0x676aa96316274a2e!2zTsOhxYFsYWRuw60gNDcxLzMyLCA3NDYgMDEgT3BhdmE!5e0!3m2!1scs!2scz!4v1716382098001!5m2!1scs!2scz" width="100%" height="100%" style={{ border: 0 }} allowFullScreen={false} loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Mapa sídla společnosti SFERA PRO DOMOV v Opavě"></iframe>
+              </div>
+            </div>
+          </Card>
         </div>
       </section>
 
-      {/* Final CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-[url('/placeholder.svg?height=400&width=800&text=CTA+Background')] opacity-10"></div>
-        </div>
-        <div className="container relative z-10">
-          <div className="max-w-4xl mx-auto text-center text-white">
-            <MessageCircle className="h-16 w-16 text-yellow-400 mx-auto mb-6" />
-            <h2 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
-              Jste připraveni začít?
-            </h2>
-            <p className="text-xl text-blue-100 mb-8 leading-relaxed max-w-3xl mx-auto">
-              Kontaktujte nás ještě dnes a necháme si zpracovat nezávaznou nabídku 
-              přesně na míru vašim potřebám a rozpočtu.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold" asChild>
-                <Link href="tel:+420735014112">
-                  <Phone className="h-5 w-5 mr-2" />
-                  Zavolat nyní
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10" asChild>
-                <Link href="#kontaktni-formular">
-                  <Mail className="h-5 w-5 mr-2" />
-                  Napsat zprávu
-                </Link>
-              </Button>
+      {/* --- SEKCE KONTAKTNÍ FORMULÁŘ - PŘEPRACOVANÁ --- */}
+      <section id="kontaktni-formular" className="py-20 sm:py-28">
+        <div className="container mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Levá část - Text */}
+            <div className="max-w-md">
+              <h2 className="text-base font-semibold text-blue-600 tracking-wider uppercase">Máte dotaz?</h2>
+              <p className="mt-4 text-4xl md:text-5xl font-extrabold tracking-tighter text-slate-900">
+                Pošlete nám zprávu
+              </p>
+              <p className="mt-6 text-lg text-slate-600 leading-8">
+                Vyplňte formulář a my se vám ozveme do 24 hodin s návrhem řešení. Konzultace je vždy nezávazná a zdarma.
+              </p>
+              <div className="mt-8 space-y-4">
+                <div className="flex items-center gap-3"><CheckCircle className="h-5 w-5 text-green-500" /><span className="text-slate-700">Rychlá odpověď do 24 hodin</span></div>
+                <div className="flex items-center gap-3"><CheckCircle className="h-5 w-5 text-green-500" /><span className="text-slate-700">Nezávazná konzultace a nacenění</span></div>
+                <div className="flex items-center gap-3"><CheckCircle className="h-5 w-5 text-green-500" /><span className="text-slate-700">Profesionální a vstřícný přístup</span></div>
+              </div>
             </div>
-            <p className="text-sm text-blue-200 mt-6">
-              ✓ Rychlá odezva do 24 hodin    ✓ Nezávazná konzultace    ✓ Profesionální přístup
-            </p>
+            
+            {/* Pravá část - Formulář a Trust Badges */}
+            <div className="bg-white p-8 lg:p-12 rounded-2xl shadow-2xl border border-slate-200/60">
+                <h3 className="text-2xl font-bold mb-1 text-slate-800">Nezávazná poptávka</h3>
+                <p className="text-slate-600 mb-6">Vyplňte formulář nebo nám rovnou zavolejte.</p>
+                <ContactForm source="kontakt-page" />
+                <Separator className="my-6" />
+           
+            </div>
           </div>
         </div>
       </section>

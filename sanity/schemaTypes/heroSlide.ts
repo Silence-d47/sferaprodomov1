@@ -2,29 +2,29 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'heroSlide',
-  title: 'Hero Slide',
+  title: 'Hero slide',
   type: 'document',
   fields: [
     defineField({
       name: 'title',
-      title: 'Title',
+      title: 'Název',
       type: 'string',
       validation: Rule => Rule.required(),
     }),
     defineField({
       name: 'subtitle',
-      title: 'Subtitle',
+      title: 'Podnázev',
       type: 'string',
     }),
     defineField({
       name: 'description',
-      title: 'Description',
+      title: 'Popis',
       type: 'text',
       rows: 4,
     }),
     defineField({
       name: 'bgImage',
-      title: 'Background Image',
+      title: 'Obrázek na pozadí',
       type: 'image',
       options: {
         hotspot: true,
@@ -32,7 +32,7 @@ export default defineType({
     }),
     defineField({
       name: 'slideType',
-      title: 'Slide Type',
+      title: 'Typ slide',
       type: 'string',
       options: {
         list: [
@@ -46,54 +46,54 @@ export default defineType({
     }),
     defineField({
       name: 'features',
-      title: 'Features',
+      title: 'Funkce',
       type: 'array',
       of: [{type: 'string'}],
     }),
     defineField({
       name: 'cta',
-      title: 'Call to Action',
+      title: 'Call to Action (CTA)',
       type: 'object',
       fields: [
         {
           name: 'text',
-          title: 'CTA Text',
+          title: 'Text CTA',
           type: 'string',
         },
         {
           name: 'link',
-          title: 'CTA Link',
+          title: 'Odkaz CTA',
           type: 'string',
         },
       ],
     }),
     defineField({
       name: 'phoneNumber',
-      title: 'Phone Number',
+      title: 'Telefonní číslo',
       type: 'string',
     }),
     defineField({
       name: 'bgColor',
-      title: 'Background Color Classes',
+        title: 'Barva pozadí (tailwind)',
       type: 'string',
       description: 'Tailwind gradient classes for background',
     }),
     defineField({
       name: 'order',
-      title: 'Display Order',
+      title: 'Pořadí',
       type: 'number',
       validation: Rule => Rule.required(),
     }),
     defineField({
       name: 'isActive',
-      title: 'Active',
+      title: 'Zobrazit',
       type: 'boolean',
       initialValue: true,
     }),
   ],
   orderings: [
     {
-      title: 'Order',
+        title: 'Sestupné pořadí',
       name: 'orderAsc',
       by: [
         {field: 'order', direction: 'asc'}

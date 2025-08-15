@@ -1,7 +1,7 @@
 import { groq } from 'next-sanity'
 
 export const postsQuery = groq`
-  *[_type == "post"] | order(publishedAt desc) {
+  *[_type == "post" && defined(publishedAt)] | order(publishedAt desc) {
     _id,
     title,
     slug,
@@ -9,7 +9,8 @@ export const postsQuery = groq`
     mainImage,
     "author": author->name,
     "categories": categories[]->title,
-    excerpt
+    excerpt,
+    readingTime
   }
 `
 
@@ -22,7 +23,9 @@ export const postQuery = groq`
     mainImage,
     "author": author->name,
     "categories": categories[]->title,
-    body
+    excerpt,
+    body,
+    readingTime
   }
 `
 
@@ -42,4 +45,4 @@ export const authorsQuery = groq`
     image,
     bio
   }
-` 
+`

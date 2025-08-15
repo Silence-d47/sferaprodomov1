@@ -22,19 +22,12 @@ export function Header() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <header className="absolute left-0 right-0 z-50 mx-2 md:mx-4 bg-transparent backdrop-blur-none top-20 md:top-24">
-      <div className="container flex h-16 md:h-18 items-center justify-between px-4 md:px-8">
-        {/* SFERA DOMOV - Left */}
-        <div className="flex-1">
-          <Link href="/" className="flex flex-col items-start">
-            <span className="text-white text-2xl md:text-4xl font-semibold drop-shadow-lg leading-tight">S F É R A</span>
-            <span className="text-white text-sm md:text-xl font-semibold drop-shadow-lg leading-none mt-0.5">PRO DOMOV.CZ</span>
-          </Link>
-        </div>
-
+      <header className="absolute left-0 right-0 z-50 mx-2 md:mx-2 bg-transparent backdrop-blur-none top-16 md:top-20">
+      <div className="container mx-auto px-2 md:px-6 flex h-16 md:h-18 items-center justify-between max-w-7xl">
+      
         {/* Desktop Navigation - Right side */}
-        <div className="flex-1 flex justify-end">
-          <nav className="hidden lg:flex items-center space-x-4 mt-2">
+        <div className="flex flex-1 justify-end">
+          <nav className="hidden lg:flex items-end space-x-0.5 mt-0">
             {navigation.map((item, index) => (
               <div key={item.name} className="flex items-center">
                 <Link
@@ -51,7 +44,7 @@ export function Header() {
           </nav>
         </div>
 
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-1">
           {/* Mobile Navigation */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild className="lg:hidden">

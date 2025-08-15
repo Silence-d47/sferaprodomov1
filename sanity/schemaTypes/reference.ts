@@ -2,7 +2,7 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'projectReference',
-  title: 'Reference',
+  title: 'Projektová reference',
   type: 'document',
   fields: [
     defineField({
@@ -13,7 +13,7 @@ export default defineType({
     }),
     defineField({
       name: 'slug',
-      title: 'Slug',
+      title: 'slug',
       type: 'slug',
       options: {
         source: 'title',
@@ -29,7 +29,7 @@ export default defineType({
     }),
     defineField({
       name: 'image',
-      title: 'Úvodní obrázek',
+      title: 'Obrázek',
       type: 'image',
       options: {
         hotspot: true,
@@ -37,7 +37,7 @@ export default defineType({
     }),
     defineField({
       name: 'gallery',
-      title: 'Galerie',
+      title: 'Galerie (pokud existuje)',
       type: 'array',
       of: [{
         type: 'image',
@@ -46,7 +46,7 @@ export default defineType({
     }),
     defineField({
       name: 'category',
-      title: 'Kategorie',
+      title: 'Kategorie (pokud existuje)',
       type: 'string',
       options: {
         list: [
@@ -61,12 +61,12 @@ export default defineType({
     }),
     defineField({
       name: 'location',
-      title: 'Místo',
+      title: 'Místo (pokud existuje)',
       type: 'string',
     }),
     defineField({
       name: 'year',
-      title: 'Rok dokončení',
+      title: 'Rok dokončení (pokud existuje)',
       type: 'string',
     }),
     defineField({
@@ -89,13 +89,13 @@ export default defineType({
     }),
     defineField({
       name: 'isFeatured',
-      title: 'Obsahuje referenci',
+      title: 'Zobrazit jako referenci',
       type: 'boolean',
       initialValue: false,
     }),
     defineField({
       name: 'isTopReference',
-      title: 'Top reference',
+      title: 'Zobrazit jako top reference',
       type: 'boolean',
       initialValue: false,
     }),
@@ -194,12 +194,12 @@ export default defineType({
       fields: [
         {
           name: 'metaTitle',
-          title: 'Meta nazev',
+          title: 'Meta nadpis (pokud existuje)',
           type: 'string',
         },
         {
           name: 'metaDescription',
-          title: 'Meta popis',
+          title: 'Meta popis (pokud existuje)',
           type: 'text',
           rows: 3,
         },

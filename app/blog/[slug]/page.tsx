@@ -2,7 +2,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Calendar, User, Clock, BookOpen, ChevronLeft, ChevronRight } from 'lucide-react'
+import { client } from '@/lib/sanity.client'
+import { postQuery, postsQuery } from '@/lib/sanity.queries'
+import { urlForImage } from '@/lib/sanity.image'
+import { CustomPortableText } from '@/lib/sanity.portableText'
+import Image from 'next/image'
 
 interface BlogPostPageProps {
   params: {
@@ -10,69 +15,77 @@ interface BlogPostPageProps {
   }
 }
 
-// Mock data pro testování
-const mockPosts = {
-  'jak-vybrat-klimatizaci': {
-    title: 'Jak vybrat správnou klimatizaci pro váš domov',
-    excerpt: 'Kompletní průvodce výběrem klimatizace podle velikosti místnosti a energetické náročnosti.',
-    categories: ['Klimatizace'],
-    author: 'Ing. Jan Novák',
-    publishedAt: '2024-01-15',
-    content: `
-      <h2>Úvod do světa klimatizací</h2>
-      <p>Výběr správné klimatizace pro váš domov není jednoduchá záležitost. V roce 2024 máme k dispozici mnoho technologií a možností, které mohou být pro laika matoucí.</p>
-      
-      <h2>Typy klimatizací</h2>
-      <p>Existuje několik základních typů klimatizačních systémů:</p>
-      <ul>
-        <li><strong>Split klimatizace</strong> - nejpopulárnější volba pro domácnosti</li>
-        <li><strong>Multi-split systémy</strong> - pro chlazení více místností</li>
-        <li><strong>VRF systémy</strong> - pro větší objekty</li>
-      </ul>
-      
-      <h2>Výpočet výkonu</h2>
-      <p>Správný výpočet výkonu je klíčový pro efektivní provoz. Základní pravidlo je 100-150 W na m².</p>
-    `
-  },
-  'tepelna-cerpadla-dotace': {
-    title: 'Tepelná čerpadla a dotace 2024',
-    excerpt: 'Aktuální přehled všech dostupných dotací na tepelná čerpadla.',
-    categories: ['Tepelná čerpadla'],
-    author: 'Marie Svobodová',
-    publishedAt: '2024-01-10',
-    content: `
-      <h2>Dotace na tepelná čerpadla</h2>
-      <p>V roce 2024 jsou dostupné různé dotace na tepelná čerpadla. Zjistěte, jaké možnosti máte.</p>
-      
-      <h2>Nová zelená úsporám</h2>
-      <p>Program Nová zelená úsporám nabízí dotace až 180 000 Kč na tepelná čerpadla.</p>
-    `
-  },
-  'elektroinstalace-chytra-domacnost': {
-    title: 'Elektroinstalace pro chytrou domácnost',
-    excerpt: 'Moderní elektroinstalace jako základ chytré domácnosti.',
-    categories: ['Elektroinstalace'],
-    author: 'Ing. Pavel Černý',
-    publishedAt: '2024-01-05',
-    content: `
-      <h2>Chytrá domácnost</h2>
-      <p>Moderní elektroinstalace je základním kamenem chytré domácnosti. Bez správné přípravy nemůžete využívat moderní technologie.</p>
-      
-      <h2>Co potřebujete</h2>
-      <ul>
-        <li>Silné okruhy pro spotřebiče</li>
-        <li>Wi-Fi připojení v každé místnosti</li>
-        <li>Příprava pro smart technologie</li>
-      </ul>
-    `
+// Types
+interface Post {
+  _id: string
+  title: string
+  excerpt: string
+  slug: { current: string }
+  categories: string[]
+  author: string
+  publishedAt: string
+  mainImage: any
+  body: any
+  readingTime?: number
+}
+
+// Category color mapping
+const categoryColors: Record<string, { bg: string; text: string; border: string }> = {
+  'Klimatizace': { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
+  'Tepelná čerpadla': { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200' },
+  'Rekuperace': { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200' },
+  'Elektroinstalace': { bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200' },
+  'Fotovoltaika': { bg: 'bg-yellow-50', text: 'text-yellow-700', border: 'border-yellow-200' },
+  'Komerční': { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200' },
+  'default': { bg: 'bg-slate-50', text: 'text-slate-700', border: 'border-slate-200' }
+}
+
+// Fetch post data from Sanity
+async function getPostData(slug: string): Promise<Post | null> {
+  try {
+    const post = await client.fetch<Post>(postQuery, { slug })
+    return post
+  } catch (error) {
+    console.error('Error fetching post:', error)
+    return null
+  }
+}
+
+// Fetch all posts for navigation
+async function getAllPosts(): Promise<Post[]> {
+  try {
+    const posts = await client.fetch<Post[]>(postsQuery)
+    return posts.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+  } catch (error) {
+    console.error('Error fetching posts:', error)
+    return []
   }
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const post = mockPosts[(await params).slug as keyof typeof mockPosts]
+  const slug = params.slug
+  const [post, allPosts] = await Promise.all([
+    getPostData(slug),
+    getAllPosts()
+  ])
 
   if (!post) {
     notFound()
+  }
+
+  // Get current post index and navigation posts
+  const currentIndex = allPosts.findIndex(p => p.slug.current === slug)
+  const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null
+  const nextPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null
+  
+  // Get related posts (same category, excluding current)
+  const relatedPosts = allPosts
+    .filter(p => p.slug.current !== slug && p.categories?.some(cat => post.categories?.includes(cat)))
+    .slice(0, 3)
+
+  // Get category color
+  const getCategoryColor = (category: string) => {
+    return categoryColors[category] || categoryColors.default
   }
 
   return (
@@ -93,11 +106,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               <span>{new Date(post.publishedAt).toLocaleDateString('cs-CZ')}</span>
             </div>
             <div className="flex flex-wrap gap-2">
-              {post.categories?.map((category: string) => (
-                <Badge key={category} className="bg-white/20 text-white border-white/20">
-                  {category}
-                </Badge>
-              ))}
+              {post.categories?.map((category: string) => {
+                const colors = getCategoryColor(category)
+                return (
+                  <Badge key={category} className={`${colors.bg} ${colors.text} ${colors.border} border`}>
+                    {category}
+                  </Badge>
+                )
+              })}
             </div>
           </div>
         </div>
@@ -109,12 +125,63 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <div className="max-w-4xl mx-auto">
             <Card className="p-8 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl shadow-lg">
               <CardContent>
-                <div 
-                  className="prose prose-lg max-w-none"
-                  dangerouslySetInnerHTML={{ __html: post.content }}
-                />
+                {post.mainImage && (
+                  <div className="mb-8">
+                    <Image
+                      src={urlForImage(post.mainImage).url()}
+                      alt={post.title}
+                      width={800}
+                      height={400}
+                      className="w-full h-auto rounded-lg"
+                    />
+                  </div>
+                )}
+                
+                {post.excerpt && (
+                  <div className="mb-8 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r-lg">
+                    <p className="text-lg text-gray-700 italic">{post.excerpt}</p>
+                  </div>
+                )}
+                
+                <div className="prose prose-lg max-w-none">
+                  <CustomPortableText value={post.body} />
+                </div>
               </CardContent>
             </Card>
+            
+            {/* Navigation between posts */}
+            <div className="mt-12 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+              <div className="grid md:grid-cols-2 gap-0">
+                {prevPost && (
+                  <Link 
+                    href={`/blog/${prevPost.slug.current}`}
+                    className="p-6 hover:bg-gray-50 transition-colors duration-200 border-r border-gray-200"
+                  >
+                    <div className="flex items-center gap-3">
+                      <ChevronLeft className="h-5 w-5 text-gray-400" />
+                      <div>
+                        <div className="text-sm text-gray-500 mb-1">Předchozí článek</div>
+                        <div className="font-semibold text-gray-900 line-clamp-2">{prevPost.title}</div>
+                      </div>
+                    </div>
+                  </Link>
+                )}
+                {nextPost && (
+                  <Link 
+                    href={`/blog/${nextPost.slug.current}`}
+                    className={`p-6 hover:bg-gray-50 transition-colors duration-200 ${!prevPost ? 'md:col-span-2' : ''}`}
+                  >
+                    <div className="flex items-center gap-3 justify-end">
+                      <div className="text-right">
+                        <div className="text-sm text-gray-500 mb-1">Následující článek</div>
+                        <div className="font-semibold text-gray-900 line-clamp-2">{nextPost.title}</div>
+                      </div>
+                      <ChevronRight className="h-5 w-5 text-gray-400" />
+                    </div>
+                  </Link>
+                )}
+              </div>
+            </div>
             
             <div className="mt-8 text-center">
               <Link 
@@ -129,7 +196,79 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </div>
       </section>
 
-      {/* Related Articles CTA */}
+      {/* Related Articles Section */}
+      {relatedPosts.length > 0 && (
+        <section className="py-16 bg-gradient-to-br from-gray-50 via-white to-blue-50/30">
+          <div className="container">
+            <div className="text-center mb-12">
+              <div className="flex items-center justify-center mb-4">
+                <BookOpen className="h-8 w-8 text-blue-600 mr-3" />
+                <h2 className="text-3xl font-bold text-gray-800">Související články</h2>
+              </div>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Podívejte se na další články ze stejné kategorie
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              {relatedPosts.map((relatedPost) => (
+                <article key={relatedPost._id} className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-xl hover:border-gray-300 transition-all duration-300 group">
+                  <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
+                    {relatedPost.mainImage ? (
+                      <Image
+                        src={urlForImage(relatedPost.mainImage).url()}
+                        alt={relatedPost.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#1B5D93]/10 to-[#196097]/20 group-hover:from-[#1B5D93]/20 group-hover:to-[#196097]/30 transition-all duration-300"></div>
+                    )}
+                    <div className="absolute top-4 left-4">
+                      {relatedPost.categories?.map((category: string) => {
+                        const colors = getCategoryColor(category)
+                        return (
+                          <Badge key={category} className={`${colors.bg} ${colors.text} ${colors.border} border text-xs`}>
+                            {category}
+                          </Badge>
+                        )
+                      })}
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <div className="flex items-center gap-3 text-xs text-gray-500 mb-3">
+                      <div className="flex items-center gap-1">
+                        <Calendar className="h-3 w-3" />
+                        <span>{new Date(relatedPost.publishedAt).toLocaleDateString('cs-CZ')}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Clock className="h-3 w-3" />
+                        <span>{relatedPost.readingTime || 3} min</span>
+                      </div>
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-3 leading-tight group-hover:text-[#1B5D93] transition-colors duration-200">
+                      <Link href={`/blog/${relatedPost.slug.current}`} className="block">
+                        {relatedPost.title}
+                      </Link>
+                    </h3>
+                    <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
+                      {relatedPost.excerpt}
+                    </p>
+                    <Link 
+                      href={`/blog/${relatedPost.slug.current}`}
+                      className="text-[#1B5D93] text-sm font-semibold hover:text-[#196097] transition-colors duration-200"
+                    >
+                      Číst více
+                    </Link>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Enhanced CTA Section */}
       <section className="py-16 bg-gradient-to-r from-[#1B5D93] to-[#196097] text-white">
         <div className="container text-center max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold mb-4">Zajímá vás více informací?</h2>
@@ -141,7 +280,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               href="/blog" 
               className="inline-block bg-white text-[#1B5D93] px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors duration-300 text-center"
             >
-              Více článků
+              Všechny články
             </Link>
             <Link 
               href="/kontakt" 

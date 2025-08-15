@@ -2,7 +2,7 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'faq',
-  title: 'FAQ',
+  title: 'Často kladené otázky',
   type: 'document',
   fields: [
     defineField({
@@ -33,18 +33,18 @@ export default defineType({
     }),
     defineField({
       name: 'order',
-      title: 'Zobrazit pořadí',
+      title: 'Pořadí',
       type: 'number',
     }),
     defineField({
       name: 'isActive',
-      title: 'Aktivní',
+      title: 'Zobrazit',
       type: 'boolean',
       initialValue: true,
     }),
     defineField({
       name: 'tags',
-      title: 'Tagy',
+      title: 'Štítky',
       type: 'array',
       of: [{type: 'string'}],
     }),

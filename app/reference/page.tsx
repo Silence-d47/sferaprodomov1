@@ -196,12 +196,14 @@ export default function ReferencePage() {
                     Nezávazná poptávka
                   </Link>
                 </Button>
-                <Button size="lg" className="bg-white/10 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-blue-700 transition-all" asChild>
-                  <Link href="#reference-mapa">
-                    <MapPin className="h-5 w-5 mr-2" />
-                    Zobrazit na mapě
-                  </Link>
-                </Button>
+                {featuredReferences && featuredReferences.length > 0 && (
+                  <Button size="lg" className="bg-white/10 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-blue-700 transition-all" asChild>
+                    <Link href={`/reference/${featuredReferences[0].id}`}>
+                      <ArrowRight className="h-5 w-5 mr-2" />
+                      Zobrazit nejnovější referenci
+                    </Link>
+                  </Button>
+                )}
               </div>
             </div>
             
@@ -213,7 +215,7 @@ export default function ReferencePage() {
                 <div className="relative bg-white/20 backdrop-blur-md rounded-full p-2 border border-white/30 shadow-2xl">
                 </div>
                 {/* Floating elements */}
-                <div className="absolute -top-2 -right-2 w-4 h-4 bg-yellow-400 rounded-full animate-bounce"></div>
+                <div className="absolute -top-2 -right-2 w-4 h-4 bg-yellow-400 rounded-full animate-pulse"></div>
                 <div className="absolute -bottom-3 -left-3 w-3 h-3 bg-cyan-400 rounded-full animate-pulse"></div>
               </div>
             </div>
@@ -243,13 +245,74 @@ export default function ReferencePage() {
               </Badge>
             </div>
             <h2 className="text-3xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-Chcete být naši další referencí?            </h2>
+              Naše působnost v regionu
+            </h2>
             <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-              Naše pověst nás předchází napříč Moravskoslezským krajem. Děkujeme!
+              Působíme v Moravskoslezském, Olomouckém a Zlínském kraji. Naše reference jsou důkazem kvality napříč celým regionem.
             </p>
             <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-cyan-600 mx-auto mt-8"></div>
           </div>
-            
+          
+          {/* Mapa s pokrytím */}
+          <div className="max-w-6xl mx-auto mb-16">
+            <div className="grid lg:grid-cols-2 gap-8 items-center">
+              {/* Levý sloupec - Text */}
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-800 mb-4">Naše působnost v regionu</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Působíme v Moravskoslezském, Olomouckém a Zlínském kraji. Ostrava je naším hlavním centrem, 
+                    odkud pokrýváme celý region a realizujeme projekty pro spokojené zákazníky.
+                  </p>
+                </div>
+                
+                {/* Klíčové oblasti */}
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
+                    <span className="text-gray-700 font-medium">Moravskoslezský kraj</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-3 h-3 bg-cyan-500 rounded-full"></div>
+                    <span className="text-gray-700 font-medium">Olomoucký kraj</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                    <span className="text-gray-700 font-medium">Zlínský kraj</span>
+                  </div>
+                </div>
+                
+                {/* Statistiky */}
+                <div className="grid grid-cols-2 gap-4 pt-4">
+                  <div className="text-center p-4 bg-blue-50 rounded-lg">
+                    <div className="text-2xl font-bold text-blue-600">120+</div>
+                    <div className="text-sm text-gray-600">Spokojených zákazníků</div>
+                  </div>
+                  <div className="text-center p-4 bg-green-50 rounded-lg">
+                    <div className="text-2xl font-bold text-green-600">3</div>
+                    <div className="text-sm text-gray-600">Kraje pokrytí</div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Pravý sloupec - Mapa */}
+              <div className="relative">
+                <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-6 border border-blue-100 shadow-lg">
+                  <Image
+                    src="/mapa/mapa2.jpg"
+                    alt="Mapa pokrytí - Ostrava, Olomoucký a Zlínský kraj"
+                    width={600}
+                    height={450}
+                    className="w-full h-auto rounded-xl"
+                  />
+                </div>
+                
+                {/* Dekorativní prvky */}
+                <div className="absolute -top-2 -right-2 w-4 h-4 bg-yellow-400 rounded-full animate-pulse"></div>
+                <div className="absolute -bottom-2 -left-2 w-3 h-3 bg-blue-400 rounded-full animate-bounce"></div>
+              </div>
+            </div>
+          </div>
           
           {/* Bottom CTA */}
           <div className="text-center mt-16">
@@ -391,7 +454,7 @@ Chcete být naši další referencí?            </h2>
       <section className="py-20 bg-white">
         <div className="container">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Projekty</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Co o nás říkají naši zákazníci?</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Každý projekt je pro nás důležitý a zaslouží si naši veškerou a plnou pozornost. Také i proto se všechny projekty u nás zůstávají v našem paměti. Vy si je můžete prohlédnout níže.</p>
             <div className="w-24 h-1 bg-blue-600 mx-auto mt-6"></div>
@@ -457,11 +520,10 @@ Chcete být naši další referencí?            </h2>
         </div>
       </section>
 
+
       {/* Enhanced CTA Section */}
       <section className="py-20 bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-[url('/placeholder.svg?height=400&width=800&text=CTA+Background')] opacity-10"></div>
-        </div>
+        <div className="absolute inset-0"></div>
         <div className="container relative z-10">
           <div className="max-w-4xl mx-auto text-center text-white">
             <div className="mb-8">
@@ -503,8 +565,8 @@ Chcete být naši další referencí?            </h2>
               </div>
               <div className="text-center">
                 <Award className="h-12 w-12 text-orange-400 mx-auto mb-4" />
-                <h3 className="font-semibold text-lg mb-2">Certifikáty</h3>
-                <p className="text-blue-100 text-sm">Jsme certifikovaným týmem v oboru a řídíme se normami ISO 9001 a 14001</p>
+                <h3 className="font-semibold text-lg mb-2">Nejlepší v okolí</h3>
+                <p className="text-blue-100 text-sm">Jsme nejlepší v oboru v našem regionu. Vyzkoušejte nás!</p>
               </div>
             </div>
           </div>

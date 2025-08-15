@@ -7,13 +7,13 @@ export default defineType({
   fields: [
     defineField({
       name: 'title',
-      title: 'název',
+      title: 'Název',
       type: 'string',
       validation: Rule => Rule.required(),
     }),
     defineField({
       name: 'slug',
-      title: 'Slug',
+      title: 'slug',
       type: 'slug',
       options: {
         source: 'title',
@@ -29,7 +29,7 @@ export default defineType({
     }),
     defineField({
       name: 'icon',
-      title: 'Ikona',
+      title: 'Ikona (Lucide React)',
       type: 'image',
       options: {
         hotspot: true,
@@ -37,41 +37,41 @@ export default defineType({
     }),
     defineField({
       name: 'hoverColor',
-      title: 'Barva hover',
+      title: 'Barva hover (tailwind)',
       type: 'string',
       description: 'Tailwind třída pro hover barvu',
     }),
     defineField({
       name: 'link',
-      title: 'odkaz na stránku servisu',
+      title: 'odkaz na stránku servisu (pokud existuje)',
       type: 'string',
     }),
     defineField({
       name: 'order',
-      title: 'Zobrazit pořadí',
+      title: 'Pořadí',
       type: 'number',
     }),
     defineField({
       name: 'isActive',
-      title: 'Aktivní',
+      title: 'Zobrazit',
       type: 'boolean',
       initialValue: true,
     }),
     defineField({
       name: 'features',
-      title: 'Klíčové vlastnosti',
+      title: 'Funkce',
       type: 'array',
       of: [{type: 'string'}],
     }),
     defineField({
       name: 'benefits',
-      title: 'Výhody',
+      title: 'Výhody (pokud existují)',
       type: 'array',
       of: [{type: 'string'}],
     }),
     defineField({
       name: 'heroImage',
-      title: 'Hero Image',
+      title: 'Hero Image (pokud existuje)',
       type: 'image',
       options: {
         hotspot: true,

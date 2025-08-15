@@ -2,24 +2,24 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'siteSettings',
-  title: 'Nastavení stránky',
+  title: 'Nastavení webu',
   type: 'document',
   fields: [
     defineField({
       name: 'title',
-      title: 'Název stránky',
+      title: 'Název webu',
       type: 'string',
       validation: Rule => Rule.required(),
     }),
     defineField({
       name: 'description',
-      title: 'Popis stránky',
+      title: 'Popis webu',
       type: 'text',
       rows: 4,
     }),
     defineField({
       name: 'logo',
-      title: 'Logo',
+      title: 'Logo webu',
       type: 'image',
       options: {
         hotspot: true,
@@ -27,12 +27,12 @@ export default defineType({
     }),
     defineField({
       name: 'favicon',
-      title: 'Favicon',
+      title: 'Favicon webu',
       type: 'image',
     }),
     defineField({
       name: 'contact',
-      title: 'Kontaktní informace',
+      title: 'Kontaktní informace webu',
       type: 'object',
       fields: [
         {
@@ -61,7 +61,7 @@ export default defineType({
     }),
     defineField({
       name: 'social',
-      title: 'Socialní sítě',
+      title: 'Socialní sítě webu',
       type: 'object',
       fields: [
         {
@@ -88,41 +88,41 @@ export default defineType({
     }),
     defineField({
       name: 'ratings',
-      title: 'Hodnocení společnosti',
+      title: 'Hodnocení webu',
       type: 'object',
       fields: [
         {
           name: 'googleRating',
-          title: 'Google hodnocení',
+          title: 'Google hodnocení webu',
           type: 'number',
           validation: Rule => Rule.min(1).max(5),
         },
         {
           name: 'googleReviews',
-          title: 'Počet Google hodnocení',
+          title: 'Počet Google hodnocení webu',
           type: 'number',
         },
         {
           name: 'seznamRating',
-          title: 'Seznam.cz hodnocení',
+          title: 'Seznam.cz hodnocení webu',
           type: 'number',
           validation: Rule => Rule.min(1).max(5),
         },
         {
           name: 'seznamReviews',
-          title: 'Počet hodnocení na Seznam.cz',
+          title: 'Počet hodnocení na Seznam.cz webu (pokud existuje)',
           type: 'number',
         },
       ],
     }),
     defineField({
       name: 'companyInfo',
-      title: 'Informace o společnosti',
+      title: 'Informace o společnosti (pokud existují)',
       type: 'object',
       fields: [
         {
           name: 'companyName',
-          title: 'Jméno společnosti',
+          title: 'Jméno společnosti (pokud existuje)',
           type: 'string',
         },
         {

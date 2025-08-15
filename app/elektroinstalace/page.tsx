@@ -87,8 +87,8 @@ export default async function ElektroinstalacePage() {
       <div className="bg-white text-slate-800">
         <section className="relative h-[90vh] min-h-[600px] flex items-center text-white">
           <div className="absolute inset-0">
-          <Image src="/images/elektroinstalace.webp" alt="Profesionální elektroinstalace" fill priority className="object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-orange-500/90 via-slate-600/60 to-black"></div>
+          <Image src="/images/10.webp" alt="Profesionální elektroinstalace" fill priority className="object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-orange-900/60 to-black"></div>
         </div>
         <div className="relative z-10 container">
             <div className="max-w-3xl">
@@ -139,7 +139,7 @@ export default async function ElektroinstalacePage() {
               </div>
               <h3 className="font-bold text-lg mb-3 text-orange-500">Bezpečnost především!</h3>
               <p className="text-muted-foreground leading-relaxed">
-                Používáme pouze certifikovaný materiál a dodržujeme všechny platné normy ČSN. 
+                Používáme pouze certifikovaný materiál a dodržujeme všechny platné normy. 
                 Prioritou je vždy bezpečnost.
               </p>
             </div>
@@ -176,7 +176,7 @@ export default async function ElektroinstalacePage() {
               </div>
               <h3 className="font-bold text-lg mb-3 text-orange-500">Odbornost a zkušenost</h3>
               <p className="text-muted-foreground leading-relaxed">
-                Náš tým tvoří pouze kvalifikovaní a zkušení elektrikáři se všemi potřebnými osvědčeními (Zákon č. 250/2021 Sb. a NV 194/2022 Sb).
+                Náš tým tvoří pouze kvalifikovaní a zkušení elektrikáři se všemi potřebnými osvědčeními.
               </p>
             </div>
 
@@ -373,7 +373,7 @@ export default async function ElektroinstalacePage() {
       </section>
 
   {/* Technical Support Section - Professional & Trustworthy */}
-  <section className="py-32 bg-gradient-to-br from-orange-600 via-orange-30 to-orange-900 text-white relative overflow-hidden">
+  <section className="py-32 bg-gradient-to-br from-orange-600/80 via-orange-30 to-orange-900/90 text-white relative overflow-hidden">
         {/* Background decorative elements */}
         <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-[#3D8FC4]/20 to-transparent rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-tl from-[#196097]/20 to-transparent rounded-full blur-3xl"></div>
@@ -386,15 +386,17 @@ export default async function ElektroinstalacePage() {
                 <Shield className="w-5 h-5" />
                 <span>Technická Podpora</span>
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-relaxed">
                 Jsme tu pro vás!
                 <span className="block text-white/90 font-normal"></span>
               </h2>
-              <p className="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
+              <p className="text-xl text-slate-200/90 max-w-3xl mx-auto leading-relaxed">
                 Tým našich proškolených a certifikovaných techniků je připraven řešit vaše požadavky ve všední dny od 8:00 do 20:00.  
+                <br />
                 <span className="font-bold text-white"> <p>
                    &nbsp;ELEKTROPOHOTOVOST - OPAVA A OKOLÍ 25 km.</p>
-                  </span>Akutní poruchu garantujeme opravit nejpozději do 72 hodin od prvního kontaktu. V některých případech i do 24 hodin.
+                   <br />
+                  </span>| Garantujeme opravu do 24 hodin od prvního kontaktu |
               </p>
             </div>
 
@@ -411,10 +413,10 @@ export default async function ElektroinstalacePage() {
                       <div className="w-4 h-4 bg-orange-500 rounded-full animate-pulse"></div>
                     </div>
                   </div>
-                                  <div className="text-white font-bold text-2xl mb-2">+420 735 014 112</div>
-                <div className="text-white/80 text-sm">Hlavní linka</div>
-                <div className="text-green-300 text-sm font-medium mt-2">✓ Elektropohotovost Opava</div>
-                <div className="text-green-300 text-sm font-medium">✓ Oprava do 72 hodin</div>
+                                  <div className="text-slate-200 font-bold text-2xl mb-2">+420 735 014 112</div>
+                <div className="text-slate-200/80 text-sm">Hlavní linka</div>
+                <div className="text-green-900 text-sm font-medium mt-2">✓ Elektropohotovost Opava</div>
+                <div className="text-green-900 text-sm font-medium">✓ Oprava do 72 hodin</div>
                 </div>
 
                 {/* Working hours */}
@@ -422,8 +424,8 @@ export default async function ElektroinstalacePage() {
                   <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto lg:mr-0 lg:ml-auto mb-4">
                     <Clock className="h-8 w-8 text-white" />
                   </div>
-                  <div className="text-white font-bold text-lg mb-2">Po - Pá: 8:00 - 20:00</div>
-                  <div className="text-green-300 text-sm font-medium mt-3">✓ Pohotovostní servis</div>
+                  <div className="text-slate-200 font-bold text-lg mb-2">Po - Pá: 8:00 - 20:00</div>
+                  <div className="text-green-900 text-sm font-medium mt-3">✓ Pohotovostní servis</div>
                 </div>
               </div>
             </div>
@@ -587,20 +589,17 @@ export default async function ElektroinstalacePage() {
         <div className="container relative z-10">
           <div className="text-center mb-16">
             <div className="flex items-center justify-center mb-6">
-              <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mr-4">
-                <span className="text-white font-bold text-lg">?</span>
-              </div>
               <Badge className="bg-orange-100 text-orange-800 px-4 py-2">
-                FAQ
+            Nejčastější dotazy
               </Badge>
-            </div>
-            <h2 className="text-3xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
+              </div>
+            <h2 className="text-3xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-orange-800 to-orange-900 bg-clip-text text-transparent">
               Často kladené otázky
             </h2>
             <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
               Vše co potřebujete vědět o elektroinstalacích - odpovědi od expertů s více než 15letou praxí
             </p>
-            <div className="w-24 h-1 bg-gradient-to-r from-orange-500 to-red-600 mx-auto mt-8"></div>
+            <div className="w-24 h-1 bg-gradient-to-r from-orange-800 to-orange-900 mx-auto mt-8"></div>
           </div>
 
           <div className="max-w-5xl mx-auto">
@@ -613,7 +612,7 @@ export default async function ElektroinstalacePage() {
                       Q
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg mb-3 text-orange-500">Jak dlouho trvá kompletní rekonstrukce elektroinstalace?</h3>
+                      <h3 className="font-bold text-lg mb-3 text-orange-900">Jak dlouho trvá kompletní rekonstrukce elektroinstalace?</h3>
                       <p className="text-muted-foreground mb-4">
                         <strong>Byt 2+1:</strong> 3-5 pracovních dnů<br/>
                         <strong>Rodinný dům:</strong> 5-10 pracovních dnů<br/>
@@ -632,7 +631,7 @@ export default async function ElektroinstalacePage() {
                       Q
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg mb-3 text-orange-500">Kolik stojí nová elektroinstalace?</h3>
+                      <h3 className="font-bold text-lg mb-3 text-orange-900">Kolik stojí nová elektroinstalace?</h3>
                       <div className="space-y-2 mb-4">
                         <div className="flex justify-between items-center p-2 bg-orange-50 rounded">
                           <span className="font-medium">Byt 2+1:</span>
@@ -656,7 +655,7 @@ export default async function ElektroinstalacePage() {
                       Q
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg mb-3 text-orange-500">Kdy je nutná revize elektroinstalace?</h3>
+                      <h3 className="font-bold text-lg mb-3 text-orange-900">Kdy je nutná revize elektroinstalace?</h3>
                       <div className="space-y-3 mb-4">
                         <div className="flex items-center">
                           <CheckCircle className="h-5 w-5 text-orange-500 mr-3" />
@@ -688,7 +687,7 @@ export default async function ElektroinstalacePage() {
                       Q
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg mb-3 text-orange-500">Děláte i drobné zásahy?</h3>
+                      <h3 className="font-bold text-lg mb-3 text-orange-900">Děláte i drobné zásahy?</h3>
                       <p className="text-muted-foreground mb-4">
                         Samozřejmě! Nabízíme jak kompletní rekonstrukce, tak i menší zásahy:
                       </p>
@@ -724,7 +723,7 @@ export default async function ElektroinstalacePage() {
                       Q
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg mb-3 text-orange-500">Jaká je záruka na vaši práci?</h3>
+                      <h3 className="font-bold text-lg mb-3 text-orange-900">Jaká je záruka na vaši práci?</h3>
                       <div className="space-y-3 mb-4">
                         <div className="flex justify-between items-center p-3 bg-green-50 rounded">
                           <span className="font-medium">Práce a montáž:</span>
@@ -748,7 +747,7 @@ export default async function ElektroinstalacePage() {
                       Q
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg mb-3 text-orange-500">Potřebuji přípravu pro elektromobil?</h3>
+                        <h3 className="font-bold text-lg mb-3 text-orange-900">Potřebuji přípravu pro elektromobil?</h3>
                       <p className="text-muted-foreground mb-4">
                         Ano, pro nabíjecí stanici (wallbox) je potřeba speciální příprava:
                       </p>
@@ -780,21 +779,21 @@ export default async function ElektroinstalacePage() {
 
             {/* CTA v FAQ */}
             <div className="mt-12 text-center bg-orange-500/10 rounded-2xl p-8 border border-orange-500/20">
-              <h3 className="text-2xl font-bold text-orange-500 mb-4">Chcete se zeptat na něco jiného?</h3>
+              <h3 className="text-2xl font-bold text-orange-900 mb-4">Chcete se zeptat na něco jiného?</h3>
               <p className="text-muted-foreground mb-6">
                 Kontaktujte nás telefonicky nebo e-mailem. Rádi vám odpovíme na všechny dotazy.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button className="bg-orange-500 hover:bg-orange-500" asChild>
+                <Button className="bg-orange-900 hover:bg-orange-500" asChild>
                   <Link href="tel:+420735014112">
                     <Phone className="h-4 w-4 mr-2" />
                     +420 735 014 112
                   </Link>
                 </Button>
-                <Button variant="outline" className="border-orange-500 text-orange-500 hover:bg-orange-50" asChild>
-                  <Link href="mailto:info@sfera-pro-domov.cz">
+                <Button variant="outline" className="border-orange-900 text-orange-900 hover:bg-orange-500" asChild>
+                  <Link href="mailto:info@sfera-domov.cz">
                     <Mail className="h-4 w-4 mr-2" />
-                    info@sfera-pro-domov.cz
+                    info@sfera-domov.cz
                   </Link>
                 </Button>
               </div>
@@ -805,9 +804,9 @@ export default async function ElektroinstalacePage() {
                 {faqs && faqs.filter((_, i) => i % 2 === 0).map((item, idx) => (
                   <div key={`faq-left-${idx}`} className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-orange-500">
                     <div className="flex items-start space-x-4">
-                      <div className="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">Q</div>
+                      <div className="w-8 h-8 bg-orange-900 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">Q</div>
                       <div>
-                        <h3 className="font-bold text-lg mb-3 text-orange-500">{item.question}</h3>
+                        <h3 className="font-bold text-lg mb-3 text-orange-900">{item.question}</h3>
                         <div className="prose prose-sm max-w-none text-slate-700">
                           <CustomPortableText value={item.answer} />
                         </div>
@@ -822,7 +821,7 @@ export default async function ElektroinstalacePage() {
                     <div className="flex items-start space-x-4">
                       <div className="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">Q</div>
                       <div>
-                        <h3 className="font-bold text-lg mb-3 text-orange-500">{item.question}</h3>
+                        <h3 className="font-bold text-lg mb-3 text-orange-900">{item.question}</h3>
                         <div className="prose prose-sm max-w-none text-slate-700">
                           <CustomPortableText value={item.answer} />
                         </div>
@@ -837,15 +836,15 @@ export default async function ElektroinstalacePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-orange-500 text-white">
+      <section className="py-20 bg-orange-500/50 text-orange-800">
         <div className="container text-center">
           <h2 className="text-4xl font-bold mb-6">Začínáte projekt? Pomůžeme vám.</h2>
-          <p className="text-xl mb-8 max-w-3xl mx-auto text-orange-200">
+          <p className="text-xl mb-8 max-w-3xl mx-auto text-orange-900">
             Zatím máte jen nápad, možná máte připravený kompletní plán a chcete začít s realizací? Ozvěte se nám,  
             Rádi vám připravíme nezávaznou nabídku.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Button size="lg" variant="secondary" asChild className="bg-white font-bold text-orange-500 hover:bg-orange-50">
+            <Button size="lg" variant="secondary" asChild className="bg-orange-500/50 font-bold text-orange-00 hover:bg-orange-50">
               <Link href="#kontakt">SPOLUPRACUJTE S NÁMI!</Link>
             </Button>
             <div className="flex items-center gap-3 text-lg">

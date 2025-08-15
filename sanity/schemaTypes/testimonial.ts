@@ -2,12 +2,12 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'testimonial',
-  title: 'Zkušenosti klientů',
+  title: 'Zkušenosti klientů (pokud existují)',
   type: 'document',
   fields: [
     defineField({
       name: 'clientName',
-      title: 'Jméno nebo název',
+      title: 'Jméno nebo název klienta',
       type: 'string',
       validation: Rule => Rule.required(),
     }),
@@ -18,12 +18,12 @@ export default defineType({
     }),
     defineField({
       name: 'clientCompany',
-      title: 'firma zákazníka',
+      title: 'firma zákazníka (pokud existuje)',
       type: 'string',
     }),
     defineField({
       name: 'clientImage',
-      title: 'obrázek zákazníka',
+      title: 'obrázek zákazníka (pokud existuje)',
       type: 'image',
       options: {
         hotspot: true,
@@ -31,21 +31,21 @@ export default defineType({
     }),
     defineField({
       name: 'quote',
-      title: 'citace zkušenosti (s úvozovkama, ten hlavní text)',
+      title: 'citace zkušenosti (s úvozovkama, ten hlavní text) - automatické',
       type: 'text',
       rows: 6,
       validation: Rule => Rule.required(),
     }),
     defineField({
       name: 'rating',
-      title: 'hodnocení',
+      title: 'hodnocení (pokud existuje) - automatické',
       type: 'number',
       validation: Rule => Rule.min(1).max(5),
       initialValue: 5,
     }),
     defineField({
       name: 'service',
-      title: 'Kategorie služby',
+      title: 'Kategorie služby (pokud existuje)',
       type: 'string',
       options: {
         list: [
@@ -59,42 +59,42 @@ export default defineType({
     }),
     defineField({
       name: 'projectReference',
-      title: 'Patří k projektu z referencí',
+      title: 'Patří k projektu z referencí (pokud existuje)',
       type: 'reference',
       to: {type: 'projectReference'},
     }),
     defineField({
       name: 'location',
-      title: 'Místo',
+      title: 'Místo (pokud existuje)',
       type: 'string',
     }),
     defineField({
       name: 'dateCompleted',
-      title: 'Datum dokončení',
+      title: 'Datum dokončení (pokud existuje)',
       type: 'date',
     }),
     defineField({
       name: 'isFeatured',
-      title: 'zobrazit v náhledech zkušeností?',
+      title: 'Zobrazit v náhledech zkušeností?',
       type: 'boolean',
       initialValue: false,
     }),
     defineField({
       name: 'order',
-      title: 'Zobrazit pořadí',
+      title: 'Pořadí',
       type: 'number',
     }),
     defineField({
       name: 'isActive',
-      title: 'aktivní',
+      title: 'Zobrazit',
       type: 'boolean',
       initialValue: true,
     }),
   ],
   orderings: [
     {
-      title: 'Order',
-      name: 'Seřadit vzestupně',
+      title: 'Sestupné pořadí',
+      name: 'orderAsc',
       by: [
         {field: 'order', direction: 'asc'}
       ]

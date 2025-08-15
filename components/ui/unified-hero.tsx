@@ -50,7 +50,12 @@ export function UnifiedHero({ slides }: UnifiedHeroProps) {
   }, [slides?.length]);
 
   useEffect(() => {
-    const handleScroll = () => setParallaxOffset(window.scrollY * 0.5);
+    const handleScroll = () => {
+      // Úplně bezpečný paralax - obrázek se posune jen o malou část scrollu
+      const maxOffset = window.innerHeight * 0.1; // Maximálně 10% výšky obrazovky
+      const rawOffset = window.scrollY * 0.2; // Ještě pomalejší paralax
+      setParallaxOffset(Math.min(rawOffset, maxOffset));
+    };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -58,42 +63,52 @@ export function UnifiedHero({ slides }: UnifiedHeroProps) {
   return (
     <section className="relative h-screen min-h-[600px] overflow-hidden">
       {/* Kontejner pro posuvná pozadí */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 z-0">
         {slides.map((slide, index) => (
           <div
             key={slide.id}
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-1000 ease-in-out"
+            className="absolute inset-0 transition-transform duration-1000 ease-in-out z-0"
             style={{
+              // Rozšíříme kontejner ještě více nad rámec obrazovky pro paralax
+              top: '-30%',
+              bottom: '-30%',
+              left: '0',
+              right: '0',
               backgroundImage: `url(${slide.bgImage})`,
-              transform: `translateX(${(index - currentSlide) * -100}%) translateY(${parallaxOffset * -1}px)`,
+              backgroundSize: '110% 110%', // Zvětšíme obrázek ještě více
+              backgroundPosition: 'center center',
+              backgroundRepeat: 'no-repeat',
+              // Kombinovaný posun pro slideshow i paralax efekt
+              transform: `translateX(${(index - currentSlide) * 100}%) translateY(${parallaxOffset}px)`,
             }}
           >
+            {/* Gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-orange-900/30" />
             <div className="absolute inset-0 bg-black/20" />
           </div>
         ))}
       </div>
 
-      {/* Hlavní obsah a statická karta */}
+      {/*   Hlavní obsah a statická karta */}
       <div className="relative z-10 h-full flex items-center justify-center">
-        <div className="container mx-auto px-4 md:px-6">
+        <div className="container mx-auto px-0  md:px-0">
           <div className="max-w-4xl mx-auto text-center">
             {/* STATICKÁ KARTA - Funguje jako maska (okno) */}
-            <div className="bg-white/[0.08] backdrop-blur-2xl rounded-2xl md:rounded-3xl p-6 md:p-12 lg:p-16 shadow-2xl border border-white/10 relative overflow-hidden mx-2">
+            <div className="bg-white/[0.08] backdrop-blur-2xl rounded-2xl md:rounded-3xl p-6 md:p-2 md:p-12 lg:p-16 shadow-2xl border border-white/10 relative overflow-hidden mx-1">
               
               {/* Kontejner pro posuvný OBSAH uvnitř karty */}
-              <div className="relative min-h-[80vh] md:min-h-[70vh] flex items-center justify-center">
+              <div className="relative min-h-[50vh] md:min-h-[70vh] flex items-center justify-center">
                 {slides.map((slideData, index) => (
                   <div
                     key={slideData.id}
-                    className="absolute inset-0 transition-opacity duration-700 ease-in-out flex flex-col justify-center px-4 py-8"
+                    className="absolute inset-0 transition-opacity duration-700 ease-in-out flex flex-col justify-center px-1 py-1"
                     style={{
                       opacity: index === currentSlide ? 1 : 0,
                       pointerEvents: index === currentSlide ? 'auto' : 'none',
                     }}
                   >
                     {/* Samotný obsah jednoho slidu */}
-                    <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-500/20 to-blue-500/20 backdrop-blur-md rounded-full px-6 py-3 mb-8 border border-white/20 mx-auto">
+                    <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-500/20 to-blue-500/20 backdrop-blur-md rounded-full px-2 py-8 md:py-3 mb-6 border border-white/20 mx-auto mt-10 ">
                       <Shield className="w-4 h-4 text-orange-300" />
                       <span className="text-white/90 font-medium">Garance kvality a spolehlivosti</span>
                     </div>
@@ -138,7 +153,6 @@ export function UnifiedHero({ slides }: UnifiedHeroProps) {
                       </Button>
                     </div>
                     
-
                     <div className="mt-6 md:mt-8 pt-4 md:pt-6 border-t border-white/10">
                       <p className="text-white/60 text-xs md:text-sm mb-2">Nebo nám zavolejte přímo:</p>
                       <a 
@@ -148,7 +162,6 @@ export function UnifiedHero({ slides }: UnifiedHeroProps) {
                         {slideData.phoneNumber || '+420 735 014 112'}
                       </a>
                     </div>
-                    
                   </div>
                 ))}
               </div>
@@ -158,30 +171,28 @@ export function UnifiedHero({ slides }: UnifiedHeroProps) {
       </div>
 
       {/* Navigační tečky */}
-      <div className="absolute bottom-16 md:bottom-20 left-1/2 transform -translate-x-1/2 flex space-x-3 md:space-x-4 z-20">
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => goToSlide(index)}
-            className={`transition-all duration-500 hover:scale-110 ${
-              index === currentSlide
-                ? 'w-12 h-3 bg-orange-400 rounded-full'
-                : 'w-3 h-3 bg-white/50 rounded-full hover:bg-white/70'
-            }`}
-          />
-        ))}
-      </div>
-      
-      {/* Vlnka na spodu stránky */}
-      <div className="absolute bottom-0 left-0 right-0 z-10">
-        <EnhancedSectionDivider 
-          variant="wave"
-          animated={true}
-          height="xl"
-          fromColor="from-transparent"
-          toColor="to-white"
-          particles={false}
-        />
+      {slides.length > 1 && (
+        <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-20 flex space-x-3">
+          {slides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                index === currentSlide
+                  ? 'bg-white scale-125 shadow-lg'
+                  : 'bg-white/50 hover:bg-white/75 hover:scale-110'
+              }`}
+              aria-label={`Přejít na slide ${index + 1}`}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Enhanced Section Divider - vlnka na spodu */}
+      <div className="absolute bottom-0 z-30 -left-1 -right-1 overflow-hidden">
+        <div className="w-[calc(100%+8px)] -ml-1">
+          <EnhancedSectionDivider />
+        </div>
       </div>
     </section>
   );

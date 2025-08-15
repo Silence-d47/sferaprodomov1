@@ -8,7 +8,7 @@ import { groq } from "next-sanity"
 import useSWR from "swr"
 import { Button } from "@/components/ui/button"
 import { ReferenceSlider } from "@/components/ui/reference-slider"
-import { ContactForm } from "@/components/ui/contact-form"
+import { ContactForm } from "@/components/ui/contact-form6"
 import { OrganicWaveDivider } from "@/components/ui/organic-wave-divider"
 import { UnifiedHero, type UnifiedHeroSlide } from "@/components/ui/unified-hero"
 import { LogoCarousel } from "@/components/ui/logo-carousel"
@@ -84,7 +84,7 @@ const services = [
   {
     id: "klimatizace",
     title: "Klimatizace",
-    description: "Profesionální instalace klimatizací všech značek s nadstandardním servisem",
+    description: "Profesionální instalace klimatizací léty prověřených značek s nadstandardním servisem",
     iconSrc: "/hub/klimatizace.svg",
     features: ["Montáž do 14 dnů", "bez akontace", "až 5 let záruka"],
     isPopular: true,
@@ -95,7 +95,7 @@ const services = [
   {
     id: "tepelna-cerpadla",
     title: "Tepelná čerpadla",
-    description: "Efektivní vytápění a chlazení s maximálními úsporami energií",
+    description: "Efektivní vytápění kvalitními zdroji s maximální úsporou energií",
     iconSrc: "/hub/tepelna-cerpadla.svg",
     features: ["Vzduch-Vzduch", "Vzduch-Voda", "Země-Voda", "Dotace a podpory"],
     color: 'bg-green-300',
@@ -105,7 +105,7 @@ const services = [
   {
     id: "rekuperace",
     title: "Rekuperace",
-    description: "Čerstvý vzduch bez ztrát tepla pro zdravé vnitřní prostředí",
+    description: "Čerstvý vzduch bez tepelných ztrát pro zdravé domácí prostředí",
     iconSrc: "/hub/rekuperace.png",
     features: ["Centrální rekuperace", "Decentrální jednotky", "Tiché provoz", "Úsporu až 30%"],
     color: 'bg-orange-300',
@@ -115,7 +115,7 @@ const services = [
   {
     id: "elektroinstalace",
     title: "Elektroinstalace",
-    description: "Kompletní elektroinstalace od novostaveb po chytrou domácnost",
+    description: "Kompletní elektroinstalace od drobných oprav, rekonstrukcí bytu, novostaveb až po chytrou domácnost",
     iconSrc: "/hub/elektroinstalace.svg",
     features: ["Certifikované materiály", "Dodržení ČSN norem", "Chytrá domácnost", "Revize a servis"],
     color: 'bg-purple-300',
@@ -178,8 +178,8 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex flex-col bg-white text-slate-800">
-      {/* Unified Hero Section (tvoje data zůstávají) */}
+    
+< >      {/* Unified Hero Section (tvoje data zůstávají) */}
       <motion.div initial="hidden" animate="visible" variants={{
         hidden: {},
         visible: {}
@@ -190,7 +190,7 @@ export default function HomePage() {
 
       {/* Logo Carousel - Brand Partners */}
       <section className="relative">
-        <div className="absolute top-0 left-0 right-0 z-10">
+        <div className="absolute top-0 left-0 right-0 z-0">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center py-8">
             </div>
@@ -206,9 +206,24 @@ export default function HomePage() {
           />
         </div>
       </section>
-  {/* Naše služby */}
 
-  <section className="relative py-12 bg-gradient-to-br from-gray- to-blue-100">
+       <section
+          className="relative py-20 bg-gradient-to-b from-white via-white to-blue-100/50 overflow-hidden"
+        >
+          {/* Background decorative elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {/* Floating circles */}
+            <div className="absolute top-10 left-10 w-32 h-32 bg-gradient-to-br from-blue-300/60 to-transparent rounded-full blur-xl"></div>
+            <div className="absolute top-32 right-20 w-24 h-24 bg-gradient-to-bl from-blue-400/50 to-transparent rounded-full blur-lg"></div>
+            <div className="absolute bottom-20 left-1/4 w-20 h-20 bg-gradient-to-tr from-blue-300/70 to-transparent rounded-full blur-lg"></div>
+            
+            {/* Thin lines */}
+            
+            {/* Geometric shapes */}
+
+            {/* Subtle grid pattern */}
+          </div>
+          
           <div className="absolute top-2 right-2 w-64 h-64 bg-gradient-to-bl from-blue-100/30 to-transparent rounded-full blur-2xl"></div>
           <div className="relative z-2">
           <div className="text-center">
@@ -225,7 +240,7 @@ export default function HomePage() {
             {/* Services Grid */}
             <div className="flex flex-wrap justify-center items-start gap-12 md:gap-16 max-w-6xl mx-auto">
               {services.map((service, index) => (
-                <div key={service.id} className="flex justify-center relative w-64 group cursor-pointer">
+                <Link key={service.id} href={`/${service.id}`} className="flex justify-center relative w-64 group cursor-pointer">
                   <div className={`${service.cardColor} p-6 pl-16 w-full text-left shadow-md rounded-lg transition-all duration-500 ease-out group-hover:shadow-2xl group-hover:scale-105 group-hover:-translate-y-2`}>
                     <h3 className="text-sm font-bold text-gray-700 mb-2 group-hover:text-gray-900 transition-colors duration-300">
                       {service.title}
@@ -233,22 +248,27 @@ export default function HomePage() {
                     <p className="text-xs text-gray-600 leading-relaxed mb-4 group-hover:text-gray-700 transition-colors duration-300">
                       {service.description}
                     </p>
-                    <a href="#" className="text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-200 inline-flex items-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                    <div className="text-xs font-semibold text-blue-600 group-hover:text-blue-800 transition-colors duration-200 inline-flex items-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
                       Více informací
                       <svg className="w-3 h-3 ml-1 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
-                    </a>
+                    </div>
                   </div>
                   <div className={`w-16 h-16 ${service.color} flex items-center justify-center shadow-lg rounded-lg absolute -left-4 top-1/2 transform -translate-y-1/2 z-10 transition-all duration-500 ease-out group-hover:scale-110 group-hover:shadow-xl group-hover:-translate-y-3 group-hover:rotate-3`}>
                     <Image src={service.iconSrc} alt={service.title} width={56} height={56} className={`w-8 h-8 ${service.iconColor} transition-transform duration-300 group-hover:scale-110`} />
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
     </section>
     <section className="relative overflow-hidden bg-slate-50 py-24 sm:py-32">
+  {/* Dekorativní prvek nahoře - navazuje na předchozí sekci */}
+  <div className="absolute top-0 left-0 right-0 z-0">
+    <div className="w-full h-32 bg-gradient-to-b from-white to-slate-50"></div>
+  </div>
+  
   {/* Abstraktní vlny na pozadí */}
   <div className="absolute inset-0 z-0 opacity-40">
     <svg
@@ -282,7 +302,7 @@ export default function HomePage() {
         </span>
       </h2>
       <p className="mt-6 text-lg leading-8 text-gray-600">
-        Každý projekt je pro nás závazkem kvality a preciznosti. Prohlédněte si, jak jsme pomohli našim klientům.
+        Každý projekt je pro nás závazkem kvality a preciznosti. Prohlédněte si, jak jsme pomohli našim zákazníkům.
       </p>
     </div>
 
@@ -337,32 +357,26 @@ export default function HomePage() {
                
               <p className="text-xl text-gray-600 leading-relaxed mb-8">
                 <span className="bg-gradient-to-r from-[#1B5D93] to-[#2D78AD] bg-clip-text text-transparent font-semibold">Rodinná firma</span> z Ostravy, která už řadu let pomáhá domácnostem v <span className="bg-gradient-to-r from-[#1B5D93] to-[#2D78AD] bg-clip-text text-transparent font-semibold">Moravskoslezském a Olomouckém kraji</span> zlepšit <span className="bg-gradient-to-r from-[#1B5D93] to-[#2D78AD] bg-clip-text text-transparent font-semibold">komfort bydlení</span>. 
-                <span className="bg-gradient-to-r from-[#1B5D93] to-[#2D78AD] bg-clip-text text-transparent font-semibold">Elektropohotovost Opava a okolí do 25km</span> s garantovanými opravami do 24 hodin.
-              </p>
+                Zakládáme si na kvalitním provedení a <span className="bg-gradient-to-r from-[#1B5D93] to-[#2D78AD] bg-clip-text text-transparent font-semibold">rychlém</span> zákazníckém servisu.
+                </p>
             </div>
             {/* Right side - Enhanced logo */}
             <div className="relative flex justify-center lg:justify-end">
               {/* Enhanced logo with effects */}
-              <div className="relative z-10 w-full max-w-[400px] md:max-w-[500px] lg:max-w-[600px]">
+               {/* LEVÁ ČÁST: VIZUÁL */}
+            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="relative">
+              <div className="absolute -top-12 -left-16 w-72 h-72 bg-blue-50 rounded-full opacity-40 blur-2xl"></div>
+              <div className="absolute -bottom-12 -right-12 w-80 h-80 bg-slate-50 rounded-full opacity-70 blur-2xl"></div>
+              <div className="relative z-10">
                 <Image
-                  src="/logo/logo.svg"
-                  alt="Sfera logo"
-                  width={600}
+                  src="/images/tym-sfera.webp"
+                  alt="Jaroslav Hendrich, jednatel společnosti SFÉRA PRO DOMOV, s.r.o."
+                  width={500}
                   height={600}
-                  className="w-full h-auto object-contain drop-shadow-xl"
-                  style={{
-                    filter: 'drop-shadow(0 10px 20px rgba(120, 193, 241, 0.57))'
-                  }}
+                  className="rounded-2xl shadow-2xl object-cover w-full h-auto max-h-[600px] ring-8 ring-white/60"
                 />
-                {/* Reflection effect */}
-                <div className="absolute -bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-blue-200/10 to-transparent transform scale-y-[-10] opacity-1"></div>
-                {/* Glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-200/10 to-blue-500/60 rounded-5xl blur-2xl -z-0"></div>
-                {/* Floating particles */}
-                <div className="absolute top-4 right-4 w-3 h-3 bg-blue-400 rounded-full animate-pulse"></div>
-                <div className="absolute bottom-8 left-8 w-2 h-2 bg-blue-500 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
-                <div className="absolute top-1/2 left-4 w-1.5 h-1.5 bg-blue-300 rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
               </div>
+            </motion.div>
             </div>
           </div>
           {/* Additional content below */}
@@ -388,11 +402,9 @@ export default function HomePage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
               <p className="text-lg text-gray-600 leading-relaxed">
-                Postaráme se o vše, co váš domov potřebuje: od bezpečné elektroinstalace, přes efektivní vytápění, až po klimatizace, které v létě ochladí a v zimě spolehlivě vytopí.
-              </p>
+              Zajistíme kompletní řešení pro váš komfortní a úsporný domov. Nabízíme bezpečné elektroinstalace, výrobu vlastní elektřiny pomocí fotovoltaických elektráren, rekuperace pro efektivní výměnu čerstvého vzduchu, letní chlazení klimatizacemi i zimní vytápění tepelnými čerpadly. Vše realizujeme z komponentů léty ověřených výrobců, které nakupujeme u <span className="bg-gradient-to-r from-[#1B5D93] to-[#2D78AD] bg-clip-text text-transparent font-semibold">oficiálních českých distributorů</span>.              </p>
               <p className="text-lg text-gray-600 leading-relaxed">
-                A protože víme, že čistý a čerstvý vzduch je základ zdravého bydlení, nabízíme také moderní systémy rekuperace vzduchu.
-              </p>
+              A protože k modernímu bydlení 21. století patří chytré ovládání, propojíme všechny technologie do inteligentní domácnosti, kterou máte pod kontrolou odkudkoliv.</p>
             </div>
           </div>
         </div>
@@ -407,16 +419,16 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             {/* LEVÁ ČÁST: VIZUÁL */}
-            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="relative">
+            <motion.div initial={{ opacity: 20, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="relative">
               <div className="absolute -top-12 -left-16 w-72 h-72 bg-blue-50 rounded-full opacity-40 blur-2xl"></div>
-              <div className="absolute -bottom-12 -right-12 w-80 h-80 bg-slate-50 rounded-full opacity-70 blur-2xl"></div>
+              <div className="absolute -bottom-12 -right-12 w-80 h-80 bg-slate-200 rounded-full opacity-40 blur-2xl"></div>
               <div className="relative z-10">
                 <Image
-                  src="/images/hendrich_jaroslav.jpg"
+                  src="/images/hendrich_jaroslav.webp"
                   alt="Jaroslav Hendrich, jednatel společnosti SFÉRA PRO DOMOV, s.r.o."
-                  width={500}
-                  height={600}
-                  className="rounded-2xl shadow-2xl object-cover w-full h-auto max-h-[600px] ring-8 ring-white/60"
+                  width={600}
+                  height={550}
+                  className="rounded-2xl shadow-2xl object-cover w-full h-auto max-h-[550px] ring-8 ring-white/60"
                 />
               </div>
             </motion.div>
@@ -434,11 +446,9 @@ export default function HomePage() {
 
               <div className="text-slate-600 space-y-4 text-base leading-relaxed">
                 <p>
-                  Máme za sebou roky zkušeností, kde jsme se naučili řemeslo, ale taky viděli, co nám vadilo: ústup od poctivosti a snaha ušetřit na nesprávných místech.
-                </p>
+                Máme za sebou roky zkušeností z montážních firem, kde jsme se naučili řemeslo i práci se zákazníky. Ale také jsme si všimli něčeho, co nám vadilo – ústup od poctivého přístupu, zhoršující se servis a snaha ušetřit tam, kde by se naopak mělo přidat. Právě proto jsme založili SFERA PRO DOMOV s.r.o., firmu, která dělá věci tak, jak je považujeme za správné – férově, kvalitně a s respektem k zákazníkům.                </p>
                 <p className="font-medium text-slate-700">
-                  Právě proto jsme založili SFERA PRO DOMOV. Firmu, která stojí na férovosti, kvalitě a respektu k lidem, kterým pomáháme. Chceme být důkazem, že nejlepší cesta vede přes dlouhodobou spolupráci a spokojenost, která je pro nás tou nejlepší vizitkou.
-                </p>
+                Chceme být důkazem, že nejlepší cesta vede přes dlouhodobou spolupráci, rychlé a vstřícné jednání a telefonní číslo, které zvedáme i po letech. Díky tomu se k nám naši zákazníci s důvěrou vracejí.                </p>
               </div>
 
               <div className="mt-8 pt-6 border-t border-slate-200">
@@ -446,16 +456,7 @@ export default function HomePage() {
                 <p className="text-sm text-slate-500">Jednatel společnosti SFERA PRO DOMOV s.r.o.</p>
               </div>
 
-              <details className="group mt-8 text-sm">
-                <summary className="text-blue-600 font-semibold cursor-pointer list-none flex items-center gap-2">
-                  <span>V čem jsme jiní a kam míříme?</span>
-                  <ChevronDown className="h-4 w-4 transition-transform duration-300 group-open:rotate-180" />
-                </summary>
-                <div className="mt-4 text-slate-500 space-y-3 prose prose-sm max-w-none">
-                  <p>Naše ambice nejsou malé. Chceme, aby telefonní číslo, které od nás máte, platilo i po letech. Ať už řešíte nový kotel, klimatizaci, nebo potřebujete poradit s fotovoltaikou, jsme tu pro vás. Rádi vám ukážeme, jak vypadá poctivá práce, za kterou si stojíme.</p>
-                </div>
-              </details>
-            </motion.div>
+              </motion.div>
           </div>
         </div>
       </section>
@@ -512,7 +513,7 @@ export default function HomePage() {
               </h2>
               <p className="text-xl text-gray-600 leading-relaxed mb-8">
                 Víme, jak je frustrující, když něco nefunguje a vy se nemůžete dovolat nikomu, kdo by to opravil.
-                <span className="block bg-gradient-to-r from-[#1B5D93] to-[#49A3D7] bg-clip-text text-transparent"> My se schovávat nebudeme.</span>
+                <span className="block bg-gradient-to-r from-[#1B5D93] to-[#49A3D7] bg-clip-text text-transparent font-semibold"> My se schovávat nebudeme.</span>
                 Vždy jsme na telefonu, abychom Vám poradili a problém odstranili co nejdříve. Akutní poruchy řešíme do 3 dnů, v některých případech i do 24h.
               </p>
               <div className="flex items-center gap-4">
@@ -565,7 +566,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* References */}
      
 
       {/* Contact */}
@@ -574,6 +574,7 @@ export default function HomePage() {
           <ContactForm source="homepage-main" showTrustBadges={true} customHeading="Máte dotaz nebo zájem o naše služby?" />
         </div>
       </section>
-    </div>
-  )
+</>  
+)
+
 }

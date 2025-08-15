@@ -105,7 +105,7 @@ const ServiceHub: React.FC<ServiceHubProps> = ({ onServiceChange, activeService 
           {!isMobileExpanded ? (
             // Collapsed mobile bar
             <div 
-              className="flex items-center justify-center gap-2 p-3 bg-white/25 backdrop-blur-3xl border border-white/40 rounded-2xl shadow-[0_25px_50px_rgba(0,0,0,0.35),0_0_0_1px_rgba(255,255,255,0.1)_inset] cursor-pointer"
+              className="flex items-center justify-center gap-2 p-3 bg-black/40 backdrop-blur-3xl border border-white/20 rounded-2xl shadow-[0_25px_50px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.1)_inset] cursor-pointer"
               onClick={handleMobileToggle}
             >
               {services.map((service) => (
@@ -125,7 +125,7 @@ const ServiceHub: React.FC<ServiceHubProps> = ({ onServiceChange, activeService 
             </div>
           ) : (
             // Vertical list - one service per row
-            <div className="bg-white/25 backdrop-blur-3xl border border-white/40 rounded-2xl shadow-[0_25px_50px_rgba(0,0,0,0.35),0_0_0_1px_rgba(255,255,255,0.1)_inset] p-3 w-64">
+            <div className="bg-black/40 backdrop-blur-3xl border border-white/20 rounded-2xl shadow-[0_25px_50px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.1)_inset] p-3 w-64">
               {services.map((service) => (
                 <Link
                   key={service.id}
@@ -173,7 +173,7 @@ const ServiceHub: React.FC<ServiceHubProps> = ({ onServiceChange, activeService 
 
         {/* Desktop Layout - unchanged */}
         <div className="hidden md:block">
-          <div className={`flex items-center gap-6 p-8 bg-white/25 backdrop-blur-3xl border border-white/40 rounded-3xl shadow-[0_25px_50px_rgba(0,0,0,0.35),0_0_0_1px_rgba(255,255,255,0.1)_inset] transition-all duration-300 ${
+          <div className={`flex items-center gap-6 p-8 bg-black/40 backdrop-blur-3xl border border-white/20 rounded-3xl shadow-[0_25px_50px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.1)_inset] transition-all duration-300 ${
             isScrolled && !hoveredService ? 'h-16' : hoveredService ? 'h-56' : 'h-32'
           }`}>
             {services.map((service) => (

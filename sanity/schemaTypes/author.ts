@@ -2,7 +2,7 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'author',
-  title: 'Autor',
+  title: 'Karta uživatele',
   type: 'document',
   fields: [
     defineField({
@@ -13,7 +13,7 @@ export default defineType({
     }),
     defineField({
       name: 'slug',
-      title: 'Slug',
+      title: 'slug',
       type: 'slug',
       options: {
         source: 'name',
@@ -22,7 +22,7 @@ export default defineType({
     }),
     defineField({
       name: 'image',
-      title: 'Obrázek',
+      title: 'Nahrajte profilový obrázek',
       type: 'image',
       options: {
         hotspot: true,
@@ -30,7 +30,7 @@ export default defineType({
     }),
     defineField({
       name: 'bio',
-      title: 'Bio',
+      title: 'Něco o mně',
       type: 'array',
       of: [
         {
@@ -43,12 +43,12 @@ export default defineType({
     }),
     defineField({
       name: 'title',
-      title: 'Pozice',
+      title: 'Zaměření',
       type: 'string',
     }),
     defineField({
       name: 'email',
-      title: 'Email',
+      title: 'Emailová adresa',
       type: 'string',
     }),
   ],

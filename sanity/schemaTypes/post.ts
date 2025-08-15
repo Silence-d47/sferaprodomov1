@@ -2,18 +2,18 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'post',
-  title: 'článek',
+  title: 'Článek',
   type: 'document',
   fields: [
     defineField({
       name: 'title',
-      title: 'článek',
+      title: 'Název',
       type: 'string',
       validation: Rule => Rule.required(),
     }),
     defineField({
       name: 'slug',
-      title: 'Slug',
+      title: 'slug',
       type: 'slug',
       options: {
         source: 'title',
@@ -23,13 +23,13 @@ export default defineType({
     }),
     defineField({
       name: 'author',
-      title: 'Autor',
+      title: 'Uživatel',
       type: 'reference',
       to: {type: 'author'},
     }),
     defineField({
       name: 'mainImage',
-      title: 'Hlavní obrázek',
+      title: 'Obrázek',
       type: 'image',
       options: {
         hotspot: true,
@@ -37,35 +37,35 @@ export default defineType({
     }),
     defineField({
       name: 'categories',
-      title: 'Kategorie',
+      title: 'Kategorie (pokud existuje)',
       type: 'array',
       of: [{type: 'reference', to: {type: 'category'}}],
     }),
     defineField({
       name: 'publishedAt',
-      title: 'Publikováno',
+      title: 'Datum publikace',
       type: 'datetime',
     }),
     defineField({
       name: 'excerpt',
-      title: 'úvod',
+      title: 'Úvod',
       type: 'text',
       rows: 4,
     }),
     defineField({
       name: 'body',
-      title: 'Tělo',
+      title: 'Text',
       type: 'blockContent',
     }),
     defineField({
       name: 'readingTime',
-      title: 'Přečteno za (minut)',
+      title: 'Přečteno za (minut) - automatické',
       type: 'number',
       initialValue: 5,
     }),
     defineField({
       name: 'featured',
-      title: 'Nejnovější články',
+      title: 'Zobrazit jako nejnovější články',
       type: 'boolean',
       initialValue: false,
     }),
@@ -76,12 +76,12 @@ export default defineType({
       fields: [
         {
           name: 'metaTitle',
-          title: 'Meta nadpis',
+          title: 'Meta nadpis (pokud existuje)',
           type: 'string',
         },
         {
           name: 'metaDescription',
-          title: 'Meta popis',
+          title: 'Meta popis (pokud existuje)',
           type: 'text',
           rows: 3,
         },

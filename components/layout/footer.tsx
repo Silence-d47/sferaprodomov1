@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Facebook, Instagram, Linkedin, Phone, Mail, MapPin, Zap, Shield, Award, Users, CheckCircle, Clock, ArrowRight } from "lucide-react"
 
 export function Footer() {
@@ -12,7 +13,7 @@ export function Footer() {
           {/* Sloupec 1: O nás */}
           <div className="md:col-span-2 lg:col-span-1">
             <Link href="/" className="inline-block mb-3 md:mb-4">
-              <h3 className="text-xl md:text-2xl font-bold text-white hover:text-gray-200 transition-colors">SFÉRA PRO DOMOV.CZ</h3>
+              <h3 className="text-xl md:text-2xl font-bold text-white hover:text-gray-200 transition-colors">SFÉRA - DOMOV.CZ</h3>
             </Link>
             <p className="text-sm text-gray-400 mb-3 md:mb-4">Rodinná firma z Moravskoslezského kraje.</p>
             <p className="mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
@@ -37,7 +38,6 @@ export function Footer() {
                 { href: "/rekuperace", label: "Rekuperace" },
                 { href: "/elektroinstalace", label: "Elektroinstalace" },
                 { href: "/fotovoltaika", label: "Fotovoltaika" },
-                { href: "/elektro-pohotovost", label: "Elektro pohotovost" },
               ].map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className="group flex items-center gap-2 text-gray-300 hover:text-white transition-colors text-sm md:text-base">
@@ -57,36 +57,21 @@ export function Footer() {
                 <Phone className="h-4 md:h-5 w-4 md:w-5 text-gray-400 group-hover:text-white transition-colors" />
                 <div className="text-white font-medium group-hover:underline text-sm md:text-base">+420 735 014 112</div>
               </a>
-              <a href="mailto:info@sfera-pro-domov.cz" className="flex items-center gap-2 md:gap-3 group">
+              <a href="mailto:info@sfera-domov.cz" className="flex items-center gap-2 md:gap-3 group">
                 <Mail className="h-4 md:h-5 w-4 md:w-5 text-gray-400 group-hover:text-white transition-colors" />
-                <div className="text-white font-medium group-hover:underline text-sm md:text-base break-all">info@sfera-pro-domov.cz</div>
+                <div className="text-white font-medium group-hover:underline text-sm md:text-base break-all">info@sfera-domov.cz</div>
               </a>
               <div className="flex items-start gap-2 md:gap-3">
                 <MapPin className="h-4 md:h-5 w-4 md:w-5 text-gray-400 mt-0.5 flex-shrink-0" />
                 <div>
-                  <div className="text-white font-medium text-sm md:text-base">Moravskoslezský kraj</div>
+                  <div className="text-white font-medium text-sm md:text-base">Ostrava, Olomouc a okolí</div>
                   <div className="text-xs md:text-sm text-gray-400">Po - Pá 8:00 - 20:00</div>
                 </div>
               </div>
             </div>
-            {/* Hodnocení a recenze */}
-            <div className="mt-6 md:mt-8 pt-4 md:pt-6 border-t border-white/10">
-              <div className="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
-                <div className="flex text-yellow-400">
-                  {[...Array(5)].map((_, i) => ( <svg key={i} className="w-4 md:w-5 h-4 md:h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg> ))}
-                </div>
-                <span className="font-bold text-white text-sm md:text-base">4.9 / 5</span>
-              </div>
-              <div className="flex flex-wrap gap-1 md:gap-2">
-                <a href="#" target="_blank" rel="noopener noreferrer" className="text-xs bg-white/10 hover:bg-white/20 transition-colors text-gray-200 px-2 md:px-3 py-1 md:py-1.5 rounded-full">
-                  Seznam.cz (65+)
-                </a>
-                <a href="#" target="_blank" rel="noopener noreferrer" className="text-xs bg-white/10 hover:bg-white/20 transition-colors text-gray-200 px-2 md:px-3 py-1 md:py-1.5 rounded-full">
-                  Google (55+)
-                </a>
-              </div>
-            </div>
           </div>
+
+
 
           {/* Sloupec 4: Newsletter & Socials */}
           <div>
@@ -111,6 +96,61 @@ export function Footer() {
                 <a href="#" aria-label="Facebook" className="text-gray-400 hover:text-white transition-colors"><Facebook className="h-5 md:h-6 w-5 md:w-6" /></a>
                 <a href="https://instagram.com/klima_sfera" aria-label="Instagram" className="text-gray-400 hover:text-white transition-colors"><Instagram className="h-5 md:h-6 w-5 md:w-6" /></a>
                 <a href="#" aria-label="LinkedIn" className="text-gray-400 hover:text-white transition-colors"><Linkedin className="h-5 md:h-6 w-5 md:w-6" /></a>
+              </div>
+              
+              {/* Rating bar - stejný jako v top baru */}
+              <div className="mt-4 md:mt-6">
+                <div className="flex items-center space-x-4">
+                  {/* Google Rating */}
+                  <div className="flex flex-col items-center space-y-1">
+                    <Image 
+                      src="/google.svg"
+                      alt="Google hodnocení"
+                      width={84}
+                      height={24}
+                      className="h-5 w-[84px]"
+                      style={{ filter: 'brightness(0) invert(1)' }}
+                    />
+                    <div className="flex space-x-0.5">
+                      {Array(5).fill(0).map((_, i) => (
+                        <Image 
+                          key={`footer-google-star-${i}`}
+                          src="/star.svg"
+                          alt="Hvězda hodnocení"
+                          width={14}
+                          height={14}
+                          className="h-3.5 w-3.5"
+                          style={{ filter: 'invert(86%) sepia(99%) saturate(358%) hue-rotate(354deg) brightness(104%) contrast(102%)' }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Seznam Rating */}
+                  <div className="flex flex-col items-center space-y-1">
+                    <Image 
+                      src="/seznam.svg"
+                      alt="Seznam.cz hodnocení"
+                      width={78}
+                      height={21}
+                      className="h-5 w-[78px]"
+                      style={{ filter: 'brightness(0) invert(1)' }}
+                    />
+                    <div className="flex space-x-0.5">
+                      {Array(5).fill(0).map((_, i) => (
+                        <Image 
+                          key={`footer-seznam-star-${i}`}
+                          src="/star.svg"
+                          alt="Hvězda hodnocení"
+                          width={14}
+                          height={14}
+                          className="h-3.5 w-3.5"
+                          style={{ filter: 'invert(86%) sepia(99%) saturate(358%) hue-rotate(354deg) brightness(104%) contrast(102%)' }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

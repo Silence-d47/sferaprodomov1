@@ -2,12 +2,12 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'featureCard',
-  title: 'Nejnovější příspěvek (featureCard)',
+  title: 'Karta s funkcí',
   type: 'document',
   fields: [
     defineField({
       name: 'title',
-      title: 'Názevv',
+      title: 'Název',
       type: 'string',
       validation: Rule => Rule.required(),
     }),
@@ -19,19 +19,19 @@ export default defineType({
     }),
     defineField({
       name: 'icon',
-      title: 'Název ikony',
+      title: 'Název ikony (Lucide React)',
       type: 'string',
       description: 'Název ikony z knihovny Lucide React (např. CreditCard, CheckCircle, Calendar, dohledatelné v dokumentaci k lucide-react)',
     }),
     defineField({
       name: 'iconColor',
-      title: 'Barva ikonky',
+      title: 'Barva ikonky (tailwind)',
       type: 'string',
       description: 'Třída barvy tailwind pro ikonu',
     }),
     defineField({
       name: 'iconBgColor',
-      title: 'Barva pozadí',
+      title: 'Barva pozadí (tailwind)',
       type: 'string',
       description: 'Třída barvy tailwind pro pozadí ikonky',
     }),
@@ -50,19 +50,19 @@ export default defineType({
     }),
     defineField({
       name: 'order',
-      title: 'Zobrazit pořadí',
+      title: 'Pořadí',
       type: 'number',
     }),
     defineField({
       name: 'isActive',
-      title: 'Aktivní',
+     title: 'Zobrazit',
       type: 'boolean',
       initialValue: true,
     }),
   ],
   orderings: [
     {
-      title: 'Pořadí',
+      title: 'Sestupné pořadí',
       name: 'orderAsc',
       by: [
         {field: 'order', direction: 'asc'}

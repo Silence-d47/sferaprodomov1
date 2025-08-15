@@ -238,11 +238,11 @@ export default async function TepelnaCerpadlaPageRefined() {
       <section className="relative h-[70vh] md:h-[90vh] min-h-[500px] md:min-h-[600px] flex items-center text-white">
         <div className="absolute inset-0">
           <Image src="/images/tepelne_cerpadlo_hero.jpg" alt="Dům s tepelným čerpadlem" fill priority className="object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-green-500/90 via-transparent to-black"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-green-800/90 via-green-400/20 to-black/60"></div>
         </div>
         <div className="relative z-10 container px-4 md:px-6">
           <div className="max-w-3xl">
-            <Badge variant="outline" className="mb-3 md:mb-4 bg-green-500/10 border-green-500/30 text-white text-xs md:text-sm">
+            <Badge variant="outline" className="mb-3 md:mb-4 bg-green-500/10 border-green-500/30 text-green-900 text-xs md:text-sm">
               Tepelná čerpadla pro váš domov
             </Badge>
             <h1 className="text-3xl md:text-6xl font-bold mb-3 md:mb-4 leading-tight [text-shadow:_0_3px_10px_rgb(0_0_0_/_70%)]">
@@ -361,16 +361,16 @@ export default async function TepelnaCerpadlaPageRefined() {
         </div>
       </section>
 
-      <section className="py-12 md:py-20 lg:py-28 bg-green-700 text-white">
+      <section className="py-12 md:py-20 lg:py-28 bg-green-700/20 text-green-900">
         <div className="container px-4 md:px-6">
           <div className="text-center max-w-3xl mx-auto mb-8 md:mb-16">
             <h2 className="text-2xl md:text-4xl font-bold mb-3 md:mb-4">Od poptávky k úsporám v 5 krocích</h2>
-            <p className="text-base md:text-lg text-green-400">
+            <p className="text-base md:text-lg text-green-800">
               Náš proces je transparentní a navržený tak, aby pro vás byl co nejjednodušší a nejpohodlnější.
             </p>
           </div>
           <div className="relative max-w-5xl mx-auto">
-            <div className="hidden md:block absolute top-8 left-0 w-full h-0.5 bg-slate-100"></div>
+            <div className="hidden md:block absolute top-8 left-0 w-full h-0.5 bg-green-800"></div>
             <div className="grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-8 relative">
               {[
                 { step: "Poptávka a konzultace", icon: "1" },
@@ -381,9 +381,9 @@ export default async function TepelnaCerpadlaPageRefined() {
               ].map((item, index) => (
                 <div key={index} className="text-center">
                   <div className="relative w-12 md:w-16 h-12 md:h-16 bg-green-200 border-2 border-green-700 rounded-full flex items-center justify-center font-bold text-lg md:text-xl mx-auto mb-3 md:mb-4 transition-all duration-300 group-hover:border-green-700">
-                    <span className="text-green-700/80">{item.icon}</span>
+                    <span className="text-green-900">{item.icon}</span>
                   </div>
-                  <p className="font-light text-xs md:text-sm text-green-300 leading-tight">{item.step}</p>
+                  <p className="font-medium text-xs md:text-sm text-green-800 leading-relaxed">{item.step}</p>
                 </div>
               ))}
             </div>
@@ -391,7 +391,7 @@ export default async function TepelnaCerpadlaPageRefined() {
         </div>
       </section>
 
-      <section className="py-12 md:py-20 lg:py-28 bg-white">
+      <section className="py-12 md:py-20 lg:py-28 bg-green-50/70">
         <div className="container px-4 md:px-6">
           <div className="text-center max-w-3xl mx-auto mb-8 md:mb-16">
             <h2 className="text-2xl md:text-4xl font-bold mb-3 md:mb-4">Co říkají naši zákazníci</h2>
@@ -455,9 +455,6 @@ export default async function TepelnaCerpadlaPageRefined() {
         <div className="container relative z-10 px-4 md:px-6">
           <div className="text-center mb-8 md:mb-16">
             <div className="flex items-center justify-center mb-4 md:mb-6">
-              <div className="w-10 md:w-12 h-10 md:h-12 bg-green-500 rounded-full flex items-center justify-center mr-3 md:mr-4">
-                <span className="text-white font-bold text-base md:text-lg">?</span>
-              </div>
 
               {leftDynamicFaqs && leftDynamicFaqs.map((item, idx) => (
                 <div key={`faq-left-${idx}`} className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-green-500">
@@ -475,16 +472,16 @@ export default async function TepelnaCerpadlaPageRefined() {
                 </div>
               ))}
               <Badge className="bg-green-100 text-green-800 px-3 md:px-4 py-1 md:py-2 text-xs md:text-sm">
-                FAQ
+                Nejčastější otázky
               </Badge>
             </div>
-            <h2 className="text-2xl md:text-5xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-green-500 to-green-700 bg-clip-text text-transparent">
+            <h2 className="text-2xl md:text-5xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-slate-800 to-slate-900 bg-clip-text text-transparent">
               Často kladené otázky
             </h2>
             <p className="text-base md:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
               Vše co potřebujete vědět o tepelných čerpadlech - odpovědi od expertů
             </p>
-            <div className="w-16 md:w-24 h-1 bg-gradient-to-r from-green-500 to-green-700 mx-auto mt-4 md:mt-8"></div>
+            <div className="w-16 md:w-24 h-1 bg-gradient-to-r from-green-800 to-green-900 mx-auto mt-4 md:mt-8"></div>
           </div>
 
           <div className="max-w-5xl mx-auto">
@@ -497,25 +494,25 @@ export default async function TepelnaCerpadlaPageRefined() {
                       Q
                     </div>
                     <div>
-                      <h3 className="font-bold text-base md:text-lg mb-2 md:mb-3 text-green-500">Jak tepelné čerpadlo funguje?</h3>
+                      <h3 className="font-bold text-base md:text-lg mb-2 md:mb-3 text-green-900">Jak tepelné čerpadlo funguje?</h3>
                       <p className="text-muted-foreground mb-3 md:mb-4 text-sm md:text-base">
                         Tepelné čerpadlo přenáší teplo z jednoho místa na druhé pomocí malého množství elektrické energie:
                       </p>
                       <div className="space-y-2">
                         <div className="flex items-center">
-                          <CheckCircle className="h-4 md:h-5 w-4 md:w-5 text-green-500 mr-2 md:mr-3" />
+                          <CheckCircle className="h-4 md:h-5 w-4 md:w-5 text-green-900 mr-2 md:mr-3" />
                           <span className="text-xs md:text-sm">Vzduchové čerpadlo získává teplo z venkovního vzduchu</span>
                         </div>
                         <div className="flex items-center">
-                          <CheckCircle className="h-4 md:h-5 w-4 md:w-5 text-green-500 mr-2 md:mr-3" />
+                          <CheckCircle className="h-4 md:h-5 w-4 md:w-5 text-green-900 mr-2 md:mr-3" />
                           <span className="text-xs md:text-sm">Zemní čerpadlo získává teplo z podzemí</span>
                         </div>
                         <div className="flex items-center">
-                          <CheckCircle className="h-4 md:h-5 w-4 md:w-5 text-green-500 mr-2 md:mr-3" />
+                          <CheckCircle className="h-4 md:h-5 w-4 md:w-5 text-green-900 mr-2 md:mr-3" />
                           <span className="text-xs md:text-sm">Voda-vzduch čerpadlo získává teplo z podzemí vody</span>
                         </div>
                         <div className="flex items-center">
-                          <CheckCircle className="h-4 md:h-5 w-4 md:w-5 text-green-500 mr-2 md:mr-3" />
+                          <CheckCircle className="h-4 md:h-5 w-4 md:w-5 text-green-900 mr-2 md:mr-3" />
                           <span className="text-xs md:text-sm">Teplo je komprimováno a přenášeno do interiéru</span>
                         </div>
                       </div>
@@ -529,7 +526,7 @@ export default async function TepelnaCerpadlaPageRefined() {
                       Q
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg mb-3 text-green-500">Jaká je účinnost tepelného čerpadla?</h3>
+                      <h3 className="font-bold text-lg mb-3 text-green-900">Jaká je účinnost tepelného čerpadla?</h3>
                       <div className="space-y-3 mb-4">
                         <div className="flex justify-between items-center p-2 bg-green-50 rounded">
                           <span className="font-medium">COP (Coefficient of Performance):</span>
@@ -553,7 +550,7 @@ export default async function TepelnaCerpadlaPageRefined() {
                       Q
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg mb-3 text-green-500">Jaký typ tepelného čerpadla je pro mě nejvhodnější?</h3>
+                      <h3 className="font-bold text-lg mb-3 text-green-900">Jaký typ tepelného čerpadla je pro mě nejvhodnější?</h3>
                       <div className="space-y-3 mb-4">
                         <div className="p-3 bg-green-50 rounded">
                           <p className="font-medium text-green-700 mb-1">Vzduchové čerpadlo (Aerothermální)</p>
@@ -584,25 +581,25 @@ export default async function TepelnaCerpadlaPageRefined() {
                       Q
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg mb-3 text-green-500">Lze tepelné čerpadlo kombinovat s jinými systémy?</h3>
+                      <h3 className="font-bold text-lg mb-3 text-green-900">Lze tepelné čerpadlo kombinovat s jinými systémy?</h3>
                       <p className="text-muted-foreground mb-4">
                         Ano, tepelná čerpadla lze kombinovat s různými systémy:
                       </p>
                       <div className="grid grid-cols-2 gap-2 text-sm">
                         <div className="flex items-center">
-                          <Wrench className="h-4 w-4 text-green-500 mr-2" />
+                          <Wrench className="h-4 w-4 text-green-900 mr-2" />
                           <span>FV panely</span>
                         </div>
                         <div className="flex items-center">
-                          <Wrench className="h-4 w-4 text-green-500 mr-2" />
+                          <Wrench className="h-4 w-4 text-green-900 mr-2" />
                           <span>Nabíječky elektromobilů</span>
                         </div>
                         <div className="flex items-center">
-                          <Wrench className="h-4 w-4 text-green-500 mr-2" />
+                          <Wrench className="h-4 w-4 text-green-900 mr-2" />
                           <span>Rekuperace</span>
                         </div>
                         <div className="flex items-center">
-                          <Wrench className="h-4 w-4 text-green-500 mr-2" />
+                          <Wrench className="h-4 w-4 text-green-900 mr-2" />
                           <span>Podlahové vytápění</span>
                         </div>
                       </div>
@@ -636,7 +633,7 @@ export default async function TepelnaCerpadlaPageRefined() {
                       Q
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg mb-3 text-green-500">Jaké jsou provozní náklady tepelného čerpadla?</h3>
+                      <h3 className="font-bold text-lg mb-3 text-green-900">Jaké jsou provozní náklady tepelného čerpadla?</h3>
                       <div className="space-y-3 mb-4">
                         <div className="flex justify-between items-center p-2 bg-green-50 rounded">
                           <span className="font-medium">Elektřina:</span>
@@ -664,7 +661,7 @@ export default async function TepelnaCerpadlaPageRefined() {
                       Q
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg mb-3 text-green-500">Je tepelné čerpadlo hlučné?</h3>
+                      <h3 className="font-bold text-lg mb-3 text-green-900">Je tepelné čerpadlo hlučné?</h3>
                       <p className="text-muted-foreground mb-4">
                         Moderní tepelná čerpadla jsou tichá a naprostá většina telelných čerpadel má pouze venkovní jednotku, uvnitř je tedy hluk zanedbatelný:
                       </p>
@@ -687,7 +684,7 @@ export default async function TepelnaCerpadlaPageRefined() {
                       Q
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg mb-3 text-green-500">Jaká je záruka na tepelná čerpadla?</h3>
+                        <h3 className="font-bold text-lg mb-3 text-green-900">Jaká je záruka na tepelná čerpadla?</h3>
                       <div className="space-y-3 mb-4">
                         <div className="flex justify-between items-center p-3 bg-green-50 rounded">
                           <span className="font-medium">Práce a montáž:</span>

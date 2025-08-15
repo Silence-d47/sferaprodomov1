@@ -273,7 +273,7 @@ export default function ReferenceDetailPage() {
             <p className="text-xl text-blue-100 mb-8 leading-relaxed max-w-3xl mx-auto">Kontaktujte nás a společně vytvoříme řešení přesně pro vaše potřeby. Každý projekt realizujeme s maximální péčí a profesionalitou.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50" asChild><Link href="/kontakt">Nezávazná poptávka</Link></Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10" asChild><Link href="/reference">Všechny reference</Link></Button>
+              <Button size="lg" variant="outline" className="border-blue-700 bg-blue-300 text-blue-700 font-bold hover:bg-blue-700 hover:text-white" asChild><Link href="/reference">Všechny reference</Link></Button>
             </div>
           </div>
         </div>

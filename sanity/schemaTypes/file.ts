@@ -2,7 +2,7 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'fileAsset',
-  title: 'Soubory',
+  title: 'Soubor',
   type: 'document',
   fields: [
     defineField({
@@ -19,7 +19,7 @@ export default defineType({
     }),
     defineField({
       name: 'file',
-      title: 'Soubor (pdf, doc, docx, xls, xlsx, ppt, pptx, zip, rar)',
+      title: 'Soubor (pdf, doc, docx, xls, xlsx, ppt, pptx, zip, rar, ...)',
       type: 'file',
       options: {
         accept: '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.rar',
@@ -27,7 +27,7 @@ export default defineType({
     }),
     defineField({
       name: 'fileType',
-      title: 'Typ souboru',
+      title: 'Typ souboru (kategorie)',
       type: 'string',
       options: {
         list: [
@@ -43,7 +43,7 @@ export default defineType({
     }),
     defineField({
       name: 'category',
-      title: 'Kategorie',
+      title: 'Kategorie (typ souboru)',
       type: 'string',
       options: {
         list: [
@@ -58,7 +58,7 @@ export default defineType({
     }),
     defineField({
       name: 'language',
-      title: 'Jazyk',
+      title: 'Jazyk (pouze pro české soubory)',
       type: 'string',
       options: {
         list: [
@@ -72,25 +72,25 @@ export default defineType({
     }),
     defineField({
       name: 'version',
-      title: 'Verze',
+      title: 'Verze (pouze pro české soubory)',
       type: 'string',
     }),
     defineField({
       name: 'uploadDate',
-      title: 'datum nahrátí',
+      title: 'Datum nahrátí',
       type: 'datetime',
       initialValue: () => new Date().toISOString(),
     }),
     defineField({
       name: 'isPublic',
-      title: 'Ke stažení pro veřejnost?',
+      title: 'Zobrazit',
       type: 'boolean',
       initialValue: true,
       description: 'Povolí veřejné stažení bez nutnosti registrace nebo žádosti adminovi',
     }),
     defineField({
       name: 'downloadCount',
-      title: 'Počet stažení',
+      title: 'Počet stažení (pouze pro veřejné soubory) - automatické',
       type: 'number',
       initialValue: 0,
       readOnly: true,

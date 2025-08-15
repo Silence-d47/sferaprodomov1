@@ -7,13 +7,13 @@ export default defineType({
   fields: [
     defineField({
       name: 'title',
-      title: 'Title',
+      title: 'Název',
       type: 'string',
       validation: Rule => Rule.required(),
     }),
     defineField({
       name: 'slug',
-      title: 'Slug',
+      title: 'slug',
       type: 'slug',
       options: {
         source: 'title',
@@ -23,13 +23,13 @@ export default defineType({
     }),
     defineField({
       name: 'description',
-      title: 'Popis produktu',
+      title: 'Popis',
       type: 'text',
       rows: 4,
     }),
     defineField({
       name: 'image',
-      title: 'Hlavní obrázek produktu',
+      title: 'Obrázek',
       type: 'image',
       options: {
         hotspot: true,
@@ -37,37 +37,37 @@ export default defineType({
     }),
     defineField({
       name: 'category',
-      title: 'Kategorie',
+      title: 'Kategorie (pokud existuje)',
       type: 'reference',
       to: {type: 'category'},
     }),
     defineField({
       name: 'features',
-      title: 'Vlastnosti',
+      title: 'Funkce',
       type: 'array',
       of: [{type: 'string'}],
     }),
     defineField({
       name: 'isRecommended',
-      title: 'Doporučujeme!',
+      title: 'Zobrazit jako doporučený produkt',
       type: 'boolean',
       initialValue: false,
     }),
     defineField({
       name: 'isBestSelling',
-      title: 'Nejprodávanější',
+      title: 'Zobrazit jako nejprodávanější produkt',
       type: 'boolean',
       initialValue: false,
     }),
     defineField({
       name: 'catalogUrl',
-      title: 'odkaz (URL) pro katalog k produktu',
+      title: 'odkaz (URL) pro katalog k produktu (pokud existuje)',
       type: 'url',
       description: 'Legacy field - use files array instead',
     }),
     defineField({
       name: 'files',
-      title: 'Soubory k produktu',
+      title: 'Soubory k produktu (pokud existují)',
       type: 'array',
       of: [{
         type: 'reference',
@@ -179,12 +179,12 @@ export default defineType({
       fields: [
         {
           name: 'metaTitle',
-          title: 'nadpis meta',
+          title: 'Meta nadpis (pokud existuje)',
           type: 'string',
         },
         {
           name: 'metaDescription',
-          title: 'popis meta',
+          title: 'Meta popis (pokud existuje)',
           type: 'text',
           rows: 3,
         },
