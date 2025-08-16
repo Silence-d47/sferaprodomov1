@@ -14,6 +14,8 @@ import faq from './faq'
 import testimonial from './testimonial'
 import siteSettings from './siteSettings'
 import fileAsset from './file'
+import employee from './employee'
+import brands from './brands'
 
 export const schema = {
   types: [
@@ -31,5 +33,7 @@ export const schema = {
     testimonial,
     siteSettings,
     fileAsset,
+    employee,
+    brands,
   ],
 }

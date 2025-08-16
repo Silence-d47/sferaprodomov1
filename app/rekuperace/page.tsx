@@ -11,6 +11,7 @@ import { client } from "@/lib/sanity.client"
 import { groq } from "next-sanity"
 import { CustomPortableText } from "@/lib/sanity.portableText"
 import { urlForImage } from "@/lib/sanity.image"
+import { bestSellingProductsQuery } from "@/lib/sanity.queries"
 import { 
   Shield, 
   Clock, 
@@ -296,16 +297,9 @@ export default async function RekuperacePage() {
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
-              {(await client.fetch<any[]>(
-                groq`*[_type == "product" && category->slug.current == "rekuperace" && isBestSelling == true] | order(_createdAt desc)[0...12] {
-                  title,
-                  description,
-                  image,
-                  features,
-                  isRecommended,
-                  catalogUrl
-                }`
-              )).map((p, idx, arr) => (
+                              {(await client.fetch<any[]>(
+                  bestSellingProductsQuery, { category: "rekuperace" }
+                )).map((p, idx, arr) => (
                 <ProductCard
                   key={`best-rek-${idx}`}
                   title={p.title}
@@ -314,6 +308,7 @@ export default async function RekuperacePage() {
                   features={p.features || []}
                   isRecommended={Boolean(p.isRecommended)}
                   catalogUrl={p.catalogUrl || "#"}
+                  files={p.files}
                 />
               ))}
               {/** Fallback na hardcoded, pokud by query vrátilo prázdno */}

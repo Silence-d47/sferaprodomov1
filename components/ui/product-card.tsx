@@ -11,10 +11,16 @@ export interface ProductCardProps {
   image: string
   features: string[]
   isRecommended?: boolean
-  catalogUrl: string
+  catalogUrl?: string
+  files?: Array<{
+    _id: string
+    title: string
+    fileUrl: string
+    fileType: string
+  }>
 }
 
-export function ProductCard({ title, description, image, features, isRecommended, catalogUrl }: ProductCardProps) {
+export function ProductCard({ title, description, image, features, isRecommended, catalogUrl, files }: ProductCardProps) {
   return (
     <div className="bg-card rounded-2xl border border-border shadow-sm flex flex-col transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-full">
       <div className="relative w-full overflow-hidden aspect-[5/4] bg-muted rounded-t-2xl">
@@ -38,11 +44,36 @@ export function ProductCard({ title, description, image, features, isRecommended
         </div>
 
         <div className="mt-auto space-y-2 border-t pt-4">
-          <Button variant="outline" asChild className="w-full border-black/30 text-black hover:bg-black/5">
-            <a href={catalogUrl} download>
-              <Download className="mr-2 h-4 w-4" /> Stáhnout katalog
-            </a>
-          </Button>
+          {/* Tlačítko pro stažení - prioritně files, pak catalogUrl */}
+          {(files && files.length > 0) ? (
+            // Pokud máme nahrané soubory, zobrazíme tlačítka pro každý
+            <div className="space-y-2">
+              {files.map((file) => (
+                <Button 
+                  key={file._id} 
+                  variant="outline" 
+                  asChild 
+                  className="w-full border-black/30 text-black hover:bg-black/5"
+                >
+                  <a href={file.fileUrl} download target="_blank" rel="noopener noreferrer">
+                    <Download className="mr-2 h-4 w-4" /> 
+                    {file.fileType === 'catalog' ? 'Stáhnout katalog' : 
+                     file.fileType === 'manual' ? 'Stáhnout návod' :
+                     file.fileType === 'datasheet' ? 'Stáhnout datasheet' :
+                     `Stáhnout ${file.title}`}
+                  </a>
+                </Button>
+              ))}
+            </div>
+          ) : catalogUrl ? (
+            // Fallback na legacy catalogUrl
+            <Button variant="outline" asChild className="w-full border-black/30 text-black hover:bg-black/5">
+              <a href={catalogUrl} download target="_blank" rel="noopener noreferrer">
+                <Download className="mr-2 h-4 w-4" /> Stáhnout katalog
+              </a>
+            </Button>
+          ) : null}
+          
           <Button asChild className="w-full bg-black text-white hover:bg-black/90">
             <Link href="#kontakt">
               <MessageCircle className="mr-2 h-4 w-4" /> Nezávazná poptávka

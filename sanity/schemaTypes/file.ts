@@ -2,24 +2,24 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'fileAsset',
-  title: 'Soubor',
+  title: 'File Asset',
   type: 'document',
   fields: [
     defineField({
       name: 'title',
-      title: 'Název',
+      title: 'Title',
       type: 'string',
       validation: Rule => Rule.required(),
     }),
     defineField({
       name: 'description',
-      title: 'Popis',
+      title: 'Description',
       type: 'text',
       rows: 3,
     }),
     defineField({
       name: 'file',
-      title: 'Soubor (pdf, doc, docx, xls, xlsx, ppt, pptx, zip, rar, ...)',
+      title: 'File',
       type: 'file',
       options: {
         accept: '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.rar',
@@ -27,73 +27,19 @@ export default defineType({
     }),
     defineField({
       name: 'fileType',
-      title: 'Typ souboru (kategorie)',
+      title: 'Typ souboru',
       type: 'string',
       options: {
         list: [
-          {title: 'Datový list modelu', value: 'datasheet'},
+          {title: 'Datasheet', value: 'datasheet'},
           {title: 'Návod k instalaci', value: 'manual'},
           {title: 'Katalog', value: 'catalog'},
           {title: 'Certifikát', value: 'certificate'},
-          {title: 'Technické údaje', value: 'specification'},
+          {title: 'Technický list', value: 'specification'},
           {title: 'Záruční list', value: 'warranty'},
-          {title: 'Ostatní', value: 'other'},
+          {title: 'Jiné', value: 'other'},
         ],
       },
-    }),
-    defineField({
-      name: 'category',
-      title: 'Kategorie (typ souboru)',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Klimatizace', value: 'klimatizace'},
-          {title: 'Tepelná čerpadla', value: 'tepelna-cerpadla'},
-          {title: 'Rekuperace', value: 'rekuperace'},
-          {title: 'Elektroinstalace', value: 'elektroinstalace'},
-          {title: 'Fotovoltaika', value: 'fotovoltaika'},
-          {title: 'General', value: 'general'},
-        ],
-      },
-    }),
-    defineField({
-      name: 'language',
-      title: 'Jazyk (pouze pro české soubory)',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Česky', value: 'cs'},
-          {title: 'English', value: 'en'},
-          {title: 'German', value: 'de'},
-          {title: 'Slovak', value: 'sk'},
-        ],
-      },
-      initialValue: 'cs',
-    }),
-    defineField({
-      name: 'version',
-      title: 'Verze (pouze pro české soubory)',
-      type: 'string',
-    }),
-    defineField({
-      name: 'uploadDate',
-      title: 'Datum nahrátí',
-      type: 'datetime',
-      initialValue: () => new Date().toISOString(),
-    }),
-    defineField({
-      name: 'isPublic',
-      title: 'Zobrazit',
-      type: 'boolean',
-      initialValue: true,
-      description: 'Povolí veřejné stažení bez nutnosti registrace nebo žádosti adminovi',
-    }),
-    defineField({
-      name: 'downloadCount',
-      title: 'Počet stažení (pouze pro veřejné soubory) - automatické',
-      type: 'number',
-      initialValue: 0,
-      readOnly: true,
     }),
   ],
   preview: {

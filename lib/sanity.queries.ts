@@ -58,3 +58,61 @@ export const employeesQuery = groq`
     isDirector
   }
 `
+
+export const productsByCategoryQuery = groq`
+  *[_type == "product" && category->slug.current == $category] {
+    _id,
+    title,
+    description,
+    image,
+    features,
+    isRecommended,
+    isBestSelling,
+    catalogUrl,
+    "files": files[]->{
+      _id,
+      title,
+      "fileUrl": file.asset->url,
+      fileType
+    }
+  }
+`
+
+export const bestSellingProductsQuery = groq`
+  *[_type == "product" && category->slug.current == $category && isBestSelling == true] | order(_createdAt desc)[0...12] {
+    _id,
+    title,
+    description,
+    image,
+    features,
+    isRecommended,
+    isBestSelling,
+    catalogUrl,
+    "files": files[]->{
+      _id,
+      title,
+      fileType,
+      "fileUrl": file.asset->url
+    }
+  }
+`
+
+// Správný způsob pro získání URL souboru v Sanity
+export const productsByCategoryWithFilesQuery = groq`
+  *[_type == "product" && category->slug.current == $category] {
+    _id,
+    title,
+    description,
+    image,
+    features,
+    isRecommended,
+    isBestSelling,
+    catalogUrl,
+    "files": files[]->{
+      _id,
+      title,
+      fileType,
+      "fileUrl": file.asset->url
+    }
+  }
+`

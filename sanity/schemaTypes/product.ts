@@ -9,7 +9,7 @@ export default defineType({
       name: 'title',
       title: 'Název',
       type: 'string',
-      validation: Rule => Rule.required(),
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'slug',
@@ -19,7 +19,7 @@ export default defineType({
         source: 'title',
         maxLength: 96,
       },
-      validation: Rule => Rule.required(),
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'description',
@@ -69,10 +69,12 @@ export default defineType({
       name: 'files',
       title: 'Soubory k produktu (pokud existují)',
       type: 'array',
-      of: [{
-        type: 'reference',
-        to: {type: 'fileAsset'},
-      }],
+      of: [
+        {
+          type: 'reference',
+          to: {type: 'fileAsset'},
+        },
+      ],
       description: 'Datové listy, katalog, manuál a další soubory, které patří k danému produktu',
     }),
     defineField({
@@ -96,37 +98,43 @@ export default defineType({
       type: 'object',
       fields: [
         {
-          name: 'power',
-          title: 'výkon(kW)',
-          type: 'number',
+          name: 'powerRange',
+          title: 'Výkon (kW)',
+          type: 'object',
+          fields: [
+            {name: 'min', title: 'Od (kW)', type: 'number'},
+            {name: 'max', title: 'Do (kW)', type: 'number'},
+          ],
+          description: 'Rozsah výkonu v kilowattech (např. od 2 do 5 kW)',
         },
         {
-          name: 'coolingCapacity',
-          title: 'chladící kapacita(kW)',
-          type: 'number',
+          name: 'coolingCapacityRange',
+          title: 'Chladicí výkon (kW)',
+          type: 'object',
+          fields: [
+            {name: 'min', title: 'Od (kW)', type: 'number'},
+            {name: 'max', title: 'Do (kW)', type: 'number'},
+          ],
+          description: 'Rozsah chladicího výkonu v kilowattech',
         },
         {
-          name: 'heatingCapacity',
-          title: 'kapacita výhřevu(kW)',
-          type: 'number',
+          name: 'heatingCapacityRange',
+          title: 'Topný výkon (kW)',
+          type: 'object',
+          fields: [
+            {name: 'min', title: 'Od (kW)', type: 'number'},
+            {name: 'max', title: 'Do (kW)', type: 'number'},
+          ],
+          description: 'Rozsah topného výkonu v kilowattech',
         },
         {
           name: 'noiseLevel',
-          title: 'Hlučnost(dB)',
+          title: 'Hladina hluku (dB)',
           type: 'number',
-        },
-        {
-          name: 'dimensions',
-          title: 'Rozměry',
-          type: 'object',
-          fields: [
-            {name: 'width', title: 'Šířka (mm)', type: 'number'},
-            {name: 'height', title: 'Výška (mm)', type: 'number'},
-            {name: 'depth', title: 'Hloubka (mm)', type: 'number'},
-          ],
         },
       ],
     }),
+
     defineField({
       name: 'price',
       title: 'Informace o ceně',
@@ -156,22 +164,17 @@ export default defineType({
       type: 'number',
       initialValue: 2,
     }),
+    
+    // --- ZDE JE TA ZMĚNA ---
     defineField({
       name: 'brand',
       title: 'Značka',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Daikin', value: 'daikin'},
-          {title: 'Mitsubishi', value: 'mitsubishi'},
-          {title: 'LG', value: 'lg'},
-          {title: 'Panasonic', value: 'panasonic'},
-          {title: 'Fujitsu', value: 'fujitsu'},
-          {title: 'Samsung', value: 'samsung'},
-          {title: 'Toshiba', value: 'toshiba'},
-        ],
-      },
+      type: 'reference', // Změna z 'string' na 'reference'
+      to: [{type: 'brand'}], // Říkáme, že se odkazujeme na náš nový typ 'brand'
+      validation: (Rule) => Rule.required(),
     }),
+    // --- KONEC ZMĚNY ---
+
     defineField({
       name: 'seo',
       title: 'SEO',
@@ -194,7 +197,7 @@ export default defineType({
   preview: {
     select: {
       title: 'title',
-      subtitle: 'brand',
+      subtitle: 'brand.title', // Musíme se proklikat k názvu značky
       media: 'image',
     },
   },

@@ -11,6 +11,7 @@ import { PDFDownloadButton } from "@/components/ui/pdf-download-button"
 import { groq } from "next-sanity"
 import { CustomPortableText } from "@/lib/sanity.portableText"
 import { urlForImage } from "@/lib/sanity.image"
+import { productsByCategoryWithFilesQuery } from "@/lib/sanity.queries"
 import { 
   Shield, 
   Clock, 
@@ -49,20 +50,16 @@ interface Product {
   image: any; // Sanity vrací obrázek jako objekt
   features: string[];
   isRecommended?: boolean;
-  catalogUrl: string; // Prozatím necháváme
+  catalogUrl: string; // Legacy field
+  files?: Array<{
+    _id: string;
+    title: string;
+    fileUrl: string;
+    fileType: string;
+  }>;
 }
 
-const productsQuery = groq`
-  *[_type == "product" && category->slug.current == "klimatizace"] {
-    _id,
-    title,
-    description,
-    image,
-    features,
-    isRecommended,
-    catalogUrl 
-  }
-`
+// Používáme importovaný dotaz z sanity.queries.ts
 
 type TestimonialEntry = {
   clientName: string
@@ -199,7 +196,7 @@ export default async function KlimatizacePageRefined() {
   const { client } = await import('@/lib/sanity.client')
   
   const [products, testimonials, faqs] = await Promise.all([
-    client.fetch<Product[]>(productsQuery),
+    client.fetch<Product[]>(productsByCategoryWithFilesQuery, { category: "klimatizace" }),
     client.fetch<TestimonialEntry[]>(testimonialsQuery),
     client.fetch<FaqEntry[]>(faqsQuery),
   ])
@@ -314,15 +311,17 @@ export default async function KlimatizacePageRefined() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
             {products.map((product, index) => (
-              <ProductCard key={product._id}
-  title={product.title}
-                  description={product.description}
-                  image={product.image ? urlForImage(product.image).url() : "/placeholder.svg"}
-                  features={product.features || []}
-                  isRecommended={product.isRecommended}
-                  catalogUrl={product.catalogUrl}
-                />
-              ))}
+              <ProductCard
+                key={product._id}
+                title={product.title}
+                description={product.description}
+                image={product.image ? urlForImage(product.image).url() : "/placeholder.svg"}
+                features={product.features || []}
+                isRecommended={product.isRecommended}
+                catalogUrl={product.catalogUrl}
+                files={product.files}
+              />
+            ))}
             </div>
           <div className="mt-8 md:mt-16 text-center">
             <PDFDownloadButton
