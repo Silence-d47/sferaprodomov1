@@ -17,7 +17,12 @@ export const metadata: Metadata = {
   description:
     "Profesionální klimatizace, tepelná čerpadla a rekuperace. Nadstandardní servis, montáž do 14 dnů, 0% záloha na skladové zboží. Opava.",
   keywords: "klimatizace, tepelná čerpadla, rekuperace, elektroinstalace, servis, montáž, Opava",
-    generator: 'v0.dev'
+  icons: {
+    icon: "/favicon/favicon.ico",
+    shortcut: "/favicon/favicon-32x32.png",
+    apple: "/favicon/apple-touch-icon.png",
+  },
+    
 }
 
 export default function RootLayout({

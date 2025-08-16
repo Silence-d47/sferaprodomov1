@@ -1,10 +1,7 @@
-"use client"
-
 import React from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { groq } from "next-sanity"
-import useSWR from "swr"
 import { Button } from "@/components/ui/button"
 import { ReferenceSlider } from "@/components/ui/reference-slider"
 import { ContactForm } from "@/components/ui/contact-form6"
@@ -15,7 +12,6 @@ import { ServiceHub } from "@/components/ui/service-hub"
 import { Shield, Clock, Phone, CheckCircle, Users, CreditCard, Calendar, HeadphonesIcon, Heart, Star, Award, ArrowRight, ChevronDown, Quote } from "lucide-react"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
-import { motion } from "framer-motion"
 
 // GROQ dotazy
 const heroSlidesQuery = groq`
@@ -31,7 +27,7 @@ const heroSlidesQuery = groq`
 `
 
 const topReferencesQuery = groq`
-  *[_type == "projectReference" && isTopReference == true] | order(_createdAt desc)[0...6] {
+  *[_type == "projectReference" && isTopReference == true] | order(_createdAt desc)[0...3] {
     "id": slug.current,
     title,
     "description": coalesce(description, ""),
@@ -42,11 +38,7 @@ const topReferencesQuery = groq`
   }
 `
 
-// SWR fetcher with dynamic import
-const fetcher = async (query: string) => {
-  const { client } = await import('@/lib/sanity.client')
-  return client.fetch(query)
-}
+// (data fetching is done inside the page component)
 
 
 
@@ -147,13 +139,7 @@ type TopReference = {
 }
 function ValueCard  ({ icon, title, description, iconBgColor, iconColor }: { icon: React.ReactNode, title: string, description: string, iconBgColor: string, iconColor: string }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.45 }}
-      className="bg-white p-2 rounded-xl border border-slate-100 shadow-sm text-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
-    >
+    <div className="bg-white p-2 rounded-xl border border-slate-100 shadow-sm text-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
       <div className="flex justify-center mb-4">
         <div className={`h-12 w-12 rounded-full flex items-center justify-center ${iconBgColor}`}>
           {icon}
@@ -161,36 +147,22 @@ function ValueCard  ({ icon, title, description, iconBgColor, iconColor }: { ico
       </div>
       <h3 className="text-lg font-semibold text-slate-800 mb-2">{title}</h3>
       <p className="text-slate-600 text-sm leading-relaxed">{description}</p>
-    </motion.div>
+    </div>
   )
 }
 
 export default async function HomePage() {
-  // Import Sanity client inside the component
-
-
-  const { data: slides, error: heroError, isLoading: heroLoading } = useSWR<UnifiedHeroSlide[]>(heroSlidesQuery, fetcher)
-  const { data: topReferences } = useSWR<TopReference[]>(topReferencesQuery, fetcher)
-
-  if (heroLoading) {
-    return <div>Načítání...</div>
-  }
-  if (heroError) {
-    return <div>Chyba při načítání dat.</div>
-  }
-  if (!slides || slides.length === 0) {
-    return <div>Žádná data pro hero sekci.</div>
-  }
+  const { client } = await import("@/lib/sanity.client")
+  const [slides, topReferences] = await Promise.all([
+    client.fetch<UnifiedHeroSlide[]>(heroSlidesQuery),
+    client.fetch<TopReference[]>(topReferencesQuery),
+  ])
 
   return (
-    
-< >      {/* Unified Hero Section (tvoje data zůstávají) */}
-      <motion.div initial="hidden" animate="visible" variants={{
-        hidden: {},
-        visible: {}
-      }}>
+    <>
+      <div className="animate-fade-in">
         <UnifiedHero slides={slides} />
-      </motion.div>
+      </div>
       <ServiceHub />
 
       {/* Logo Carousel - Brand Partners */}
@@ -369,7 +341,7 @@ export default async function HomePage() {
             <div className="relative flex justify-center lg:justify-end">
               {/* Enhanced logo with effects */}
                {/* LEVÁ ČÁST: VIZUÁL */}
-            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="relative">
+            <div className="relative">
               <div className="absolute -top-12 -left-16 w-72 h-72 bg-blue-50 rounded-full opacity-40 blur-2xl"></div>
               <div className="absolute -bottom-12 -right-12 w-80 h-80 bg-slate-50 rounded-full opacity-70 blur-2xl"></div>
               <div className="relative z-10">
@@ -381,7 +353,7 @@ export default async function HomePage() {
                   className="rounded-2xl shadow-2xl object-cover w-full h-auto max-h-[600px] ring-8 ring-white/60"
                 />
               </div>
-            </motion.div>
+            </div>
             </div>
           </div>
           {/* Additional content below */}
@@ -424,7 +396,7 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             {/* LEVÁ ČÁST: VIZUÁL */}
-            <motion.div initial={{ opacity: 20, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="relative">
+            <div className="relative">
               <div className="absolute -top-12 -left-16 w-72 h-72 bg-blue-50 rounded-full opacity-40 blur-2xl"></div>
               <div className="absolute -bottom-12 -right-12 w-80 h-80 bg-slate-200 rounded-full opacity-40 blur-2xl"></div>
               <div className="relative z-10">
@@ -436,10 +408,10 @@ export default async function HomePage() {
                   className="rounded-2xl shadow-2xl object-cover w-full h-auto max-h-[550px] ring-8 ring-white/60"
                 />
               </div>
-            </motion.div>
+            </div>
 
             {/* PRAVÁ ČÁST: PŘÍBĚH */}
-            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="relative z-20">
+            <div className="relative z-20">
               <div className="inline-block bg-blue-50 text-blue-600 font-semibold px-4 py-1.5 rounded-full text-sm mb-4">
                 Náš příběh
               </div>
@@ -461,7 +433,7 @@ export default async function HomePage() {
                 <p className="text-sm text-slate-500">Jednatel společnosti SFERA PRO DOMOV s.r.o.</p>
               </div>
 
-              </motion.div>
+              </div>
           </div>
         </div>
       </section>
@@ -540,7 +512,7 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
             {featureCards.map((feature, index) => (
-              <motion.div key={index} initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45, delay: index * 0.05 }} className="group relative">
+              <div key={index} className="group relative">
                 <div className="absolute -inset-1 bg-gradient-to-r from-[#1B5D93]/25 to-[#1B5D93]/15 rounded-2xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div className="relative bg-white/90 backdrop-blur-sm rounded-2xl p-8 border border-white/50 shadow-md hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 h-full">
                   <div className="flex flex-col items-center text-center h-full">
@@ -565,7 +537,7 @@ export default async function HomePage() {
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>

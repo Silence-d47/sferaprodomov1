@@ -140,6 +140,27 @@ export default function ReferenceDetailPage() {
         </div>
       </section>
 
+      {/* Gallery moved directly under the intro section (before client review) */}
+      {reference.gallery && reference.gallery.length > 0 && (
+        <section className="py-16 bg-gradient-to-br from-gray-50 to-blue-50/30">
+          <div className="container">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">Fotogalerie</h2>
+              <p className="text-xl text-muted-foreground">Podívejte se na fotografie z realizace</p>
+              <div className="w-24 h-1 bg-blue-600 mx-auto mt-6" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {reference.gallery.map((image, index) => (
+                <div key={index} className="relative overflow-hidden rounded-xl shadow-lg group aspect-[5/4]">
+                  <Image src={image || "/placeholder.svg"} alt={`${reference.title} - foto ${index + 1}`} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Client Review */}
       {showReview && (
         <section className="py-20 bg-gradient-to-br from-[#f8f9fa] via-white to-blue-50/30">
@@ -259,26 +280,7 @@ export default function ReferenceDetailPage() {
         </section>
       )}
 
-      {/* Gallery */}
-      {reference.gallery && reference.gallery.length > 0 && (
-        <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50/30">
-          <div className="container">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Fotogalerie</h2>
-              <p className="text-xl text-muted-foreground">Podívejte se na fotografie z realizace</p>
-              <div className="w-24 h-1 bg-blue-600 mx-auto mt-6" />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {reference.gallery.map((image, index) => (
-                <div key={index} className="aspect-video relative rounded-xl overflow-hidden shadow-lg group">
-                  <Image src={image || "/placeholder.svg"} alt={`${reference.title} - foto ${index + 1}`} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600 relative overflow-hidden">

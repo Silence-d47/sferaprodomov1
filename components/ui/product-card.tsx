@@ -16,14 +16,14 @@ export interface ProductCardProps {
 
 export function ProductCard({ title, description, image, features, isRecommended, catalogUrl }: ProductCardProps) {
   return (
-    <div className="bg-card rounded-2xl border border-border shadow-sm flex flex-col transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-      <div className="relative aspect-[1/1] w-full bg-muted rounded-t-2xl">
-        <Image src={image} alt={title} layout="fill" objectFit="contain" className="p-4" />
+    <div className="bg-card rounded-2xl border border-border shadow-sm flex flex-col transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-full">
+      <div className="relative w-full overflow-hidden aspect-[5/4] bg-muted rounded-t-2xl">
+        <Image src={image} alt={title} fill className="object-cover" />
         {isRecommended && <Badge className="absolute top-3 right-3 bg-amber-400 text-amber-900">Doporučujeme</Badge>}
       </div>
       <div className="p-6 flex-grow flex flex-col">
         <h3 className="font-bold text-lg text-foreground mb-2">{title}</h3>
-        <p className="text-muted-foreground text-sm mb-4 flex-grow">{description.substring(0, 100)}...</p>
+        <p className="text-muted-foreground text-sm mb-4 flex-grow overflow-hidden [display:-webkit-box] [-webkit-line-clamp:5] [-webkit-box-orient:vertical]">{description}</p>
         
         <div>
           <h4 className="text-sm font-semibold mb-2 text-black">Klíčové vlastnosti:</h4>

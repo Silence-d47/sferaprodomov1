@@ -46,3 +46,15 @@ export const authorsQuery = groq`
     bio
   }
 `
+
+export const employeesQuery = groq`
+  *[_type == "employee" && isActive == true] | order(order asc, name asc) {
+    _id,
+    name,
+    position,
+    image,
+    phone,
+    email,
+    isDirector
+  }
+`

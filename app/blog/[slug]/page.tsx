@@ -131,13 +131,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               <CardContent>
                 {post.mainImage && (
                   <div className="mb-8">
-                    <Image
-                      src={urlForImage(post.mainImage).url()}
-                      alt={post.title}
-                      width={800}
-                      height={400}
-                      className="w-full h-auto rounded-lg"
-                    />
+                    <div className="relative w-full overflow-hidden aspect-[5/4] rounded-lg">
+                      <Image
+                        src={urlForImage(post.mainImage).url()}
+                        alt={post.title}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
                   </div>
                 )}
                 
@@ -217,7 +218,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
               {relatedPosts.map((relatedPost) => (
                 <article key={relatedPost._id} className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-xl hover:border-gray-300 transition-all duration-300 group">
-                  <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
+                  <div className="relative w-full overflow-hidden aspect-[5/4] bg-gradient-to-br from-gray-100 to-gray-200">
                     {relatedPost.mainImage ? (
                       <Image
                         src={urlForImage(relatedPost.mainImage).url()}

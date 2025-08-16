@@ -51,9 +51,10 @@ export function UnifiedHero({ slides }: UnifiedHeroProps) {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Úplně bezpečný paralax - obrázek se posune jen o malou část scrollu
-      const maxOffset = window.innerHeight * 0.1; // Maximálně 10% výšky obrazovky
-      const rawOffset = window.scrollY * 0.2; // Ještě pomalejší paralax
+      // Jemný parallax; na mobilech výrazně omezený
+      const isSmallScreen = window.innerWidth < 768;
+      const maxOffset = isSmallScreen ? 12 : window.innerHeight * 0.08;
+      const rawOffset = window.scrollY * (isSmallScreen ? 0.08 : 0.18);
       setParallaxOffset(Math.min(rawOffset, maxOffset));
     };
     window.addEventListener('scroll', handleScroll);
@@ -61,7 +62,7 @@ export function UnifiedHero({ slides }: UnifiedHeroProps) {
   }, []);
 
   return (
-    <section className="relative h-screen min-h-[600px] overflow-hidden">
+    <section className="relative min-h-[100svh] md:h-screen min-h-[540px] overflow-hidden">
       {/* Kontejner pro posuvná pozadí */}
       <div className="absolute inset-0 z-0">
         {slides.map((slide, index) => (
@@ -69,14 +70,9 @@ export function UnifiedHero({ slides }: UnifiedHeroProps) {
             key={slide.id}
             className="absolute inset-0 transition-transform duration-1000 ease-in-out z-0"
             style={{
-              // Rozšíříme kontejner ještě více nad rámec obrazovky pro paralax
-              top: '-30%',
-              bottom: '-30%',
-              left: '0',
-              right: '0',
               backgroundImage: `url(${slide.bgImage})`,
-              backgroundSize: '110% 110%', // Zvětšíme obrázek ještě více
-              backgroundPosition: 'center center',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
               // Kombinovaný posun pro slideshow i paralax efekt
               transform: `translateX(${(index - currentSlide) * 100}%) translateY(${parallaxOffset}px)`,
@@ -91,13 +87,13 @@ export function UnifiedHero({ slides }: UnifiedHeroProps) {
 
       {/*   Hlavní obsah a statická karta */}
       <div className="relative z-10 h-full flex items-center justify-center">
-        <div className="container mx-auto px-0  md:px-0">
+        <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-4xl mx-auto text-center">
             {/* STATICKÁ KARTA - Funguje jako maska (okno) */}
-            <div className="bg-white/[0.08] backdrop-blur-2xl rounded-2xl md:rounded-3xl p-6 md:p-2 md:p-12 lg:p-16 shadow-2xl border border-white/10 relative overflow-hidden mx-1">
+            <div className="w-full max-w-[560px] sm:max-w-3xl mx-4 sm:mx-auto bg-white/10 backdrop-blur-2xl rounded-2xl md:rounded-3xl p-4 sm:p-8 md:p-12 lg:p-16 shadow-2xl border border-white/10 ring-1 ring-white/20 relative overflow-hidden">
               
               {/* Kontejner pro posuvný OBSAH uvnitř karty */}
-              <div className="relative min-h-[50vh] md:min-h-[70vh] flex items-center justify-center">
+              <div className="relative min-h-[52vh] md:min-h-[68vh] flex items-center justify-center">
                 {slides.map((slideData, index) => (
                   <div
                     key={slideData.id}
@@ -108,24 +104,24 @@ export function UnifiedHero({ slides }: UnifiedHeroProps) {
                     }}
                   >
                     {/* Samotný obsah jednoho slidu */}
-                    <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-500/20 to-blue-500/20 backdrop-blur-md rounded-full px-2 py-8 md:py-3 mb-6 border border-white/20 mx-auto mt-10 ">
+                    <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-500/25 to-blue-500/25 backdrop-blur-md rounded-full px-3 py-1.5 md:px-4 md:py-2 mb-6 border border-white/20 mx-auto mt-2 sm:mt-4">
                       <Shield className="w-4 h-4 text-orange-300" />
                       <span className="text-white/90 font-medium">Garance kvality a spolehlivosti</span>
                     </div>
 
                     <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
-                      <h1 className="text-3xl md:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight">
+                      <h1 className="text-[28px] sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight">
                         {slideData.title}
                       </h1>
                       {slideData.subtitle && (
-                        <p className="text-lg md:text-2xl lg:text-3xl text-blue-100 font-light leading-relaxed">
+                        <p className="text-base sm:text-lg md:text-2xl lg:text-3xl text-blue-100 font-light leading-relaxed">
                           {slideData.subtitle}
                         </p>
                       )}
                     </div>
 
                     {slideData.description && (
-                      <p className="text-base md:text-xl text-white/80 leading-relaxed mb-6 md:mb-10 max-w-2xl mx-auto px-2">
+                      <p className="text-base md:text-xl text-white/80 leading-relaxed mb-6 md:mb-10 max-w-2xl mx-auto px-3">
                         {slideData.description}
                       </p>
                     )}

@@ -278,14 +278,14 @@ export default async function KlimatizacePageRefined() {
                 Každý dům a každá místnost je jiná. Pomůžeme vám vybrat řešení, které bude přesně odpovídat vašim potřebám a možnostem.
               </p>
             </div>
-            <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 md:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8">
               {acTypes.map((type, index) => (
                 <div key={index} className="bg-slate-50/70 rounded-xl md:rounded-2xl p-4 md:p-8 flex flex-col border border-slate-200/80 hover:shadow-xl transition-shadow duration-300">
                   <div className="flex items-center gap-3 md:gap-4 mb-3 md:mb-4">
-                    <div className="flex-shrink-0 h-12 md:h-16 w-12 md:w-16 rounded-full flex items-center justify-center bg-blue-500/10">
-                      <type.icon className="h-6 md:h-8 w-6 md:w-8 text-blue-500" />
+                    <div className="flex-shrink-0 h-10 md:h-16 w-10 md:w-16 rounded-full flex items-center justify-center bg-blue-500/10">
+                      <type.icon className="h-5 md:h-8 w-5 md:w-8 text-blue-500" />
                     </div>
-                    <h3 className="text-lg md:text-2xl font-bold text-slate-800">{type.title}</h3>
+                    <h3 className="text-base sm:text-lg md:text-2xl font-bold text-slate-800">{type.title}</h3>
                   </div>
                   <p className="text-slate-600 mb-4 md:mb-6 flex-grow text-sm md:text-base">{type.description}</p>
                   <div className="space-y-2 md:space-y-3 mt-auto">
@@ -379,7 +379,7 @@ export default async function KlimatizacePageRefined() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
             {(testimonials && testimonials.length > 0 ? testimonials : []).map((t, index) => (
               <div key={`t-${index}`} className="bg-slate-50/70 rounded-xl md:rounded-2xl p-1 flex flex-col border border-slate-200/80">
-                <div className="relative h-48 md:h-56 w-full">
+                <div className="relative w-full overflow-hidden aspect-[5/4]">
                   <Image src={t.clientImageUrl || "/placeholder.svg"} alt={t.clientName} fill className="object-cover rounded-t-xl md:rounded-t-2xl" />
                 </div>
                 <div className="p-4 md:p-6 flex-grow flex flex-col">
@@ -412,7 +412,7 @@ export default async function KlimatizacePageRefined() {
 
             {(!testimonials || testimonials.length === 0) && references.map((ref, index) => (
               <div key={`r-${index}`} className="bg-slate-50/70 rounded-xl md:rounded-2xl p-1 flex flex-col border border-slate-200/80">
-                <div className="relative h-48 md:h-56 w-full">
+                <div className="relative w-full overflow-hidden aspect-[5/4]">
                   <Image src={ref.image} alt={ref.project} fill className="object-cover rounded-t-xl md:rounded-t-2xl" />
                 </div>
                 <div className="p-4 md:p-6 flex-grow flex flex-col">

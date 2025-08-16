@@ -374,7 +374,7 @@ export default async function RekuperacePage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
               {references && references.length > 0 ? references.map((ref, index) => (
                 <div key={`r-${index}`} className="bg-slate-50/70 rounded-xl md:rounded-2xl p-1 flex flex-col border border-slate-200/80">
-                  <div className="relative h-48 md:h-56 w-full">
+                  <div className="relative w-full overflow-hidden aspect-[5/4]">
                     <Image src={ref.image || "/placeholder.svg"} alt={ref.title} fill className="object-cover rounded-t-xl md:rounded-t-2xl" />
                   </div>
                   <div className="p-4 md:p-6 flex-grow flex flex-col">

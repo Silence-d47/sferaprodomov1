@@ -29,7 +29,7 @@ export function ReferenceSlider({ references }: ReferenceSliderProps) {
       {references.map((reference) => (
         <Card key={reference.id} className="h-full group hover:shadow-xl transition-all duration-300 border-0 bg-white overflow-hidden flex flex-col">
           <CardContent className="p-0 flex flex-col h-full">
-            <div className="aspect-video relative overflow-hidden">
+            <div className="relative overflow-hidden aspect-[5/4]">
               <Image
                 src={reference.image || "/placeholder.svg"}
                 alt={reference.title}
@@ -75,9 +75,10 @@ export function ReferenceSlider({ references }: ReferenceSliderProps) {
               <h3 className="font-bold text-lg mb-3 group-hover:text-blue-600 transition-colors">
                 {reference.title}
               </h3>
-              <p className="text-muted-foreground mb-6 text-sm leading-relaxed flex-grow">
+              <p className="text-muted-foreground mb-6 text-sm leading-relaxed flex-grow overflow-hidden [display:-webkit-box] [-webkit-line-clamp:5] [-webkit-box-orient:vertical]">
                 {reference.description}
               </p>
+              {/* Optional: expand toggle could be added later if potřebné */}
 
               {/* Tlačítko vždy na stejném místě */}
               <div className="mt-auto">

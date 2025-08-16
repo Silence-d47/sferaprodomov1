@@ -107,6 +107,7 @@ export default function ReferencePage() {
   const [featuredReferences, setFeaturedReferences] = useState<FeaturedReference[]>([])
   const [otherReferences, setOtherReferences] = useState<ListReference[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [currentSlide, setCurrentSlide] = useState(0)
 
   // Fetch data on component mount
   useEffect(() => {
@@ -317,13 +318,13 @@ export default function ReferencePage() {
               
               {/* Pravý sloupec - Mapa */}
               <div className="relative">
-                <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-6 border border-blue-100 shadow-lg">
+                <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-4 md:p-6 border border-blue-100 shadow-lg">
                   <Image
                     src="/mapa/mapa2.jpg"
                     alt="Mapa pokrytí - Ostrava, Olomoucký a Zlínský kraj"
                     width={600}
-                    height={450}
-                    className="w-full h-auto rounded-xl"
+                    height={360}
+                    className="max-w-[60%] md:max-w-[60%] h-auto rounded-xl mx-auto"
                   />
                 </div>
                 
@@ -383,9 +384,9 @@ export default function ReferencePage() {
                 <Slider {...carouselSettings}>
                   {featuredReferences.map((reference) => (
                     <div key={reference.id} className="px-4">
-                      <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-                        <div className="grid lg:grid-cols-2 gap-0">
-                          <div className="relative h-80 lg:h-auto">
+                      <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-xl overflow-hidden border border-gray-100 flex flex-col h-full">
+                        <div className="grid lg:grid-cols-2 gap-0 flex-grow">
+                          <div className="relative w-full overflow-hidden aspect-[5/4]">
                             <Image
                               src={reference.image}
                               alt={reference.title}
@@ -409,7 +410,7 @@ export default function ReferencePage() {
                               </div>
                             </div>
                           </div>
-                          <div className="p-8 lg:p-12 flex flex-col justify-center">
+                          <div className="p-8 lg:p-12 flex flex-col justify-center flex-grow">
                             <div className="flex items-center justify-between mb-4">
                               <Badge className={`${categoryStyles(reference.category).bg} ${categoryStyles(reference.category).text} border-0`}>
                                 {reference.category}
@@ -422,7 +423,7 @@ export default function ReferencePage() {
                               </div>
                             </div>
                             <h3 className="text-2xl font-bold mb-4">{reference.title}</h3>
-                            <p className="text-muted-foreground mb-6 leading-relaxed">{reference.description}</p>
+                            <p className="text-muted-foreground mb-6 leading-relaxed overflow-hidden [display:-webkit-box] [-webkit-line-clamp:5] [-webkit-box-orient:vertical]">{reference.description}</p>
                             
                             <div className="mb-6">
                               <h4 className="font-semibold mb-3">Klíčové vlastnosti:</h4>
@@ -445,7 +446,7 @@ export default function ReferencePage() {
                               </div>
                             )}
                             
-                            <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" asChild>
+                            <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white mt-auto" asChild>
                               <Link href={`/reference/${reference.id}`}>
                                 Zobrazit detail projektu
                                 <ArrowRight className="h-4 w-4 ml-2" />
@@ -483,9 +484,9 @@ export default function ReferencePage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {otherReferences && otherReferences.length > 0 ? (
               otherReferences.map((reference) => (
-                <Card key={reference.id} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white overflow-hidden">
-                  <CardContent className="p-0">
-                    <div className="relative h-48 overflow-hidden">
+                <Card key={reference.id} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white overflow-hidden flex flex-col h-full">
+                  <CardContent className="p-0 flex flex-col h-full">
+                    <div className="relative w-full overflow-hidden aspect-[5/4]">
                       <Image
                         src={reference.image}
                         alt={reference.title}
@@ -499,7 +500,7 @@ export default function ReferencePage() {
                         </div>
                       </div>
                     </div>
-                    <div className="p-6">
+                    <div className="p-6 flex flex-col flex-grow">
                       <div className="flex items-center justify-between mb-3">
                         <Badge className={`${categoryStyles(reference.category).bg} ${categoryStyles(reference.category).text} border-0 text-xs`}>
                           {reference.category}
@@ -510,7 +511,7 @@ export default function ReferencePage() {
                         </div>
                       </div>
                       <h3 className="font-bold text-lg mb-2 group-hover:text-blue-600 transition-colors">{reference.title}</h3>
-                      <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{reference.description}</p>
+                      <p className="text-muted-foreground text-sm mb-4 leading-relaxed overflow-hidden [display:-webkit-box] [-webkit-line-clamp:5] [-webkit-box-orient:vertical]">{reference.description}</p>
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center text-xs text-muted-foreground">
                           <Calendar className="h-3 w-3 mr-1" />
@@ -521,7 +522,7 @@ export default function ReferencePage() {
                           <span className="text-xs text-blue-600 font-medium">Realizováno</span>
                         </div>
                       </div>
-                      <Button asChild variant="outline" className="w-full group-hover:bg-blue-50 group-hover:border-blue-200 transition-colors">
+                      <Button asChild variant="outline" className="w-full group-hover:bg-blue-50 group-hover:border-blue-200 transition-colors mt-auto">
                         <Link href={`/reference/${reference.id}`}>
                           Zobrazit detail
                           <ArrowRight className="h-3 w-3 ml-2" />

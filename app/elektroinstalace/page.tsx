@@ -1,15 +1,13 @@
-"use client"
-
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ContactForm } from "@/components/ui/contact-form4"
 import { ThemeProvider } from "@/components/theme-provider"
 import { ReferenceSlider } from "@/components/ui/reference-slider"
 import { groq } from "next-sanity"
 import { CustomPortableText } from "@/lib/sanity.portableText"
+import { client } from "@/lib/sanity.client" // <-- SPRÁVNÝ IMPORT KLIENTA
 import { 
   Shield, 
   Clock, 
@@ -36,6 +34,7 @@ import {
   Mail
 } from "lucide-react"
 
+// Definice typů pro data ze Sanity
 type FaqEntry = {
   question: string
   answer: any
@@ -51,6 +50,7 @@ type ReferenceCard = {
   isTopReference?: boolean
 }
 
+// GROQ dotazy zůstávají stejné
 const faqsQuery = groq`
   *[_type == "faq" && isActive == true && category in ["elektroinstalace", "obecne"]]
   | order(coalesce(order, 9999) asc, _createdAt asc) {
@@ -71,28 +71,30 @@ const referencesQuery = groq`
   }
 `
 
+// Změna na ASYNC funkci pro server-side data fetching
 export default async function ElektroinstalacePage() {
-  // Import Sanity client inside the component
-  const { client } = await import('@/lib/sanity.client')
   
+  // Načtení dat na serveru pomocí await a Promise.all
   const [faqs, references] = await Promise.all([
     client.fetch<FaqEntry[]>(faqsQuery),
     client.fetch<ReferenceCard[]>(referencesQuery),
   ])
 
+  // Zpracování dat pro FAQ sloupce
   const leftDynamicFaqs: FaqEntry[] = []
   const rightDynamicFaqs: FaqEntry[] = []
   faqs?.forEach((item, index) => {
     if (index % 2 === 0) leftDynamicFaqs.push(item)
     else rightDynamicFaqs.push(item)
   })
+
   return (
     <ThemeProvider theme="elektroinstalace">
       <div className="bg-white text-slate-800">
         <section className="relative h-[90vh] min-h-[600px] flex items-center text-white">
           <div className="absolute inset-0">
           <Image src="/images/10.webp" alt="Profesionální elektroinstalace" fill priority className="object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-orange-900/60 to-black"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-orange-900/60 to-black"></div>   
         </div>
         <div className="relative z-10 container">
             <div className="max-w-3xl">
@@ -397,10 +399,11 @@ export default async function ElektroinstalacePage() {
               <p className="text-xl text-slate-200/90 max-w-3xl mx-auto leading-relaxed">
                 Tým našich proškolených a certifikovaných techniků je připraven řešit vaše požadavky ve všední dny od 8:00 do 20:00.  
                 <br />
-                <span className="font-bold text-white"> <p>
-                   &nbsp;ELEKTROPOHOTOVOST - OPAVA A OKOLÍ 25 km.</p>
+                <span className="font-bold text-white">
+                   &nbsp;ELEKTROPOHOTOVOST - OPAVA A OKOLÍ 25 km.
                    <br />
-                  </span>| Garantujeme opravu do 24 hodin od prvního kontaktu |
+                   Garantujeme opravu do 24 hodin od prvního kontaktu
+                   </span>
               </p>
             </div>
 
@@ -608,7 +611,7 @@ export default async function ElektroinstalacePage() {
 
           <div className="max-w-5xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-8">
-              {/* Levý sloupec */}
+              {/* Levý sloupec - statické FAQ */}
               <div className="space-y-6">
                 <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-orange-500">
                   <div className="flex items-start space-x-4">
@@ -718,7 +721,7 @@ export default async function ElektroinstalacePage() {
                 </div>
               </div>
 
-              {/* Pravý sloupec */}
+              {/* Pravý sloupec - statické FAQ */}
               <div className="space-y-6">
 
                 <div className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-orange-500">
@@ -776,8 +779,40 @@ export default async function ElektroinstalacePage() {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
 
-
+            {/* Dynamické FAQ z CMS */}
+            <div className="grid lg:grid-cols-2 gap-8 mt-8">
+              <div className="space-y-6">
+                {leftDynamicFaqs.map((item, idx) => (
+                  <div key={`faq-left-${idx}`} className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-orange-500">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-8 h-8 bg-orange-900 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">Q</div>
+                      <div>
+                        <h3 className="font-bold text-lg mb-3 text-orange-900">{item.question}</h3>
+                        <div className="prose prose-sm max-w-none text-slate-700">
+                          <CustomPortableText value={item.answer} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="space-y-6">
+                {rightDynamicFaqs.map((item, idx) => (
+                  <div key={`faq-right-${idx}`} className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-orange-500">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">Q</div>
+                      <div>
+                        <h3 className="font-bold text-lg mb-3 text-orange-900">{item.question}</h3>
+                        <div className="prose prose-sm max-w-none text-slate-700">
+                          <CustomPortableText value={item.answer} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -800,39 +835,6 @@ export default async function ElektroinstalacePage() {
                     info@sfera-domov.cz
                   </Link>
                 </Button>
-              </div>
-            </div>
-            {/* Dynamické FAQ z CMS - doplnění pod hardcoded část */}
-            <div className="grid lg:grid-cols-2 gap-8 mt-8">
-              <div className="space-y-6">
-                {faqs && faqs.filter((_, i) => i % 2 === 0).map((item, idx) => (
-                  <div key={`faq-left-${idx}`} className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-orange-500">
-                    <div className="flex items-start space-x-4">
-                      <div className="w-8 h-8 bg-orange-900 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">Q</div>
-                      <div>
-                        <h3 className="font-bold text-lg mb-3 text-orange-900">{item.question}</h3>
-                        <div className="prose prose-sm max-w-none text-slate-700">
-                          <CustomPortableText value={item.answer} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="space-y-6">
-                {faqs && faqs.filter((_, i) => i % 2 === 1).map((item, idx) => (
-                  <div key={`faq-right-${idx}`} className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-orange-500">
-                    <div className="flex items-start space-x-4">
-                      <div className="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">Q</div>
-                      <div>
-                        <h3 className="font-bold text-lg mb-3 text-orange-900">{item.question}</h3>
-                        <div className="prose prose-sm max-w-none text-slate-700">
-                          <CustomPortableText value={item.answer} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
               </div>
             </div>
           </div>
@@ -866,8 +868,6 @@ export default async function ElektroinstalacePage() {
         <div className="container">
           <div className="max-w-4xl mx-auto">
             <ContactForm
-              title="Poptávka elektroinstalace"
-              subtitle="Pošlete nám vyplněný formulář a my vám připravíme nabídku šitou na míru."
               source="elektroinstalace-page"
               customHeading="Nechte si váš projekt dopředu nacenit."
             />
