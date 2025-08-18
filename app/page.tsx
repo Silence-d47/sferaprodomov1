@@ -284,8 +284,8 @@ export default async function HomePage() {
     </div>
 
     {/* Karta se sliderem referencí */}
-    <div className="mt-16 sm:mt-20">
-      <div className="rounded-3xl bg-white/60 p-2 shadow-2xl shadow-slate-900/10 ring-1 ring-gray-200 backdrop-blur-md">
+    <div className="mt-16 sm:mt-20 flex justify-center">
+      <div className="w-auto max-w-4xl rounded-3xl bg-white/60 p-2 shadow-2xl shadow-slate-900/10 ring-1 ring-gray-200 backdrop-blur-md">
         {topReferences && topReferences.length > 0 && (
           <ReferenceSlider references={topReferences} />
         )}

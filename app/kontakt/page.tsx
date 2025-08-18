@@ -42,34 +42,34 @@ interface Employee {
 
 // --- SUB-KOMPONENTY ---
 const TeamMemberCard = ({ member }: { member: Employee }) => (
-  <Card className="group flex flex-col h-full bg-white text-center transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border border-slate-200/80">
+  <Card className="group flex flex-col h-full bg-white text-center transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border border-slate-200/80 hover:border-blue-300">
     <CardHeader className="flex-shrink-0">
-      <div className="relative w-full max-w-[220px] mx-auto overflow-hidden aspect-[1/1] rounded-full">
+      <div className="relative w-full max-w-[160px] sm:max-w-[200px] md:max-w-[220px] mx-auto overflow-hidden aspect-[1/1] rounded-full group-hover:scale-105 transition-transform duration-500">
         <Image 
           src={member.image?.asset?.url || "/images/tym-sfera.webp"} 
           alt={member.name} 
           fill 
-          className="object-cover" 
+          className="object-cover group-hover:scale-110 transition-transform duration-700" 
         />
       </div>
     </CardHeader>
-    <CardContent className="flex flex-col flex-grow p-6 pt-2">
-      <CardTitle className="text-xl text-slate-800">{member.name}</CardTitle>
-      <CardDescription className="text-blue-600 font-semibold text-sm mb-4">{member.position}</CardDescription>
-      <Separator className="my-4" />
+    <CardContent className="flex flex-col flex-grow p-3 sm:p-4 md:p-6 pt-1 sm:pt-2">
+      <CardTitle className="text-lg sm:text-xl text-slate-800 group-hover:text-blue-600 transition-colors duration-300 leading-tight">{member.name}</CardTitle>
+      <CardDescription className="text-blue-600 font-semibold text-xs sm:text-sm mb-3 sm:mb-4 group-hover:text-blue-700 transition-colors duration-300">{member.position}</CardDescription>
+      <Separator className="my-3 sm:my-4 group-hover:bg-blue-300 transition-colors duration-300" />
       {member.isDirector && (
-        <div className="flex gap-2 justify-center">
+        <div className="flex gap-1.5 sm:gap-2 justify-center">
           {member.phone && (
-            <Button size="sm" asChild className="flex-1 bg-slate-800 hover:bg-slate-900">
+            <Button size="sm" asChild className="flex-1 bg-slate-800 hover:bg-slate-900 hover:scale-105 transition-all duration-300 hover:shadow-lg group/btn text-xs sm:text-sm h-8 sm:h-10">
               <Link href={`tel:${member.phone}`}>
-                <Phone className="h-4 w-4 mr-2" />Zavolat
+                <Phone className="h-3 w-3 sm:h-4 sm:w-4 mr-1.5 sm:mr-2 group-hover/btn:animate-pulse transition-all duration-300" />Zavolat
               </Link>
             </Button>
           )}
           {member.email && (
-            <Button size="sm" variant="outline" asChild className="flex-1">
+            <Button size="sm" variant="outline" asChild className="flex-1 hover:scale-105 transition-all duration-300 hover:shadow-md group/btn text-xs sm:text-sm h-8 sm:h-10">
               <Link href={`mailto:${member.email}`}>
-                <Mail className="h-4 w-4 mr-2" />Email
+                <Mail className="h-3 w-3 sm:h-4 sm:w-4 mr-1.5 sm:mr-2 group-hover/btn:animate-bounce transition-all duration-300" />Email
               </Link>
             </Button>
           )}
@@ -106,12 +106,12 @@ export default function ContactPage() {
 
   const ContactInfoCard = ({ icon, title, value, href }: { icon: React.ReactNode, title: string, value: string, href: string }) => (
     <div>
-      <Link href={href} className="group block rounded-2xl bg-white/10 p-6 backdrop-blur-md border border-white/20 hover:bg-white/20 transition-colors duration-300 h-full">
-        <div className="flex items-center gap-4">
-          <div className="flex-shrink-0 w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">{icon}</div>
+      <Link href={href} className="group block rounded-xl sm:rounded-2xl bg-white/10 p-3 sm:p-4 md:p-6 backdrop-blur-md border border-white/20 hover:bg-white/20 transition-all duration-500 h-full hover:scale-105 hover:shadow-2xl">
+        <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+          <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 group-hover:bg-white/30 transition-all duration-300">{icon}</div>
           <div>
-            <p className="text-sm font-semibold text-blue-100">{title}</p>
-            <p className="text-lg font-medium text-white">{value}</p>
+            <p className="text-xs sm:text-sm font-semibold text-blue-100 group-hover:text-white transition-colors duration-300">{title}</p>
+            <p className="text-sm sm:text-base md:text-lg font-medium text-white group-hover:text-blue-200 transition-colors duration-300 leading-tight">{value}</p>
           </div>
         </div>
       </Link>
@@ -191,7 +191,7 @@ export default function ContactPage() {
            <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-base font-semibold text-blue-600 tracking-wider uppercase">Naše působnost</h2>
             <p className="mt-4 text-4xl md:text-5xl font-extrabold tracking-tighter text-slate-900">Jsme vám nablízku</p>
-            <p className="mt-6 text-lg text-slate-600 leading-8">Naše hlavní sídlo a kanceláře najdete v Opavě a Ostravě. Působíme napříč Ostravským, Olomouckým, Zlínským a Moravskoslezským kraje.</p>
+            <p className="mt-6 text-lg text-slate-600 leading-8">Naše hlavní sídlo a kanceláře najdete v Opavě a Ostravě. Působíme napříč Ostravským, Olomouckým a Zlínským  krajem.</p>
           </div>
           <Card className="overflow-hidden shadow-2xl border-slate-200/80">
             <div className="grid lg:grid-cols-2">
@@ -216,17 +216,34 @@ export default function ContactPage() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Levá část - Text */}
             <div className="max-w-md">
-              <h2 className="text-base font-semibold text-blue-600 tracking-wider uppercase">Máte dotaz?</h2>
-              <p className="mt-4 text-4xl md:text-5xl font-extrabold tracking-tighter text-slate-900">
+              {/* Logo firmy - velké a nad nadpisem */}
+              <div className="mb-4 sm:mb-6">
+                <Image 
+                  src="/logo-sfera.svg" 
+                  alt="SFERA PRO DOMOV" 
+                  width={1600} 
+                  height={1360} 
+                  className="h-48 sm:h-64 md:h-80 lg:h-96 w-auto hover:scale-105 transition-transform duration-500 hover:drop-shadow-2xl"
+                />
+              </div>
+              <h2 className="text-sm sm:text-base font-semibold text-blue-600 tracking-wider uppercase animate-fade-in-up">Máte dotaz?</h2>
+              <p className="mt-2 sm:mt-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tighter text-slate-900 animate-fade-in-up animation-delay-200 leading-tight">
                 Pošlete nám zprávu
               </p>
-              <p className="mt-6 text-lg text-slate-600 leading-8">
+              <p className="mt-3 sm:mt-6 text-sm sm:text-base md:text-lg text-slate-600 leading-relaxed animate-fade-in-up animation-delay-400">
                 Vyplňte formulář a my se vám ozveme do 24 hodin s návrhem řešení. Konzultace je vždy nezávazná a zdarma.
               </p>
-              <div className="mt-8 space-y-4">
-                <div className="flex items-center gap-3"><CheckCircle className="h-5 w-5 text-green-500" /><span className="text-slate-700">Rychlá odpověď do 24 hodin</span></div>
-                <div className="flex items-center gap-3"><CheckCircle className="h-5 w-5 text-green-500" /><span className="text-slate-700">Nezávazná konzultace a nacenění</span></div>
-                <div className="flex items-center gap-3"><CheckCircle className="h-5 w-5 text-green-500" /><span className="text-slate-700">Profesionální a vstřícný přístup</span></div>
+              <div className="mt-6 sm:mt-8 space-y-3 sm:space-y-4 animate-fade-in-up animation-delay-600">
+                {[
+                  "Rychlá odpověď do 24 hodin",
+                  "Nezávazná konzultace a nacenění",
+                  "Profesionální a vstřícný přístup"
+                ].map((feature, index) => (
+                  <div key={index} className="flex items-center gap-2 sm:gap-3 hover:translate-x-2 transition-transform duration-300" style={{ animationDelay: `${700 + index * 100}ms` }}>
+                    <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 animate-pulse hover:animate-bounce transition-all duration-300 flex-shrink-0" />
+                    <span className="text-xs sm:text-sm md:text-base text-slate-700 hover:text-slate-900 transition-colors duration-300 leading-relaxed">{feature}</span>
+                  </div>
+                ))}
               </div>
             </div>
             

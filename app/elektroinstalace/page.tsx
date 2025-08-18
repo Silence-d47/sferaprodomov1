@@ -93,8 +93,8 @@ export default async function ElektroinstalacePage() {
       <div className="bg-white text-slate-800">
         <section className="relative h-[90vh] min-h-[600px] flex items-center text-white">
           <div className="absolute inset-0">
-          <Image src="/images/10.webp" alt="Profesionální elektroinstalace" fill priority className="object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-orange-900/60 to-black"></div>   
+        <Image src="/images/10.webp" alt="Profesionální elektroinstalace" fill priority className="object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-orange-900/60 to-black"></div>   
         </div>
         <div className="relative z-10 container">
             <div className="max-w-3xl">

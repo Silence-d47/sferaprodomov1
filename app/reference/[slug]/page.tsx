@@ -124,18 +124,102 @@ export default function ReferenceDetailPage() {
       {/* Project heading placed OUTSIDE the hero */}
       <section className="py-12 bg-white relative z-10">
         <div className="container">
-          <div className="max-w-4xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">{reference.title}</h2>
-            {(reference.location || reference.year || reference.category) && (
-              <div className="flex flex-wrap items-center gap-3 text-sm text-slate-600 mb-4">
-                {reference.category && <Badge className="bg-blue-50 text-blue-700 border-0">{reference.category}</Badge>}
-                {reference.location && <span>{reference.location}</span>}
-                {reference.year && <span>• {reference.year}</span>}
-              </div>
-            )}
-            {reference.description && (
-              <p className="text-slate-600 text-lg leading-relaxed">{reference.description}</p>
-            )}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+            {/* Hlavní text vlevo */}
+            <div className="lg:col-span-2">
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">{reference.title}</h2>
+              {(reference.location || reference.year || reference.category) && (
+                <div className="flex flex-wrap items-center gap-3 text-sm text-slate-600 mb-4">
+                  {reference.category && <Badge className="bg-blue-50 text-blue-700 border-0">{reference.category}</Badge>}
+                  {reference.location && <span>{reference.location}</span>}
+                  {reference.year && <span>• {reference.year}</span>}
+                </div>
+              )}
+              {reference.description && (
+                <p className="text-slate-600 text-lg leading-relaxed">{reference.description}</p>
+              )}
+            </div>
+            
+                         {/* Miniatury fotek z projektu vpravo */}
+             <div className="lg:col-span-1 space-y-4">
+               {reference.gallery && reference.gallery.length > 0 ? (
+                 <>
+                   {/* První řada - 2 miniatury */}
+                   <div className="grid grid-cols-2 gap-3">
+                     <div className="relative overflow-hidden rounded-lg aspect-square shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 border border-gray-200">
+                       <Image 
+                         src={reference.gallery[0] || "/placeholder.svg"} 
+                         alt={`${reference.title} - náhled 1`} 
+                         fill 
+                         className="object-cover" 
+                       />
+                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
+                     </div>
+                     
+                     {reference.gallery[1] && (
+                       <div className="relative overflow-hidden rounded-lg aspect-square shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 border border-gray-200">
+                         <Image 
+                           src={reference.gallery[1]} 
+                           alt={`${reference.title} - náhled 2`} 
+                           fill 
+                           className="object-cover" 
+                         />
+                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
+                       </div>
+                     )}
+                   </div>
+                   
+                                       {/* Druhá řada - 3 miniatury pod sebou */}
+                    {reference.gallery.length > 2 && (
+                      <div className="grid grid-cols-1 gap-2">
+                        {reference.gallery.slice(2, 5).map((image, index) => (
+                          <div key={index} className="relative overflow-hidden rounded-lg aspect-[3/2] shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 border border-gray-200">
+                            <Image 
+                              src={image} 
+                              alt={`${reference.title} - náhled ${index + 3}`} 
+                              fill 
+                              className="object-cover" 
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                 </>
+               ) : (
+                 /* Fallback - dekorativní miniatury pokud nejsou fotky */
+                 <div className="space-y-4">
+                   <div className="grid grid-cols-2 gap-3">
+                     <div className="relative overflow-hidden rounded-lg aspect-square bg-gradient-to-br from-blue-100 to-cyan-100 border border-blue-200 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
+                       <div className="absolute inset-0 bg-gradient-to-br from-blue-200/50 to-transparent" />
+                       <div className="absolute inset-0 flex items-center justify-center">
+                         <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                           <Star className="h-4 w-4 text-white" />
+                         </div>
+                       </div>
+                     </div>
+                     
+                     <div className="relative overflow-hidden rounded-lg aspect-square bg-gradient-to-br from-green-100 to-emerald-100 border border-green-200 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
+                       <div className="absolute inset-0 bg-gradient-to-br from-green-200/50 to-transparent" />
+                       <div className="absolute inset-0 flex items-center justify-center">
+                         <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                           <CheckCircle className="h-4 w-4 text-white" />
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                   
+                   <div className="relative overflow-hidden rounded-lg aspect-[4/3] bg-gradient-to-br from-orange-100 to-amber-100 border border-orange-200 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
+                     <div className="absolute inset-0 bg-gradient-to-br from-orange-200/50 to-transparent" />
+                     <div className="absolute inset-0 flex items-center justify-center">
+                       <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
+                         <Award className="h-5 w-5 text-white" />
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+               )}
+             </div>
           </div>
         </div>
       </section>

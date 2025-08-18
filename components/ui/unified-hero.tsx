@@ -22,7 +22,6 @@ interface UnifiedHeroProps {
 
 export function UnifiedHero({ slides }: UnifiedHeroProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [parallaxOffset, setParallaxOffset] = useState(0);
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
 
   const startAutoPlay = () => {
@@ -49,18 +48,6 @@ export function UnifiedHero({ slides }: UnifiedHeroProps) {
     return () => stopAutoPlay();
   }, [slides?.length]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      // Jemný parallax; na mobilech výrazně omezený
-      const isSmallScreen = window.innerWidth < 768;
-      const maxOffset = isSmallScreen ? 12 : window.innerHeight * 0.08;
-      const rawOffset = window.scrollY * (isSmallScreen ? 0.08 : 0.18);
-      setParallaxOffset(Math.min(rawOffset, maxOffset));
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
     <section className="relative min-h-[100svh] md:h-screen min-h-[540px] overflow-hidden">
       {/* Kontejner pro posuvná pozadí */}
@@ -74,8 +61,8 @@ export function UnifiedHero({ slides }: UnifiedHeroProps) {
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
-              // Kombinovaný posun pro slideshow i paralax efekt
-              transform: `translateX(${(index - currentSlide) * 100}%) translateY(${parallaxOffset}px)`,
+              // Pouze posun pro slideshow bez paralax efektu
+              transform: `translateX(${(index - currentSlide) * 100}%)`,
             }}
           >
             {/* Gradient overlay */}
@@ -104,56 +91,56 @@ export function UnifiedHero({ slides }: UnifiedHeroProps) {
                     }}
                   >
                     {/* Samotný obsah jednoho slidu */}
-                    <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-500/25 to-blue-500/25 backdrop-blur-md rounded-full px-3 py-1.5 md:px-4 md:py-2 mb-6 border border-white/20 mx-auto mt-2 sm:mt-4">
-                      <Shield className="w-4 h-4 text-orange-300" />
-                      <span className="text-white/90 font-medium">Garance kvality a spolehlivosti</span>
+                    <div className="inline-flex items-center space-x-1.5 sm:space-x-2 bg-gradient-to-r from-orange-500/25 to-blue-500/25 backdrop-blur-md rounded-full px-2 py-1 sm:px-3 sm:py-1.5 md:px-4 md:py-2 mb-4 sm:mb-6 border border-white/20 mx-auto mt-2 sm:mt-4 hover:scale-105 transition-transform duration-300 hover:shadow-lg">
+                      <Shield className="w-3 h-3 sm:w-4 sm:h-4 text-orange-300 animate-pulse hover:animate-bounce transition-all duration-300" />
+                      <span className="text-white/90 font-medium text-xs sm:text-sm">Garance kvality a spolehlivosti</span>
                     </div>
 
-                    <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
-                      <h1 className="text-[28px] sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight">
+                    <div className="space-y-2 sm:space-y-3 md:space-y-4 mb-4 sm:mb-6 md:mb-8">
+                      <h1 className="text-[24px] sm:text-[28px] md:text-4xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight tracking-tight hover:scale-105 transition-transform duration-500">
                         {slideData.title}
                       </h1>
                       {slideData.subtitle && (
-                        <p className="text-base sm:text-lg md:text-2xl lg:text-3xl text-blue-100 font-light leading-relaxed">
+                        <p className="text-sm sm:text-base md:text-lg lg:text-2xl xl:text-3xl text-blue-100 font-light leading-relaxed hover:text-white transition-colors duration-300">
                           {slideData.subtitle}
                         </p>
                       )}
                     </div>
 
                     {slideData.description && (
-                      <p className="text-base md:text-xl text-white/80 leading-relaxed mb-6 md:mb-10 max-w-2xl mx-auto px-3">
+                      <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/80 leading-relaxed mb-4 sm:mb-6 md:mb-10 max-w-sm sm:max-w-2xl mx-auto px-2 sm:px-3 hover:text-white/90 transition-colors duration-300">
                         {slideData.description}
                       </p>
                     )}
 
-                    <div className="flex flex-wrap justify-center gap-2 md:gap-4 mb-8 md:mb-12">
+                    <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2 md:gap-4 mb-6 sm:mb-8 md:mb-12">
                       {(slideData.features || []).map((feature, idx) => (
-                        <div key={idx} className="bg-white/10 backdrop-blur-md rounded-full px-3 md:px-6 py-2 md:py-3 border border-white/20 hover:bg-white/15 transition-all duration-300">
-                          <span className="text-white font-medium text-xs md:text-base">{feature}</span>
+                        <div key={idx} className="bg-white/10 backdrop-blur-md rounded-full px-2 py-1.5 sm:px-3 sm:py-2 md:px-6 md:py-3 border border-white/20 hover:bg-white/15 hover:scale-110 hover:shadow-lg transition-all duration-300 cursor-pointer">
+                          <span className="text-white font-medium text-xs sm:text-sm md:text-base leading-tight">{feature}</span>
                         </div>
                       ))}
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center max-w-lg mx-auto px-2">
-                      <Button asChild size="lg" className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 md:py-4 px-6 md:px-8 rounded-xl md:rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] border-0">
-                        <Link href="/kontakt" className="flex items-center justify-center space-x-2 md:space-x-3">
-                          <Calculator className="w-4 md:w-5 h-4 md:h-5" />
-                          <span className="text-sm md:text-base">Nezávazná nabídka</span>
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4 justify-center max-w-sm sm:max-w-lg mx-auto px-2">
+                      <Button asChild size="lg" className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-2.5 sm:py-3 md:py-4 px-4 sm:px-6 md:px-8 rounded-lg sm:rounded-xl md:rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] border-0 hover:animate-pulse text-sm sm:text-base h-10 sm:h-12 md:h-14">
+                        <Link href="/kontakt" className="flex items-center justify-center space-x-1.5 sm:space-x-2 md:space-x-3">
+                          <Calculator className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 animate-bounce" />
+                          <span className="text-xs sm:text-sm md:text-base">Nezávazná nabídka</span>
                         </Link>
                       </Button>
-                      <Button asChild size="lg" className="flex-1 bg-white/15 hover:bg-white/25 text-white font-bold py-3 md:py-4 px-6 md:px-8 rounded-xl md:rounded-2xl border border-white/30 hover:border-white/40 transition-all duration-300 backdrop-blur-md hover:scale-[1.02]">
-                        <Link href={`tel:${slideData.phoneNumber || '+420735014112'}`} className="flex items-center justify-center space-x-2 md:space-x-3">
-                          <Phone className="w-4 md:w-5 h-4 md:h-5" />
-                          <span className="text-sm md:text-base">Zavolejte nám</span>
+                      <Button asChild size="lg" className="flex-1 bg-white/15 hover:bg-white/25 text-white font-bold py-2.5 sm:py-3 md:py-4 px-4 sm:px-6 md:px-8 rounded-lg sm:rounded-xl md:rounded-2xl border border-white/30 hover:border-white/40 transition-all duration-300 backdrop-blur-md hover:scale-[1.02] hover:shadow-lg text-sm sm:text-base h-10 sm:h-12 md:h-14">
+                        <Link href={`tel:${slideData.phoneNumber || '+420735014112'}`} className="flex items-center justify-center space-x-1.5 sm:space-x-2 md:space-x-3">
+                          <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 animate-pulse" />
+                          <span className="text-xs sm:text-sm md:text-base">Zavolejte nám</span>
                         </Link>
                       </Button>
                     </div>
                     
-                    <div className="mt-6 md:mt-8 pt-4 md:pt-6 border-t border-white/10">
-                      <p className="text-white/60 text-xs md:text-sm mb-2">Nebo nám zavolejte přímo:</p>
+                    <div className="mt-4 sm:mt-6 md:mt-8 pt-3 sm:pt-4 md:pt-6 border-t border-white/10">
+                      <p className="text-white/60 text-xs sm:text-sm mb-1.5 sm:mb-2">Nebo nám zavolejte přímo:</p>
                       <a 
                         href={`tel:${slideData.phoneNumber || '+420735014112'}`} 
-                        className="text-lg md:text-2xl font-bold text-white hover:text-orange-300 transition-colors duration-300"
+                        className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white hover:text-orange-300 transition-colors duration-300 hover:scale-105 inline-block"
                       >
                         {slideData.phoneNumber || '+420 735 014 112'}
                       </a>

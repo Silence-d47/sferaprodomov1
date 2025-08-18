@@ -97,7 +97,7 @@ export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-3 md:p-4">
       {/* Backdrop s rozmazaným pozadím */}
       <div 
         className={`absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300 ${
@@ -106,117 +106,117 @@ export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
         onClick={onClose} 
       />
       
-      {/* Popup */}
-      <div className={`relative bg-white rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-sm sm:max-w-md lg:max-w-2xl mx-2 sm:mx-4 max-h-[90dvh] sm:max-h-[85vh] overflow-y-auto overscroll-contain transition-all duration-500 transform ${
+      {/* Popup - optimalizovaný pro mobilní zařízení */}
+      <div className={`relative bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-[95vw] sm:max-w-sm md:max-w-md mx-2 sm:mx-4 max-h-[90vh] sm:max-h-[85vh] overflow-hidden transition-all duration-500 transform ${
         isVisible ? 'scale-100 opacity-100 translate-y-0' : 'scale-95 opacity-0 translate-y-4'
       }`}>
         {/* Zavírací tlačítko */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 sm:top-6 sm:right-6 z-10 p-2 hover:bg-slate-100 rounded-full transition-colors group"
+          className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 p-1.5 sm:p-2 hover:bg-slate-100 rounded-full transition-all duration-300 group hover:scale-110 hover:rotate-90"
         >
-          <X className="h-5 w-5 sm:h-6 sm:w-6 text-slate-600 group-hover:text-slate-800" />
+          <X className="h-4 w-4 sm:h-5 sm:w-5 text-slate-600 group-hover:text-slate-800 transition-colors" />
         </button>
 
-        {/* Obsah popupu */}
-        <div className="p-4 sm:p-6 lg:p-8">
-          {/* Malý obrázek nahoře - proužek */}
-          <div className="text-center mb-6 sm:mb-8">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full mx-auto mb-4 sm:mb-6 flex items-center justify-center shadow-lg">
-              <Award className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-white" />
+        {/* Obsah popupu - optimalizovaný pro mobilní zařízení */}
+        <div className="p-3 sm:p-4 md:p-6">
+          {/* Malý obrázek nahoře */}
+          <div className="text-center mb-3 sm:mb-4">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full mx-auto mb-2 sm:mb-3 flex items-center justify-center shadow-lg animate-pulse hover:animate-bounce transition-all duration-300 hover:scale-110 hover:shadow-xl">
+              <Award className="h-6 w-6 sm:h-8 sm:w-8 text-white animate-pulse" />
             </div>
           </div>
 
-          {/* Hlavní nadpis */}
-          <div className="text-center mb-6 sm:mb-8">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-800 mb-3 sm:mb-4">
+          {/* Hlavní nadpis - optimalizovaný pro mobilní zařízení */}
+          <div className="text-center mb-3 sm:mb-4">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-800 mb-1 sm:mb-2 animate-fade-in-up leading-tight">
               Nechte si poradit od profíků a získejte 5% slevu
             </h2>
-            <p className="text-base sm:text-lg text-slate-600 max-w-xl mx-auto">
+            <p className="text-xs sm:text-sm md:text-base text-slate-600 max-w-xs sm:max-w-sm mx-auto animate-fade-in-up animation-delay-200 leading-relaxed">
               Nechte si od nás nezávazně a zdarma navrhnout ideální řešení pro vaši domácnost.
             </p>
           </div>
 
-          {/* Klíčové výhody - odrážky */}
-          <div className="mb-6 sm:mb-8">
-            <div className="space-y-2 sm:space-y-3">
-              <div className="flex items-start gap-2 sm:gap-3">
-                <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                <span className="text-sm sm:text-base text-slate-700">Nezávazná konzultace a nacenění zdarma</span>
-              </div>
-              <div className="flex items-start gap-2 sm:gap-3">
-                <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                <span className="text-sm sm:text-base text-slate-700">Návrhneme vám řešení na míru </span>
-              </div>
-              <div className="flex items-start gap-2 sm:gap-3">
-                <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                <span className="text-sm sm:text-base text-slate-700">Garance 5% slevy na finální realizaci</span>
-              </div>
+          {/* Klíčové výhody - optimalizované pro mobilní zařízení */}
+          <div className="mb-3 sm:mb-4">
+            <div className="space-y-1.5 sm:space-y-2">
+              {[
+                "Nezávazná konzultace a nacenění zdarma",
+                "Návrhneme vám řešení na míru",
+                "Garance 5% slevy na finální realizaci"
+              ].map((feature, index) => (
+                <div key={index} className="flex items-start gap-1.5 sm:gap-2 animate-fade-in-left" style={{ animationDelay: `${300 + index * 100}ms` }}>
+                  <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-green-500 mt-0.5 flex-shrink-0 animate-bounce" style={{ animationDelay: `${400 + index * 100}ms` }} />
+                  <span className="text-xs sm:text-sm text-slate-700 leading-relaxed">{feature}</span>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Formulář - pro ukládání leadů */}
-          <div className="bg-slate-50/70 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-slate-200">
-            <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
-            <div className="space-y-2">
-        <Select name="service">
-          <SelectTrigger><SelectValue placeholder="Vyberte službu" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="klimatizace">Klimatizace</SelectItem>
-            <SelectItem value="tepelna-cerpadla">Tepelná čerpadla</SelectItem>
-            <SelectItem value="rekuperace">Rekuperace</SelectItem>
-            <SelectItem value="elektroinstalace">Elektroinstalace</SelectItem>
-            <SelectItem value="fotovoltaika">Fotovoltaika</SelectItem>
-            <SelectItem value="servis">Servis a revize</SelectItem>
-            <SelectItem value="jine">Jiný dotaz</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-              <div className="relative">
+          {/* Formulář - optimalizovaný pro mobilní zařízení */}
+          <div className="bg-slate-50/70 rounded-lg sm:rounded-xl p-3 sm:p-4 border border-slate-200 animate-fade-in-up animation-delay-500">
+            <form onSubmit={handleSubmit} className="space-y-2.5 sm:space-y-3">
+              <div className="space-y-2 animate-fade-in-up animation-delay-600">
+                <Select name="service">
+                  <SelectTrigger className="h-9 sm:h-10 text-xs sm:text-sm hover:scale-105 transition-transform duration-200">
+                    <SelectValue placeholder="Vyberte službu" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="klimatizace">Klimatizace</SelectItem>
+                    <SelectItem value="tepelna-cerpadla">Tepelná čerpadla</SelectItem>
+                    <SelectItem value="rekuperace">Rekuperace</SelectItem>
+                    <SelectItem value="elektroinstalace">Elektroinstalace</SelectItem>
+                    <SelectItem value="fotovoltaika">Fotovoltaika</SelectItem>
+                    <SelectItem value="servis">Servis a revize</SelectItem>
+                    <SelectItem value="jine">Jiný dotaz</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="relative animate-fade-in-up animation-delay-700 group">
                 <Input
                   name="email"
                   type="email"
                   placeholder="Váš email*"
                   required
-                  className="h-10 sm:h-12 text-sm sm:text-base bg-white border-slate-200 focus:border-blue-500 focus:ring-blue-500/50"
+                  className="h-9 sm:h-10 text-xs sm:text-sm bg-white border-slate-200 focus:border-blue-500 focus:ring-blue-500/50 transition-all duration-300 group-hover:scale-105 group-hover:shadow-md"
                 />
-                <Mail className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <Mail className="absolute right-2.5 sm:right-3 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-400 group-hover:text-blue-500 transition-colors duration-300" />
               </div>
               
-              <div className="relative">
+              <div className="relative animate-fade-in-up animation-delay-800 group">
                 <Input
                   name="phone"
                   type="tel"
                   placeholder="Telefon*"
                   required
-                  className="h-10 sm:h-12 text-sm sm:text-base bg-white border-slate-200 focus:border-blue-500 focus:ring-blue-500/50 "
+                  className="h-9 sm:h-10 text-xs sm:text-sm bg-white border-slate-200 focus:border-blue-500 focus:ring-blue-500/50 transition-all duration-300 group-hover:scale-105 group-hover:shadow-md"
                 />
-                <Phone className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <Phone className="absolute right-2.5 sm:right-3 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-400 group-hover:text-blue-500 transition-colors duration-300" />
               </div>
               
-              <div className="relative">
+              <div className="relative animate-fade-in-up animation-delay-900 group">
                 <Input
                   name="zipCode"
                   placeholder="PSČ (pro ověření lokality)*"
                   required
-                  className="h-10 sm:h-12 text-sm sm:text-base bg-white border-slate-200 focus:border-blue-500 focus:ring-blue-500/50"
+                  className="h-9 sm:h-10 text-xs sm:text-sm bg-white border-slate-200 focus:border-blue-500 focus:ring-blue-500/50 transition-all duration-300 group-hover:scale-105 group-hover:shadow-md"
                 />
-                <MapPin className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <MapPin className="absolute right-2.5 sm:right-3 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-400 group-hover:text-blue-500 transition-colors duration-300" />
               </div>
 
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 sm:py-4 rounded-lg sm:rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-base sm:text-lg h-12 sm:h-14"
+                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-2.5 sm:py-3 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-sm sm:text-base h-10 sm:h-12 animate-fade-in-up animation-delay-1000 hover:animate-pulse"
               >
                 {isSubmitting ? (
                   <>
-                    <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-b-2 border-white mr-2 sm:mr-3" />
+                    <div className="animate-spin rounded-full h-3 w-3 sm:h-4 sm:w-4 border-b-2 border-white mr-1.5 sm:mr-2" />
                     Odesílám...
                   </>
                 ) : (
                   <>
-                    <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                    <MessageSquare className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5 sm:mr-2 animate-bounce" />
                     Chci konzultaci a slevu
                   </>
                 )}
