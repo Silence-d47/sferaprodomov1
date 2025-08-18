@@ -33,8 +33,8 @@ export function TopBar() {
           {/* Otevírací doba - doleva */}
           <div className="flex items-center space-x-1">
             <Clock className="w-3 md:w-4 h-3 md:h-4" />
-            <span className="hidden lg:inline text-xs md:text-sm font-medium">| Pondělí - Pátek 08:00 - 20:00</span>
-            <span className="lg:hidden text-xs md:text-sm font-medium">Po-Pá 8-20</span>
+            <span className="hidden lg:inline text-xs md:text-sm font-medium">| Pondělí - Neděle 08:00 - 20:00</span>
+            <span className="lg:hidden text-xs md:text-sm font-medium">Po-Ne 8-20</span>
           </div>
           
           {/* Contact Info */}

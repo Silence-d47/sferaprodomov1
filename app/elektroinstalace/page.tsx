@@ -397,7 +397,7 @@ export default async function ElektroinstalacePage() {
                 <span className="block text-white/90 font-normal"></span>
               </h2>
               <p className="text-xl text-slate-200/90 max-w-3xl mx-auto leading-relaxed">
-                Tým našich proškolených a certifikovaných techniků je připraven řešit vaše požadavky ve všední dny od 8:00 do 20:00.  
+                Tým našich proškolených a certifikovaných techniků je připraven řešit vaše požadavky od pondělí do neděle od 8:00 do 20:00.  
                 <br />
                 <span className="font-bold text-white">
                    &nbsp;ELEKTROPOHOTOVOST - OPAVA A OKOLÍ 25 km.
@@ -423,7 +423,7 @@ export default async function ElektroinstalacePage() {
                                   <div className="text-slate-200 font-bold text-2xl mb-2">+420 735 014 112</div>
                 <div className="text-slate-200/80 text-sm">Hlavní linka</div>
                 <div className="text-green-900 text-sm font-medium mt-2">✓ Elektropohotovost Opava</div>
-                <div className="text-green-900 text-sm font-medium">✓ Oprava do 72 hodin</div>
+                <div className="text-green-900 text-sm font-medium">✓ Oprava do 24 hodin</div>
                 </div>
 
                 {/* Working hours */}
