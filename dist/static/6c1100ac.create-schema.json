@@ -1,0 +1,2209 @@
+[
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Název"
+      },
+      {
+        "options": {
+          "source": "title",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "slug",
+        "type": "slug",
+        "title": "slug"
+      },
+      {
+        "to": [
+          {
+            "type": "author"
+          }
+        ],
+        "name": "author",
+        "type": "reference",
+        "title": "Uživatel"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "mainImage",
+        "type": "image",
+        "title": "Obrázek"
+      },
+      {
+        "of": [
+          {
+            "to": [
+              {
+                "type": "category"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to kategorie"
+          }
+        ],
+        "name": "categories",
+        "type": "array",
+        "title": "Kategorie (pokud existuje)"
+      },
+      {
+        "name": "publishedAt",
+        "type": "datetime",
+        "title": "Datum publikace"
+      },
+      {
+        "rows": 4,
+        "name": "excerpt",
+        "type": "text",
+        "title": "Úvod"
+      },
+      {
+        "name": "body",
+        "type": "blockContent",
+        "title": "Text"
+      },
+      {
+        "initialValue": 5,
+        "name": "readingTime",
+        "type": "number",
+        "title": "Přečteno za (minut) - automatické"
+      },
+      {
+        "initialValue": false,
+        "name": "featured",
+        "type": "boolean",
+        "title": "Zobrazit jako nejnovější články"
+      },
+      {
+        "fields": [
+          {
+            "name": "metaTitle",
+            "type": "string",
+            "title": "Meta nadpis (pokud existuje)"
+          },
+          {
+            "rows": 3,
+            "name": "metaDescription",
+            "type": "text",
+            "title": "Meta popis (pokud existuje)"
+          }
+        ],
+        "name": "seo",
+        "type": "object",
+        "title": "SEO"
+      }
+    ],
+    "name": "post",
+    "type": "document",
+    "title": "Článek"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "name",
+        "type": "string",
+        "title": "Jméno"
+      },
+      {
+        "options": {
+          "source": "name",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "slug",
+        "type": "slug",
+        "title": "slug"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "image",
+        "type": "image",
+        "title": "Nahrajte profilový obrázek"
+      },
+      {
+        "of": [
+          {
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ],
+                          "level": "error"
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Strong"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                },
+                {
+                  "value": "code",
+                  "title": "Code"
+                },
+                {
+                  "value": "underline",
+                  "title": "Underline"
+                },
+                {
+                  "value": "strike-through",
+                  "title": "Strike"
+                }
+              ]
+            },
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              }
+            ],
+            "of": [],
+            "type": "block"
+          }
+        ],
+        "name": "bio",
+        "type": "array",
+        "title": "Něco o mně"
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "title": "Zaměření"
+      },
+      {
+        "name": "email",
+        "type": "string",
+        "title": "Emailová adresa"
+      }
+    ],
+    "name": "author",
+    "type": "document",
+    "title": "Karta uživatele"
+  },
+  {
+    "fields": [
+      {
+        "name": "title",
+        "type": "string",
+        "title": "Název"
+      },
+      {
+        "options": {
+          "source": "title",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "slug",
+        "type": "slug",
+        "title": "slug"
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "title": "Popis"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Modrá",
+              "value": "blue"
+            },
+            {
+              "title": "Zelená",
+              "value": "green"
+            },
+            {
+              "title": "Fialová",
+              "value": "purple"
+            },
+            {
+              "title": "Oranžová",
+              "value": "orange"
+            },
+            {
+              "title": "Červená",
+              "value": "red"
+            },
+            {
+              "title": "Žlutá",
+              "value": "yellow"
+            }
+          ]
+        },
+        "name": "color",
+        "type": "string",
+        "title": "Barva"
+      }
+    ],
+    "name": "category",
+    "type": "document",
+    "title": "Kategorie"
+  },
+  {
+    "of": [
+      {
+        "marks": {
+          "annotations": [
+            {
+              "fields": [
+                {
+                  "validation": [
+                    {
+                      "rules": [
+                        {
+                          "flag": "uri",
+                          "constraint": {
+                            "options": {
+                              "scheme": [
+                                "/^http$/",
+                                "/^https$/"
+                              ],
+                              "allowRelative": false,
+                              "relativeOnly": false,
+                              "allowCredentials": false
+                            }
+                          }
+                        }
+                      ],
+                      "level": "error"
+                    }
+                  ],
+                  "name": "href",
+                  "type": "url",
+                  "title": "Odkaz"
+                }
+              ],
+              "name": "link",
+              "type": "object",
+              "title": "Odkaz"
+            }
+          ],
+          "decorators": [
+            {
+              "value": "strong",
+              "title": "Tučný"
+            },
+            {
+              "value": "em",
+              "title": "Kurzíva"
+            }
+          ]
+        },
+        "lists": [
+          {
+            "value": "bullet",
+            "title": "Seznam"
+          }
+        ],
+        "styles": [
+          {
+            "value": "normal",
+            "title": "Normal"
+          },
+          {
+            "value": "h1",
+            "title": "H1"
+          },
+          {
+            "value": "h2",
+            "title": "H2"
+          },
+          {
+            "value": "h3",
+            "title": "H3"
+          },
+          {
+            "value": "h4",
+            "title": "H4"
+          },
+          {
+            "value": "blockquote",
+            "title": "Citace"
+          }
+        ],
+        "of": [],
+        "type": "block",
+        "title": "Blok"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "type": "image"
+      }
+    ],
+    "name": "blockContent",
+    "type": "array",
+    "title": "Text"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Název"
+      },
+      {
+        "options": {
+          "source": "title",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "slug",
+        "type": "slug",
+        "title": "slug"
+      },
+      {
+        "rows": 4,
+        "name": "description",
+        "type": "text",
+        "title": "Popis"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "image",
+        "type": "image",
+        "title": "Obrázek"
+      },
+      {
+        "to": [
+          {
+            "type": "category"
+          }
+        ],
+        "name": "category",
+        "type": "reference",
+        "title": "Kategorie (pokud existuje)"
+      },
+      {
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "features",
+        "type": "array",
+        "title": "Funkce"
+      },
+      {
+        "initialValue": false,
+        "name": "isRecommended",
+        "type": "boolean",
+        "title": "Zobrazit jako doporučený produkt"
+      },
+      {
+        "initialValue": false,
+        "name": "isBestSelling",
+        "type": "boolean",
+        "title": "Zobrazit jako nejprodávanější produkt"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Legacy field - use files array instead",
+        "name": "catalogUrl",
+        "type": "url",
+        "title": "odkaz (URL) pro katalog k produktu (pokud existuje)"
+      },
+      {
+        "description": "Datové listy, katalog, manuál a další soubory, které patří k danému produktu",
+        "of": [
+          {
+            "to": [
+              {
+                "type": "fileAsset"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to file asset"
+          }
+        ],
+        "name": "files",
+        "type": "array",
+        "title": "Soubory k produktu (pokud existují)"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "A+++",
+              "value": "A+++"
+            },
+            {
+              "title": "A++",
+              "value": "A++"
+            },
+            {
+              "title": "A+",
+              "value": "A+"
+            },
+            {
+              "title": "A",
+              "value": "A"
+            },
+            {
+              "title": "B",
+              "value": "B"
+            },
+            {
+              "title": "C",
+              "value": "C"
+            }
+          ]
+        },
+        "name": "energyClass",
+        "type": "string",
+        "title": "Energická třída"
+      },
+      {
+        "fields": [
+          {
+            "description": "Rozsah výkonu v kilowattech (např. od 2 do 5 kW)",
+            "fields": [
+              {
+                "name": "min",
+                "type": "number",
+                "title": "Od (kW)"
+              },
+              {
+                "name": "max",
+                "type": "number",
+                "title": "Do (kW)"
+              }
+            ],
+            "name": "powerRange",
+            "type": "object",
+            "title": "Výkon (kW)"
+          },
+          {
+            "description": "Rozsah chladicího výkonu v kilowattech",
+            "fields": [
+              {
+                "name": "min",
+                "type": "number",
+                "title": "Od (kW)"
+              },
+              {
+                "name": "max",
+                "type": "number",
+                "title": "Do (kW)"
+              }
+            ],
+            "name": "coolingCapacityRange",
+            "type": "object",
+            "title": "Chladicí výkon (kW)"
+          },
+          {
+            "description": "Rozsah topného výkonu v kilowattech",
+            "fields": [
+              {
+                "name": "min",
+                "type": "number",
+                "title": "Od (kW)"
+              },
+              {
+                "name": "max",
+                "type": "number",
+                "title": "Do (kW)"
+              }
+            ],
+            "name": "heatingCapacityRange",
+            "type": "object",
+            "title": "Topný výkon (kW)"
+          },
+          {
+            "name": "noiseLevel",
+            "type": "number",
+            "title": "Hladina hluku (dB)"
+          }
+        ],
+        "name": "specifications",
+        "type": "object",
+        "title": "Technické specifikace"
+      },
+      {
+        "fields": [
+          {
+            "name": "basePrice",
+            "type": "number",
+            "title": "Základní cena (Kč)"
+          },
+          {
+            "name": "installationPrice",
+            "type": "number",
+            "title": "Cena za práci a instalaci (Kč)"
+          },
+          {
+            "initialValue": false,
+            "name": "showPrice",
+            "type": "boolean",
+            "title": "Zobrazit cenu na stránce"
+          }
+        ],
+        "name": "price",
+        "type": "object",
+        "title": "Informace o ceně"
+      },
+      {
+        "initialValue": 2,
+        "name": "warranty",
+        "type": "number",
+        "title": "Záruka (roky)"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "to": [
+          {
+            "type": "brand"
+          }
+        ],
+        "name": "brand",
+        "type": "reference",
+        "title": "Značka"
+      },
+      {
+        "fields": [
+          {
+            "name": "metaTitle",
+            "type": "string",
+            "title": "Meta nadpis (pokud existuje)"
+          },
+          {
+            "rows": 3,
+            "name": "metaDescription",
+            "type": "text",
+            "title": "Meta popis (pokud existuje)"
+          }
+        ],
+        "name": "seo",
+        "type": "object",
+        "title": "SEO"
+      }
+    ],
+    "name": "product",
+    "type": "document",
+    "title": "Produkt"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Název"
+      },
+      {
+        "options": {
+          "source": "title",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "slug",
+        "type": "slug",
+        "title": "slug"
+      },
+      {
+        "rows": 4,
+        "name": "description",
+        "type": "text",
+        "title": "Popis"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "image",
+        "type": "image",
+        "title": "Obrázek"
+      },
+      {
+        "of": [
+          {
+            "options": {
+              "hotspot": true
+            },
+            "type": "image"
+          }
+        ],
+        "name": "gallery",
+        "type": "array",
+        "title": "Galerie (pokud existuje)"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Klimatizace",
+              "value": "klimatizace"
+            },
+            {
+              "title": "Tepelná čerpadla",
+              "value": "tepelna-cerpadla"
+            },
+            {
+              "title": "Rekuperace",
+              "value": "rekuperace"
+            },
+            {
+              "title": "Elektroinstalace",
+              "value": "elektroinstalace"
+            },
+            {
+              "title": "Fotovoltaika",
+              "value": "fotovoltaika"
+            },
+            {
+              "title": "Komerční",
+              "value": "komercni"
+            }
+          ]
+        },
+        "name": "category",
+        "type": "string",
+        "title": "Kategorie (pokud existuje)"
+      },
+      {
+        "name": "location",
+        "type": "string",
+        "title": "Místo (pokud existuje)"
+      },
+      {
+        "name": "year",
+        "type": "string",
+        "title": "Rok dokončení (pokud existuje)"
+      },
+      {
+        "initialValue": 5,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 5
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "rating",
+        "type": "number",
+        "title": "Hodnocení"
+      },
+      {
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "highlights",
+        "type": "array",
+        "title": "Hlavní body projektu"
+      },
+      {
+        "name": "savings",
+        "type": "string",
+        "title": "Výhody / Úspora"
+      },
+      {
+        "initialValue": false,
+        "name": "isFeatured",
+        "type": "boolean",
+        "title": "Zobrazit jako referenci"
+      },
+      {
+        "initialValue": false,
+        "name": "isTopReference",
+        "type": "boolean",
+        "title": "Zobrazit jako top reference"
+      },
+      {
+        "fields": [
+          {
+            "options": {
+              "list": [
+                {
+                  "title": "Soukromý",
+                  "value": "residential"
+                },
+                {
+                  "title": "Komerční",
+                  "value": "commercial"
+                },
+                {
+                  "title": "Průmyslový",
+                  "value": "industrial"
+                }
+              ]
+            },
+            "name": "clientType",
+            "type": "string",
+            "title": "Typ zákazníka"
+          },
+          {
+            "name": "projectSize",
+            "type": "number",
+            "title": "Rozsah projektu (m²)"
+          },
+          {
+            "name": "duration",
+            "type": "number",
+            "title": "Doba trvání prací (dny)"
+          },
+          {
+            "name": "teamSize",
+            "type": "number",
+            "title": "Počet členů týmu"
+          }
+        ],
+        "name": "projectDetails",
+        "type": "object",
+        "title": "Detaily projektu"
+      },
+      {
+        "fields": [
+          {
+            "rows": 4,
+            "name": "quote",
+            "type": "text",
+            "title": "Citace"
+          },
+          {
+            "name": "clientName",
+            "type": "string",
+            "title": "Jméno zákazníka"
+          },
+          {
+            "name": "clientTitle",
+            "type": "string",
+            "title": "Pozice zákazníka"
+          }
+        ],
+        "name": "testimonial",
+        "type": "object",
+        "title": "Zákazníkova zkušenost"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "label",
+                "type": "string",
+                "title": "Označení"
+              },
+              {
+                "name": "value",
+                "type": "string",
+                "title": "Hodnota"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "technicalSpecs",
+        "type": "array",
+        "title": "Technické specifikace"
+      },
+      {
+        "fields": [
+          {
+            "options": {
+              "hotspot": true
+            },
+            "name": "before",
+            "type": "image",
+            "title": "Před"
+          },
+          {
+            "options": {
+              "hotspot": true
+            },
+            "name": "after",
+            "type": "image",
+            "title": "Po"
+          }
+        ],
+        "name": "beforeAfter",
+        "type": "object",
+        "title": "Před/Po fotky"
+      },
+      {
+        "fields": [
+          {
+            "name": "metaTitle",
+            "type": "string",
+            "title": "Meta nadpis (pokud existuje)"
+          },
+          {
+            "rows": 3,
+            "name": "metaDescription",
+            "type": "text",
+            "title": "Meta popis (pokud existuje)"
+          }
+        ],
+        "name": "seo",
+        "type": "object",
+        "title": "SEO"
+      }
+    ],
+    "name": "projectReference",
+    "type": "document",
+    "title": "Projektová reference"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Název"
+      },
+      {
+        "name": "subtitle",
+        "type": "string",
+        "title": "Podnázev"
+      },
+      {
+        "rows": 4,
+        "name": "description",
+        "type": "text",
+        "title": "Popis"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "bgImage",
+        "type": "image",
+        "title": "Obrázek na pozadí"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Intro",
+              "value": "intro"
+            },
+            {
+              "title": "Reference",
+              "value": "reference"
+            },
+            {
+              "title": "Blog",
+              "value": "blog"
+            },
+            {
+              "title": "Service",
+              "value": "service"
+            }
+          ]
+        },
+        "initialValue": "intro",
+        "name": "slideType",
+        "type": "string",
+        "title": "Typ slide"
+      },
+      {
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "features",
+        "type": "array",
+        "title": "Funkce"
+      },
+      {
+        "fields": [
+          {
+            "name": "text",
+            "type": "string",
+            "title": "Text CTA"
+          },
+          {
+            "name": "link",
+            "type": "string",
+            "title": "Odkaz CTA"
+          }
+        ],
+        "name": "cta",
+        "type": "object",
+        "title": "Call to Action (CTA)"
+      },
+      {
+        "name": "phoneNumber",
+        "type": "string",
+        "title": "Telefonní číslo"
+      },
+      {
+        "description": "Tailwind gradient classes for background",
+        "name": "bgColor",
+        "type": "string",
+        "title": "Barva pozadí (tailwind)"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "order",
+        "type": "number",
+        "title": "Pořadí"
+      },
+      {
+        "initialValue": true,
+        "name": "isActive",
+        "type": "boolean",
+        "title": "Zobrazit"
+      }
+    ],
+    "name": "heroSlide",
+    "type": "document",
+    "title": "Hero slide"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Název"
+      },
+      {
+        "rows": 4,
+        "name": "description",
+        "type": "text",
+        "title": "Popis"
+      },
+      {
+        "description": "Název ikony z knihovny Lucide React (např. CreditCard, CheckCircle, Calendar, dohledatelné v dokumentaci k lucide-react)",
+        "name": "icon",
+        "type": "string",
+        "title": "Název ikony (Lucide React)"
+      },
+      {
+        "description": "Třída barvy tailwind pro ikonu",
+        "name": "iconColor",
+        "type": "string",
+        "title": "Barva ikonky (tailwind)"
+      },
+      {
+        "description": "Třída barvy tailwind pro pozadí ikonky",
+        "name": "iconBgColor",
+        "type": "string",
+        "title": "Barva pozadí (tailwind)"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Homepage",
+              "value": "homepage"
+            },
+            {
+              "title": "Proč si vybrat nás",
+              "value": "why-choose-us"
+            },
+            {
+              "title": "Nadstandardní servis",
+              "value": "service-benefits"
+            },
+            {
+              "title": "Kroky",
+              "value": "process-steps"
+            }
+          ]
+        },
+        "name": "category",
+        "type": "string",
+        "title": "Kategorie"
+      },
+      {
+        "name": "order",
+        "type": "number",
+        "title": "Pořadí"
+      },
+      {
+        "initialValue": true,
+        "name": "isActive",
+        "type": "boolean",
+        "title": "Zobrazit"
+      }
+    ],
+    "name": "featureCard",
+    "type": "document",
+    "title": "Karta s funkcí"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "name",
+        "type": "string",
+        "title": "Jméno / název partner"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "logo",
+        "type": "image"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "website",
+        "type": "url",
+        "title": "Website URL (pokud existuje)"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "partnerství značka",
+              "value": "brand"
+            },
+            {
+              "title": "partnerství technologie",
+              "value": "technology"
+            },
+            {
+              "title": "školící středisko / vzdělávání ",
+              "value": "certification"
+            },
+            {
+              "title": "dodavatel",
+              "value": "supplier"
+            }
+          ]
+        },
+        "name": "category",
+        "type": "string",
+        "title": "Kategorie (typ partnerství)"
+      },
+      {
+        "name": "order",
+        "type": "number",
+        "title": "Pořadí"
+      },
+      {
+        "initialValue": true,
+        "name": "isActive",
+        "type": "boolean",
+        "title": "Zobrazit"
+      },
+      {
+        "rows": 3,
+        "name": "description",
+        "type": "text",
+        "title": "Popis"
+      }
+    ],
+    "name": "logoPartner",
+    "type": "document",
+    "title": "Logo partner"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Název"
+      },
+      {
+        "options": {
+          "source": "title",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "slug",
+        "type": "slug",
+        "title": "slug"
+      },
+      {
+        "rows": 4,
+        "name": "description",
+        "type": "text",
+        "title": "Popis"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "icon",
+        "type": "image",
+        "title": "Ikona (Lucide React)"
+      },
+      {
+        "description": "Tailwind třída pro hover barvu",
+        "name": "hoverColor",
+        "type": "string",
+        "title": "Barva hover (tailwind)"
+      },
+      {
+        "name": "link",
+        "type": "string",
+        "title": "odkaz na stránku servisu (pokud existuje)"
+      },
+      {
+        "name": "order",
+        "type": "number",
+        "title": "Pořadí"
+      },
+      {
+        "initialValue": true,
+        "name": "isActive",
+        "type": "boolean",
+        "title": "Zobrazit"
+      },
+      {
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "features",
+        "type": "array",
+        "title": "Funkce"
+      },
+      {
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "benefits",
+        "type": "array",
+        "title": "Výhody (pokud existují)"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "heroImage",
+        "type": "image",
+        "title": "Hero Image (pokud existuje)"
+      },
+      {
+        "name": "content",
+        "type": "blockContent",
+        "title": "Obsah stránky"
+      },
+      {
+        "fields": [
+          {
+            "name": "metaTitle",
+            "type": "string",
+            "title": "Meta název"
+          },
+          {
+            "rows": 3,
+            "name": "metaDescription",
+            "type": "text",
+            "title": "Meta popis"
+          }
+        ],
+        "name": "seo",
+        "type": "object",
+        "title": "SEO"
+      }
+    ],
+    "name": "service",
+    "type": "document",
+    "title": "Služba"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "question",
+        "type": "string",
+        "title": "Otázka"
+      },
+      {
+        "name": "answer",
+        "type": "blockContent",
+        "title": "Odpověď"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Klimatizace",
+              "value": "klimatizace"
+            },
+            {
+              "title": "Tepelná čerpadla",
+              "value": "tepelna-cerpadla"
+            },
+            {
+              "title": "Rekuperace",
+              "value": "rekuperace"
+            },
+            {
+              "title": "Elektroinstalace",
+              "value": "elektroinstalace"
+            },
+            {
+              "title": "Fotovoltaika",
+              "value": "fotovoltaika"
+            },
+            {
+              "title": "Obecné",
+              "value": "obecne"
+            }
+          ]
+        },
+        "name": "category",
+        "type": "string",
+        "title": "Kategorie"
+      },
+      {
+        "name": "order",
+        "type": "number",
+        "title": "Pořadí"
+      },
+      {
+        "initialValue": true,
+        "name": "isActive",
+        "type": "boolean",
+        "title": "Zobrazit"
+      },
+      {
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "tags",
+        "type": "array",
+        "title": "Štítky"
+      }
+    ],
+    "name": "faq",
+    "type": "document",
+    "title": "Často kladené otázky"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "clientName",
+        "type": "string",
+        "title": "Jméno nebo název klienta"
+      },
+      {
+        "name": "clientTitle",
+        "type": "string",
+        "title": "role zákazníka"
+      },
+      {
+        "name": "clientCompany",
+        "type": "string",
+        "title": "firma zákazníka (pokud existuje)"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "clientImage",
+        "type": "image",
+        "title": "obrázek zákazníka (pokud existuje)"
+      },
+      {
+        "rows": 6,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "quote",
+        "type": "text",
+        "title": "citace zkušenosti (s úvozovkama, ten hlavní text) - automatické"
+      },
+      {
+        "initialValue": 5,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 5
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "rating",
+        "type": "number",
+        "title": "hodnocení (pokud existuje) - automatické"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Klimatizace",
+              "value": "klimatizace"
+            },
+            {
+              "title": "Tepelná čerpadla",
+              "value": "tepelna-cerpadla"
+            },
+            {
+              "title": "Rekuperace",
+              "value": "rekuperace"
+            },
+            {
+              "title": "Elektroinstalace",
+              "value": "elektroinstalace"
+            },
+            {
+              "title": "Fotovoltaika",
+              "value": "fotovoltaika"
+            }
+          ]
+        },
+        "name": "service",
+        "type": "string",
+        "title": "Kategorie služby (pokud existuje)"
+      },
+      {
+        "to": [
+          {
+            "type": "projectReference"
+          }
+        ],
+        "name": "projectReference",
+        "type": "reference",
+        "title": "Patří k projektu z referencí (pokud existuje)"
+      },
+      {
+        "name": "location",
+        "type": "string",
+        "title": "Místo (pokud existuje)"
+      },
+      {
+        "name": "dateCompleted",
+        "type": "date",
+        "title": "Datum dokončení (pokud existuje)"
+      },
+      {
+        "initialValue": false,
+        "name": "isFeatured",
+        "type": "boolean",
+        "title": "Zobrazit v náhledech zkušeností?"
+      },
+      {
+        "name": "order",
+        "type": "number",
+        "title": "Pořadí"
+      },
+      {
+        "initialValue": true,
+        "name": "isActive",
+        "type": "boolean",
+        "title": "Zobrazit"
+      }
+    ],
+    "name": "testimonial",
+    "type": "document",
+    "title": "Zkušenosti klientů (pokud existují)"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Název webu"
+      },
+      {
+        "rows": 4,
+        "name": "description",
+        "type": "text",
+        "title": "Popis webu"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "logo",
+        "type": "image",
+        "title": "Logo webu"
+      },
+      {
+        "name": "favicon",
+        "type": "image",
+        "title": "Favicon webu"
+      },
+      {
+        "fields": [
+          {
+            "name": "phone",
+            "type": "string",
+            "title": "Telefon"
+          },
+          {
+            "name": "email",
+            "type": "string"
+          },
+          {
+            "rows": 3,
+            "name": "address",
+            "type": "text",
+            "title": "Addresa"
+          },
+          {
+            "rows": 4,
+            "name": "openingHours",
+            "type": "text",
+            "title": "Otevírací doba"
+          }
+        ],
+        "name": "contact",
+        "type": "object",
+        "title": "Kontaktní informace webu"
+      },
+      {
+        "fields": [
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "facebook",
+            "type": "url",
+            "title": "Facebook URL"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "instagram",
+            "type": "url",
+            "title": "Instagram URL"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "linkedin",
+            "type": "url",
+            "title": "LinkedIn URL"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "youtube",
+            "type": "url",
+            "title": "YouTube URL"
+          }
+        ],
+        "name": "social",
+        "type": "object",
+        "title": "Socialní sítě webu"
+      },
+      {
+        "fields": [
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "min",
+                    "constraint": 1
+                  },
+                  {
+                    "flag": "max",
+                    "constraint": 5
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "googleRating",
+            "type": "number",
+            "title": "Google hodnocení webu"
+          },
+          {
+            "name": "googleReviews",
+            "type": "number",
+            "title": "Počet Google hodnocení webu"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "min",
+                    "constraint": 1
+                  },
+                  {
+                    "flag": "max",
+                    "constraint": 5
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "seznamRating",
+            "type": "number",
+            "title": "Seznam.cz hodnocení webu"
+          },
+          {
+            "name": "seznamReviews",
+            "type": "number",
+            "title": "Počet hodnocení na Seznam.cz webu (pokud existuje)"
+          }
+        ],
+        "name": "ratings",
+        "type": "object",
+        "title": "Hodnocení webu"
+      },
+      {
+        "fields": [
+          {
+            "name": "companyName",
+            "type": "string",
+            "title": "Jméno společnosti (pokud existuje)"
+          },
+          {
+            "name": "ico",
+            "type": "string",
+            "title": "IČO"
+          },
+          {
+            "name": "dic",
+            "type": "string",
+            "title": "DIČ"
+          },
+          {
+            "name": "foundedYear",
+            "type": "number",
+            "title": "Založeno"
+          }
+        ],
+        "name": "companyInfo",
+        "type": "object",
+        "title": "Informace o společnosti (pokud existují)"
+      },
+      {
+        "fields": [
+          {
+            "name": "metaTitle",
+            "type": "string",
+            "title": "Základní Meta název"
+          },
+          {
+            "rows": 3,
+            "name": "metaDescription",
+            "type": "text",
+            "title": "Základní Meta popis"
+          },
+          {
+            "options": {
+              "hotspot": true
+            },
+            "name": "ogImage",
+            "type": "image",
+            "title": "Default OG obrázek"
+          }
+        ],
+        "name": "seo",
+        "type": "object",
+        "title": "Základní nastavení SEO"
+      },
+      {
+        "fields": [
+          {
+            "name": "googleAnalyticsId",
+            "type": "string",
+            "title": "Google Analytics ID"
+          },
+          {
+            "name": "facebookPixelId",
+            "type": "string",
+            "title": "Facebook Pixel ID"
+          },
+          {
+            "name": "gtmId",
+            "type": "string",
+            "title": "Google Tag Manager ID"
+          }
+        ],
+        "name": "analytics",
+        "type": "object",
+        "title": "Analýza a sledování"
+      }
+    ],
+    "name": "siteSettings",
+    "type": "document",
+    "title": "Nastavení webu"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "rows": 3,
+        "name": "description",
+        "type": "text"
+      },
+      {
+        "options": {
+          "accept": ".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.rar"
+        },
+        "name": "file",
+        "type": "file"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Datasheet",
+              "value": "datasheet"
+            },
+            {
+              "title": "Návod k instalaci",
+              "value": "manual"
+            },
+            {
+              "title": "Katalog",
+              "value": "catalog"
+            },
+            {
+              "title": "Certifikát",
+              "value": "certificate"
+            },
+            {
+              "title": "Technický list",
+              "value": "specification"
+            },
+            {
+              "title": "Záruční list",
+              "value": "warranty"
+            },
+            {
+              "title": "Jiné",
+              "value": "other"
+            }
+          ]
+        },
+        "name": "fileType",
+        "type": "string",
+        "title": "Typ souboru"
+      }
+    ],
+    "name": "fileAsset",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "name",
+        "type": "string",
+        "title": "Jméno a příjmení"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "position",
+        "type": "string",
+        "title": "Pozice"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "image",
+        "type": "image",
+        "title": "Fotografie"
+      },
+      {
+        "description": "Telefonní číslo ve formátu +420 XXX XXX XXX",
+        "name": "phone",
+        "type": "string",
+        "title": "Telefon"
+      },
+      {
+        "name": "email",
+        "type": "email"
+      },
+      {
+        "initialValue": false,
+        "description": "Zaškrtněte, pokud je zaměstnanec jednatelem společnosti",
+        "name": "isDirector",
+        "type": "boolean",
+        "title": "Jednatel společnosti"
+      },
+      {
+        "initialValue": 0,
+        "description": "Čím menší číslo, tím dříve se zobrazí (0 = první)",
+        "name": "order",
+        "type": "number",
+        "title": "Pořadí zobrazení"
+      },
+      {
+        "initialValue": true,
+        "description": "Zaškrtněte, pokud je zaměstnanec stále aktivní",
+        "name": "isActive",
+        "type": "boolean",
+        "title": "Aktivní zaměstnanec"
+      }
+    ],
+    "name": "employee",
+    "type": "document",
+    "title": "Zaměstnanec"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Název značky"
+      },
+      {
+        "options": {
+          "source": "title",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "slug",
+        "type": "slug"
+      }
+    ],
+    "name": "brand",
+    "type": "document",
+    "title": "Značka"
+  }
+]
