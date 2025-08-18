@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Download, MessageCircle } from "lucide-react"
+import { ExpandableFeatures } from "./expandable-features"
 
 export interface ProductCardProps {
   title: string
@@ -11,7 +12,22 @@ export interface ProductCardProps {
   image: string
   features: string[]
   isRecommended?: boolean
+  isBestSelling?: boolean
   catalogUrl?: string
+  energyClass?: string
+  specifications?: {
+    powerRange?: { min?: number; max?: number };
+    coolingCapacityRange?: { min?: number; max?: number };
+    heatingCapacityRange?: { min?: number; max?: number };
+    noiseLevel?: number;
+  };
+  price?: {
+    basePrice?: number;
+    installationPrice?: number;
+    showPrice?: boolean;
+  };
+  warranty?: number;
+  brand?: string;
   files?: Array<{
     _id: string
     title: string
@@ -20,7 +36,7 @@ export interface ProductCardProps {
   }>
 }
 
-export function ProductCard({ title, description, image, features, isRecommended, catalogUrl, files }: ProductCardProps) {
+export function ProductCard({ title, description, image, features, isRecommended, isBestSelling, catalogUrl, energyClass, specifications, price, warranty, brand, files }: ProductCardProps) {
   return (
     <div className="bg-card rounded-xl sm:rounded-2xl border border-border shadow-sm flex flex-col transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 h-full group">
       <div className="relative w-full overflow-hidden aspect-[5/4] bg-muted rounded-t-xl sm:rounded-t-2xl">
@@ -37,14 +53,89 @@ export function ProductCard({ title, description, image, features, isRecommended
         
         <div>
           <h4 className="text-xs sm:text-sm font-semibold mb-1.5 sm:mb-2 text-black group-hover:text-blue-700 transition-colors duration-300">Klíčové vlastnosti:</h4>
-          <ul className="space-y-1 text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-6">
-            {features.slice(0, 3).map((feature, i) => (
-              <li key={i} className="flex items-start hover:text-slate-700 transition-colors duration-200">
-                <span className="mr-1.5 sm:mr-2 mt-0.5 text-black group-hover:text-blue-500 transition-colors duration-300">•</span><span className="leading-relaxed">{feature}</span>
-              </li>
-            ))}
-            {features.length > 3 && <li className="text-xs text-muted-foreground/70 mt-1 group-hover:text-slate-600 transition-colors duration-300">+ {features.length - 3} dalších vlastností</li>}
-          </ul>
+          
+          {/* Značka */}
+          {brand && (
+            <div className="flex items-center mb-2 text-xs sm:text-sm">
+              <span className="font-medium text-blue-600 mr-2">Značka:</span>
+              <span className="text-slate-700">{brand}</span>
+            </div>
+          )}
+
+          {/* Energetická třída */}
+          {energyClass && (
+            <div className="flex items-center mb-2 text-xs sm:text-sm">
+              <span className="font-medium text-blue-600 mr-2">Energetická třída:</span>
+              <Badge variant="outline" className="text-xs px-2 py-1 border-blue-300 text-blue-700">
+                {energyClass}
+              </Badge>
+            </div>
+          )}
+
+          {/* Technické specifikace */}
+          {specifications && (
+            <div className="space-y-2 mb-3">
+              {specifications.powerRange && (
+                <div className="flex items-center text-xs sm:text-sm">
+                  <span className="font-medium text-blue-600 mr-2 w-20">Výkon:</span>
+                  <span className="text-slate-700">
+                    {specifications.powerRange.min}-{specifications.powerRange.max} kW
+                  </span>
+                </div>
+              )}
+              {specifications.coolingCapacityRange && (
+                <div className="flex items-center text-xs sm:text-sm">
+                  <span className="font-medium text-blue-600 mr-2 w-20">Chlazení:</span>
+                  <span className="text-slate-700">
+                    {specifications.coolingCapacityRange.min}-{specifications.coolingCapacityRange.max} kW
+                  </span>
+                </div>
+              )}
+              {specifications.heatingCapacityRange && (
+                <div className="flex items-center text-xs sm:text-sm">
+                  <span className="font-medium text-blue-600 mr-2 w-20">Topení:</span>
+                  <span className="text-slate-700">
+                    {specifications.heatingCapacityRange.min}-{specifications.heatingCapacityRange.max} kW
+                  </span>
+                </div>
+              )}
+              {specifications.noiseLevel && (
+                <div className="flex items-center text-xs sm:text-sm">
+                  <span className="font-medium text-blue-600 mr-2 w-20">Hluk:</span>
+                  <span className="text-slate-700">{specifications.noiseLevel} dB</span>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Záruka */}
+          {warranty && (
+            <div className="flex items-center mb-2 text-xs sm:text-sm">
+              <span className="font-medium text-blue-600 mr-2">Záruka:</span>
+              <span className="text-slate-700">{warranty} let</span>
+            </div>
+          )}
+
+          {/* Cena (pokud je povolena) */}
+          {price && price.showPrice && (
+            <div className="space-y-1 mb-3">
+              {price.basePrice && (
+                <div className="flex items-center text-xs sm:text-sm">
+                  <span className="font-medium text-blue-600 mr-2">Cena:</span>
+                  <span className="text-slate-700 font-semibold">{price.basePrice.toLocaleString()} Kč</span>
+                </div>
+              )}
+              {price.installationPrice && (
+                <div className="flex items-center text-xs sm:text-sm">
+                  <span className="font-medium text-blue-600 mr-2">Instalace:</span>
+                  <span className="text-slate-700">{price.installationPrice.toLocaleString()} Kč</span>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Features - rozbalovací sekce */}
+          <ExpandableFeatures features={features || []} />
         </div>
 
         <div className="mt-auto space-y-2 border-t pt-3 sm:pt-4">

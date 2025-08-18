@@ -74,74 +74,37 @@ const heatPumpTypes = [
   }
 ]
 
-// 8 nejprodávanějších modelů tepelných čerpadel (fallback data)
-const bestSellingModels = [
-    {
-    slug: 'daikin-altherma-3-h-ht',
-    title: "Daikin Altherma 3 H HT",
-    description: "Vysoce účinné TČ vzduch-voda pro vytápění, chlazení a ohřev teplé vody.",
-    image: "/placeholder.svg?height=300&width=300&text=Daikin+Altherma",
-    features: ["Energetická třída A+++", "Provoz do -28°C", "Integrovaný zásobník TUV", "Bluevolution technologie", "Tichý provoz 35 dB(A)"],
-    isRecommended: true,
-    catalogUrl: "/katalogy/daikin-altherma.pdf",
-  },
-  {
-    slug: 'mitsubishi-ecodan-zubadan',
-    title: "Mitsubishi Ecodan Zubadan",
-    description: "Revoluční technologie pro spolehlivý výkon i v extrémně nízkých teplotách.",
-    image: "/placeholder.svg?height=300&width=300&text=Mitsubishi+Zubadan",
-    features: ["Topí i při -28°C", "Udržuje výkon bez poklesu", "Flash Injection technologie", "MELCloud ovládání", "Hybridní možnosti"],
-    catalogUrl: "/katalogy/mitsubishi-ecodan.pdf",
-  },
-  {
-    slug: 'vaillant-arotherm-plus',
-    title: "Vaillant aroTHERM plus",
-    description: "Prémiové tepelné čerpadlo s přírodním chladivem a elegantním designem.",
-    image: "/placeholder.svg?height=300&width=300&text=Vaillant+AroTherm",
-    features: ["Přírodní chladivo R290", "Výstupní teplota až 75°C", "myVAILLANT aplikace", "Sound Safe System", "Energetická třída A+++"],
-    catalogUrl: "/katalogy/vaillant-arotherm.pdf",
-  },
-  {
-    slug: 'viessmann-vitocal-200-s',
-    title: "Viessmann Vitocal 200-S",
-    description: "Spolehlivé splitové TČ s pokročilým řízením Vitotronic a tichým provozem.",
-    image: "/placeholder.svg?height=300&width=300&text=Viessmann+Vitocal",
-    features: ["COP až 5,0", "Vitotronic 200 regulace", "ViCare aplikace", "Modulární konstrukce", "Tichý noční provoz"],
-    catalogUrl: "/katalogy/viessmann-vitocal.pdf",
-  },
-   {
-    slug: 'lg-therma-v-r32',
-    title: "LG Therma V R32 Monoblok",
-    description: "Kompaktní monoblokové řešení s ekologickým chladivem R32 a snadnou instalací.",
-    image: "/placeholder.svg?height=300&width=300&text=LG+Therma+V",
-    features: ["Chladivo R32", "R1 Compressor™", "LG ThinQ integrace", "Kompaktní rozměry", "Snadná instalace a údržba"],
-    catalogUrl: "/katalogy/lg-therma-v.pdf",
-  },
-  {
-    slug: 'panasonic-aquarea-t-cap',
-    title: "Panasonic Aquarea T-CAP",
-    description: "Inovativní technologie pro udržení maximálního výkonu i při nízkých teplotách.",
-    image: "/placeholder.svg?height=300&width=300&text=Panasonic+Aquarea",
-    features: ["T-CAP technologie", "Provoz do -28°C", "Aquarea Smart Cloud", "Hydromodul All in One", "Energetická třída A+++" ],
-    catalogUrl: "/katalogy/panasonic-aquarea.pdf",
-  },
-  {
-    slug: 'bosch-compress-7000i-aw',
-    title: "Bosch Compress 7000i AW",
-    description: "Prémiové tepelné čerpadlo s inteligentním řízením a vysokou účinností.",
-    image: "/placeholder.svg?height=300&width=300&text=Bosch+Compress",
-    features: ["Top design", "Inverterová technologie", "Bosch HomeCom Pro", "Hybridní připravenost", "Velmi tichý provoz"],
-    catalogUrl: "/katalogy/bosch-compress.pdf",
-  },
-  {
-    slug: 'stiebel-eltron-wpl-acs',
-    title: "Stiebel Eltron WPL-A Premium",
-    description: "Německá kvalita s pokročilými funkcemi, určená pro vytápění i chlazení.",
-    image: "/placeholder.svg?height=300&width=300&text=Stiebel+Eltron",
-    features: ["Inverterová technologie", "Internet Service Gateway", "Aktivní chlazení", "Kombinace s fotovoltaikou", "Tichý provoz"],
-    catalogUrl: "/katalogy/stiebel-eltron.pdf",
-  },
-]
+// Interface pro produkty tepelných čerpadel
+interface Product {
+  _id: string;
+  title: string;
+  description: string;
+  image: any; // Sanity vrací obrázek jako objekt
+  features: string[];
+  isRecommended?: boolean;
+  isBestSelling?: boolean;
+  catalogUrl?: string; // Legacy field
+  energyClass?: string;
+  specifications?: {
+    powerRange?: { min?: number; max?: number };
+    coolingCapacityRange?: { min?: number; max?: number };
+    heatingCapacityRange?: { min?: number; max?: number };
+    noiseLevel?: number;
+  };
+  price?: {
+    basePrice?: number;
+    installationPrice?: number;
+    showPrice?: boolean;
+  };
+  warranty?: number;
+  brand?: string;
+  files?: Array<{
+    _id: string;
+    title: string;
+    fileUrl: string;
+    fileType: string;
+  }>;
+}
 
 // Ukázkové reference pro tepelná čerpadla (fallback, když nejsou testimonials v Sanity)
 const references = [
@@ -232,7 +195,28 @@ export default async function TepelnaCerpadlaPage() {
   // Import Sanity client inside the component
   const { client } = await import('@/lib/sanity.client')
   
-  const [faqs, references] = await Promise.all([
+  const [products, faqs, references] = await Promise.all([
+    client.fetch<Product[]>(`*[_type == "product" && category->slug.current == "tepelna-cerpadla"] {
+      _id,
+      title,
+      description,
+      image,
+      features,
+      isRecommended,
+      isBestSelling,
+      catalogUrl,
+      energyClass,
+      specifications,
+      price,
+      warranty,
+      "brand": brand->title,
+      "files": files[]->{
+        _id,
+        title,
+        fileType,
+        "fileUrl": file.asset->url
+      }
+    }`),
     client.fetch<FaqEntry[]>(faqsQuery),
     client.fetch<ReferenceCard[]>(referencesQuery),
   ])
@@ -341,17 +325,31 @@ export default async function TepelnaCerpadlaPage() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
-            {bestSellingModels.map((product, index) => (
-              <ProductCard
-                key={`best-${index}`}
-                title={product.title}
-                description={product.description}
-                image={product.image}
-                features={product.features}
-                isRecommended={product.isRecommended}
-                catalogUrl={product.catalogUrl}
-              />
-            ))}
+            {products && products.length > 0 ? (
+              products.map((product, index) => (
+                <ProductCard
+                  key={product._id}
+                  title={product.title}
+                  description={product.description}
+                  image={product.image ? urlForImage(product.image).url() : "/placeholder.svg"}
+                  features={product.features || []}
+                  isRecommended={product.isRecommended}
+                  isBestSelling={product.isBestSelling}
+                  catalogUrl={product.catalogUrl}
+                  energyClass={product.energyClass}
+                  specifications={product.specifications}
+                  price={product.price}
+                  warranty={product.warranty}
+                  brand={product.brand}
+                  files={product.files}
+                />
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12">
+                <p className="text-slate-500">Zatím nemáme žádné produkty tepelných čerpadel v katalogu.</p>
+                <p className="text-slate-400 text-sm mt-2">Kontaktujte nás pro aktuální nabídku.</p>
+              </div>
+            )}
           </div>
           <div className="mt-8 md:mt-16 text-center">
             <PDFDownloadButton

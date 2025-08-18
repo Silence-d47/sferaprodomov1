@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 import { EnhancedSectionDivider } from "@/components/ui/enhanced-section-divider"
+import { urlForImage } from "@/lib/sanity.image"
 import { 
   MapPin, 
   Phone, 
@@ -30,11 +31,7 @@ interface Employee {
   _id: string
   name: string
   position: string
-  image?: {
-    asset: {
-      url: string
-    }
-  }
+  image?: any // Sanity vrací obrázek jako objekt
   phone?: string
   email?: string
   isDirector: boolean
@@ -46,7 +43,7 @@ const TeamMemberCard = ({ member }: { member: Employee }) => (
     <CardHeader className="flex-shrink-0">
       <div className="relative w-full max-w-[160px] sm:max-w-[200px] md:max-w-[220px] mx-auto overflow-hidden aspect-[1/1] rounded-full group-hover:scale-105 transition-transform duration-500">
         <Image 
-          src={member.image?.asset?.url || "/images/tym-sfera.webp"} 
+          src={member.image ? urlForImage(member.image).url() : "/images/tym-sfera.webp"} 
           alt={member.name} 
           fill 
           className="object-cover group-hover:scale-110 transition-transform duration-700" 
@@ -162,13 +159,16 @@ export default function ContactPage() {
             </div>
           ) : (
             <>
+              
+              
               {director && (
                 <div className="max-w-xl mx-auto mb-10">
                   <TeamMemberCard member={director} />
                 </div>
               )}
+              
               {/* Vertikální oddělení jednatele od ostatních */}
-              {otherEmployees.length > 0 && (
+              {otherEmployees.length > 0 ? (
                 <>
                   <div className="hidden md:flex items-center justify-center my-8">
                     <div className="h-12 w-px bg-slate-300" />
@@ -179,6 +179,11 @@ export default function ContactPage() {
                     ))}
                   </div>
                 </>
+              ) : (
+                <div className="text-center py-8">
+                  <p className="text-slate-500">Zatím nemáme v týmu další aktivní zaměstnance.</p>
+                  <p className="text-slate-400 text-sm mt-2">Tým se neustále rozrůstá!</p>
+                </div>
               )}
             </>
           )}

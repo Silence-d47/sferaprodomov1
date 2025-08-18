@@ -1,3 +1,4 @@
+
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -40,7 +41,7 @@ import {
   Split,
   Shuffle,
   Building2,
-  Quote
+
 } from "lucide-react"
 
 interface Product {
@@ -50,7 +51,22 @@ interface Product {
   image: any; // Sanity vrací obrázek jako objekt
   features: string[];
   isRecommended?: boolean;
-  catalogUrl: string; // Legacy field
+  isBestSelling?: boolean;
+  catalogUrl?: string; // Legacy field
+  energyClass?: string;
+  specifications?: {
+    powerRange?: { min?: number; max?: number };
+    coolingCapacityRange?: { min?: number; max?: number };
+    heatingCapacityRange?: { min?: number; max?: number };
+    noiseLevel?: number;
+  };
+  price?: {
+    basePrice?: number;
+    installationPrice?: number;
+    showPrice?: boolean;
+  };
+  warranty?: number;
+  brand?: string;
   files?: Array<{
     _id: string;
     title: string;
@@ -61,28 +77,25 @@ interface Product {
 
 // Používáme importovaný dotaz z sanity.queries.ts
 
-type TestimonialEntry = {
-  clientName: string
-  clientTitle?: string
-  clientCompany?: string
-  clientImageUrl?: string
-  quote: string
-  rating?: number
+type ReferenceCard = {
+  id: string
+  title: string
+  description: string
+  image: string
+  category: string
   location?: string
-  dateCompleted?: string
+  isTopReference?: boolean
 }
 
-const testimonialsQuery = groq`
-  *[_type == "testimonial" && isActive == true && service == "klimatizace"]
-  | order(coalesce(order, 9999) asc, _createdAt desc)[0...9] {
-    clientName,
-    clientTitle,
-    clientCompany,
-    "clientImageUrl": clientImage.asset->url,
-    quote,
-    rating,
+const referencesQuery = groq`
+  *[_type == "projectReference" && isActive != false && category == "klimatizace"] | order(_createdAt desc)[0...9] {
+    "id": slug.current,
+    title,
+    description,
+    "image": image.asset->url,
+    category,
     location,
-    dateCompleted
+    isTopReference
   }
 `
 
@@ -166,38 +179,15 @@ const acTypes = [
 ]
 
 
-// Ukázkové reference
-const references = [
-  {
-    slug: 'rodinny-dum-opava',
-    image: "/images/reference/rodinny-dum-opava.jpg",
-    quote: "S firmou Sféra pro domov jsme byli maximálně spokojeni. Rychlá domluva, profesionální přístup a čistá práce. Klimatizace funguje skvěle a v létě je to k nezaplacení.",
-    customer: "Rodina Novákova, Opava",
-    project: "Instalace multisplit klimatizace"
-  },
-  {
-    slug: 'kancelare-ostrava',
-    image: "/images/reference/kancelare-ostrava.jpg",
-    quote: "Potřebovali jsme vyřešit klimatizaci v našich nových kancelářích. Vše proběhlo hladce od návrhu až po realizaci. Technici byli ochotní a vše nám vysvětlili.",
-    customer: "Firma ABC s.r.o., Ostrava",
-    project: "Klimatizace pro komerční prostory"
-  },
-  {
-    slug: 'byt-krnov',
-    image: "/images/reference/byt-krnov.jpg",
-    quote: "I v našem podkrovním bytě je teď v létě příjemně. Děkujeme za skvěle odvedenou práci a doporučujeme všem, kdo váhají.",
-    customer: "Paní Svobodová, Krnov",
-    project: "Nástěnná klimatizace do bytu"
-  },
-];
+
 
 export default async function KlimatizacePageRefined() {
   // Import Sanity client inside the component
   const { client } = await import('@/lib/sanity.client')
   
-  const [products, testimonials, faqs] = await Promise.all([
+  const [products, references, faqs] = await Promise.all([
     client.fetch<Product[]>(productsByCategoryWithFilesQuery, { category: "klimatizace" }),
-    client.fetch<TestimonialEntry[]>(testimonialsQuery),
+    client.fetch<ReferenceCard[]>(referencesQuery),
     client.fetch<FaqEntry[]>(faqsQuery),
   ])
 
@@ -318,7 +308,13 @@ export default async function KlimatizacePageRefined() {
                 image={product.image ? urlForImage(product.image).url() : "/placeholder.svg"}
                 features={product.features || []}
                 isRecommended={product.isRecommended}
+                isBestSelling={product.isBestSelling}
                 catalogUrl={product.catalogUrl}
+                energyClass={product.energyClass}
+                specifications={product.specifications}
+                price={product.price}
+                warranty={product.warranty}
+                brand={product.brand}
                 files={product.files}
               />
             ))}
@@ -365,82 +361,22 @@ export default async function KlimatizacePageRefined() {
         </div>
       </section>
 
-           {/* --- SEKCE REFERENCE (KOMPLETNĚ PŘEPRACOVÁNO) --- */}
+           {/* --- SEKCE REALIZACE PRACÍ --- */}
            <section className="py-12 md:py-20 lg:py-28 bg-white">
         <div className="container px-4 md:px-6">
           <div className="text-center max-w-3xl mx-auto mb-8 md:mb-16">
-            <h2 className="text-2xl md:text-4xl font-bold mb-3 md:mb-4">Co říkají naši zákazníci</h2>
+            <h2 className="text-2xl md:text-4xl font-bold mb-3 md:mb-4">Realizace našich prací</h2>
             <p className="text-base md:text-lg text-slate-600">
-              Spokojenost našich klientů je pro nás nejlepší referencí. Podívejte se na ukázky naší práce.
+              Podívejte se na ukázky našich realizací klimatizací. Každý projekt je důkazem naší kvality a zkušeností.
             </p>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
-            {(testimonials && testimonials.length > 0 ? testimonials : []).map((t, index) => (
-              <div key={`t-${index}`} className="bg-slate-50/70 rounded-xl md:rounded-2xl p-1 flex flex-col border border-slate-200/80">
-                <div className="relative w-full overflow-hidden aspect-[5/4]">
-                  <Image src={t.clientImageUrl || "/placeholder.svg"} alt={t.clientName} fill className="object-cover rounded-t-xl md:rounded-t-2xl" />
-                </div>
-                <div className="p-4 md:p-6 flex-grow flex flex-col">
-                  <Quote className="w-6 md:w-8 h-6 md:h-8 text-blue-200 mb-3 md:mb-4 flex-shrink-0" fill="currentColor" />
-                  <p className="text-slate-600 italic mb-4 md:mb-6 flex-grow text-sm md:text-base">"{t.quote}"</p>
-                  <div className="mt-auto pt-3 md:pt-5 border-t border-slate-200">
-                    <p className="font-bold text-slate-800 text-sm md:text-base">{t.clientName}{t.clientTitle ? `, ${t.clientTitle}` : ""}</p>
-                    <p className="text-xs md:text-sm text-slate-500">{t.clientCompany || t.location || ""}</p>
-                  </div>
-                </div>
-
-                {leftDynamicFaqs && leftDynamicFaqs.map((item, idx) => (
-                  <div key={`faq-left-${idx}`} className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-blue-500">
-                    <div className="flex items-start space-x-4">
-                      <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
-                        Q
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-lg mb-3 text-blue-500">{item.question}</h3>
-                        <div className="prose prose-sm max-w-none text-slate-700">
-                          <CustomPortableText value={item.answer} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-
-              </div>
-            ))}
-
-            {(!testimonials || testimonials.length === 0) && references.map((ref, index) => (
-              <div key={`r-${index}`} className="bg-slate-50/70 rounded-xl md:rounded-2xl p-1 flex flex-col border border-slate-200/80">
-                <div className="relative w-full overflow-hidden aspect-[5/4]">
-                  <Image src={ref.image} alt={ref.project} fill className="object-cover rounded-t-xl md:rounded-t-2xl" />
-                </div>
-                <div className="p-4 md:p-6 flex-grow flex flex-col">
-                  <Quote className="w-6 md:w-8 h-6 md:h-8 text-blue-200 mb-3 md:mb-4 flex-shrink-0" fill="currentColor" />
-                  <p className="text-slate-600 italic mb-4 md:mb-6 flex-grow text-sm md:text-base">"{ref.quote}"</p>
-                  <div className="mt-auto pt-3 md:pt-5 border-t border-slate-200">
-                    <p className="font-bold text-slate-800 text-sm md:text-base">{ref.customer}</p>
-                    <p className="text-xs md:text-sm text-slate-500">{ref.project}</p>
-                  </div>
-                </div>
-
-                {rightDynamicFaqs && rightDynamicFaqs.map((item, idx) => (
-                  <div key={`faq-right-${idx}`} className="bg-white rounded-xl p-6 shadow-lg border-l-4 border-blue-500">
-                    <div className="flex items-start space-x-4">
-                      <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
-                        Q
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-lg mb-3 text-blue-500">{item.question}</h3>
-                        <div className="prose prose-sm max-w-none text-slate-700">
-                          <CustomPortableText value={item.answer} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-
-              </div>
-            ))}
+          <div className="rounded-3xl bg-white/60 p-2 shadow-2xl shadow-slate-900/10 ring-1 ring-gray-200 backdrop-blur-md">
+            {references && references.length > 0 ? (
+              <ReferenceSlider references={references} />
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">Zatím nemáme zveřejněné realizace v této kategorii.</div>
+            )}
           </div>
           
           <div className="text-center mt-8 md:mt-16">

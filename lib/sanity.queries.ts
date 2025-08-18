@@ -108,6 +108,11 @@ export const productsByCategoryWithFilesQuery = groq`
     isRecommended,
     isBestSelling,
     catalogUrl,
+    energyClass,
+    specifications,
+    price,
+    warranty,
+    "brand": brand->title,
     "files": files[]->{
       _id,
       title,

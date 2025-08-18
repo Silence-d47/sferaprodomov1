@@ -80,7 +80,7 @@ const services = [
     title: "Klimatizace",
     description: "Profesionální instalace klimatizací léty prověřených značek s nadstandardním servisem",
     iconSrc: "/hub/klimatizace.svg",
-    features: ["Montáž do 14 dnů", "bez akontace", "až 5 let záruka"],
+    features: [], // Will be populated from Sanity
     isPopular: true,
     color: 'bg-blue-300',
     iconColor: 'text-blue-600',
@@ -91,7 +91,7 @@ const services = [
     title: "Tepelná čerpadla",
     description: "Efektivní vytápění kvalitními zdroji s maximální úsporou energií",
     iconSrc: "/hub/tepelna-cerpadla.svg",
-    features: ["Vzduch-Vzduch", "Vzduch-Voda", "Země-Voda", "Dotace a podpory"],
+    features: [], // Will be populated from Sanity
     color: 'bg-green-300',
     iconColor: 'text-green-600',
     cardColor: 'bg-green-50'
@@ -101,7 +101,7 @@ const services = [
     title: "Rekuperace",
     description: "Čerstvý vzduch bez tepelných ztrát pro zdravé domácí prostředí",
     iconSrc: "/hub/rekuperace.png",
-    features: ["Centrální rekuperace", "Decentrální jednotky", "Tiché provoz", "Úsporu až 30%"],
+    features: [], // Will be populated from Sanity
     color: 'bg-orange-300',
     iconColor: 'text-orange-300',
     cardColor: 'bg-orange-50'
@@ -111,7 +111,7 @@ const services = [
     title: "Elektroinstalace",
     description: "Kompletní elektroinstalace od drobných oprav, rekonstrukcí bytu, novostaveb až po chytrou domácnost",
     iconSrc: "/hub/elektroinstalace.svg",
-    features: ["Certifikované materiály", "Dodržení ČSN norem", "Chytrá domácnost", "Revize a servis"],
+    features: [], // Will be populated from Sanity
     color: 'bg-purple-300',
     iconColor: 'text-purple-600',
     cardColor: 'bg-purple-50'
@@ -121,7 +121,7 @@ const services = [
     title: "Fotovoltaika",
     description: "Vlastní výroba elektřiny s návratností 5-7 let",
     iconSrc: "/hub/fotovoltaika.svg",
-    features: ["On-grid systémy", "Hybridní řešení", "Dotace NZÚ", "Monitoring výroby"],
+    features: [], // Will be populated from Sanity
     color: 'bg-yellow-300',
     iconColor: 'text-yellow-600',
     cardColor: 'bg-yellow-50'

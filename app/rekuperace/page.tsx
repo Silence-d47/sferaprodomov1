@@ -11,7 +11,7 @@ import { client } from "@/lib/sanity.client"
 import { groq } from "next-sanity"
 import { CustomPortableText } from "@/lib/sanity.portableText"
 import { urlForImage } from "@/lib/sanity.image"
-import { bestSellingProductsQuery } from "@/lib/sanity.queries"
+
 import { 
   Shield, 
   Clock, 
@@ -64,42 +64,37 @@ const recuperationTypes = [
   }
 ]
 
-// 8 nejprodávanějších modelů (data ponechána, upraveny slugy pro URL)
-const bestSellingModels = [
-  {
-    slug: 'zehnder-comfoair-q350',
-    title: "Zehnder ComfoAir Q350",
-    description: "Prémiová jednotka s nejvyšší účinností rekuperace tepla a vlhkosti na trhu.",
-    image: "/placeholder.svg?height=300&width=300&text=Zehnder+Q350",
-    features: ["Účinnost až 96%", "Entalpický výměník", "Ovládání přes aplikaci", "Letní bypass", "Extrémně tichý provoz"],
-    isRecommended: true,
-    catalogUrl: "/katalogy/zehnder-comfoair.pdf",
-  },
-  {
-    slug: 'atrea-duplex-ecv5',
-    title: "Atrea Duplex ECV5",
-    description: "Osvědčená česká kvalita s vysokou účinností a pokročilou regulací.",
-    image: "/placeholder.svg?height=300&width=300&text=Atrea+Duplex",
-    features: ["Účinnost až 93%", "Regulace RD5", "Protiproudý výměník", "Týdenní program", "Snadná údržba"],
-    catalogUrl: "/katalogy/atrea-duplex.pdf",
-  },
-  {
-    slug: 'jablotron-futura',
-    title: "Jablotron Futura",
-    description: "Inteligentní rekuperace s možností chlazení a řízením podle CO₂.",
-    image: "/placeholder.svg?height=300&width=300&text=Jablotron+Futura",
-    features: ["Aktivní rekuperace s TČ", "Chlazení v létě", "Aplikace MyJablotron", "CO₂ čidla v ceně", "Kompaktní rozměry"],
-    catalogUrl: "/katalogy/jablotron-futura.pdf",
-  },
-  {
-    slug: 'systemair-save-vtr-300',
-    title: "Systemair SAVE VTR 300",
-    description: "Švédská spolehlivost s rotačním výměníkem, ideální do chladných podmínek.",
-    image: "/placeholder.svg?height=300&width=300&text=Systemair+SAVE",
-    features: ["Rotační výměník tepla", "Účinnost až 86%", "Vestavěný vlhkostní senzor", "Modbus komunikace", "Robustní konstrukce"],
-    catalogUrl: "/katalogy/systemair-save.pdf",
-  },
-]
+// Interface pro produkty rekuperace
+interface Product {
+  _id: string;
+  title: string;
+  description: string;
+  image: any; // Sanity vrací obrázek jako objekt
+  features: string[];
+  isRecommended?: boolean;
+  isBestSelling?: boolean;
+  catalogUrl?: string; // Legacy field
+  energyClass?: string;
+  specifications?: {
+    powerRange?: { min?: number; max?: number };
+    coolingCapacityRange?: { min?: number; max?: number };
+    heatingCapacityRange?: { min?: number; max?: number };
+    noiseLevel?: number;
+  };
+  price?: {
+    basePrice?: number;
+    installationPrice?: number;
+    showPrice?: boolean;
+  };
+  warranty?: number;
+  brand?: string;
+  files?: Array<{
+    _id: string;
+    title: string;
+    fileUrl: string;
+    fileType: string;
+  }>;
+}
 
 // Ukázkové reference pro rekuperaci
 const references = [
@@ -190,7 +185,28 @@ export default async function RekuperacePage() {
   // Import Sanity client inside the component
   const { client } = await import('@/lib/sanity.client')
   
-  const [faqs, references] = await Promise.all([
+  const [products, faqs, references] = await Promise.all([
+    client.fetch<Product[]>(`*[_type == "product" && category->slug.current == "rekuperace"] {
+      _id,
+      title,
+      description,
+      image,
+      features,
+      isRecommended,
+      isBestSelling,
+      catalogUrl,
+      energyClass,
+      specifications,
+      price,
+      warranty,
+      "brand": brand->title,
+      "files": files[]->{
+        _id,
+        title,
+        fileType,
+        "fileUrl": file.asset->url
+      }
+    }`),
     client.fetch<FaqEntry[]>(faqsQuery),
     client.fetch<ReferenceCard[]>(referencesQuery),
   ])
@@ -297,25 +313,31 @@ export default async function RekuperacePage() {
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
-                              {(await client.fetch<any[]>(
-                  bestSellingProductsQuery, { category: "rekuperace" }
-                )).map((p, idx, arr) => (
-                <ProductCard
-                  key={`best-rek-${idx}`}
-                  title={p.title}
-                  description={p.description || ""}
-                  image={p.image ? urlForImage(p.image).url() : "/placeholder.svg"}
-                  features={p.features || []}
-                  isRecommended={Boolean(p.isRecommended)}
-                  catalogUrl={p.catalogUrl || "#"}
-                  files={p.files}
-                />
-              ))}
-              {/** Fallback na hardcoded, pokud by query vrátilo prázdno */}
-              {(await client.fetch<number>(groq`count(*[_type == "product" && category->slug.current == "rekuperace" && isBestSelling == true])`)) === 0 &&
-                bestSellingModels.map((product, index) => (
-                  <ProductCard key={`best-fb-${index}`} {...product} />
-                ))}
+              {products && products.length > 0 ? (
+                products.map((product, index) => (
+                  <ProductCard
+                    key={product._id}
+                    title={product.title}
+                    description={product.description}
+                    image={product.image ? urlForImage(product.image).url() : "/placeholder.svg"}
+                    features={product.features || []}
+                    isRecommended={product.isRecommended}
+                    isBestSelling={product.isBestSelling}
+                    catalogUrl={product.catalogUrl}
+                    energyClass={product.energyClass}
+                    specifications={product.specifications}
+                    price={product.price}
+                    warranty={product.warranty}
+                    brand={product.brand}
+                    files={product.files}
+                  />
+                ))
+              ) : (
+                <div className="col-span-full text-center py-12">
+                  <p className="text-slate-500">Zatím nemáme žádné produkty rekuperace v katalogu.</p>
+                  <p className="text-slate-400 text-sm mt-2">Kontaktujte nás pro aktuální nabídku.</p>
+                </div>
+              )}
             </div>
             <div className="mt-8 md:mt-16 text-center">
               <PDFDownloadButton
