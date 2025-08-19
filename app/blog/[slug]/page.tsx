@@ -217,7 +217,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             
             <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
               {relatedPosts.map((relatedPost) => (
-                <article key={relatedPost._id} className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-xl hover:border-gray-300 transition-all duration-300 group">
+                <Link key={relatedPost._id} href={`/blog/${relatedPost.slug.current}`} className="block bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-xl hover:border-gray-300 transition-all duration-300 group">
                   <div className="relative w-full overflow-hidden aspect-[5/4] bg-gradient-to-br from-gray-100 to-gray-200">
                     {relatedPost.mainImage ? (
                       <Image
@@ -252,21 +252,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                       </div>
                     </div>
                     <h3 className="text-lg font-bold text-gray-900 mb-3 leading-tight group-hover:text-[#1B5D93] transition-colors duration-200">
-                      <Link href={`/blog/${relatedPost.slug.current}`} className="block">
-                        {relatedPost.title}
-                      </Link>
+                      {relatedPost.title}
                     </h3>
                     <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
                       {relatedPost.excerpt}
                     </p>
-                    <Link 
-                      href={`/blog/${relatedPost.slug.current}`}
-                      className="text-[#1B5D93] text-sm font-semibold hover:text-[#196097] transition-colors duration-200"
-                    >
+                    <div className="text-[#1B5D93] text-sm font-semibold group-hover:text-[#196097] transition-colors duration-200">
                       Číst více
-                    </Link>
+                    </div>
                   </div>
-                </article>
+                </Link>
               ))}
             </div>
           </div>

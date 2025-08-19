@@ -1,10 +1,7 @@
 "use client"
 
-import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { MapPin, Star } from "lucide-react"
 
@@ -27,8 +24,8 @@ export function ReferenceSlider({ references }: ReferenceSliderProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {references.map((reference) => (
-        <Card key={reference.id} className="h-full group hover:shadow-xl transition-all duration-300 border-0 bg-white overflow-hidden flex flex-col">
-          <CardContent className="p-0 flex flex-col h-full">
+        <Link key={reference.id} href={`/reference/${reference.id}`} className="block h-full group hover:shadow-xl transition-all duration-300 border-0 bg-white overflow-hidden flex flex-col rounded-lg">
+          <div className="p-0 flex flex-col h-full">
             <div className="relative overflow-hidden aspect-[5/4]">
               <Image
                 src={reference.image || "/placeholder.svg"}
@@ -82,17 +79,13 @@ export function ReferenceSlider({ references }: ReferenceSliderProps) {
 
               {/* Tlačítko vždy na stejném místě */}
               <div className="mt-auto">
-                <Button
-                  asChild
-                  variant="outline"
-                  className="w-full border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white bg-transparent"
-                >
-                  <Link href={`/reference/${reference.id}`}>Zobrazit detail</Link>
-                </Button>
+                <div className="w-full border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white bg-transparent rounded-md px-4 py-2 text-center text-sm font-medium transition-colors duration-200">
+                  Zobrazit detail
+                </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </Link>
       ))}
     </div>
   )

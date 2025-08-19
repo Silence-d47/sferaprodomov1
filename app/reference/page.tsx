@@ -2,9 +2,7 @@
 import React, { useMemo, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { OrganicWaveDivider } from "@/components/ui/organic-wave-divider"
 import { EnhancedSectionDivider } from "@/components/ui/enhanced-section-divider"
 import { ShapedSectionHeader } from "@/components/ui/shaped-section-header"
@@ -384,7 +382,7 @@ export default function ReferencePage() {
                 <Slider {...carouselSettings}>
                   {featuredReferences.map((reference) => (
                     <div key={reference.id} className="px-4">
-                      <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-xl overflow-hidden border border-gray-100 flex flex-col h-full">
+                      <Link href={`/reference/${reference.id}`} className="block bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-xl overflow-hidden border border-gray-100 flex flex-col h-full hover:shadow-2xl transition-all duration-300">
                         <div className="grid lg:grid-cols-2 gap-0 flex-grow">
                           <div className="relative w-full overflow-hidden aspect-[5/4]">
                             <Image
@@ -446,15 +444,13 @@ export default function ReferencePage() {
                               </div>
                             )}
                             
-                            <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white mt-auto" asChild>
-                              <Link href={`/reference/${reference.id}`}>
-                                Zobrazit detail projektu
-                                <ArrowRight className="h-4 w-4 ml-2" />
-                              </Link>
-                            </Button>
+                            <div className="w-full bg-blue-600 hover:bg-blue-700 text-white mt-auto py-3 px-4 rounded-md text-center font-medium transition-colors duration-200">
+                              Zobrazit detail projektu
+                              <ArrowRight className="h-4 w-4 ml-2 inline" />
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </Link>
                     </div>
                   ))}
                 </Slider>
@@ -484,8 +480,8 @@ export default function ReferencePage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {otherReferences && otherReferences.length > 0 ? (
               otherReferences.map((reference) => (
-                <Card key={reference.id} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white overflow-hidden flex flex-col h-full">
-                  <CardContent className="p-0 flex flex-col h-full">
+                <Link key={reference.id} href={`/reference/${reference.id}`} className="block group hover:shadow-xl transition-all duration-300 border-0 bg-white overflow-hidden flex flex-col h-full rounded-lg">
+                  <div className="p-0 flex flex-col h-full">
                     <div className="relative w-full overflow-hidden aspect-[5/4]">
                       <Image
                         src={reference.image}
@@ -522,15 +518,13 @@ export default function ReferencePage() {
                           <span className="text-xs text-blue-600 font-medium">Realizováno</span>
                         </div>
                       </div>
-                      <Button asChild variant="outline" className="w-full group-hover:bg-blue-50 group-hover:border-blue-200 transition-colors mt-auto">
-                        <Link href={`/reference/${reference.id}`}>
-                          Zobrazit detail
-                          <ArrowRight className="h-3 w-3 ml-2" />
-                        </Link>
-                      </Button>
+                      <div className="w-full border border-gray-300 group-hover:bg-blue-50 group-hover:border-blue-200 transition-colors mt-auto py-2 px-4 rounded-md text-center text-sm font-medium text-gray-700 group-hover:text-blue-700">
+                        Zobrazit detail
+                        <ArrowRight className="h-3 w-3 ml-2 inline" />
+                      </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </Link>
               ))
             ) : (
               <div className="col-span-full text-center py-12">

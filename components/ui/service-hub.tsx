@@ -43,18 +43,18 @@ const ServiceHub: React.FC<ServiceHubProps> = ({ onServiceChange, activeService 
       iconSrc: '/hub/tepelna-cerpadla.svg'
     },
     {
-      id: 'elektroinstalace',
-      title: 'Elektroinstalace',
-      link: '/elektroinstalace',
-      hoverColor: 'bg-orange-300',
-      iconSrc: '/hub/elektroinstalace.svg'
-    },
-    {
       id: 'rekuperace',
       title: 'Rekuperace',
       link: '/rekuperace',
       hoverColor: 'bg-purple-300',
       iconSrc: '/hub/rekuperace.png'
+    },
+    {
+      id: 'elektroinstalace',
+      title: 'Elektroinstalace',
+      link: '/elektroinstalace',
+      hoverColor: 'bg-orange-300',
+      iconSrc: '/hub/elektroinstalace.svg'
     },
     {
       id: 'fotovoltaika',

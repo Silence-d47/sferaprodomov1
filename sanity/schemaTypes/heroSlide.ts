@@ -51,19 +51,52 @@ export default defineType({
       of: [{type: 'string'}],
     }),
     defineField({
-      name: 'cta',
-      title: 'Call to Action (CTA)',
+      name: 'primaryButton',
+      title: 'Primární tlačítko (oranžové)',
       type: 'object',
       fields: [
         {
           name: 'text',
-          title: 'Text CTA',
+          title: 'Text tlačítka',
           type: 'string',
+          initialValue: 'Nezávazná nabídka',
         },
         {
           name: 'link',
-          title: 'Odkaz CTA',
+          title: 'Odkaz',
           type: 'string',
+          initialValue: '/kontakt',
+        },
+        {
+          name: 'isActive',
+          title: 'Zobrazit tlačítko',
+          type: 'boolean',
+          initialValue: true,
+        },
+      ],
+    }),
+    defineField({
+      name: 'secondaryButton',
+      title: 'Sekundární tlačítko (modré)',
+      type: 'object',
+      fields: [
+        {
+          name: 'text',
+          title: 'Text tlačítka',
+          type: 'string',
+          initialValue: 'Zavolejte nám',
+        },
+        {
+          name: 'link',
+          title: 'Odkaz',
+          type: 'string',
+          initialValue: 'tel:+420735014112',
+        },
+        {
+          name: 'isActive',
+          title: 'Zobrazit tlačítko',
+          type: 'boolean',
+          initialValue: true,
         },
       ],
     }),

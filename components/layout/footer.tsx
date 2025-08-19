@@ -65,7 +65,7 @@ export function Footer() {
                 <MapPin className="h-4 md:h-5 w-4 md:w-5 text-gray-400 mt-0.5 flex-shrink-0" />
                 <div>
                   <div className="text-white font-medium text-sm md:text-base">Ostrava, Olomouc a okolí</div>
-                  <div className="text-xs md:text-sm text-gray-400">Po - Pá 8:00 - 20:00</div>
+                  <div className="text-xs md:text-sm text-gray-400">Po - Ne 8:00 - 20:00</div>
                 </div>
               </div>
             </div>

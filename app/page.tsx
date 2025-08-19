@@ -22,7 +22,17 @@ const heroSlidesQuery = groq`
     description,
     "bgImage": bgImage.asset->url,
     features,
-    phoneNumber
+    phoneNumber,
+    primaryButton {
+      text,
+      link,
+      isActive
+    },
+    secondaryButton {
+      text,
+      link,
+      isActive
+    }
   }
 `
 
@@ -102,9 +112,9 @@ const services = [
     description: "Čerstvý vzduch bez tepelných ztrát pro zdravé domácí prostředí",
     iconSrc: "/hub/rekuperace.png",
     features: [], // Will be populated from Sanity
-    color: 'bg-orange-300',
-    iconColor: 'text-orange-300',
-    cardColor: 'bg-orange-50'
+    color: 'bg-purple-300',
+    iconColor: 'text-purple-600',
+    cardColor: 'bg-purple-50'
   },
   {
     id: "elektroinstalace",
@@ -112,9 +122,9 @@ const services = [
     description: "Kompletní elektroinstalace od drobných oprav, rekonstrukcí bytu, novostaveb až po chytrou domácnost",
     iconSrc: "/hub/elektroinstalace.svg",
     features: [], // Will be populated from Sanity
-    color: 'bg-purple-300',
-    iconColor: 'text-purple-600',
-    cardColor: 'bg-purple-50'
+    color: 'bg-orange-300',
+    iconColor: 'text-orange-600',
+    cardColor: 'bg-orange-50'
   },
   {
     id: "fotovoltaika",

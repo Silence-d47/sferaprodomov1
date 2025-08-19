@@ -121,3 +121,28 @@ export const productsByCategoryWithFilesQuery = groq`
     }
   }
 `
+
+export const heroSlidesQuery = groq`
+  *[_type == "heroSlide" && isActive == true] | order(order asc) {
+    _id,
+    title,
+    subtitle,
+    description,
+    "bgImage": bgImage.asset->url,
+    features,
+    phoneNumber,
+    primaryButton {
+      text,
+      link,
+      isActive
+    },
+    secondaryButton {
+      text,
+      link,
+      isActive
+    },
+    slideType,
+    order,
+    isActive
+  }
+`

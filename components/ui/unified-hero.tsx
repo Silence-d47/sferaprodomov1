@@ -14,6 +14,16 @@ export interface UnifiedHeroSlide {
   bgImage: string;
   features?: string[];
   phoneNumber?: string;
+  primaryButton?: {
+    text: string;
+    link: string;
+    isActive: boolean;
+  };
+  secondaryButton?: {
+    text: string;
+    link: string;
+    isActive: boolean;
+  };
 }
 
 interface UnifiedHeroProps {
@@ -72,19 +82,19 @@ export function UnifiedHero({ slides }: UnifiedHeroProps) {
         ))}
       </div>
 
-      {/*   Hlavní obsah a statická karta */}
-      <div className="relative z-10 h-full flex items-center justify-center">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="max-w-4xl mx-auto text-center">
+      {/* Hlavní obsah a statická karta */}
+      <div className="relative z-10 h-full flex items-center justify-center px-4 sm:px-6 md:px-8">
+        <div className="w-full max-w-5xl mx-auto">
+          <div className="text-center">
             {/* STATICKÁ KARTA - Funguje jako maska (okno) */}
-            <div className="w-full max-w-[560px] sm:max-w-3xl mx-4 sm:mx-auto bg-white/10 backdrop-blur-2xl rounded-2xl md:rounded-3xl p-4 sm:p-8 md:p-12 lg:p-16 shadow-2xl border border-white/10 ring-1 ring-white/20 relative overflow-hidden">
+            <div className="w-full max-w-4xl mx-auto bg-white/10 backdrop-blur-2xl rounded-2xl md:rounded-3xl p-6 sm:p-8 md:p-10 lg:p-12 xl:p-16 shadow-2xl border border-white/10 ring-1 ring-white/20 relative overflow-hidden">
               
               {/* Kontejner pro posuvný OBSAH uvnitř karty */}
-              <div className="relative min-h-[52vh] md:min-h-[68vh] flex items-center justify-center">
+              <div className="relative min-h-[60vh] md:min-h-[70vh] flex items-center justify-center">
                 {slides.map((slideData, index) => (
                   <div
                     key={slideData.id}
-                    className="absolute inset-0 transition-opacity duration-700 ease-in-out flex flex-col justify-center px-1 py-1"
+                    className="absolute inset-0 transition-opacity duration-700 ease-in-out flex flex-col justify-center px-4 sm:px-6 md:px-8 py-4 sm:py-6 md:py-8"
                     style={{
                       opacity: index === currentSlide ? 1 : 0,
                       pointerEvents: index === currentSlide ? 'auto' : 'none',
@@ -108,32 +118,39 @@ export function UnifiedHero({ slides }: UnifiedHeroProps) {
                     </div>
 
                     {slideData.description && (
-                      <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/80 leading-relaxed mb-4 sm:mb-6 md:mb-10 max-w-sm sm:max-w-2xl mx-auto px-2 sm:px-3 hover:text-white/90 transition-colors duration-300">
+                      <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/80 leading-relaxed mb-6 sm:mb-8 md:mb-10 max-w-sm sm:max-w-2xl mx-auto hover:text-white/90 transition-colors duration-300">
                         {slideData.description}
                       </p>
                     )}
 
-                    <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2 md:gap-4 mb-6 sm:mb-8 md:mb-12">
+                    <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 mb-6 sm:mb-8 md:mb-12">
                       {(slideData.features || []).map((feature, idx) => (
-                        <div key={idx} className="bg-white/10 backdrop-blur-md rounded-full px-2 py-1.5 sm:px-3 sm:py-2 md:px-6 md:py-3 border border-white/20 hover:bg-white/15 hover:scale-110 hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <div key={idx} className="bg-white/10 backdrop-blur-md rounded-full px-3 py-2 sm:px-4 sm:py-2.5 md:px-6 md:py-3 border border-white/20 hover:bg-white/15 hover:scale-110 hover:shadow-lg transition-all duration-300 cursor-pointer">
                           <span className="text-white font-medium text-xs sm:text-sm md:text-base leading-tight">{feature}</span>
                         </div>
                       ))}
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4 justify-center max-w-sm sm:max-w-lg mx-auto px-2">
-                      <Button asChild size="lg" className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-2.5 sm:py-3 md:py-4 px-4 sm:px-6 md:px-8 rounded-lg sm:rounded-xl md:rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] border-0 hover:animate-pulse text-sm sm:text-base h-10 sm:h-12 md:h-14">
-                        <Link href="/kontakt" className="flex items-center justify-center space-x-1.5 sm:space-x-2 md:space-x-3">
-                          <Calculator className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 animate-bounce" />
-                          <span className="text-xs sm:text-sm md:text-base">Nezávazná nabídka</span>
-                        </Link>
-                      </Button>
-                      <Button asChild size="lg" className="flex-1 bg-white/15 hover:bg-white/25 text-white font-bold py-2.5 sm:py-3 md:py-4 px-4 sm:px-6 md:px-8 rounded-lg sm:rounded-xl md:rounded-2xl border border-white/30 hover:border-white/40 transition-all duration-300 backdrop-blur-md hover:scale-[1.02] hover:shadow-lg text-sm sm:text-base h-10 sm:h-12 md:h-14">
-                        <Link href={`tel:${slideData.phoneNumber || '+420735014112'}`} className="flex items-center justify-center space-x-1.5 sm:space-x-2 md:space-x-3">
-                          <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 animate-pulse" />
-                          <span className="text-xs sm:text-sm md:text-base">Zavolejte nám</span>
-                        </Link>
-                      </Button>
+                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 justify-center max-w-sm sm:max-w-lg mx-auto">
+                      {/* Primární tlačítko - oranžové */}
+                      {(slideData.primaryButton?.isActive !== false) && (
+                        <Button asChild size="lg" className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-2.5 sm:py-3 md:py-4 px-4 sm:px-6 md:px-8 rounded-lg sm:rounded-xl md:rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] border-0 hover:animate-pulse text-sm sm:text-base h-10 sm:h-12 md:h-14">
+                          <Link href={slideData.primaryButton?.link || "/kontakt"} className="flex items-center justify-center space-x-1.5 sm:space-x-2 md:space-x-3">
+                            <Calculator className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 animate-bounce" />
+                            <span className="text-xs sm:text-sm md:text-base">{slideData.primaryButton?.text || "Nezávazná nabídka"}</span>
+                          </Link>
+                        </Button>
+                      )}
+                      
+                      {/* Sekundární tlačítko - modré */}
+                      {(slideData.secondaryButton?.isActive !== false) && (
+                        <Button asChild size="lg" className="flex-1 bg-white/15 hover:bg-white/25 text-white font-bold py-2.5 sm:py-3 md:py-4 px-4 sm:px-6 md:px-8 rounded-lg sm:rounded-xl md:rounded-2xl border border-white/30 hover:border-white/40 transition-all duration-300 backdrop-blur-md hover:scale-[1.02] hover:shadow-lg text-sm sm:text-base h-10 sm:h-12 md:h-14">
+                          <Link href={slideData.secondaryButton?.link || `tel:${slideData.phoneNumber || '+420735014112'}`} className="flex items-center justify-center space-x-1.5 sm:space-x-2 md:space-x-3">
+                            <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 animate-pulse" />
+                            <span className="text-xs sm:text-sm md:text-base">{slideData.secondaryButton?.text || "Zavolejte nám"}</span>
+                          </Link>
+                        </Button>
+                      )}
                     </div>
                     
                     <div className="mt-4 sm:mt-6 md:mt-8 pt-3 sm:pt-4 md:pt-6 border-t border-white/10">

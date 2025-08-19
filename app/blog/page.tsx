@@ -315,7 +315,7 @@ export default function BlogPage() {
               </div>
             </div>
 
-            <article className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300">
+            <Link href={`/blog/${latestPost.slug.current}`} className="block bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300">
               <div className="md:flex">
                 <div className="md:w-1/2">
                   <div className="h-64 md:h-full bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
@@ -356,24 +356,19 @@ export default function BlogPage() {
                       <span>{latestPost.readingTime || 5} min čtení</span>
                     </div>
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 leading-tight">
-                    <Link href={`/blog/${latestPost.slug.current}`} className="hover:text-[#1B5D93] transition-colors duration-200">
-                      {latestPost.title}
-                    </Link>
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 leading-tight hover:text-[#1B5D93] transition-colors duration-200">
+                    {latestPost.title}
                   </h2>
                   <p className="text-gray-600 text-lg leading-relaxed mb-6">
                     {latestPost.excerpt}
                   </p>
-                  <Link 
-                    href={`/blog/${latestPost.slug.current}`}
-                    className="inline-flex items-center gap-2 text-[#1B5D93] font-semibold hover:gap-3 transition-all duration-200"
-                  >
+                  <div className="inline-flex items-center gap-2 text-[#1B5D93] font-semibold group-hover:gap-3 transition-all duration-200">
                     Číst celý článek
                     <ArrowRight className="h-4 w-4" />
-                  </Link>
+                  </div>
                 </div>
               </div>
-            </article>
+            </Link>
           </div>
         </section>
       )}
@@ -484,7 +479,7 @@ export default function BlogPage() {
           {filteredPosts.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredPosts.map((post) => (
-                <article key={post._id} className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-xl hover:border-gray-300 transition-all duration-300 group">
+                <Link key={post._id} href={`/blog/${post.slug.current}`} className="block bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-xl hover:border-gray-300 transition-all duration-300 group">
                   <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
                     {post.mainImage ? (
                       <Image
@@ -519,9 +514,7 @@ export default function BlogPage() {
                       </div>
                     </div>
                     <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight group-hover:text-[#1B5D93] transition-colors duration-200">
-                      <Link href={`/blog/${post.slug.current}`} className="block">
-                        {post.title}
-                      </Link>
+                      {post.title}
                     </h3>
                     <p className="text-gray-600 text-sm leading-relaxed mb-4">
                       {post.excerpt}
@@ -531,15 +524,12 @@ export default function BlogPage() {
                         <User className="h-3 w-3" />
                         <span>{post.author}</span>
                       </div>
-                      <Link 
-                        href={`/blog/${post.slug.current}`}
-                        className="text-[#1B5D93] text-sm font-semibold hover:text-[#196097] transition-colors duration-200"
-                      >
+                      <div className="text-[#1B5D93] text-sm font-semibold group-hover:text-[#196097] transition-colors duration-200">
                         Číst více
-                      </Link>
+                      </div>
                     </div>
                   </div>
-                </article>
+                </Link>
               ))}
             </div>
           ) : (
