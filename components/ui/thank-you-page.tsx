@@ -85,51 +85,7 @@ export function ThankYouPage({ conversionData, onClose }: ThankYouPageProps) {
             </div>
           )}
 
-          {/* Další kroky */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
-            {[
-              {
-                icon: <Clock className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />,
-                title: "Co bude následovat?",
-                description: "Do 24 hodin se vám ozveme s návrhem řešení na míru a termínem bezplatné konzultace.",
-                bgColor: "from-blue-50 to-indigo-50",
-                borderColor: "border-blue-100",
-                iconBg: "bg-blue-100",
-                delay: 400
-              },
-              {
-                icon: <Phone className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />,
-                title: "Máte dotaz?",
-                description: "Zavolejte nám rovnou na +420 735 014 112 nebo napište na info@sfera-pro-domov.cz",
-                bgColor: "from-green-50 to-emerald-50",
-                borderColor: "border-green-100",
-                iconBg: "bg-green-100",
-                delay: 500
-              },
-              {
-                icon: <Download className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />,
-                title: "Užitečné materiály",
-                description: "Stáhněte si naše ceníky a technické specifikace pro lepší orientaci.",
-                bgColor: "from-purple-50 to-pink-50",
-                borderColor: "border-purple-100",
-                iconBg: "bg-purple-100",
-                delay: 600
-              }
-            ].map((item, index) => (
-              <div 
-                key={index}
-                className={`text-center p-3 sm:p-4 bg-gradient-to-br ${item.bgColor} rounded-lg sm:rounded-xl border ${item.borderColor} animate-fade-in-up hover:scale-105 transition-all duration-300 hover:shadow-lg`}
-                style={{ animationDelay: `${item.delay}ms` }}
-              >
-                <div className={`w-10 h-10 sm:w-12 sm:h-12 ${item.iconBg} rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3 hover:scale-110 transition-transform duration-300`}>
-                  {item.icon}
-                </div>
-                <h3 className="text-sm sm:text-base font-bold text-slate-800 mb-1.5 sm:mb-2 leading-tight">{item.title}</h3>
-                <p className="text-xs sm:text-xs text-slate-700 leading-relaxed">{item.description}</p>
-              </div>
-            ))}
-          </div>
-
+       
           {/* Call to action tlačítka */}
           <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 justify-center animate-fade-in-up animation-delay-700">
             <Button asChild className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg sm:rounded-xl text-sm sm:text-base h-10 sm:h-12 hover:scale-105 transition-all duration-300 hover:shadow-xl">

@@ -45,7 +45,7 @@ export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
     }
     
     // URL vašeho Google Apps Scriptu
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxNaxi5ngjEZGrtg_HFoe1oyQXMPa9iRKfWr5K6jMBDKizsT9DQIMpzQ8HVW5aHtJw0LQ/exec'
+    const scriptURL = 'https://script.google.com/macros/s/AKfycby7rp2SXJMyFVrUDEEdKo9uomVt3_OYsg4H2OBhJ2pPa2ZFXDAenzqsqTUNA4dx-GGrAQ/exec'
 
     try {
       // 1. Odeslání dat na Google Script
