@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { EnhancedSectionDivider } from '@/components/ui/enhanced-section-divider';
-import { Calculator, Phone, Shield } from 'lucide-react';
+import { Calculator, Phone, Shield, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export interface UnifiedHeroSlide {
   id: string;
@@ -32,9 +32,13 @@ interface UnifiedHeroProps {
 
 export function UnifiedHero({ slides }: UnifiedHeroProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
+  const touchStartX = useRef<number>(0);
+  const touchEndX = useRef<number>(0);
 
   const startAutoPlay = () => {
+    if (isPaused) return; // Nepouštět autoplay pokud je pozastaveno
     stopAutoPlay();
     autoPlayRef.current = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % Math.max(slides.length, 1));
@@ -44,7 +48,18 @@ export function UnifiedHero({ slides }: UnifiedHeroProps) {
   const stopAutoPlay = () => {
     if (autoPlayRef.current) {
       clearInterval(autoPlayRef.current);
+      autoPlayRef.current = null;
     }
+  };
+
+  const pauseAutoPlay = () => {
+    setIsPaused(true);
+    stopAutoPlay();
+  };
+
+  const resumeAutoPlay = () => {
+    setIsPaused(false);
+    startAutoPlay();
   };
 
   const goToSlide = (index: number) => {
@@ -53,13 +68,84 @@ export function UnifiedHero({ slides }: UnifiedHeroProps) {
     startAutoPlay();
   };
 
+  const goToNextSlide = () => {
+    goToSlide((currentSlide + 1) % slides.length);
+  };
+
+  const goToPreviousSlide = () => {
+    goToSlide((currentSlide - 1 + slides.length) % slides.length);
+  };
+
+  // Touch handlers pro swipe
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    
+    const distance = touchStartX.current - touchEndX.current;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      goToNextSlide();
+    } else if (isRightSwipe) {
+      goToPreviousSlide();
+    }
+  };
+
+  // Mouse hover handlers
+  const handleMouseEnter = () => {
+    pauseAutoPlay();
+  };
+
+  const handleMouseLeave = () => {
+    resumeAutoPlay();
+  };
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      switch (e.key) {
+        case 'ArrowLeft':
+          e.preventDefault();
+          goToPreviousSlide();
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          goToNextSlide();
+          break;
+        case ' ':
+          e.preventDefault();
+          if (isPaused) {
+            resumeAutoPlay();
+          } else {
+            pauseAutoPlay();
+          }
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentSlide, slides.length, isPaused]);
+
   useEffect(() => {
     startAutoPlay();
     return () => stopAutoPlay();
-  }, [slides?.length]);
+  }, [slides?.length, isPaused]);
 
   return (
-    <section className="relative min-h-[100svh] md:h-screen min-h-[540px] overflow-hidden">
+    <section 
+      className="relative min-h-[100svh] md:h-screen min-h-[540px] overflow-hidden"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       {/* Kontejner pro posuvná pozadí */}
       <div className="absolute inset-0 z-0">
         {slides.map((slide, index) => (
@@ -82,8 +168,36 @@ export function UnifiedHero({ slides }: UnifiedHeroProps) {
         ))}
       </div>
 
+      {/* Navigační šipky */}
+      {slides.length > 1 && (
+        <>
+          {/* Levá šipka */}
+          <button
+            onClick={goToPreviousSlide}
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full p-3 border border-white/20 transition-all duration-300 hover:scale-110 hover:shadow-lg group"
+            aria-label="Předchozí slide"
+          >
+            <ChevronLeft className="w-6 h-6 text-white group-hover:text-orange-300 transition-colors duration-300" />
+          </button>
+
+          {/* Pravá šipka */}
+          <button
+            onClick={goToNextSlide}
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full p-3 border border-white/30 hover:border-white/40 transition-all duration-300 backdrop-blur-md hover:scale-[1.02] hover:shadow-lg text-sm sm:text-base h-10 sm:h-12 md:h-14"
+            aria-label="Další slide"
+          >
+            <ChevronRight className="w-6 h-6 text-white group-hover:text-orange-300 transition-colors duration-300" />
+          </button>
+        </>
+      )}
+
       {/* Hlavní obsah a statická karta */}
-      <div className="relative z-10 h-full flex items-center justify-center px-4 sm:px-6 md:px-8">
+      <div 
+        className="relative z-10 h-full flex items-center justify-center px-4 sm:px-6 md:px-8"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         <div className="w-full max-w-5xl mx-auto">
           <div className="text-center">
             {/* STATICKÁ KARTA - Funguje jako maska (okno) */}
