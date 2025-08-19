@@ -55,36 +55,44 @@ export function ContactForm({
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-
-    const formData = new FormData(e.currentTarget)
-    const data = {
-      name: formData.get("name"),
-      email: formData.get("email"),
-      phone: formData.get("phone"),
-      service: formData.get("service"),
-      message: formData.get("message"),
-      source: source,
-    }
-
+    e.preventDefault();
+    setIsSubmitting(true);
+  
+    // URL vašeho Google skriptu - stejná jako u pop-upu
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxpEjOr45h3ErID2_GKH7dmeSy4nwLq8dCj_m9tnJqqC8snPQwMabH7kquuWIs4OCc-eg/exec';
+    const form = e.currentTarget;
+  
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      // Nahrazujeme simulaci skutečným odesláním dat na Google Script
+      const response = await fetch(scriptURL, {
+        method: 'POST',
+        body: new FormData(form),
+      });
+  
+      // Zkontrolujeme, zda odeslání proběhlo úspěšně
+      if (!response.ok) {
+        throw new Error('Chyba při odesílání na server.');
+      }
+  
+      // Vše je v pořádku, zobrazíme úspěšnou notifikaci
       toast({
         title: "Poptávka úspěšně odeslána!",
         description: "Děkujeme, brzy se vám ozveme s dalšími kroky.",
-      })
-      ;(e.target as HTMLFormElement).reset()
+      });
+      form.reset(); // Vyčistíme formulář
+  
     } catch (error) {
+      console.error('Chyba při odesílání:', error);
+      // V případě chyby zobrazíme chybovou notifikaci
       toast({
         title: "Něco se pokazilo",
         description: "Formulář se nepodařilo odeslat. Zkuste to prosím znovu.",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <div className="bg-slate-50/70 rounded-3xl p-4 sm:p-8">
