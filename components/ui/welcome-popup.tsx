@@ -1,12 +1,11 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { X, Phone, Mail, MapPin, User, MessageSquare, CheckCircle, Clock, Award, Shield } from "lucide-react"
+import { X, Phone, Mail, MapPin, MessageSquare, CheckCircle, Award } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ThankYouPage } from "@/components/ui/thank-you-page"
 import { useConversionMetrics, type ConversionData } from "@/hooks/use-conversion-metrics"
-import { Label } from "@radix-ui/react-label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface WelcomePopupProps {
@@ -34,25 +33,49 @@ export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
     e.preventDefault()
     setIsSubmitting(true)
 
-    const formData = new FormData(e.currentTarget)
+    const formElement = e.currentTarget
+    const formData = new FormData(formElement)
     const data = {
       name: "", // Prázdné, protože jsme odstranili pole
       phone: formData.get("phone") as string,
       email: formData.get("email") as string,
       zipCode: formData.get("zipCode") as string,
+      service: formData.get("service") as string, // Přidáno pro sběr vybrané služby
       source: "welcome-popup"
     }
+    
+    // URL vašeho Google Apps Scriptu
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxNaxi5ngjEZGrtg_HFoe1oyQXMPa9iRKfWr5K6jMBDKizsT9DQIMpzQ8HVW5aHtJw0LQ/exec'
 
     try {
-      // Uložení konverze s metrikami
+      // 1. Odeslání dat na Google Script
+      // Vytvoříme FormData znovu, protože Google Script očekává tento formát.
+      // Přidáme datum, pokud ho chceme poslat z frontendu (lepší je ale nechat ho generovat scriptem)
+      const googleFormData = new FormData();
+      googleFormData.append('email', data.email);
+      googleFormData.append('phone', data.phone);
+      googleFormData.append('zipCode', data.zipCode);
+      googleFormData.append('service', data.service);
+      // Můžete přidat i další skrytá pole, pokud je váš script očekává
+      // googleFormData.append('source', data.source);
+
+
+      const response = await fetch(scriptURL, { 
+        method: 'POST', 
+        body: googleFormData
+      })
+
+      if (!response.ok) {
+        throw new Error('Chyba při odesílání do Google Sheets.')
+      }
+
+      // 2. Uložení konverze lokálně (původní kód)
       const success = saveConversion(data)
       
       if (success) {
         // Vytvoření conversion data pro thank you stránku
         const conversionData: ConversionData = {
           ...data,
-          name: "", // Prázdné, protože jsme odstranili pole
-          phone: data.phone, // Telefon z formuláře
           timestamp: new Date(),
           userAgent: navigator.userAgent,
           referrer: document.referrer || 'direct',
@@ -65,18 +88,18 @@ export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
         setShowThankYou(true)
         
         // Reset formuláře
-        ;(e.target as HTMLFormElement).reset()
+        formElement.reset()
       } else {
-        throw new Error('Nepodařilo se uložit konverzi')
+        throw new Error('Nepodařilo se uložit konverzi lokálně.')
       }
     } catch (error) {
       console.error('Chyba při odesílání:', error)
-      // Fallback na toast notifikaci při chybě
       alert('Formulář se nepodařilo odeslat. Zkuste to prosím znovu.')
     } finally {
       setIsSubmitting(false)
     }
   }
+
 
   const handleThankYouClose = () => {
     setShowThankYou(false)
@@ -157,9 +180,9 @@ export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
           <div className="bg-slate-50/70 rounded-lg sm:rounded-xl p-3 sm:p-4 border border-slate-200 animate-fade-in-up animation-delay-500">
             <form onSubmit={handleSubmit} className="space-y-2.5 sm:space-y-3">
               <div className="space-y-2 animate-fade-in-up animation-delay-600">
-                <Select name="service">
+                <Select name="service" required>
                   <SelectTrigger className="h-9 sm:h-10 text-xs sm:text-sm hover:scale-105 transition-transform duration-200">
-                    <SelectValue placeholder="Vyberte službu" />
+                    <SelectValue placeholder="Vyberte službu*" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="klimatizace">Klimatizace</SelectItem>
