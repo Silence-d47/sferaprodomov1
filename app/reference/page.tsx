@@ -4,9 +4,8 @@ import Image from "next/image"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { OrganicWaveDivider } from "@/components/ui/organic-wave-divider"
 import { EnhancedSectionDivider } from "@/components/ui/enhanced-section-divider"
-import { ShapedSectionHeader } from "@/components/ui/shaped-section-header"
+  //import { ShapedSectionHeader } from "@/components/ui/shaped-section-header"
 import { 
   MapPin, 
   Calendar, 
@@ -24,14 +23,16 @@ import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import { client } from "@/lib/sanity.client"
-import { groq } from "next-sanity"
-import useSWR from "swr"
+//import { groq } from "next-sanity"
+//import useSWR from "swr"
+import { featuredReferencesQuery, projectReferencesQuery } from "@/lib/sanity.queries"
 
 type FeaturedReference = {
   id: string
   title: string
   description?: string
-  image: string
+  image: string // odkladat na server
+  gallery?: Array<{ url: string; alt?: string }>
   category: string
   location?: string
   year?: string
@@ -45,6 +46,7 @@ type ListReference = {
   title: string
   description?: string
   image: string
+  gallery?: Array<{ url: string; alt?: string }>
   category: string
   location?: string
   year?: string
@@ -52,36 +54,7 @@ type ListReference = {
   rating?: number
 }
 
-const fetcher = (q: string) => client.fetch(q)
-
-const featuredReferencesQuery = groq`
-  *[_type == "projectReference" && isTopReference == true] | order(_createdAt desc)[0...6] {
-    "id": slug.current,
-    title,
-    description,
-    "image": image.asset->url,
-    category,
-    location,
-    year,
-    rating,
-    highlights,
-    savings
-  }
-`
-
-const otherReferencesQuery = groq`
-  *[_type == "projectReference"] | order(_createdAt desc) {
-    "id": slug.current,
-    title,
-    description,
-    "image": image.asset->url,
-    category,
-    location,
-    year,
-    rating,
-    "createdAt": _createdAt
-  }
-`
+//const   fetcher = (q: string) => client.fetch(q)
 
 // Custom arrow components for carousel
 const CustomPrevArrow = ({ onClick }: { onClick?: () => void }) => (
@@ -113,13 +86,41 @@ export default function ReferencePage() {
     const fetchData = async () => {
       setIsLoading(true)
       try {
-        const { client } = await import('@/lib/sanity.client')
         const [featured, other] = await Promise.all([
-          client.fetch<FeaturedReference[]>(featuredReferencesQuery),
-          client.fetch<ListReference[]>(otherReferencesQuery)
+          client.fetch(featuredReferencesQuery),
+          client.fetch(projectReferencesQuery)
         ])
-        setFeaturedReferences(featured)
-        setOtherReferences(other)
+        
+        // Map data to match expected types
+        const mappedFeatured = featured.map((ref: any) => ({
+          id: ref.slug?.current || ref._id,
+          title: ref.title,
+          description: ref.description,
+          image: ref.image,
+          gallery: ref.gallery,
+          category: ref.category,
+          location: ref.location,
+          year: ref.year,
+          rating: ref.rating,
+          highlights: ref.highlights,
+          savings: ref.savings
+        }))
+        
+        const mappedOther = other.map((ref: any) => ({
+          id: ref.slug?.current || ref._id,
+          title: ref.title,
+          description: ref.description,
+          image: ref.image,
+          gallery: ref.gallery,
+          category: ref.category,
+          location: ref.location,
+          year: ref.year,
+          rating: ref.rating,
+          createdAt: ref._createdAt
+        }))
+        
+        setFeaturedReferences(mappedFeatured)
+        setOtherReferences(mappedOther)
       } catch (error) {
         console.error('Error fetching references:', error)
       } finally {
@@ -385,6 +386,7 @@ export default function ReferencePage() {
                     <div key={reference.id} className="px-4">
                       <Link href={`/reference/${reference.id}`} className="block bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-xl overflow-hidden border border-gray-100 flex flex-col h-full hover:shadow-2xl transition-all duration-300">
                         <div className="grid lg:grid-cols-2 gap-0 flex-grow">
+                          {/* Hlavní fotka */}
                           <div className="relative w-full overflow-hidden aspect-[5/4]">
                             <Image
                               src={reference.image}
@@ -409,6 +411,8 @@ export default function ReferencePage() {
                               </div>
                             </div>
                           </div>
+                          
+                          {/* Hlavní text */}
                           <div className="p-8 lg:p-12 flex flex-col justify-center flex-grow">
                             <div className="flex items-center justify-between mb-4">
                               <Badge className={`${categoryStyles(reference.category).bg} ${categoryStyles(reference.category).text} border-0`}>
@@ -483,6 +487,7 @@ export default function ReferencePage() {
               otherReferences.map((reference) => (
                 <Link key={reference.id} href={`/reference/${reference.id}`} className="block group hover:shadow-xl transition-all duration-300 border-0 bg-white overflow-hidden flex flex-col h-full rounded-lg">
                   <div className="p-0 flex flex-col h-full">
+                    {/* Hlavní fotka */}
                     <div className="relative w-full overflow-hidden aspect-[5/4]">
                       <Image
                         src={reference.image}
@@ -497,6 +502,8 @@ export default function ReferencePage() {
                         </div>
                       </div>
                     </div>
+                    
+                    {/* Hlavní text */}
                     <div className="p-6 flex flex-col flex-grow">
                       <div className="flex items-center justify-between mb-3">
                         <Badge className={`${categoryStyles(reference.category).bg} ${categoryStyles(reference.category).text} border-0 text-xs`}>
@@ -519,6 +526,7 @@ export default function ReferencePage() {
                           <span className="text-xs text-blue-600 font-medium">Realizováno</span>
                         </div>
                       </div>
+                      
                       <div className="w-full border border-gray-300 group-hover:bg-blue-50 group-hover:border-blue-200 transition-colors mt-auto py-2 px-4 rounded-md text-center text-sm font-medium text-gray-700 group-hover:text-blue-700">
                         Zobrazit detail
                         <ArrowRight className="h-3 w-3 ml-2 inline" />

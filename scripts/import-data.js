@@ -36,7 +36,10 @@ async function importData() {
     // 6. Import FAQ
     await importFAQ()
     
-    // 7. Import Site Settings
+    // 7. Import Hero Slides
+    await importHeroSlides()
+    
+    // 8. Import Site Settings
     await importSiteSettings()
     
     console.log('✅ Data import completed successfully!')
@@ -440,6 +443,122 @@ async function importFAQ() {
   for (const faq of faqs) {
     await client.createOrReplace(faq)
     console.log(`✓ Created FAQ: ${faq.question}`)
+  }
+}
+
+// Hero Slides
+async function importHeroSlides() {
+  console.log('🏆 Importing hero slides...')
+  
+  const slides = [
+    {
+      _type: 'heroSlide',
+      _id: 'hero-slide-1',
+      title: 'Porucha elektřiny? Jsme u vás do 24 hodin.',
+      subtitle: 'Vaše spolehlivá elektro pohotovost pro Opavu a okolí, 7 dní v týdnu.',
+      description: 'Nenechte se omezovat nefunkční zásuvkou nebo vypadlým jističem. Náš tým rychle a profesionálně vyřeší jakoukoliv drobnou poruchu elektroinstalace. Spolehlivě, bezpečně a bez zbytečného čekání.',
+      bgImage: {
+        _type: 'image',
+        asset: {
+          _type: 'reference',
+          _ref: 'image-elektroinstalace-1' // Reference to an image asset
+        }
+      },
+      slideType: 'intro',
+      features: [
+        'Rychlá reakce do 24 hodin',
+        'Profesionální servis',
+        '7 dní v týdnu',
+        'Opava a okolí'
+      ],
+      primaryButton: {
+        text: 'Potřebuji rychlou opravu',
+        link: '/kontakt',
+        isActive: true
+      },
+      secondaryButton: {
+        text: 'Zavolejte nám',
+        link: 'tel:+420735014112',
+        isActive: true
+      },
+      phoneNumber: '+420 735 014 112',
+      order: 1,
+      isActive: true
+    },
+    {
+      _type: 'heroSlide',
+      _id: 'hero-slide-2',
+      title: 'Profesionální klimatizace a tepelná čerpadla',
+      subtitle: 'Nadstandardní servis a montáž do 14 dnů',
+      description: 'Specializujeme se na instalaci klimatizací, tepelných čerpadel a rekuperačních systémů. Garantujeme kvalitu, spolehlivost a rychlou realizaci.',
+      bgImage: {
+        _type: 'image',
+        asset: {
+          _type: 'reference',
+          _ref: 'image-klimatizace-1' // Reference to an image asset
+        }
+      },
+      slideType: 'service',
+      features: [
+        'Montáž do 14 dnů',
+        '0% záloha na skladové zboží',
+        'Platba po realizaci',
+        'Servis do 7 dnů',
+        'Technická podpora 24/7'
+      ],
+      primaryButton: {
+        text: 'Nezávazná nabídka',
+        link: '/kontakt',
+        isActive: true
+      },
+      secondaryButton: {
+        text: 'Zavolejte nám',
+        link: 'tel:+420735014112',
+        isActive: true
+      },
+      phoneNumber: '+420 735 014 112',
+      order: 2,
+      isActive: true
+    },
+    {
+      _type: 'heroSlide',
+      _id: 'hero-slide-3',
+      title: 'Reference a realizace',
+      subtitle: 'Podívejte se na naše úspěšné projekty',
+      description: 'Máme za sebou stovky spokojených zákazníků a úspěšných realizací. Naše práce mluví za nás.',
+      bgImage: {
+        _type: 'image',
+        asset: {
+          _type: 'reference',
+          _ref: 'image-reference-1' // Reference to an image asset
+        }
+      },
+      slideType: 'reference',
+      features: [
+        'Stovky spokojených zákazníků',
+        'Profesionální realizace',
+        'Garance kvality',
+        'Kompletní servis'
+      ],
+      primaryButton: {
+        text: 'Zobrazit reference',
+        link: '/reference',
+        isActive: true
+      },
+      secondaryButton: {
+        text: 'Kontaktujte nás',
+        link: '/kontakt',
+        isActive: true
+      },
+      phoneNumber: '+420 735 014 112',
+      order: 3,
+      isActive: true
+    }
+  ]
+
+  for (const slide of slides) {
+    await client.createOrReplace(slide)
+    console.log(`✓ Created hero slide: ${slide.title}`)
   }
 }
 

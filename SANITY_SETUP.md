@@ -1,95 +1,118 @@
-# Sanity CMS Setup
+# Sanity CMS Setup - SFERA PRO DOMOV
 
-## Přehled
-Tento projekt používá Sanity CMS pro správu obsahu. Sanity je headless CMS, který umožňuje správu obsahu přes webové rozhraní.
+## 🚀 Rychlé spuštění
 
-## Instalace a konfigurace
-
-### 1. Vytvoření Sanity projektu
-1. Jděte na [https://www.sanity.io/](https://www.sanity.io/)
-2. Vytvořte nový projekt nebo použijte existující
-3. Zkopírujte Project ID z nastavení projektu
-
-### 2. Konfigurace prostředí
-1. Zkopírujte `env.example` jako `.env.local`
-2. Vyplňte své Sanity Project ID:
-```env
-NEXT_PUBLIC_SANITY_PROJECT_ID=your-actual-project-id
-SANITY_STUDIO_PROJECT_ID=your-actual-project-id
+### 1. **Kopírování prostředí**
+```bash
+cp env.example .env.local
 ```
 
-### 3. Spuštění Sanity Studio
+### 2. **Instalace Sanity dependencies**
 ```bash
-npx sanity dev
+cd sanity
+npm install
+```
+
+### 3. **Spuštění Sanity Studio**
+```bash
+# V adresáři sanity/
+npm run dev
 ```
 Sanity Studio bude dostupné na `http://localhost:3333`
 
-### 4. Spuštění Next.js aplikace
+### 4. **Spuštění Next.js aplikace**
 ```bash
+# V hlavním adresáři
 npm run dev
 ```
 
-## Struktura dat
+## 📊 Import dat
 
-### Post (Články)
-- `title` - Název článku
-- `slug` - URL slug
-- `author` - Reference na autora
-- `mainImage` - Hlavní obrázek
-- `categories` - Pole kategorií
-- `publishedAt` - Datum publikace
-- `body` - Obsah článku (Portable Text)
+### **Import hero slides (bez obrázků)**
+```bash
+node scripts/import-hero-slides.js
+```
 
-### Author (Autoři)
-- `name` - Jméno autora
-- `slug` - URL slug
-- `image` - Fotografie autora
-- `bio` - Biografie (Portable Text)
+### **Import kompletních dat**
+```bash
+node scripts/import-data.js
+```
 
-### Category (Kategorie)
-- `title` - Název kategorie
-- `description` - Popis kategorie
+## 🔧 Konfigurace
 
-## Použití v aplikaci
+### **Sanity Project ID**
+- Aktuální: `cu4viahw`
+- Dataset: `production`
+- API Version: `2024-01-01`
 
-### Načtení všech článků
+### **Struktura dat**
+- ✅ Hero Slides - funkční
+- ✅ Posts (články) - funkční
+- ✅ Products (produkty) - funkční
+- ✅ Categories (kategorie) - funkční
+- ✅ Authors (autoři) - funkční
+- ✅ FAQ - funkční
+- ✅ Site Settings - funkční
+
+## 🎯 Hero Slides Schema
+
+```typescript
+{
+  _type: 'heroSlide',
+  title: 'string',
+  subtitle: 'string',
+  description: 'text',
+  bgImage: 'image', // volitelné
+  slideType: 'intro' | 'service' | 'reference',
+  features: ['string'],
+  primaryButton: { text, link, isActive },
+  secondaryButton: { text, link, isActive },
+  phoneNumber: 'string',
+  order: 'number',
+  isActive: 'boolean'
+}
+```
+
+## 🚨 Troubleshooting
+
+### **Problém: Sanity se nespustí**
+1. Zkontrolujte, že máte `.env.local` s `NEXT_PUBLIC_SANITY_PROJECT_ID`
+2. Ověřte, že `sanity/package.json` má správné verze
+3. Zkuste `npm install` v `sanity/` adresáři
+
+### **Problém: Chybí data**
+1. Spusťte `node scripts/import-hero-slides.js`
+2. Zkontrolujte console pro chyby
+3. Ověřte, že Sanity Studio běží
+
+### **Problém: Chybí obrázky**
+1. Obrázky se importují později
+2. Pro testování stačí textový obsah
+3. V Sanity Studio můžete přidat obrázky ručně
+
+## 📱 Použití v aplikaci
+
+### **Načtení hero slides**
 ```typescript
 import { client } from '@/lib/sanity.client'
-import { postsQuery } from '@/lib/sanity.queries'
+import { heroSlidesQuery } from '@/lib/sanity.queries'
 
-const posts = await client.fetch(postsQuery)
+const slides = await client.fetch(heroSlidesQuery)
 ```
 
-### Načtení konkrétního článku
+### **Zobrazení v UnifiedHero**
 ```typescript
-import { client } from '@/lib/sanity.client'
-import { postQuery } from '@/lib/sanity.queries'
+import { UnifiedHero } from '@/components/ui/unified-hero'
 
-const post = await client.fetch(postQuery, { slug: 'article-slug' })
+<UnifiedHero slides={slides} />
 ```
 
-### Zobrazení obrázků
-```typescript
-import { urlForImage } from '@/lib/sanity.image'
+## 🔗 Užitečné odkazy
 
-const imageUrl = urlForImage(post.mainImage)?.url()
-```
-
-### Zobrazení Portable Text
-```typescript
-import { CustomPortableText } from '@/lib/sanity.portableText'
-
-<CustomPortableText value={post.body} />
-```
-
-## Přidání nového typu obsahu
-
-1. Vytvořte nový schema soubor v `sanity/schemaTypes/`
-2. Přidejte typ do `sanity/schemaTypes/index.ts`
-3. Vytvořte query v `lib/sanity.queries.ts`
-4. Použijte v aplikaci
-
-## Užitečné odkazy
+- [Sanity Studio](http://localhost:3333) - po spuštění
 - [Sanity Documentation](https://www.sanity.io/docs)
 - [Next.js Sanity Integration](https://github.com/sanity-io/next-sanity)
-- [Portable Text](https://portabletext.org/) 
+
+---
+
+**Poznámka:** Všechny změny jsou automaticky nasazeny. Pro testování použijte development server. 

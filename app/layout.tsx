@@ -9,6 +9,9 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
 import { WelcomePopupProvider } from "@/components/welcome-popup-provider"
 import { CookieConsent } from "@/components/ui/cookie-consent"
+import { GoogleAnalytics } from "@/components/ui/google-analytics"
+import { FacebookPixel } from "@/components/ui/facebook-pixel"
+import { GoogleTagManager } from "@/components/ui/google-tag-manager"
 
 const sourceSans = Source_Sans_3({ subsets: ["latin"] })
 
@@ -33,6 +36,9 @@ export default function RootLayout({
   return (
     <html lang="cs" suppressHydrationWarning>
       <body className={sourceSans.className} suppressHydrationWarning>
+        <GoogleAnalytics />
+        <FacebookPixel />
+        <GoogleTagManager />
         <ThemeProvider theme="default">
           <WelcomePopupProvider>
             <TopBar />

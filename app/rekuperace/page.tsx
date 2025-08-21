@@ -312,14 +312,14 @@ export default async function RekuperacePage() {
                 Nabízíme výběr prověřených jednotek od předních evropských výrobců, které zaručují vysokou účinnost a spolehlivos.
               </p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
               {products && products.length > 0 ? (
                 products.map((product, index) => (
                   <ProductCard
                     key={product._id}
                     title={product.title}
                     description={product.description}
-                    image={product.image ? urlForImage(product.image).url() : "/placeholder.svg"}
+                    image={product.image ? urlForImage(product.image).url() : undefined}
                     features={product.features || []}
                     isRecommended={product.isRecommended}
                     isBestSelling={product.isBestSelling}

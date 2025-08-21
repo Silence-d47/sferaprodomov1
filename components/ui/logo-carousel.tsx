@@ -99,16 +99,14 @@ export function LogoCarousel({
             {duplicatedLogos.map((logo, index) => (
               <div
                 key={`${logo.name}-${index}`}
-                className={`flex-shrink-0 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 mx-8 ${
-                  logo.name === 'Nordstar' ? 'w-48 h-24' : 'w-48 h-24'
-                }`}
+                className="flex-shrink-0 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 mx-8 w-48 h-24"
               >
                 <Image
                   src={logo.src}
                   alt={`${logo.name} logo`}
-                  width={logo.name === 'Nordstar' ? 192 : 128}
-                  height={logo.name === 'Nordstar' ? 96 : 64}
-                  className="max-w-full max-h-full object-contain filter brightness-0 opacity-60 hover:opacity-100 transition-all duration-300"
+                  width={192}
+                  height={96}
+                  className="w-full h-full object-contain filter brightness-0 opacity-60 hover:opacity-100 transition-all duration-300"
                   priority={index < logos.length}
                 />
               </div>

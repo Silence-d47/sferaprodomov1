@@ -1,9 +1,12 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, ArrowRight, Calendar, User, Clock, BookOpen, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Calendar, User, Clock, BookOpen, ChevronLeft, ChevronRight, Share2, Bookmark, Eye, ThumbsUp, MessageCircle, Tag, Lightbulb, Zap, Thermometer, Wrench, Home, Building2, ExternalLink, Phone, Mail, MapPin } from 'lucide-react'
 import Image from 'next/image'
+import { EnhancedSectionDivider } from '@/components/ui/enhanced-section-divider'
+import { urlForImage } from '@/lib/sanity.image'
 
 interface BlogPostPageProps {
   params: {
@@ -23,17 +26,68 @@ interface Post {
   mainImage: any
   body: any
   readingTime?: number
+  seoTitle?: string
+  seoDescription?: string
+  keywords?: string[]
 }
 
-// Category color mapping
-const categoryColors: Record<string, { bg: string; text: string; border: string }> = {
-  'Klimatizace': { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
-  'Tepelná čerpadla': { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200' },
-  'Rekuperace': { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200' },
-  'Elektroinstalace': { bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200' },
-  'Fotovoltaika': { bg: 'bg-yellow-50', text: 'text-yellow-700', border: 'border-yellow-200' },
-  'Komerční': { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200' },
-  'default': { bg: 'bg-slate-50', text: 'text-slate-700', border: 'border-slate-200' }
+// Category mapping with icons and colors
+const categoryConfig: Record<string, { 
+  bg: string; 
+  text: string; 
+  border: string; 
+  icon: any; 
+  description: string;
+  gradient: string;
+}> = {
+  'Klimatizace': { 
+    bg: 'bg-blue-50', 
+    text: 'text-blue-700', 
+    border: 'border-blue-200',
+    icon: Thermometer,
+    description: 'Tipy pro správnou klimatizaci',
+    gradient: 'from-blue-500 to-cyan-500'
+  },
+  'Tepelná čerpadla': { 
+    bg: 'bg-green-50', 
+    text: 'text-green-700', 
+    border: 'border-green-200',
+    icon: Zap,
+    description: 'Úsporné vytápění domácnosti',
+    gradient: 'from-green-500 to-emerald-500'
+  },
+  'Rekuperace': { 
+    bg: 'bg-purple-50', 
+    text: 'text-purple-700', 
+    border: 'border-purple-200',
+    icon: Home,
+    description: 'Čerstvý vzduch bez ztrát',
+    gradient: 'from-purple-500 to-violet-500'
+  },
+  'Elektroinstalace': { 
+    bg: 'bg-orange-50', 
+    text: 'text-orange-700', 
+    border: 'border-orange-200',
+    icon: Wrench,
+    description: 'Bezpečná elektroinstalace',
+    gradient: 'from-orange-500 to-amber-500'
+  },
+  'Fotovoltaika': { 
+    bg: 'bg-yellow-50', 
+    text: 'text-yellow-700', 
+    border: 'border-yellow-200',
+    icon: Lightbulb,
+    description: 'Solární energie pro váš dům',
+    gradient: 'from-yellow-500 to-orange-500'
+  },
+  'Komerční': { 
+    bg: 'bg-gray-50', 
+    text: 'text-gray-700', 
+    border: 'border-gray-200',
+    icon: Building2,
+    description: 'Řešení pro firmy a podniky',
+    gradient: 'from-gray-500 to-slate-500'
+  }
 }
 
 // Fetch post data from Sanity
@@ -63,7 +117,7 @@ async function getAllPosts(): Promise<Post[]> {
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const slug = params.slug
+  const slug = (await params).slug
   const [post, allPosts] = await Promise.all([
     getPostData(slug),
     getAllPosts()
@@ -83,211 +137,345 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     .filter(p => p.slug.current !== slug && p.categories?.some(cat => post.categories?.includes(cat)))
     .slice(0, 3)
 
-  // Get category color
-  const getCategoryColor = (category: string) => {
-    return categoryColors[category] || categoryColors.default
+  // Get category config
+  const getCategoryConfig = (category: string) => {
+    return categoryConfig[category] || categoryConfig['Klimatizace']
   }
 
   // Import Sanity utilities inside the component
-  const { urlForImage } = await import('@/lib/sanity.image')
   const { CustomPortableText } = await import('@/lib/sanity.portableText')
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-100">
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-[#1B5D93] via-[#196097] to-[#49A3D7] relative overflow-hidden">
+      <section className="relative py-20 bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600 overflow-hidden">
+        {/* Background pattern */}
         <div className="absolute inset-0 bg-grid-white/[0.05] bg-[length:20px_20px]"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"></div>
+        
         <div className="container relative z-10">
-          <div className="max-w-4xl mx-auto text-white">
-            <Badge className="mb-4 bg-white/20 text-white border-white/20 px-4 py-2">
-              Blog článek
-            </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              {post.title}
-            </h1>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between text-white/90 gap-2 mb-6">
-              <span className="font-medium">Autor: {post.author}</span>
-              <span>{new Date(post.publishedAt).toLocaleDateString('cs-CZ')}</span>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {post.categories?.map((category: string) => {
-                const colors = getCategoryColor(category)
-                return (
-                  <Badge key={category} className={`${colors.bg} ${colors.text} ${colors.border} border`}>
-                    {category}
-                  </Badge>
-                )
-              })}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Article Content */}
-      <section className="py-16">
-        <div className="container">
-          <div className="max-w-4xl mx-auto">
-            <Card className="p-8 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl shadow-lg">
-              <CardContent>
-                {post.mainImage && (
-                  <div className="mb-8">
-                    <div className="relative w-full overflow-hidden aspect-[5/4] rounded-lg">
-                      <Image
-                        src={urlForImage(post.mainImage).url()}
-                        alt={post.title}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  </div>
-                )}
-                
-                {post.excerpt && (
-                  <div className="mb-8 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r-lg">
-                    <p className="text-lg text-gray-700 italic">{post.excerpt}</p>
-                  </div>
-                )}
-                
-                <div className="prose prose-lg max-w-none">
-                  <CustomPortableText value={post.body} />
-                </div>
-              </CardContent>
-            </Card>
-            
-            {/* Navigation between posts */}
-            <div className="mt-12 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-              <div className="grid md:grid-cols-2 gap-0">
-                {prevPost && (
-                  <Link 
-                    href={`/blog/${prevPost.slug.current}`}
-                    className="p-6 hover:bg-gray-50 transition-colors duration-200 border-r border-gray-200"
-                  >
-                    <div className="flex items-center gap-3">
-                      <ChevronLeft className="h-5 w-5 text-gray-400" />
-                      <div>
-                        <div className="text-sm text-gray-500 mb-1">Předchozí článek</div>
-                        <div className="font-semibold text-gray-900 line-clamp-2">{prevPost.title}</div>
-                      </div>
-                    </div>
-                  </Link>
-                )}
-                {nextPost && (
-                  <Link 
-                    href={`/blog/${nextPost.slug.current}`}
-                    className={`p-6 hover:bg-gray-50 transition-colors duration-200 ${!prevPost ? 'md:col-span-2' : ''}`}
-                  >
-                    <div className="flex items-center gap-3 justify-end">
-                      <div className="text-right">
-                        <div className="text-sm text-gray-500 mb-1">Následující článek</div>
-                        <div className="font-semibold text-gray-900 line-clamp-2">{nextPost.title}</div>
-                      </div>
-                      <ChevronRight className="h-5 w-5 text-gray-400" />
-                    </div>
-                  </Link>
-                )}
-              </div>
-            </div>
-            
-            <div className="mt-8 text-center">
-              <Link 
-                href="/blog" 
-                className="inline-flex items-center gap-2 text-[#1B5D93] hover:text-[#196097] font-medium transition-colors duration-200"
-              >
-                <ArrowLeft className="h-5 w-5" />
-                Zpět na blog
+          <div className="max-w-6xl mx-auto">
+            {/* Breadcrumb */}
+            <div className="mb-8">
+              <Link href="/blog" className="inline-flex items-center text-blue-100 hover:text-white transition-colors">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Zpět na všechny články
               </Link>
             </div>
+
+            {/* Main content */}
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              {/* Left side - Text */}
+              <div className="text-white">
+                {/* Category badge */}
+                {post.categories?.[0] && (
+                  <div className="mb-6">
+                    <Badge className="bg-white/20 text-white border-white/30 text-sm px-4 py-2 backdrop-blur-sm">
+                      {post.categories[0]}
+                    </Badge>
+                  </div>
+                )}
+
+                {/* Title */}
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight drop-shadow-2xl">
+                  {post.title}
+                </h1>
+
+                {/* Excerpt */}
+                <p className="text-xl text-blue-100 leading-relaxed mb-8 max-w-2xl">
+                  {post.excerpt}
+                </p>
+
+                {/* Meta information */}
+                <div className="flex flex-wrap items-center gap-6 text-white mb-8">
+                  <div className="flex items-center">
+                    <User className="h-5 w-5 mr-2" />
+                    <span className="font-medium">{post.author}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Calendar className="h-5 w-5 mr-2" />
+                    <span>{new Date(post.publishedAt).toLocaleDateString('cs-CZ', { 
+                      year: 'numeric', 
+                      month: 'long', 
+                      day: 'numeric' 
+                    })}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Clock className="h-5 w-5 mr-2" />
+                    <span>{post.readingTime || 5} min čtení</span>
+                  </div>
+                </div>
+
+                {/* Action buttons */}
+                <div className="flex flex-wrap gap-4">
+                  <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold shadow-lg">
+                    <Bookmark className="h-5 w-5 mr-2" />
+                    Uložit článek
+                  </Button>
+                  <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-700 bg-white/10 backdrop-blur-sm">
+                    <Share2 className="h-5 w-5 mr-2" />
+                    Sdílet
+                  </Button>
+                </div>
+              </div>
+
+              {/* Right side - Image */}
+              <div className="relative">
+                <div className="relative overflow-hidden rounded-2xl shadow-2xl border border-white/20">
+                  <Image
+                    src={post.mainImage ? urlForImage(post.mainImage).url() : "/placeholder.svg"}
+                    alt={post.title}
+                    width={600}
+                    height={400}
+                    className="w-full h-auto object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                  
+                  {/* Reading progress indicator */}
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <div className="bg-white/20 backdrop-blur-sm rounded-full p-2">
+                      <div className="bg-yellow-400 h-2 rounded-full w-1/3"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Wave divider */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <EnhancedSectionDivider variant="wave" animated={true} height="xl" fromColor="from-blue-600" toColor="to-white" particles={false} />
+        </div>
+      </section>
+
+      {/* Main Content Section */}
+      <section className="py-16 bg-white">
+        <div className="container">
+          <div className="max-w-4xl mx-auto">
+            {/* Article content */}
+            <article className="prose prose-lg prose-blue max-w-none">
+              {post.body ? (
+                <CustomPortableText value={post.body} />
+              ) : (
+                <div className="text-center py-16">
+                  <p className="text-gray-500 text-lg">Obsah článku se načítá...</p>
+                </div>
+              )}
+            </article>
+
+            {/* Article footer */}
+            <div className="mt-16 pt-8 border-t border-gray-200">
+              {/* Tags */}
+              {post.keywords && post.keywords.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                    <Tag className="h-5 w-5 mr-2 text-blue-600" />
+                    Klíčová slova
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {post.keywords.map((keyword, index) => (
+                      <Badge key={index} variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                        {keyword}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Article actions */}
+              <div className="flex flex-wrap items-center justify-between gap-4 p-6 bg-gray-50 rounded-2xl">
+                <div className="flex items-center gap-6">
+                  <button className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors">
+                    <ThumbsUp className="h-5 w-5" />
+                    <span>Užitečné</span>
+                  </button>
+                  <button className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors">
+                    <MessageCircle className="h-5 w-5" />
+                    <span>Komentáře</span>
+                  </button>
+                  <button className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors">
+                    <Share2 className="h-5 w-5" />
+                    <span>Sdílet</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Related Articles Section */}
+      {/* Related Posts Section */}
       {relatedPosts.length > 0 && (
-        <section className="py-16 bg-gradient-to-br from-gray-50 via-white to-blue-50/30">
+        <section className="py-16 bg-gradient-to-br from-gray-50 to-blue-50/30">
           <div className="container">
             <div className="text-center mb-12">
-              <div className="flex items-center justify-center mb-4">
-                <BookOpen className="h-8 w-8 text-blue-600 mr-3" />
-                <h2 className="text-3xl font-bold text-gray-800">Související články</h2>
-              </div>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Podívejte se na další články ze stejné kategorie
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Související články
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Další užitečné články na podobné téma od našich techniků
               </p>
+              <div className="w-24 h-1 bg-blue-600 mx-auto mt-6" />
             </div>
-            
-            <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              {relatedPosts.map((relatedPost) => (
-                <Link key={relatedPost._id} href={`/blog/${relatedPost.slug.current}`} className="block bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-xl hover:border-gray-300 transition-all duration-300 group">
-                  <div className="relative w-full overflow-hidden aspect-[5/4] bg-gradient-to-br from-gray-100 to-gray-200">
-                    {relatedPost.mainImage ? (
-                      <Image
-                        src={urlForImage(relatedPost.mainImage).url()}
-                        alt={relatedPost.title}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#1B5D93]/10 to-[#196097]/20 group-hover:from-[#1B5D93]/20 group-hover:to-[#196097]/30 transition-all duration-300"></div>
-                    )}
-                    <div className="absolute top-4 left-4">
-                      {relatedPost.categories?.map((category: string) => {
-                        const colors = getCategoryColor(category)
-                        return (
-                          <Badge key={category} className={`${colors.bg} ${colors.text} ${colors.border} border text-xs`}>
-                            {category}
-                          </Badge>
-                        )
-                      })}
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center gap-3 text-xs text-gray-500 mb-3">
-                      <div className="flex items-center gap-1">
-                        <Calendar className="h-3 w-3" />
-                        <span>{new Date(relatedPost.publishedAt).toLocaleDateString('cs-CZ')}</span>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              {relatedPosts.map((relatedPost) => {
+                const category = relatedPost.categories?.[0] || 'Klimatizace'
+                const config = getCategoryConfig(category)
+                
+                return (
+                  <Card key={relatedPost._id} className="group overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                    <div className="relative overflow-hidden aspect-[4/3]">
+                                              <Image
+                          src={relatedPost.mainImage ? urlForImage(relatedPost.mainImage).url() : "/placeholder.svg"}
+                          alt={relatedPost.title}
+                          fill
+                          className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                      
+                      {/* Category badge */}
+                      <div className="absolute top-4 left-4">
+                        <Badge className={`${config.bg} ${config.text} border-0`}>
+                          {category}
+                        </Badge>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
-                        <span>{relatedPost.readingTime || 3} min</span>
+
+                      {/* Reading time */}
+                      <div className="absolute top-4 right-4">
+                        <div className="flex items-center bg-white/90 rounded-full px-3 py-1 text-sm font-medium text-gray-700">
+                          <Clock className="h-4 w-4 mr-1" />
+                          {relatedPost.readingTime || 5} min
+                        </div>
                       </div>
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900 mb-3 leading-tight group-hover:text-[#1B5D93] transition-colors duration-200">
-                      {relatedPost.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
-                      {relatedPost.excerpt}
-                    </p>
-                    <div className="text-[#1B5D93] text-sm font-semibold group-hover:text-[#196097] transition-colors duration-200">
-                      Číst více
-                    </div>
-                  </div>
-                </Link>
-              ))}
+
+                    <CardContent className="p-6">
+                      <div className="flex items-center text-sm text-gray-500 mb-3">
+                        <Calendar className="h-4 w-4 mr-2" />
+                        {new Date(relatedPost.publishedAt).toLocaleDateString('cs-CZ')}
+                      </div>
+                      
+                      <CardTitle className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                        {relatedPost.title}
+                      </CardTitle>
+                      
+                      <p className="text-gray-600 mb-4 line-clamp-3">
+                        {relatedPost.excerpt}
+                      </p>
+
+                      <Link href={`/blog/${relatedPost.slug.current}`}>
+                        <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                          <BookOpen className="h-4 w-4 mr-2" />
+                          Přečíst článek
+                          <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                        </Button>
+                      </Link>
+                    </CardContent>
+                  </Card>
+                )
+              })}
             </div>
           </div>
         </section>
       )}
 
-      {/* Enhanced CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-[#1B5D93] to-[#196097] text-white">
-        <div className="container text-center max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold mb-4">Zajímá vás více informací?</h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto text-white/90">
-            Podívejte se na další články v našem blogu nebo nás kontaktujte pro konzultaci
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link 
-              href="/blog" 
-              className="inline-block bg-white text-[#1B5D93] px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors duration-300 text-center"
-            >
-              Všechny články
-            </Link>
-            <Link 
-              href="/kontakt" 
-              className="inline-block bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white/10 transition-colors duration-300 text-center"
-            >
-              Kontaktujte nás
-            </Link>
+      {/* Navigation Section */}
+      <section className="py-16 bg-white">
+        <div className="container">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex flex-col sm:flex-row justify-between gap-6">
+              {/* Previous post */}
+              {prevPost && (
+                <Link href={`/blog/${prevPost.slug.current}`} className="group flex-1">
+                  <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                    <CardContent className="p-6">
+                      <div className="flex items-center text-blue-600 mb-3">
+                        <ChevronLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+                        <span className="text-sm font-medium">Předchozí článek</span>
+                      </div>
+                      <h3 className="font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                        {prevPost.title}
+                      </h3>
+                      <p className="text-sm text-gray-600 line-clamp-2">
+                        {prevPost.excerpt}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </Link>
+              )}
+
+              {/* Next post */}
+              {nextPost && (
+                <Link href={`/blog/${nextPost.slug.current}`} className="group flex-1">
+                  <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                    <CardContent className="p-6 text-right">
+                      <div className="flex items-center justify-end text-blue-600 mb-3">
+                        <span className="text-sm font-medium">Následující článek</span>
+                        <ChevronRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                      <h3 className="font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                        {nextPost.title}
+                      </h3>
+                      <p className="text-sm text-gray-600 line-clamp-2">
+                        {nextPost.excerpt}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600 relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[length:20px_20px]"></div>
+        <div className="container relative z-10">
+          <div className="max-w-4xl mx-auto text-center text-white">
+            <Lightbulb className="h-16 w-16 text-yellow-400 mx-auto mb-6" />
+            <h2 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
+              Potřebujete odbornou pomoc?
+            </h2>
+            <p className="text-xl text-blue-100 mb-8 leading-relaxed max-w-3xl mx-auto">
+              Máte problém s klimatizací, tepelným čerpadlem nebo elektroinstalací? 
+              Naši technici jsou připraveni vám pomoci s profesionálním řešením.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold shadow-lg" asChild>
+                <Link href="/kontakt">
+                  <Phone className="h-5 w-5 mr-2" />
+                  Nezávazná konzultace
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-700 font-semibold" asChild>
+                <Link href="/sluzby">
+                  <ExternalLink className="h-5 w-5 mr-2" />
+                  Naše služby
+                </Link>
+              </Button>
+            </div>
+            
+            {/* Contact info */}
+            <div className="grid md:grid-cols-3 gap-8 mt-16 pt-16 border-t border-white/20">
+              <div className="text-center">
+                <Phone className="h-12 w-12 text-green-400 mx-auto mb-4" />
+                <h3 className="font-semibold text-lg mb-2">Zavolejte nám</h3>
+                <p className="text-blue-100 text-sm">+420 123 456 789</p>
+              </div>
+              <div className="text-center">
+                <Mail className="h-12 w-12 text-yellow-400 mx-auto mb-4" />
+                <h3 className="font-semibold text-lg mb-2">Napište nám</h3>
+                <p className="text-blue-100 text-sm">info@sfera-pro-domov.cz</p>
+              </div>
+              <div className="text-center">
+                <MapPin className="h-12 w-12 text-orange-400 mx-auto mb-4" />
+                <h3 className="font-semibold text-lg mb-2">Navštivte nás</h3>
+                <p className="text-blue-100 text-sm">Ostrava a okolí</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>

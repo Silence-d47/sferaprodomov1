@@ -2,19 +2,16 @@
 
 import { PortableText } from '@portabletext/react'
 import type { PortableTextComponents } from '@portabletext/react'
-import Image from 'next/image'
-import { urlForImage } from './sanity.image'
 
 const components: PortableTextComponents = {
   types: {
     image: ({ value }) => {
       return (
         <div className="relative w-full h-96 my-8">
-          <Image
-            src={urlForImage(value)?.url() || ''}
+          <img
+            src={value.asset?.url || value.url || ''}
             alt={value.alt || 'Image'}
-            fill
-            className="object-cover"
+            className="w-full h-full object-cover rounded-lg"
           />
         </div>
       )
@@ -27,7 +24,7 @@ const components: PortableTextComponents = {
         <a
           href={value.href}
           rel={rel}
-          className="underline decoration-1 underline-offset-2"
+          className="underline decoration-1 underline-offset-2 text-blue-600 hover:text-blue-800"
         >
           {children}
         </a>

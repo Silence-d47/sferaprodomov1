@@ -1,7 +1,6 @@
 import React from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { groq } from "next-sanity"
 import { Button } from "@/components/ui/button"
 import { ReferenceSlider } from "@/components/ui/reference-slider"
 import { ContactForm } from "@/components/ui/contact-form6"
@@ -13,42 +12,7 @@ import { Shield, Clock, Phone, CheckCircle, Users, CreditCard, Calendar, Headpho
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 
-// GROQ dotazy
-const heroSlidesQuery = groq`
-  *[_type == "heroSlide" && isActive == true] | order(order asc) {
-    "id": _id,
-    title,
-    subtitle,
-    description,
-    "bgImage": bgImage.asset->url,
-    features,
-    phoneNumber,
-    primaryButton {
-      text,
-      link,
-      isActive
-    },
-    secondaryButton {
-      text,
-      link,
-      isActive
-    }
-  }
-`
-
-const topReferencesQuery = groq`
-  *[_type == "projectReference" && isTopReference == true] | order(_createdAt desc)[0...3] {
-    "id": slug.current,
-    title,
-    "description": coalesce(description, ""),
-    "image": image.asset->url,
-    category,
-    location,
-    isTopReference
-  }
-`
-
-// (data fetching is done inside the page component)
+// Data fetching is done inside the component using Sanity client
 
 
 
@@ -163,10 +127,23 @@ function ValueCard  ({ icon, title, description, iconBgColor, iconColor }: { ico
 
 export default async function HomePage() {
   const { client } = await import("@/lib/sanity.client")
-  const [slides, topReferences] = await Promise.all([
+  const { heroSlidesQuery, featuredReferencesQuery } = await import("@/lib/sanity.queries")
+  
+  const [slides, rawTopReferences] = await Promise.all([
     client.fetch<UnifiedHeroSlide[]>(heroSlidesQuery),
-    client.fetch<TopReference[]>(topReferencesQuery),
+    client.fetch<any[]>(featuredReferencesQuery),
   ])
+
+  // Map data to match TopReference interface
+  const topReferences: TopReference[] = rawTopReferences.map(ref => ({
+    id: ref._id,
+    title: ref.title,
+    description: ref.description || '',
+    image: ref.image || '',
+    category: ref.category || '',
+    location: ref.location,
+    isTopReference: ref.isTopReference
+  }))
 
   return (
     <>
@@ -415,7 +392,7 @@ export default async function HomePage() {
                   alt="Jaroslav Hendrich, jednatel společnosti SFÉRA PRO DOMOV, s.r.o."
                   width={600}
                   height={550}
-                  className="rounded-2xl shadow-2xl object-cover w-full h-auto max-h-[550px] ring-8 ring-white/60"
+                  className="rounded-2xl shadow-2xl object-cover w-full h-full max-h-[550px] ring-8 ring-white/60"
                 />
               </div>
             </div>

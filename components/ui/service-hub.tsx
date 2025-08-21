@@ -20,7 +20,9 @@ const ServiceHub: React.FC<ServiceHubProps> = ({ onServiceChange, activeService 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      setIsScrolled(scrollY > 100);
+      // ServiceHub se zobrazí až po scrollování dolů za hero sekci (minimálně 80vh)
+      const heroHeight = window.innerHeight * 0.8;
+      setIsScrolled(scrollY > heroHeight);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -96,8 +98,8 @@ const ServiceHub: React.FC<ServiceHubProps> = ({ onServiceChange, activeService 
   }, [isMobileExpanded]);
 
   return (
-    <div className={`fixed left-1/2 transform -translate-x-1/2 bottom-4 md:bottom-10 z-20 transition-all duration-500 ${
-      isScrolled ? 'scale-100 md:scale-75' : 'scale-100'
+    <div className={`fixed left-1/2 transform -translate-x-1/2 bottom-4 md:bottom-10 z-20 transition-all duration-700 ease-out ${
+      isScrolled ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-4 pointer-events-none'
     }`}>
       <div className="service-hub-container">
         {/* Mobile Layout */}

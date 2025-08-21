@@ -1,12 +1,38 @@
 import { groq } from 'next-sanity'
 
+export const heroSlidesQuery = groq`
+  *[_type == "heroSlide" && isActive == true] | order(order asc) {
+    _id,
+    title,
+    subtitle,
+    description,
+    "bgImage": bgImage.asset->url,
+    features,
+    phoneNumber,
+    primaryButton {
+      text,
+      link,
+      isActive
+    },
+    secondaryButton {
+      text,
+      link,
+      isActive
+    },
+    slideType,
+    order,
+    isActive
+  }
+`
+
+// Blog queries
 export const postsQuery = groq`
   *[_type == "post" && defined(publishedAt)] | order(publishedAt desc) {
     _id,
     title,
     slug,
     publishedAt,
-    mainImage,
+    "mainImage": mainImage.asset->url,
     "author": author->name,
     "categories": categories[]->title,
     excerpt,
@@ -20,12 +46,13 @@ export const postQuery = groq`
     title,
     slug,
     publishedAt,
-    mainImage,
+    "mainImage": mainImage.asset->url,
     "author": author->name,
     "categories": categories[]->title,
     excerpt,
     body,
-    readingTime
+    readingTime,
+    keywords
   }
 `
 
@@ -44,6 +71,76 @@ export const authorsQuery = groq`
     slug,
     image,
     bio
+  }
+`
+
+// Reference queries
+export const projectReferencesQuery = groq`
+  *[_type == "projectReference"] | order(_createdAt desc) {
+    _id,
+    title,
+    slug,
+    description,
+    "image": image.asset->url,
+    "gallery": gallery[]{
+      "url": asset->url,
+      "alt": alt
+    },
+    category,
+    location,
+    year,
+    rating,
+    highlights,
+    savings,
+    isFeatured,
+    isTopReference,
+    _createdAt
+  }
+`
+
+export const featuredReferencesQuery = groq`
+  *[_type == "projectReference" && isTopReference == true] | order(_createdAt desc)[0...6] {
+    _id,
+    title,
+    slug,
+    description,
+    "image": image.asset->url,
+    "gallery": gallery[]{
+      "url": asset->url,
+      "alt": alt
+    },
+    category,
+    location,
+    year,
+    rating,
+    highlights,
+    savings,
+    isFeatured,
+    isTopReference,
+    _createdAt
+  }
+`
+
+export const referenceBySlugQuery = groq`
+  *[_type == "projectReference" && slug.current == $slug][0] {
+    _id,
+    title,
+    slug,
+    description,
+    "image": image.asset->url,
+    "gallery": gallery[]{
+      "url": asset->url,
+      "alt": alt
+    },
+    category,
+    location,
+    year,
+    rating,
+    highlights,
+    savings,
+    isFeatured,
+    isTopReference,
+    _createdAt
   }
 `
 
@@ -119,30 +216,5 @@ export const productsByCategoryWithFilesQuery = groq`
       fileType,
       "fileUrl": file.asset->url
     }
-  }
-`
-
-export const heroSlidesQuery = groq`
-  *[_type == "heroSlide" && isActive == true] | order(order asc) {
-    _id,
-    title,
-    subtitle,
-    description,
-    "bgImage": bgImage.asset->url,
-    features,
-    phoneNumber,
-    primaryButton {
-      text,
-      link,
-      isActive
-    },
-    secondaryButton {
-      text,
-      link,
-      isActive
-    },
-    slideType,
-    order,
-    isActive
   }
 `

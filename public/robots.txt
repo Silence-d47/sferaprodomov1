@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Google Analytics
+User-agent: Googlebot
+Allow: /
+
+# Sitemap
+Sitemap: https://sfera-pro-domov.cz/sitemap.xml

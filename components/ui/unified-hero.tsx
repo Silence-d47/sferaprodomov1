@@ -1,11 +1,17 @@
-"use client"
+"use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import useEmblaCarousel from 'embla-carousel-react';
+import { EmblaOptionsType, EmblaCarouselType } from 'embla-carousel';
+import Autoplay from 'embla-carousel-autoplay';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { EnhancedSectionDivider } from '@/components/ui/enhanced-section-divider';
 import { Calculator, Phone, Shield, ChevronLeft, ChevronRight } from 'lucide-react';
+import { cn } from '@/lib/utils'; // Pomocná funkce pro spojování classNames (běžná u shadcn/ui)
 
+// Interface zůstává stejný
 export interface UnifiedHeroSlide {
   id: string;
   title: string;
@@ -14,295 +20,192 @@ export interface UnifiedHeroSlide {
   bgImage: string;
   features?: string[];
   phoneNumber?: string;
-  primaryButton?: {
-    text: string;
-    link: string;
-    isActive: boolean;
-  };
-  secondaryButton?: {
-    text: string;
-    link: string;
-    isActive: boolean;
-  };
+  primaryButton?: { text: string; link: string; isActive: boolean; };
+  secondaryButton?: { text: string; link: string; isActive: boolean; };
 }
 
 interface UnifiedHeroProps {
   slides: UnifiedHeroSlide[];
+  options?: EmblaOptionsType;
 }
 
-export function UnifiedHero({ slides }: UnifiedHeroProps) {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
-  const touchStartX = useRef<number>(0);
-  const touchEndX = useRef<number>(0);
+// Varianty animací pro Framer Motion
+const titleVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+};
 
-  const startAutoPlay = () => {
-    if (isPaused) return; // Nepouštět autoplay pokud je pozastaveno
-    stopAutoPlay();
-    autoPlayRef.current = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % Math.max(slides.length, 1));
-    }, 7000);
-  };
+const subtitleVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut', delay: 0.2 } },
+};
 
-  const stopAutoPlay = () => {
-    if (autoPlayRef.current) {
-      clearInterval(autoPlayRef.current);
-      autoPlayRef.current = null;
-    }
-  };
+const otherElementsVariants = {
+  hidden: { opacity: 0, scale: 0.95 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: 'easeOut', delay: 0.4 } },
+};
 
-  const pauseAutoPlay = () => {
-    setIsPaused(true);
-    stopAutoPlay();
-  };
 
-  const resumeAutoPlay = () => {
-    setIsPaused(false);
-    startAutoPlay();
-  };
+export function UnifiedHero({ slides, options }: UnifiedHeroProps) {
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {loop: true, ...options} as any, // Použijeme any pro vyřešení konfliktu typů
+    [Autoplay({ delay: 7000, stopOnInteraction: true, stopOnMouseEnter: true })] as any 
+  );
+  
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [ progress, setProgress] = useState(0);
 
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index);
-    stopAutoPlay();
-    startAutoPlay();
-  };
+  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
+  const scrollTo = useCallback((index: number) => emblaApi && emblaApi.scrollTo(index), [emblaApi]);
 
-  const goToNextSlide = () => {
-    goToSlide((currentSlide + 1) % slides.length);
-  };
-
-  const goToPreviousSlide = () => {
-    goToSlide((currentSlide - 1 + slides.length) % slides.length);
-  };
-
-  // Touch handlers pro swipe
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.targetTouches[0].clientX;
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    touchEndX.current = e.targetTouches[0].clientX;
-  };
-
-  const handleTouchEnd = () => {
-    if (!touchStartX.current || !touchEndX.current) return;
-    
-    const distance = touchStartX.current - touchEndX.current;
-    const isLeftSwipe = distance > 50;
-    const isRightSwipe = distance < -50;
-
-    if (isLeftSwipe) {
-      goToNextSlide();
-    } else if (isRightSwipe) {
-      goToPreviousSlide();
-    }
-  };
-
-  // Mouse hover handlers
-  const handleMouseEnter = () => {
-    pauseAutoPlay();
-  };
-
-  const handleMouseLeave = () => {
-    resumeAutoPlay();
-  };
-
-  // Keyboard navigation
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      switch (e.key) {
-        case 'ArrowLeft':
-          e.preventDefault();
-          goToPreviousSlide();
-          break;
-        case 'ArrowRight':
-          e.preventDefault();
-          goToNextSlide();
-          break;
-        case ' ':
-          e.preventDefault();
-          if (isPaused) {
-            resumeAutoPlay();
-          } else {
-            pauseAutoPlay();
-          }
-          break;
-      }
+    if (!emblaApi) return;
+
+    const onSelect = () => {
+      setSelectedIndex(emblaApi.selectedScrollSnap());
     };
+    
+    const onScroll = () => {
+      const progress = Math.max(0, Math.min(1, emblaApi.scrollProgress()));
+      setProgress(progress * 100);
+    }
+    
+    emblaApi.on('select', onSelect);
+    emblaApi.on('scroll', onScroll);
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentSlide, slides.length, isPaused]);
+    return () => {
+      emblaApi.off('select', onSelect);
+      emblaApi.off('scroll', onScroll);
+    };
+  }, [emblaApi]);
 
-  useEffect(() => {
-    startAutoPlay();
-    return () => stopAutoPlay();
-  }, [slides?.length, isPaused]);
+  const currentSlideData = slides[selectedIndex];
 
   return (
-    <section 
-      className="relative min-h-[100svh] md:h-screen min-h-[540px] overflow-hidden"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      {/* Kontejner pro posuvná pozadí */}
-      <div className="absolute inset-0 z-0">
-        {slides.map((slide, index) => (
-          <div
-            key={slide.id}
-            className="absolute inset-0 transition-transform duration-1000 ease-in-out z-0"
-            style={{
-              backgroundImage: `url(${slide.bgImage})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              // Pouze posun pro slideshow bez paralax efektu
-              transform: `translateX(${(index - currentSlide) * 100}%)`,
-            }}
-          >
-            {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-orange-900/30" />
-            <div className="absolute inset-0 bg-black/20" />
-          </div>
-        ))}
+    <section className="relative min-h-[100svh] md:h-screen min-h-[540px] overflow-hidden bg-gray-900">
+      <div className="embla absolute inset-0" ref={emblaRef}>
+        <div className="embla__container h-full">
+          {slides.map((slide) => (
+            <div key={slide.id} className="embla__slide relative h-full">
+              {/* Vylepšené pozadí s Ken Burns efektem */}
+              <div
+                className="absolute inset-0 transition-transform duration-[10000ms] ease-linear"
+                style={{
+                  backgroundImage: `url(${slide.bgImage})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  transform: selectedIndex === slides.indexOf(slide) ? 'scale(1.15)' : 'scale(1)',
+                }}
+              />
+              {/* Vylepšený overlay pro lepší čitelnost */}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-purple-900/15 to-black/30 sm:from-blue-900/40 sm:via-purple-900/30 sm:to-black/50" />
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Navigační šipky */}
-      {slides.length > 1 && (
-        <>
-          {/* Levá šipka */}
-          <button
-            onClick={goToPreviousSlide}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full p-3 border border-white/20 transition-all duration-300 hover:scale-110 hover:shadow-lg group"
-            aria-label="Předchozí slide"
-          >
-            <ChevronLeft className="w-6 h-6 text-white group-hover:text-orange-300 transition-colors duration-300" />
-          </button>
-
-          {/* Pravá šipka */}
-          <button
-            onClick={goToNextSlide}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full p-3 border border-white/30 hover:border-white/40 transition-all duration-300 backdrop-blur-md hover:scale-[1.02] hover:shadow-lg text-sm sm:text-base h-10 sm:h-12 md:h-14"
-            aria-label="Další slide"
-          >
-            <ChevronRight className="w-6 h-6 text-white group-hover:text-orange-300 transition-colors duration-300" />
-          </button>
-        </>
-      )}
-
       {/* Hlavní obsah a statická karta */}
-      <div 
-        className="relative z-10 h-full flex items-center justify-center px-4 sm:px-6 md:px-8"
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
-        <div className="w-full max-w-5xl mx-auto">
-          <div className="text-center">
-            {/* STATICKÁ KARTA - Funguje jako maska (okno) */}
-            <div className="w-full max-w-4xl mx-auto bg-white/10 backdrop-blur-2xl rounded-2xl md:rounded-3xl p-6 sm:p-8 md:p-10 lg:p-12 xl:p-16 shadow-2xl border border-white/10 ring-1 ring-white/20 relative overflow-hidden">
-              
-              {/* Kontejner pro posuvný OBSAH uvnitř karty */}
-              <div className="relative min-h-[60vh] md:min-h-[70vh] flex items-center justify-center">
-                {slides.map((slideData, index) => (
-                  <div
-                    key={slideData.id}
-                    className="absolute inset-0 transition-opacity duration-700 ease-in-out flex flex-col justify-center px-4 sm:px-6 md:px-8 py-4 sm:py-6 md:py-8"
-                    style={{
-                      opacity: index === currentSlide ? 1 : 0,
-                      pointerEvents: index === currentSlide ? 'auto' : 'none',
-                    }}
+      <div className="relative z-30 h-full flex items-center justify-center px-4 sm:px-6 md:px-8">
+        <div className="w-full max-w-5xl mx-auto text-center">
+          <div className="w-full max-w-4xl mx-auto bg-white/25 backdrop-blur-md rounded-2xl md:rounded-3xl p-4 sm:p-6 md:p-8 lg:p-12 shadow-2xl border border-white/30 relative overflow-hidden relative z-40">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentSlideData.id}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+                className="flex flex-col justify-center items-center"
+              >
+                <motion.div variants={otherElementsVariants as any} className="inline-flex items-center space-x-2 bg-white/20 rounded-full px-3 py-1.5 sm:px-4 sm:py-2 mb-4 sm:mb-6 border border-white/40">
+                  <Shield className="w-3 h-3 sm:w-4 sm:h-4 text-orange-400" />
+                  <span className="text-white font-medium text-xs sm:text-sm">Garance kvality a spolehlivosti</span>
+                </motion.div>
+
+                <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
+                  <motion.h1
+                    variants={titleVariants as any}
+                    className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white tracking-tight leading-tight"
+                    style={{ textShadow: '0 2px 15px rgba(0,0,0,0.8), 0 4px 20px rgba(0,0,0,0.6)' }}
                   >
-                    {/* Samotný obsah jednoho slidu */}
-                    <div className="inline-flex items-center space-x-1.5 sm:space-x-2 bg-gradient-to-r from-orange-500/25 to-blue-500/25 backdrop-blur-md rounded-full px-2 py-1 sm:px-3 sm:py-1.5 md:px-4 md:py-2 mb-4 sm:mb-6 border border-white/20 mx-auto mt-2 sm:mt-4 hover:scale-105 transition-transform duration-300 hover:shadow-lg">
-                      <Shield className="w-3 h-3 sm:w-4 sm:h-4 text-orange-300 animate-pulse hover:animate-bounce transition-all duration-300" />
-                      <span className="text-white/90 font-medium text-xs sm:text-sm">Garance kvality a spolehlivosti</span>
-                    </div>
-
-                    <div className="space-y-2 sm:space-y-3 md:space-y-4 mb-4 sm:mb-6 md:mb-8">
-                      <h1 className="text-[24px] sm:text-[28px] md:text-4xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight tracking-tight hover:scale-105 transition-transform duration-500">
-                        {slideData.title}
-                      </h1>
-                      {slideData.subtitle && (
-                        <p className="text-sm sm:text-base md:text-lg lg:text-2xl xl:text-3xl text-blue-100 font-light leading-relaxed hover:text-white transition-colors duration-300">
-                          {slideData.subtitle}
-                        </p>
-                      )}
-                    </div>
-
-                    {slideData.description && (
-                      <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/80 leading-relaxed mb-6 sm:mb-8 md:mb-10 max-w-sm sm:max-w-2xl mx-auto hover:text-white/90 transition-colors duration-300">
-                        {slideData.description}
-                      </p>
-                    )}
-
-                    <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 mb-6 sm:mb-8 md:mb-12">
-                      {(slideData.features || []).map((feature, idx) => (
-                        <div key={idx} className="bg-white/10 backdrop-blur-md rounded-full px-3 py-2 sm:px-4 sm:py-2.5 md:px-6 md:py-3 border border-white/20 hover:bg-white/15 hover:scale-110 hover:shadow-lg transition-all duration-300 cursor-pointer">
-                          <span className="text-white font-medium text-xs sm:text-sm md:text-base leading-tight">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 justify-center max-w-sm sm:max-w-lg mx-auto">
-                      {/* Primární tlačítko - oranžové */}
-                      {(slideData.primaryButton?.isActive !== false) && (
-                        <Button asChild size="lg" className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-2.5 sm:py-3 md:py-4 px-4 sm:px-6 md:px-8 rounded-lg sm:rounded-xl md:rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] border-0 hover:animate-pulse text-sm sm:text-base h-10 sm:h-12 md:h-14">
-                          <Link href={slideData.primaryButton?.link || "/kontakt"} className="flex items-center justify-center space-x-1.5 sm:space-x-2 md:space-x-3">
-                            <Calculator className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 animate-bounce" />
-                            <span className="text-xs sm:text-sm md:text-base">{slideData.primaryButton?.text || "Nezávazná nabídka"}</span>
+                    {currentSlideData.title}
+                  </motion.h1>
+                  {currentSlideData.subtitle && (
+                    <motion.p variants={subtitleVariants as any} className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-white font-medium leading-tight">
+                      {currentSlideData.subtitle}
+                    </motion.p>
+                  )}
+                </div>
+                
+                <motion.div variants={otherElementsVariants as any} className="w-full">
+                  {currentSlideData.description && (
+                    <p className="text-sm sm:text-base md:text-lg text-white leading-relaxed mb-6 sm:mb-8 md:mb-10 max-w-2xl mx-auto font-medium">
+                      {currentSlideData.description}
+                    </p>
+                  )}
+                  
+                  {/* CTA tlačítka */}
+                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-lg mx-auto relative z-50">
+                      {currentSlideData.primaryButton?.isActive !== false && (
+                        <Button asChild size="lg" className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold h-12 sm:h-14 rounded-xl shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 border-0 text-sm sm:text-base relative z-50">
+                          <Link href={currentSlideData.primaryButton?.link || "/kontakt"} className="flex items-center justify-center space-x-2">
+                            <Calculator className="w-4 h-4 sm:w-5 sm:h-5" />
+                            <span>{currentSlideData.primaryButton?.text || "Nezávazná nabídka"}</span>
                           </Link>
                         </Button>
                       )}
                       
-                      {/* Sekundární tlačítko - modré */}
-                      {(slideData.secondaryButton?.isActive !== false) && (
-                        <Button asChild size="lg" className="flex-1 bg-white/15 hover:bg-white/25 text-white font-bold py-2.5 sm:py-3 md:py-4 px-4 sm:px-6 md:px-8 rounded-lg sm:rounded-xl md:rounded-2xl border border-white/30 hover:border-white/40 transition-all duration-300 backdrop-blur-md hover:scale-[1.02] hover:shadow-lg text-sm sm:text-base h-10 sm:h-12 md:h-14">
-                          <Link href={slideData.secondaryButton?.link || `tel:${slideData.phoneNumber || '+420735014112'}`} className="flex items-center justify-center space-x-1.5 sm:space-x-2 md:space-x-3">
-                            <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 animate-pulse" />
-                            <span className="text-xs sm:text-sm md:text-base">{slideData.secondaryButton?.text || "Zavolejte nám"}</span>
+                      {currentSlideData.secondaryButton?.isActive !== false && (
+                        <Button asChild size="lg" className="flex-1 bg-white/25 hover:bg-white/35 text-white font-bold h-12 sm:h-14 rounded-xl border border-white/40 hover:border-white/50 transition-all duration-300 backdrop-blur-md hover:scale-105 hover:shadow-xl text-sm sm:text-base relative z-50">
+                          <Link href={currentSlideData.secondaryButton?.link || `tel:${currentSlideData.phoneNumber || '+420735014112'}`} className="flex items-center justify-center space-x-2">
+                            <Phone className="w-4 h-4 sm:w-5 sm:h-5" />
+                            <span>{currentSlideData.secondaryButton?.text || "Zavolejte nám"}</span>
                           </Link>
                         </Button>
                       )}
                     </div>
-                    
-                    <div className="mt-4 sm:mt-6 md:mt-8 pt-3 sm:pt-4 md:pt-6 border-t border-white/10">
-                      <p className="text-white/60 text-xs sm:text-sm mb-1.5 sm:mb-2">Nebo nám zavolejte přímo:</p>
-                      <a 
-                        href={`tel:${slideData.phoneNumber || '+420735014112'}`} 
-                        className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white hover:text-orange-300 transition-colors duration-300 hover:scale-105 inline-block"
-                      >
-                        {slideData.phoneNumber || '+420 735 014 112'}
-                      </a>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+                </motion.div>
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
       </div>
 
-      {/* Navigační tečky */}
-      {slides.length > 1 && (
-        <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-20 flex space-x-3">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => goToSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                index === currentSlide
-                  ? 'bg-white scale-125 shadow-lg'
-                  : 'bg-white/50 hover:bg-white/75 hover:scale-110'
-              }`}
-              aria-label={`Přejít na slide ${index + 1}`}
-            />
-          ))}
+      {/* Navigace a Progress Bar */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-40 w-full max-w-5xl px-4">
+        <div className="flex items-center justify-center gap-6">
+            <button onClick={scrollPrev} aria-label="Předchozí slide" className="bg-white/10 hover:bg-white/20 p-3 rounded-full transition-transform hover:scale-110">
+                <ChevronLeft className="w-6 h-6 text-white" />
+            </button>
+            <div className="flex items-center gap-3">
+                {slides.map((_, index) => (
+                    <button
+                    key={index}
+                    onClick={() => scrollTo(index)}
+                    className={cn(
+                        "w-2.5 h-2.5 rounded-full transition-all duration-300",
+                        index === selectedIndex ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/75'
+                    )}
+                    aria-label={`Přejít na slide ${index + 1}`}
+                    />
+                ))}
+            </div>
+             <button onClick={scrollNext} aria-label="Další slide" className="bg-white/10 hover:bg-white/20 p-3 rounded-full transition-transform hover:scale-110">
+                <ChevronRight className="w-6 h-6 text-white" />
+            </button>
         </div>
-      )}
+        {/* Autoplay Progress Bar */}
+        <div className="absolute top-[-20px] left-0 w-full h-1 bg-white/20 overflow-hidden rounded-full">
+             <motion.div 
+                className="h-full bg-white"
+                style={{ width: `${(100 / slides.length) * (selectedIndex + 1)}%` }} // Tento progress ukazuje, na kterém jste slidu
+                // Pro plynulý progress na základě scrollování
+                // style={{ width: `${progress}%` }}
+             />
+        </div>
+      </div>
 
-      {/* Enhanced Section Divider - vlnka na spodu */}
+      {/* Enhanced Section Divider */}
       <div className="absolute bottom-0 z-30 -left-1 -right-1 overflow-hidden">
         <div className="w-[calc(100%+8px)] -ml-1">
           <EnhancedSectionDivider />
