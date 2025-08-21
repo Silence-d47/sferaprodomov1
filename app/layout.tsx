@@ -12,6 +12,7 @@ import { CookieConsent } from "@/components/ui/cookie-consent"
 import { GoogleAnalytics } from "@/components/ui/google-analytics"
 import { FacebookPixel } from "@/components/ui/facebook-pixel"
 import { GoogleTagManager } from "@/components/ui/google-tag-manager"
+import { Analytics } from "@vercel/analytics/next"
 
 const sourceSans = Source_Sans_3({ subsets: ["latin"] })
 
@@ -39,6 +40,7 @@ export default function RootLayout({
         <GoogleAnalytics />
         <FacebookPixel />
         <GoogleTagManager />
+        <Analytics />
         <ThemeProvider theme="default">
           <WelcomePopupProvider>
             <TopBar />
