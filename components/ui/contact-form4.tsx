@@ -113,7 +113,7 @@ export function ContactForm({
               <Phone className="h-5 w-5 text-orange-500" />
               <span className="font-medium text-slate-700 group-hover:text-orange-600 transition-colors">+420 735 014 112</span>
             </a>
-            <a href="mailto:info@sfera-pro-domov.cz" className="flex items-center gap-4 group">
+            <a href="mailto:info@sfera-domov.cz" className="flex items-center gap-4 group">
               <Mail className="h-5 w-5 text-orange-500" />
               <span className="font-medium text-slate-700 group-hover:text-orange-600 transition-colors">info@sfera-pro-domov.cz</span>
             </a>

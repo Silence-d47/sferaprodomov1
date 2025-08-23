@@ -196,7 +196,7 @@ export default function BlogPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       {/* Hero Section - "Technik radí" */}
-      <section className="relative py-24 bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600 overflow-hidden">
+      <section className="relative py-40 bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600 overflow-hidden">
         {/* Background pattern */}
         <div className="absolute inset-0 bg-grid-white/[0.05] bg-[length:20px_20px]"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"></div>

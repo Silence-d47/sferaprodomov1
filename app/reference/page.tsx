@@ -187,7 +187,7 @@ export default function ReferencePage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section - konzistentní s hlavní stránkou */}
-      <section className="relative h-[60vh] md:h-[90vh] min-h-[600px] md:min-h-[600px] flex items-center bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600">
+      <section className="relative h-[70vh] md:h-[90vh] min-h-[700px] md:min-h-[600px] flex items-center bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600">
         <div className="absolute inset-0">
           <Image 
             src="/images/hero_reference.png" 

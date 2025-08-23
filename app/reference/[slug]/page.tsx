@@ -109,15 +109,15 @@ export default function ReferenceDetailPage() {
   return (
     <div className="flex flex-col">
       {/* Universal hero for all references (no project-specific text) */}
-      <section className="relative h-[360px] bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600">
+      <section className="relative h-[700px] overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600">
         <div className="absolute inset-0">
-          <Image src="/images/hero_reference.jpg" alt="Reference Hero" fill className="object-cover opacity-10" />
+          <Image src="/images/hero_reference.jpg" alt="Reference Hero" fill className="object-cover opacity-20" />
         </div>
-        <div className="absolute inset-0 flex items-center pt-36 md:pt-44">
+        <div className="absolute inset-0 flex items-center pt-12 md:pt-14">
           <div className="container">
             <div className="max-w-4xl text-white">
               <Badge className="bg-white/20 text-white border-white/20 text-sm px-3 py-1 mb-6 inline-block">Naše reference</Badge>
-              <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight drop-shadow-lg">Detail reference</h1>
+              <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight drop-shadow-lg">Detaily celého projektu</h1>
               <p className="text-lg md:text-xl text-blue-100 leading-relaxed max-w-3xl">
                 Podívejte se na realizaci a zkušenost klienta. Níže najdete fotografie a technické údaje projektu.
               </p>
@@ -131,12 +131,16 @@ export default function ReferenceDetailPage() {
             </div>
           </div>
         </div>
+        {/* Wave divider */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <EnhancedSectionDivider variant="wave" animated={true} height="xl" fromColor="from-blue-600" toColor="to-white" particles={false} />
+        </div>
       </section>
 
-      <EnhancedSectionDivider variant="wave" animated={true} height="xl" fromColor="from-transparent" toColor="to-white" particles={false} />
+      
 
       {/* Main Content Section */}
-      <section className="py-16 bg-white">
+      <section className="py-24 bg-white">
         <div className="container">
           <div className="max-w-6xl mx-auto">
             {/* Hlavní obsah - text nahoře, vedle jeden obrázek */}
@@ -271,7 +275,7 @@ export default function ReferenceDetailPage() {
                 
                 <div className="flex justify-center py-8">
                   {/* Zvětšený prostor pro hover efekt - přidán větší padding nahoře a změněno zarovnání */}
-                  <div className="flex items-center gap-3 md:gap-4 p-4 pt-24 pb-12 overflow-x-auto w-full">
+                  <div className="flex items-center justify-center gap-3 md:gap-4 p-4 pt-12 pb-8 overflow-x-auto">
                     {reference.gallery.map((image, index) => (
                       <motion.div
                         key={index}
