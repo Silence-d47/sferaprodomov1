@@ -5,7 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Download, MessageCircle, Eye, X, Star, Shield, Check, Info } from "lucide-react"
+import { Download, MessageCircle, Eye, X, Star, Shield, Check, Info, Zap, Volume2, Thermometer, Leaf, GalleryHorizontal, FileDown } from "lucide-react"
 import { ExpandableFeatures } from "./expandable-features"
 import { useState, useEffect } from "react"
 
@@ -13,6 +13,7 @@ export interface ProductCardProps {
   title: string
   description: string
   image: string
+  gallery?: { url: string; alt?: string }[]
   features: string[]
   isRecommended?: boolean
   isBestSelling?: boolean
@@ -39,10 +40,15 @@ export interface ProductCardProps {
   }>
 }
 
-export function ProductCard({ title, description, image, features, isRecommended, isBestSelling, catalogUrl, energyClass, specifications, price, warranty, brand, files }: ProductCardProps) {
+export function ProductCard({ title, description, image, gallery, features, isRecommended, isBestSelling, catalogUrl, energyClass, specifications, price, warranty, brand, files }: ProductCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
+  const [mainImage, setMainImage] = useState(image)
 
+  useEffect(() => {
+    setMainImage(image)
+  }, [image])
+  
   // Animace při otevírání/zavírání modálu
   useEffect(() => {
     if (isModalOpen) {
@@ -68,19 +74,28 @@ export function ProductCard({ title, description, image, features, isRecommended
   return (
     <>
       {/* Kompaktní karta - vylepšený design */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 h-full group overflow-hidden">
+      <div 
+        className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 h-full group overflow-hidden flex flex-col"
+      >
         {/* Obrázek s badge */}
-        <div className="relative w-full overflow-hidden aspect-[4/3] bg-gray-50">
+        <div 
+          className="relative w-full overflow-hidden aspect-[4/3] bg-gray-50 cursor-pointer"
+          onClick={() => setIsModalOpen(true)}
+        >
           <Image src={image} alt={title} fill className="object-contain transition-transform duration-700 group-hover:scale-110" />
           
+          <div className="absolute top-3 right-3 bg-white/80 backdrop-blur-sm p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100">
+            <Eye className="h-5 w-5 text-gray-800" />
+          </div>
+
           {/* Badge - vylepšený design */}
           {isRecommended && (
-            <Badge className="absolute top-3 right-3 bg-amber-500 text-white text-xs font-semibold px-3 py-1.5 shadow-lg border-0">
+            <Badge className="absolute top-3 left-3 bg-amber-500 text-white text-xs font-semibold px-3 py-1.5 shadow-lg border-0">
               Doporučujeme
             </Badge>
           )}
           {isBestSelling && (
-            <Badge className="absolute top-3 left-3 bg-green-600 text-white text-xs font-semibold px-3 py-1.5 shadow-lg border-0">
+            <Badge className="absolute top-3 right-3 bg-green-600 text-white text-xs font-semibold px-3 py-1.5 shadow-lg border-0">
               Nejprodávanější
             </Badge>
           )}
@@ -138,251 +153,148 @@ export function ProductCard({ title, description, image, features, isRecommended
           className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center p-4 z-50 transition-all duration-300"
           onClick={handleOverlayClick}
         >
-          <div className={`bg-white rounded-3xl max-w-7xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-gray-200/50 transform transition-all duration-300 ${isAnimating ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}>
-            {/* Header - profesionální design */}
-            <div className="relative flex items-center justify-between p-8 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-gray-100/50">
-              <div className="flex-1">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
-                    <Info className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-900 leading-tight">{title}</h2>
-                    {brand && (
-                      <div className="flex items-center gap-2 mt-1">
-                        <Badge variant="outline" className="text-xs px-3 py-1 border-blue-200 text-blue-700 bg-blue-50">
-                          {brand}
-                        </Badge>
-                        {isRecommended && (
-                          <Badge className="text-xs px-3 py-1 bg-amber-500 text-white">
-                            <Star className="h-3 w-3 mr-1" />
-                            Doporučujeme
-                          </Badge>
-                        )}
-                        {isBestSelling && (
-                          <Badge className="text-xs px-3 py-1 bg-green-600 text-white">
-                            <Shield className="h-3 w-3 mr-1" />
-                            Nejprodávanější
-                          </Badge>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
+          <div className={`bg-gray-50 rounded-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-gray-200/50 transform transition-all duration-300 ${isAnimating ? 'scale-100 opacity-100' : 'scale-95 opacity-0'} grid lg:grid-cols-12`}>
+            
+            {/* --- LEVÝ SLOUPEC: OBRÁZKY --- */}
+            <div className="lg:col-span-5 bg-white p-6 lg:p-8 flex flex-col gap-6">
+              <div className="relative w-full aspect-square rounded-xl overflow-hidden border border-gray-100 shadow-sm">
+                <Image src={mainImage} alt={title} fill className="object-contain transition-all duration-300" />
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleClose}
-                className="h-12 w-12 p-0 hover:bg-gray-200/70 rounded-xl transition-all duration-200 hover:scale-105"
-              >
-                <X className="h-6 w-6 text-gray-500" />
-              </Button>
+              
+              {gallery && gallery.length > 0 && (
+                <div className="grid grid-cols-4 gap-3">
+                  {/* Původní hlavní obrázek */}
+                  <button onClick={() => setMainImage(image)} className={`relative aspect-square rounded-md overflow-hidden border-2 transition-all ${mainImage === image ? 'border-blue-600 shadow-md' : 'border-gray-200 hover:border-blue-400'}`}>
+                    <Image src={image} alt={title} fill className="object-contain" />
+                  </button>
+                  {/* Galerie */}
+                  {gallery.map((img, idx) => (
+                    <button 
+                      key={idx} 
+                      onClick={() => setMainImage(img.url)}
+                      className={`relative aspect-square rounded-md overflow-hidden border-2 transition-all ${mainImage === img.url ? 'border-blue-600 shadow-md' : 'border-gray-200 hover:border-blue-400'}`}
+                    >
+                      <Image src={img.url} alt={img.alt || title} fill className="object-contain" />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* Content - bez scrollování, fixovaný layout */}
-            <div className="p-8 max-h-[calc(90vh-200px)] overflow-hidden">
-              <div className="flex flex-col lg:flex-row gap-8 h-full">
-                {/* Levý sloupec - obrázek a základní info */}
-                <div className="space-y-6">
-                  {/* Obrázek */}
-                  <div className="relative w-full aspect-[4/3] bg-gray-50 rounded-xl overflow-hidden border border-gray-200">
-                    <Image src={image} alt={title} fill className="object-contain" />
-                  </div>
-                  
-                  {/* Základní informace - profesionální design */}
-                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 space-y-4 border border-blue-100/50">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                        <Check className="h-4 w-4 text-white" />
+            {/* --- PRAVÝ SLOUPEC: INFORMACE --- */}
+            <div className="lg:col-span-7 flex flex-col overflow-hidden">
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 lg:p-8 border-b border-gray-200 flex-shrink-0">
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900 leading-tight">{title}</h2>
+                  {brand && <p className="text-sm text-gray-500 font-medium">Výrobce: {brand}</p>}
+                </div>
+                <Button variant="ghost" size="sm" onClick={handleClose} className="h-10 w-10 p-0 hover:bg-gray-200/70 rounded-full transition-all duration-200 hover:scale-105">
+                  <X className="h-5 w-5 text-gray-500" />
+                </Button>
+              </div>
+
+              {/* Scrollovatelný obsah */}
+              <div className="p-6 lg:p-8 space-y-8 overflow-y-auto">
+                
+                {/* Základní přehled */}
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-4 text-base">Základní přehled</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                    {specifications?.powerRange && (
+                      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <Zap className="mx-auto h-6 w-6 text-blue-600 mb-2" />
+                        <p className="text-xs text-gray-500">Výkon</p>
+                        <p className="font-bold text-sm text-gray-900">{specifications.powerRange.min}-{specifications.powerRange.max} kW</p>
                       </div>
-                      <h4 className="font-bold text-gray-900 text-lg">Základní informace</h4>
-                    </div>
-                    {brand && (
-                      <div className="flex items-center justify-between py-2 border-b border-gray-200">
-                        <span className="font-medium text-gray-600">Značka</span>
-                        <span className="text-gray-900 font-medium">{brand}</span>
+                    )}
+                    {specifications?.noiseLevel && (
+                      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <Volume2 className="mx-auto h-6 w-6 text-blue-600 mb-2" />
+                        <p className="text-xs text-gray-500">Hluk</p>
+                        <p className="font-bold text-sm text-gray-900">{specifications.noiseLevel} dB</p>
                       </div>
                     )}
                     {energyClass && (
-                      <div className="flex items-center justify-between py-2 border-b border-gray-200">
-                        <span className="font-medium text-gray-600">Energetická třída</span>
-                        <Badge variant="outline" className="px-3 py-1 border-gray-300 text-gray-700 font-medium">
-                          {energyClass}
-                        </Badge>
+                      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <Leaf className="mx-auto h-6 w-6 text-blue-600 mb-2" />
+                        <p className="text-xs text-gray-500">Třída</p>
+                        <p className="font-bold text-sm text-gray-900">{energyClass}</p>
                       </div>
                     )}
-                    {warranty && (
-                      <div className="flex items-center justify-between py-2">
-                        <span className="font-medium text-gray-600">Záruka</span>
-                        <span className="text-gray-900 font-medium">{warranty} let</span>
+                     {warranty && (
+                      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <Shield className="mx-auto h-6 w-6 text-blue-600 mb-2" />
+                        <p className="text-xs text-gray-500">Záruka</p>
+                        <p className="font-bold text-sm text-gray-900">{warranty} let</p>
                       </div>
                     )}
                   </div>
                 </div>
 
-                {/* Pravý sloupec - popis a specifikace */}
-                <div className="space-y-6 overflow-y-auto flex-1">
-                  {/* Popis produktu */}
-                  <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-                        <MessageCircle className="h-4 w-4 text-white" />
-                      </div>
-                      <h3 className="font-bold text-xl text-gray-900">Popis produktu</h3>
-                    </div>
-                    <p className="text-gray-700 leading-relaxed text-base pl-11">{description}</p>
-                  </div>
+                {/* Popis produktu */}
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-3 text-base">Popis produktu</h3>
+                  <p className="text-gray-600 leading-relaxed text-sm">{description}</p>
+                </div>
 
-                  {/* Technické specifikace - profesionální design */}
-                  {specifications && (
-                    <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-                      <div className="flex items-center gap-3 mb-6">
-                        <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
-                          <Shield className="h-4 w-4 text-white" />
-                        </div>
-                        <h3 className="font-bold text-xl text-gray-900">Technické specifikace</h3>
-                      </div>
-                      <div className="grid grid-cols-1 gap-3">
-                        {specifications.powerRange && (
-                          <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                            <span className="font-medium text-gray-600 text-sm">Výkon</span>
-                            <span className="text-gray-900 font-medium text-sm">
-                              {specifications.powerRange.min}-{specifications.powerRange.max} kW
-                            </span>
-                          </div>
-                        )}
+                {/* Klíčové vlastnosti */}
+                {features && features.length > 0 && (
+                  <div>
+                    <h3 className="font-semibold text-gray-800 mb-4 text-base">Klíčové vlastnosti</h3>
+                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
+                      {features.map((feature, index) => (
+                        <li key={index} className="flex items-start text-sm">
+                          <Check className="h-4 w-4 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
+                          <span className="text-gray-700">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                
+                {/* Technické specifikace */}
+                 {specifications && (specifications.coolingCapacityRange || specifications.heatingCapacityRange) && (
+                    <div>
+                        <h3 className="font-semibold text-gray-800 mb-4 text-base">Technické specifikace</h3>
+                        <div className="bg-white rounded-lg border border-gray-200 divide-y divide-gray-200">
                         {specifications.coolingCapacityRange && (
-                          <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                            <span className="font-medium text-gray-600 text-sm">Chlazení</span>
-                            <span className="text-gray-900 font-medium text-sm">
-                              {specifications.coolingCapacityRange.min}-{specifications.coolingCapacityRange.max} kW
-                            </span>
+                          <div className="flex items-center justify-between p-3">
+                            <span className="font-medium text-gray-600 text-sm">Chladící výkon</span>
+                            <span className="text-gray-800 font-semibold text-sm">{specifications.coolingCapacityRange.min}-{specifications.coolingCapacityRange.max} kW</span>
                           </div>
                         )}
                         {specifications.heatingCapacityRange && (
-                          <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                            <span className="font-medium text-gray-600 text-sm">Topení</span>
-                            <span className="text-gray-900 font-medium text-sm">
-                              {specifications.heatingCapacityRange.min}-{specifications.heatingCapacityRange.max} kW
-                            </span>
+                          <div className="flex items-center justify-between p-3">
+                            <span className="font-medium text-gray-600 text-sm">Topný výkon</span>
+                            <span className="text-gray-800 font-semibold text-sm">{specifications.heatingCapacityRange.min}-{specifications.heatingCapacityRange.max} kW</span>
                           </div>
                         )}
-                        {specifications.noiseLevel && (
-                          <div className="flex items-center justify-between py-2">
-                            <span className="font-medium text-gray-600 text-sm">Hladina hluku</span>
-                            <span className="text-gray-900 font-medium text-sm">{specifications.noiseLevel} dB</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Cena - profesionální design */}
-                  {price && price.showPrice && (
-                    <div className="bg-gradient-to-br from-amber-50 to-yellow-50 border border-amber-200 rounded-2xl p-6 shadow-sm">
-                      <div className="flex items-center gap-3 mb-6">
-                        <div className="w-8 h-8 bg-amber-600 rounded-lg flex items-center justify-center">
-                          <Star className="h-4 w-4 text-white" />
                         </div>
-                        <h3 className="font-bold text-xl text-gray-900">Cena</h3>
-                      </div>
-                      <div className="space-y-3">
-                        {price.basePrice && (
-                          <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                            <span className="font-medium text-gray-600 text-sm">Základní cena</span>
-                            <span className="text-gray-900 font-bold text-lg">{price.basePrice.toLocaleString()} Kč</span>
-                          </div>
-                        )}
-                        {price.installationPrice && (
-                          <div className="flex items-center justify-between py-2">
-                            <span className="font-medium text-gray-600 text-sm">Instalace</span>
-                            <span className="text-gray-900 font-medium text-sm">{price.installationPrice.toLocaleString()} Kč</span>
-                          </div>
-                        )}
-                      </div>
                     </div>
-                  )}
+                 )}
 
-                  {/* Klíčové vlastnosti - profesionální design */}
-                  {features && features.length > 0 && (
-                    <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-                      <div className="flex items-center gap-3 mb-6">
-                        <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-                          <Check className="h-4 w-4 text-white" />
-                        </div>
-                        <h3 className="font-bold text-xl text-gray-900">Klíčové vlastnosti</h3>
-                      </div>
-                      <ExpandableFeatures features={features} />
+                {/* Soubory ke stažení */}
+                {(files && files.length > 0) && (
+                  <div>
+                    <h3 className="font-semibold text-gray-800 mb-4 text-base">Dokumentace ke stažení</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {files.map((file) => (
+                        <Button key={file._id} variant="outline" asChild className="border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 transition-all duration-200 justify-start">
+                          <a href={file.fileUrl} download target="_blank" rel="noopener noreferrer">
+                            <FileDown className="mr-2 h-4 w-4" />
+                            {file.fileType === 'catalog' ? 'Katalog' : 
+                             file.fileType === 'manual' ? 'Návod' :
+                             file.fileType === 'datasheet' ? 'Datasheet' :
+                             file.title}
+                          </a>
+                        </Button>
+                      ))}
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
 
-              {/* Soubory ke stažení - profesionální design */}
-              {(files && files.length > 0) && (
-                <div className="mt-8 pt-8 border-t border-gray-200">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-                      <Download className="h-4 w-4 text-white" />
-                    </div>
-                    <h3 className="font-bold text-xl text-gray-900">Dokumentace ke stažení</h3>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {files.map((file) => (
-                      <Button 
-                        key={file._id} 
-                        variant="outline" 
-                        asChild 
-                        className="border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-all duration-200"
-                      >
-                        <a href={file.fileUrl} download target="_blank" rel="noopener noreferrer">
-                          <Download className="mr-2 h-4 w-4" />
-                          {file.fileType === 'catalog' ? 'Katalog' : 
-                           file.fileType === 'manual' ? 'Návod' :
-                           file.fileType === 'datasheet' ? 'Datasheet' :
-                           file.title}
-                        </a>
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Fallback na catalogUrl */}
-              {(!files || files.length === 0) && catalogUrl && (
-                <div className="mt-8 pt-8 border-t border-gray-200">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-                      <Download className="h-4 w-4 text-white" />
-                    </div>
-                    <h3 className="font-bold text-xl text-gray-900">Dokumentace</h3>
-                  </div>
-                  <Button variant="outline" asChild className="w-full border-emerald-300 text-emerald-700 hover:bg-emerald-50 hover:border-emerald-400 transition-all duration-200 py-3">
-                    <a href={catalogUrl} download target="_blank" rel="noopener noreferrer">
-                      <Download className="mr-2 h-5 w-5" />
-                      Stáhnout katalog
-                    </a>
-                  </Button>
-                </div>
-              )}
-            </div>
-
-            {/* Footer - profesionální design s lepší viditelností */}
-            <div className="flex items-center justify-between p-8 border-t border-gray-100 bg-gradient-to-r from-blue-50 to-blue-100/50">
-              <Button
-                variant="outline"
-                onClick={handleClose}
-                className="px-8 py-3 border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 transition-all duration-200 font-medium rounded-xl"
-              >
-                Zavřít
-              </Button>
-              <Button asChild className="px-8 py-3 bg-green-600 text-white hover:bg-green-700 shadow-lg transition-all duration-200 font-medium rounded-xl hover:scale-105">
-                <Link href="#kontakt">
-                  <MessageCircle className="mr-2 h-5 w-5" />
-                  Nezávazná poptávka
-                </Link>
-              </Button>
             </div>
           </div>
         </div>

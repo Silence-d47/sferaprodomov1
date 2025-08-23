@@ -1,16 +1,15 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import Image from "next/image"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
-import { OrganicWaveDivider } from "@/components/ui/organic-wave-divider"
 import { EnhancedSectionDivider } from "@/components/ui/enhanced-section-divider"
-import { ArrowLeft, Star, Quote, CheckCircle, Award, Users, Phone, MapPin, Calendar } from "lucide-react"
-import useSWR from "swr"
+import { ArrowLeft, Star, Quote, CheckCircle, Award, Users, Phone, MapPin, Calendar, X, ChevronLeft, ChevronRight } from "lucide-react"
 import { client } from "@/lib/sanity.client"
 import { groq } from "next-sanity"
 
@@ -55,13 +54,12 @@ const queryBySlug = groq`
   }
 `
 
-const fetcher = ([_q, _p]: [string, Record<string, any>]) => client.fetch(_q, _p)
-
 export default function ReferenceDetailPage() {
   const params = useParams<{ slug: string }>()
   const slug = params?.slug as string
   const [reference, setReference] = useState<Reference | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null)
 
   // Fetch data on component mount
   useEffect(() => {
@@ -69,7 +67,6 @@ export default function ReferenceDetailPage() {
       if (!slug) return
       setIsLoading(true)
       try {
-        const { client } = await import('@/lib/sanity.client')
         const data = await client.fetch<Reference>(queryBySlug, { slug })
         setReference(data)
       } catch (error) {
@@ -91,6 +88,23 @@ export default function ReferenceDetailPage() {
       reference.description ||
       reference.projectDetails
   )
+    
+  const handleNextImage = () => {
+    if (selectedImageIndex !== null && reference.gallery) {
+      setSelectedImageIndex((prevIndex) => 
+        prevIndex === null ? 0 : (prevIndex + 1) % reference.gallery!.length
+      );
+    }
+  }
+
+  const handlePrevImage = () => {
+    if (selectedImageIndex !== null && reference.gallery) {
+      setSelectedImageIndex((prevIndex) => 
+        prevIndex === null ? 0 : (prevIndex - 1 + reference.gallery!.length) % reference.gallery!.length
+      );
+    }
+  }
+
 
   return (
     <div className="flex flex-col">
@@ -242,50 +256,106 @@ export default function ReferenceDetailPage() {
               </div>
             </div>
 
-            {/* Galerie na jednom řádku s pomalým posunováním */}
+
+
+
+
+{/* Fotogalerie - macOS Dock Style */}
             {reference.gallery && reference.gallery.length > 0 && (
               <div className="border-t border-gray-200 pt-12">
                 <div className="text-center mb-8">
                   <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">Fotogalerie projektu</h2>
-                  <p className="text-gray-600">Podívejte se na fotografie z realizace</p>
+                  <p className="text-gray-600">Prohlédněte si fotografie kliknutím. Posouvejte pro zobrazení dalších.</p>
                   <div className="w-24 h-1 bg-blue-600 mx-auto mt-4" />
                 </div>
                 
-                {/* Galerie s pomalým posunováním */}
-                <div className="relative overflow-hidden">
-                  <div className="flex gap-4 animate-scroll-slow">
+                <div className="flex justify-center py-8">
+                  {/* Zvětšený prostor pro hover efekt - přidán větší padding nahoře a změněno zarovnání */}
+                  <div className="flex items-center gap-3 md:gap-4 p-4 pt-24 pb-12 overflow-x-auto w-full">
                     {reference.gallery.map((image, index) => (
-                      <div key={index} className="flex-shrink-0 w-80 h-64 rounded-xl overflow-hidden shadow-lg border border-gray-200 group">
+                      <motion.div
+                        key={index}
+                        onClick={() => setSelectedImageIndex(index)}
+                        className="relative flex-shrink-0 w-40 h-32 md:w-48 md:h-40 rounded-xl overflow-hidden shadow-lg cursor-pointer origin-center bg-gray-100"
+                        whileHover={{ scale: 1.4, zIndex: 10 }}
+                        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                      >
                         <Image
                           src={image || "/placeholder.svg"}
                           alt={`${reference.title} - foto ${index + 1}`}
-                          width={320}
-                          height={256}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          fill
+                          className="w-full h-full object-cover"
+                          sizes="(max-width: 768px) 160px, 192px"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      </div>
-                    ))}
-                    {/* Duplikujeme obrázky pro plynulé posunování */}
-                    {reference.gallery.map((image, index) => (
-                      <div key={`duplicate-${index}`} className="flex-shrink-0 w-80 h-64 rounded-xl overflow-hidden shadow-lg border border-gray-200 group">
-                        <Image
-                          src={image || "/placeholder.svg"}
-                          alt={`${reference.title} - foto ${index + 1}`}
-                          width={320}
-                          height={256}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      </div>
+                      </motion.div>
                     ))}
                   </div>
                 </div>
               </div>
             )}
+
+
+
+
+
           </div>
         </div>
       </section>
+      
+      {/* Lightbox pro zvětšené obrázky */}
+      <AnimatePresence>
+        {selectedImageIndex !== null && reference.gallery && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImageIndex(null)}
+            className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4"
+          >
+            {/* Tlačítko Zavřít */}
+            <button
+              onClick={() => setSelectedImageIndex(null)}
+              className="absolute top-4 right-4 text-white bg-black/50 rounded-full p-2 hover:bg-black/70 transition-colors z-50"
+            >
+              <X className="h-6 w-6" />
+            </button>
+
+            {/* Tlačítko Předchozí */}
+            <button
+              onClick={(e) => { e.stopPropagation(); handlePrevImage(); }}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-white bg-black/50 rounded-full p-2 hover:bg-black/70 transition-colors z-50"
+            >
+              <ChevronLeft className="h-8 w-8" />
+            </button>
+            
+            {/* Tlačítko Další */}
+            <button
+              onClick={(e) => { e.stopPropagation(); handleNextImage(); }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-white bg-black/50 rounded-full p-2 hover:bg-black/70 transition-colors z-50"
+            >
+              <ChevronRight className="h-8 w-8" />
+            </button>
+            
+            <motion.div
+              key={selectedImageIndex}
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ type: 'spring', stiffness: 200, damping: 25 }}
+              className="relative w-full h-full max-w-5xl max-h-[90vh]"
+              onClick={(e) => e.stopPropagation()} // Zabrání zavření při kliknutí na obrázek
+            >
+              <Image
+                src={reference.gallery[selectedImageIndex] || "/placeholder.svg"}
+                alt={`${reference.title} - foto ${selectedImageIndex + 1}`}
+                fill
+                className="object-contain"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
 
       {/* Client Review */}
       {showReview && (
@@ -354,5 +424,3 @@ export default function ReferenceDetailPage() {
     </div>
   )
 }
-
-

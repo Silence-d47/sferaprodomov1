@@ -431,7 +431,7 @@ export default async function ElektroinstalacePage() {
                   <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto lg:mr-0 lg:ml-auto mb-4">
                     <Clock className="h-8 w-8 text-white" />
                   </div>
-                  <div className="text-slate-200 font-bold text-lg mb-2">Po - Pá: 8:00 - 20:00</div>
+                  <div className="text-slate-200 font-bold text-lg mb-2">Po - Ne 8:00 - 20:00</div>
                   <div className="text-green-900 text-sm font-medium mt-3">✓ Pohotovostní servis</div>
                 </div>
               </div>

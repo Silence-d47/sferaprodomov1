@@ -1,18 +1,47 @@
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+"use client"
+
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter, CardImage } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { notFound } from 'next/navigation'
+import { notFound, useParams } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, ArrowRight, Calendar, User, Clock, BookOpen, ChevronLeft, ChevronRight, Share2, Bookmark, Eye, ThumbsUp, MessageCircle, Tag, Lightbulb, Zap, Thermometer, Wrench, Home, Building2, ExternalLink, Phone, Mail, MapPin } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Calendar, User, Clock, BookOpen, ChevronLeft, ChevronRight, Share2, Heart, Eye, ThumbsUp, MessageCircle, Tag, Lightbulb, Zap, Thermometer, Wrench, Home, Building2, ExternalLink, Phone, Mail, MapPin } from 'lucide-react'
 import Image from 'next/image'
 import { EnhancedSectionDivider } from '@/components/ui/enhanced-section-divider'
 import { urlForImage } from '@/lib/sanity.image'
+import { Toaster, toast } from 'react-hot-toast'
+import { useEffect, useState } from 'react'
+import { CustomPortableText } from '@/lib/sanity.portableText'
 
 interface BlogPostPageProps {
   params: {
     slug: string
   }
 }
+
+// Hooks for fetching data on client
+function usePostData(slug: string) {
+  const [post, setPost] = useState<Post | null>(null);
+  const [allPosts, setAllPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true);
+      const [postData, allPostsData] = await Promise.all([
+        getPostData(slug),
+        getAllPosts()
+      ]);
+      setPost(postData);
+      setAllPosts(allPostsData);
+      setLoading(false);
+    }
+    fetchData();
+  }, [slug]);
+
+  return { post, allPosts, loading };
+}
+
 
 // Types
 interface Post {
@@ -116,12 +145,43 @@ async function getAllPosts(): Promise<Post[]> {
   }
 }
 
-export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const slug = (await params).slug
-  const [post, allPosts] = await Promise.all([
-    getPostData(slug),
-    getAllPosts()
-  ])
+export default function BlogPostPage() {
+  const params = useParams()
+  const slug = params.slug as string
+  const { post, allPosts, loading } = usePostData(slug);
+  
+  // Handlers for buttons
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: post?.title,
+        text: post?.excerpt,
+        url: window.location.href,
+      })
+      .then(() => toast.success('Článek úspěšně sdílen!'))
+      .catch((error) => console.error('Error sharing:', error));
+    } else {
+      toast.error('Sdílení není na tomto zařízení podporováno.');
+    }
+  };
+
+  const handleBookmark = () => {
+    toast.success('Článek byl uložen do záložek!');
+  };
+
+  const handleGenericClick = () => {
+    toast('Tato funkce se připravuje.', {
+      icon: '🚧',
+    });
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl font-semibold">Načítání článku...</div>
+      </div>
+    );
+  }
 
   if (!post) {
     notFound()
@@ -142,11 +202,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     return categoryConfig[category] || categoryConfig['Klimatizace']
   }
 
-  // Import Sanity utilities inside the component
-  const { CustomPortableText } = await import('@/lib/sanity.portableText')
+  // Helper to resolve image URL correctly (string URL vs. Sanity image object)
+  const getImageUrl = (img: any) => {
+    if (!img) return "/placeholder.svg";
+    if (typeof img === "string") return img;
+    return urlForImage(img).url();
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+      <Toaster position="bottom-right" />
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600 overflow-hidden">
         {/* Background pattern */}
@@ -208,11 +273,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
                 {/* Action buttons */}
                 <div className="flex flex-wrap gap-4">
-                  <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold shadow-lg">
-                    <Bookmark className="h-5 w-5 mr-2" />
+                  <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold shadow-lg" onClick={handleBookmark}>
+                    <Heart className="h-5 w-5 mr-2" />
                     Uložit článek
                   </Button>
-                  <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-700 bg-white/10 backdrop-blur-sm">
+                  <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-700 bg-white/10 backdrop-blur-sm" onClick={handleShare}>
                     <Share2 className="h-5 w-5 mr-2" />
                     Sdílet
                   </Button>
@@ -223,7 +288,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               <div className="relative">
                 <div className="relative overflow-hidden rounded-2xl shadow-2xl border border-white/20">
                   <Image
-                    src={post.mainImage ? urlForImage(post.mainImage).url() : "/placeholder.svg"}
+                    src={getImageUrl(post.mainImage)}
                     alt={post.title}
                     width={600}
                     height={400}
@@ -231,12 +296,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                   
-                  {/* Reading progress indicator */}
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <div className="bg-white/20 backdrop-blur-sm rounded-full p-2">
-                      <div className="bg-yellow-400 h-2 rounded-full w-1/3"></div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -286,15 +345,15 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               {/* Article actions */}
               <div className="flex flex-wrap items-center justify-between gap-4 p-6 bg-gray-50 rounded-2xl">
                 <div className="flex items-center gap-6">
-                  <button className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors">
+                  <button className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors" onClick={handleGenericClick}>
                     <ThumbsUp className="h-5 w-5" />
                     <span>Užitečné</span>
                   </button>
-                  <button className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors">
+                  <button className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors" onClick={handleGenericClick}>
                     <MessageCircle className="h-5 w-5" />
                     <span>Komentáře</span>
                   </button>
-                  <button className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors">
+                  <button className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors" onClick={handleShare}>
                     <Share2 className="h-5 w-5" />
                     <span>Sdílet</span>
                   </button>
@@ -328,7 +387,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   <Card key={relatedPost._id} className="group overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
                     <div className="relative overflow-hidden aspect-[4/3]">
                                               <Image
-                          src={relatedPost.mainImage ? urlForImage(relatedPost.mainImage).url() : "/placeholder.svg"}
+                          src={getImageUrl(relatedPost.mainImage)}
                           alt={relatedPost.title}
                           fill
                           className="object-cover group-hover:scale-110 transition-transform duration-500"
@@ -450,7 +509,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   Nezávazná konzultace
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-700 font-semibold" asChild>
+              <Button size="lg" variant="outline" className="border-yellow-500 text-yellow-900 hover:bg-yellow-500 hover:text-white font-semibold" asChild>
                 <Link href="/sluzby">
                   <ExternalLink className="h-5 w-5 mr-2" />
                   Naše služby
@@ -462,18 +521,18 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <div className="grid md:grid-cols-3 gap-8 mt-16 pt-16 border-t border-white/20">
               <div className="text-center">
                 <Phone className="h-12 w-12 text-green-400 mx-auto mb-4" />
-                <h3 className="font-semibold text-lg mb-2">Zavolejte nám</h3>
-                <p className="text-blue-100 text-sm">+420 123 456 789</p>
+                <h3 className="font-semibold text-lg text-white mb-2">Zavolejte nám</h3>
+                <p className="text-blue-100 text-sm">+420 735 014 112</p>
               </div>
               <div className="text-center">
                 <Mail className="h-12 w-12 text-yellow-400 mx-auto mb-4" />
-                <h3 className="font-semibold text-lg mb-2">Napište nám</h3>
-                <p className="text-blue-100 text-sm">info@sfera-pro-domov.cz</p>
+                <h3 className="font-semibold text-lg text-white mb-2">Napište nám</h3>
+                <p className="text-blue-100 text-sm">obchod@sfera-domov.cz</p>
               </div>
               <div className="text-center">
                 <MapPin className="h-12 w-12 text-orange-400 mx-auto mb-4" />
-                <h3 className="font-semibold text-lg mb-2">Navštivte nás</h3>
-                <p className="text-blue-100 text-sm">Ostrava a okolí</p>
+                <h3 className="font-semibold text-lg text-white mb-2">Navštivte nás</h3>
+                <p className="text-blue-100 text-sm">Nákladní 471/32, Opava</p>
               </div>
             </div>
           </div>

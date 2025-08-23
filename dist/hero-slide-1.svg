@@ -1,0 +1,39 @@
+<svg width="1200" height="600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="heroGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e40af;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="overlayGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:rgba(0,0,0,0.3);stop-opacity:1" />
+      <stop offset="100%" style="stop-color:rgba(0,0,0,0.7);stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#heroGrad)"/>
+  <rect width="100%" height="100%" fill="url(#overlayGrad)"/>
+  
+  <!-- Klimatizace ikona -->
+  <g transform="translate(100,150)">
+    <rect x="0" y="0" width="80" height="60" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" stroke-width="2" rx="8"/>
+    <circle cx="40" cy="30" r="15" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+    <path d="M40 15 L40 45 M25 30 L55 30" stroke="rgba(255,255,255,0.8)" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Tepelné čerpadlo ikona -->
+  <g transform="translate(250,150)">
+    <rect x="0" y="0" width="80" height="60" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" stroke-width="2" rx="8"/>
+    <circle cx="40" cy="30" r="15" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+    <path d="M30 20 L50 40 M50 20 L30 40" stroke="rgba(255,255,255,0.8)" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Rekuperace ikona -->
+  <g transform="translate(400,150)">
+    <rect x="0" y="0" width="80" height="60" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" stroke-width="2" rx="8"/>
+    <rect x="20" y="15" width="40" height="30" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+    <path d="M20 30 L60 30" stroke="rgba(255,255,255,0.8)" stroke-width="2"/>
+  </g>
+  
+  <text x="600" y="400" font-family="Arial, sans-serif" font-size="24" fill="rgba(255,255,255,0.9)" text-anchor="middle">Sfera - Váš partner pro dokonalé klima</text>
+  <text x="600" y="430" font-family="Arial, sans-serif" font-size="16" fill="rgba(255,255,255,0.7)" text-anchor="middle">Profesionální klimatizace, tepelná čerpadla a rekuperace</text>
+</svg> 

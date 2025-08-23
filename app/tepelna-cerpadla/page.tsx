@@ -331,7 +331,7 @@ export default async function TepelnaCerpadlaPage() {
                   key={product._id}
                   title={product.title}
                   description={product.description}
-                  image={product.image }
+                  image={product.image || undefined}
                   features={product.features || []}
                   isRecommended={product.isRecommended}
                   isBestSelling={product.isBestSelling}

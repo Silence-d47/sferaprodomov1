@@ -50,7 +50,13 @@ export const postQuery = groq`
     "author": author->name,
     "categories": categories[]->title,
     excerpt,
-    body,
+    "body": body[]{
+      ...,
+      _type == "image" => {
+        ...,
+        "url": asset->url
+      }
+    },
     readingTime,
     keywords
   }

@@ -24,7 +24,7 @@ export function ReferenceSlider({ references }: ReferenceSliderProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {references.map((reference) => (
-        <Link key={reference.id} href={`/reference/${reference.id}`} className="block h-full group hover:shadow-xl transition-all duration-300 border-0 bg-white overflow-hidden flex flex-col rounded-lg">
+        <Link key={reference.id} href={`/reference/${reference.id.startsWith('drafts.') ? reference.id.substring(7) : reference.id}`} className="block h-full group hover:shadow-xl transition-all duration-300 border-0 bg-white overflow-hidden flex flex-col rounded-lg">
           <div className="p-0 flex flex-col h-full">
             <div className="relative overflow-hidden aspect-[5/4]">
               <Image

@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Source_Sans_3 } from "next/font/google"
+import { Inter } from "next/font/google"
 import "./globals.css"
 import { Header } from "@/components/layout/header"
 import { TopBar } from "@/components/ui/top-bar"
@@ -13,8 +13,13 @@ import { GoogleAnalytics } from "@/components/ui/google-analytics"
 import { FacebookPixel } from "@/components/ui/facebook-pixel"
 import { GoogleTagManager } from "@/components/ui/google-tag-manager"
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
-const sourceSans = Source_Sans_3({ subsets: ["latin"] })
+// Inter - moderní a čitelný webový font
+const inter = Inter({ 
+  subsets: ["latin"],
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: "SFERA - Klimatizace, Tepelná čerpadla, Rekuperace, Elektroinstalace",
@@ -36,11 +41,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="cs" suppressHydrationWarning>
-      <body className={sourceSans.className} suppressHydrationWarning>
+      <body className={inter.className} suppressHydrationWarning>
         <GoogleAnalytics />
         <FacebookPixel />
         <GoogleTagManager />
         <Analytics />
+        <SpeedInsights />
         <ThemeProvider theme="default">
           <WelcomePopupProvider>
             <TopBar />
