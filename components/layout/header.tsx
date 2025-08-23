@@ -6,6 +6,7 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Menu } from "lucide-react"
+import z from "zod"
 
 const navigation = [
   { name: "Klimatizace", href: "/klimatizace" },
@@ -20,19 +21,30 @@ const navigation = [
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  // Změna stylu po odscrollování hero sekce
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 120)
+    }
+    onScroll()
+    window.addEventListener("scroll", onScroll)
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
 
   return (
-      <header className="absolute left-0 right-0 z-50 mx-2 md:mx-2 bg-transparent backdrop-blur-none top-16 md:top-20">
-      <div className="container mx-auto px-2 md:px-6 flex h-16 md:h-18 items-center justify-between max-w-7xl">
+      <header className={`${scrolled ? 'bg-white/30 backdrop-blur-md backdrop-saturate-120 shadow-xl' : 'bg-transparent backdrop-blur-lg'} fixed top-[70px] md:top-[70px] z-40 left-0 right-0 transition-all duration-300`}>
+      <div className="container mx-auto px-2 md:px-4 flex h-12 md:h-16 items-center justify-between max-w-7xl">
       
         {/* Desktop Navigation - Right side */}
         <div className="flex flex-1 justify-end">
-          <nav className="hidden lg:flex items-end space-x-0.5 mt-0">
+          <nav className="hidden lg:flex items-center space-x-0.5">
             {navigation.map((item, index) => (
               <div key={item.name} className="flex items-center">
                 <Link
                   href={item.href}
-                  className="text-sm font-normal text-white drop-shadow-lg px-2 py-1 rounded-lg whitespace-nowrap transition-all duration-300 hover:text-blue-200 hover:scale-105"
+                  className={`text-sm font-normal px-1 py-1 rounded-lg whitespace-nowrap transition-all duration-300 hover:scale-105 ${scrolled ? 'text-gray-900 hover:text-blue-800' : 'text-white drop-shadow-lg hover:text-blue-200'}`}
                 >
                   {item.name}
                 </Link>
@@ -47,14 +59,14 @@ export function Header() {
         <div className="flex items-center space-x-1">
           {/* Mobile Navigation */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild className="lg:hidden">
-              <Button variant="ghost" size="icon" className="text-white drop-shadow-lg">
+            <SheetTrigger asChild className="lg:hidden" data-header-sheet-trigger>
+              <Button variant="ghost" size="icon" className={`${scrolled ? 'text-gray-900' : 'text-white drop-shadow-lg'}`}>
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[280px] sm:w-[350px] bg-white/95 backdrop-blur-md border-l border-gray-200/50">
-              <nav className="flex flex-col space-y-1 mt-6">
+            <SheetContent side="right" className="w-[350px] sm:w-[350px] bg-white/95 backdrop-blur-md border-l border-gray-200/50">
+              <nav className="flex flex-col space-y-1 mt-2">
                 {navigation.map((item) => (
                   <Link
                     key={item.name}

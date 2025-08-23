@@ -41,13 +41,16 @@ export interface ProductCardProps {
 }
 
 export function ProductCard({ title, description, image, gallery, features, isRecommended, isBestSelling, catalogUrl, energyClass, specifications, price, warranty, brand, files }: ProductCardProps) {
+  const placeholder = "/placeholder.jpg"
+  const safe = (src?: string | null) => (typeof src === 'string' && src.trim() !== "" ? src : placeholder)
+  const safeImage = safe(image)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
-  const [mainImage, setMainImage] = useState(image)
+  const [mainImage, setMainImage] = useState(safeImage)
 
   useEffect(() => {
-    setMainImage(image)
-  }, [image])
+    setMainImage(safeImage)
+  }, [safeImage])
   
   // Animace při otevírání/zavírání modálu
   useEffect(() => {
@@ -82,7 +85,7 @@ export function ProductCard({ title, description, image, gallery, features, isRe
           className="relative w-full overflow-hidden aspect-[4/3] bg-gray-50 cursor-pointer"
           onClick={() => setIsModalOpen(true)}
         >
-          <Image src={image} alt={title} fill className="object-contain transition-transform duration-700 group-hover:scale-110" />
+          <Image src={safeImage} alt={title} fill className="object-contain transition-transform duration-700 group-hover:scale-110" />
           
           <div className="absolute top-3 right-3 bg-white/80 backdrop-blur-sm p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100">
             <Eye className="h-5 w-5 text-gray-800" />
@@ -164,17 +167,24 @@ export function ProductCard({ title, description, image, gallery, features, isRe
               {gallery && gallery.length > 0 && (
                 <div className="grid grid-cols-4 gap-3">
                   {/* Původní hlavní obrázek */}
-                  <button onClick={() => setMainImage(image)} className={`relative aspect-square rounded-md overflow-hidden border-2 transition-all ${mainImage === image ? 'border-blue-600 shadow-md' : 'border-gray-200 hover:border-blue-400'}`}>
-                    <Image src={image} alt={title} fill className="object-contain" />
+                  <button
+                    onClick={() => setMainImage(safeImage)}
+                    className={`relative aspect-square rounded-md overflow-hidden border-2 transition-all ${
+                      mainImage === safeImage
+                        ? 'border-blue-600 shadow-md'
+                        : 'border-gray-200 hover:border-blue-400'
+                    }`}
+                  >
+                    <Image src={safeImage} alt={title} fill className="object-contain" />
                   </button>
                   {/* Galerie */}
                   {gallery.map((img, idx) => (
                     <button 
                       key={idx} 
-                      onClick={() => setMainImage(img.url)}
-                      className={`relative aspect-square rounded-md overflow-hidden border-2 transition-all ${mainImage === img.url ? 'border-blue-600 shadow-md' : 'border-gray-200 hover:border-blue-400'}`}
+                      onClick={() => setMainImage(safe(img.url))}
+                      className={`relative aspect-square rounded-md overflow-hidden border-2 transition-all ${mainImage === safe(img.url) ? 'border-blue-600 shadow-md' : 'border-gray-200 hover:border-blue-400'}`}
                     >
-                      <Image src={img.url} alt={img.alt || title} fill className="object-contain" />
+                      <Image src={safe(img.url)} alt={img.alt || title} fill className="object-contain" />
                     </button>
                   ))}
                 </div>

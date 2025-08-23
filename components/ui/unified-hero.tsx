@@ -230,7 +230,7 @@ export function UnifiedHero({ slides, options }: UnifiedHeroProps) {
     };
 
     const onInit = () => {
-      setIsTransitioning(true);
+      setIsTransitioning(false);
       setSelectedIndex(emblaApi.selectedScrollSnap());
       console.log('Carousel initialized with slide:', emblaApi.selectedScrollSnap());
     };

@@ -334,7 +334,7 @@ export default function BlogPage() {
                 const config = getCategoryConfig(category)
                 
                 return (
-                  <Card key={post._id} className="group overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                  <Card key={post._id} className="group relative overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
                     <div className="relative overflow-hidden aspect-[4/3]">
                       <Image
                         src={post.mainImage ? urlForImage(post.mainImage).url() : "/placeholder.svg"}
@@ -385,14 +385,15 @@ export default function BlogPage() {
                         {post.excerpt}
                       </CardDescription>
 
-                      <Link href={`/blog/${post.slug.current}`}>
+                      <span>
                         <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white group-hover:bg-blue-700 transition-colors">
                           <BookOpen className="h-4 w-4 mr-2" />
                           Přečíst článek
                           <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
                         </Button>
-                      </Link>
+                      </span>
                     </CardContent>
+                    <Link href={`/blog/${post.slug.current}`} className="absolute inset-0 z-20" aria-label={post.title}></Link>
                   </Card>
                 )
               })}
@@ -439,7 +440,7 @@ export default function BlogPage() {
                   const config = getCategoryConfig(category)
                   
                   return (
-                    <Card key={post._id} className="group overflow-hidden border border-gray-200 hover:border-blue-300 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                    <Card key={post._id} className="group relative overflow-hidden border border-gray-200 hover:border-blue-300 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                       <div className="relative overflow-hidden aspect-[4/3]">
                         <Image
                           src={post.mainImage ? urlForImage(post.mainImage).url() : "/placeholder.svg"}
@@ -482,14 +483,15 @@ export default function BlogPage() {
                           {post.excerpt}
                         </CardDescription>
 
-                        <Link href={`/blog/${post.slug.current}`}>
+                        <span>
                           <Button variant="outline" className="w-full border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300 transition-colors">
                             Přečíst článek
                             <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
                           </Button>
-                        </Link>
-                      </CardContent>
-                    </Card>
+                       </span>
+                    </CardContent>
+                    <Link href={`/blog/${post.slug.current}`} className="absolute inset-0 z-20" aria-label={post.title}></Link>
+                  </Card>
                   )
                 })}
               </div>

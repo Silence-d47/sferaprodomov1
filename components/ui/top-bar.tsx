@@ -1,19 +1,19 @@
 "use client"
 
-import { Clock, Phone, MapPin, Star } from "lucide-react"
+import { Clock, Phone, MapPin, Star, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import Image from "next/image"
 
 export function TopBar() {
   return (
-    <div className="bg-[#1B5D93] text-white py-2 md:py-3 px-2 md:px-2 top-bar">
+    <div className="bg-[#1B5D93] text-white py-2 md:py-3 px-2 md:px-2 top-bar sticky top-0 z-50">
       <div className="container mx-auto px-4 md:px-8 flex items-center justify-between h-full max-w-7xl overflow-hidden">
         {/* Left side - Logo and Contact Info */}
         <div className="flex items-center justify-start space-x-4 md:space-x-6 flex-1 min-w-0">
           {/* Text - SFÉRA a PRO DOMOV */}
           <div className="flex flex-col justify-center items-start gap-0">
-            <span className="text-white text-sm md:text-xl font-semibold drop-shadow-lg leading-tight">S F É R A</span>
+            <span className="text-white text-sm md:text-xl font-semibold drop-shadow-lg leading-tight">S F E R A</span>
             <span className="text-white text-sm md:text-sm font-light drop-shadow-lg leading-none">PRO DOMOV</span>
           </div>
           
@@ -33,7 +33,7 @@ export function TopBar() {
           {/* Otevírací doba - doleva */}
           <div className="flex items-center space-x-1">
             <Clock className="w-3 md:w-4 h-3 md:h-4" />
-            <span className="hidden lg:inline text-xs md:text-sm font-medium">| Pondělí - Neděle 08:00 - 20:00</span>
+            <span className="hidden lg:inline text-xs md:text-sm font-medium">| Po - Ne 08:00 - 20:00</span>
             <span className="lg:hidden text-xs md:text-sm font-medium">Po-Ne 8-20</span>
           </div>
           
@@ -44,7 +44,7 @@ export function TopBar() {
               <Phone className="w-3 md:w-4 h-3 md:h-4" />
               <Link href="tel:+420735014112" className="hover:underline whitespace-nowrap">
                 <span className="hidden sm:inline">| +420 735 014 112</span>
-                <span className="sm:hidden">735 014 112</span>
+                <span className="sm:hidden">735014112</span>
               </Link>
             </div>
             
@@ -110,8 +110,13 @@ export function TopBar() {
               </div>
             </div>
           </div>
+          <Button variant="ghost" size="icon" className="text-white sm:hidden" onClick={() => { if (typeof window !== 'undefined') { (document.querySelector('[data-header-sheet-trigger]') as HTMLElement)?.click(); } }}>
+              <Menu className="h-5 w-5" />
+              <span className="sr-only">Menu</span>
+            </Button>
+            <span className="hidden md:inline text-xs md:text-sm italic ml-4 whitespace-nowrap">&nbsp;&nbsp;&nbsp;Děkujeme&nbsp;za&nbsp;důvěru!</span>
         </div>
       </div>
     </div>
   )
-} 
+}
