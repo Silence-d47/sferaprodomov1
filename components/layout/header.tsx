@@ -34,7 +34,7 @@ export function Header() {
   }, [])
 
   return (
-      <header className={`${scrolled ? 'bg-white/30 backdrop-blur-md backdrop-saturate-120 shadow-xl' : 'bg-transparent backdrop-blur-lg'} fixed top-[70px] md:top-[70px] z-40 left-0 right-0 transition-all duration-300`}>
+      <header className={`${scrolled ? 'bg-white/30 backdrop-blur-md backdrop-saturate-120 shadow-xl' : 'bg-transparent backdrop-blur-lg'} hidden lg:block fixed top-[70px] md:top-[70px] z-40 left-0 right-0 transition-all duration-300`}>
       <div className="container mx-auto px-2 md:px-4 flex h-12 md:h-16 items-center justify-between max-w-7xl">
       
         {/* Desktop Navigation - Right side */}

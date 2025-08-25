@@ -28,31 +28,46 @@ export function TopBar() {
             />
           </Link>
 
-          {/* Svislá čára */}
-
-          {/* Otevírací doba - doleva */}
-          <div className="flex items-center space-x-1">
-            <Clock className="w-3 md:w-4 h-3 md:h-4" />
-            <span className="hidden lg:inline text-xs md:text-sm font-medium">| Po - Ne 08:00 - 20:00</span>
-            <span className="lg:hidden text-xs md:text-sm font-medium">Po-Ne 8-20</span>
-          </div>
-          
-          {/* Contact Info */}
-          <div className="flex items-center  space-x-1 md:space-x-8 text-xs md:text-sm font-medium overflow-hidden">
-            {/* Phone */}
-            <div className="flex items-center space-x-1 md:space-x-1">
-              <Phone className="w-3 md:w-4 h-3 md:h-4" />
+          {/* Mobile: Opening hours and phone stacked */}
+          <div className="flex md:hidden flex-col space-y-1">
+            {/* Otevírací doba */}
+            <div className="flex items-center space-x-1">
+              <Clock className="w-3 h-3" />
+              <span className="text-xs font-medium whitespace-nowrap">Po - Ne 08:00 - 20:00</span>
+            </div>
+            {/* Phone with border */}
+            <div className="flex items-center space-x-1 border border-white/30 rounded px-2 py-1">
+              <Phone className="w-3 h-3" />
               <Link href="tel:+420735014112" className="hover:underline whitespace-nowrap">
-                <span className="hidden sm:inline">| +420 735 014 112</span>
-                <span className="sm:hidden">735014112</span>
+                <span className="text-xs">+420 735 014 112</span>
               </Link>
             </div>
+          </div>
+
+          {/* Desktop: Original layout */}
+          <div className="hidden md:flex items-center space-x-6 flex-1 min-w-0">
+            {/* Otevírací doba - doleva */}
+            <div className="flex items-center space-x-1">
+              <Clock className="w-3 md:w-4 h-3 md:h-4" />
+              <span className="text-xs md:text-sm font-medium whitespace-nowrap">| Po - Ne 08:00 - 20:00</span>
+            </div>
             
-            {/* Location */}
-            <div className="hidden sm:flex items-center space-x-1">
-              <MapPin className="w-3 md:w-4 h-3 md:h-4" />
-              <span className="hidden lg:inline">|&nbsp;Ostrava, Olomouc a okolí</span>
-              <span className="lg:hidden">Ostrava, Olomouc a okolí</span>
+            {/* Contact Info */}
+            <div className="flex items-center space-x-1 md:space-x-8 text-xs md:text-sm font-medium overflow-hidden">
+              {/* Phone */}
+              <div className="flex items-center space-x-1 md:space-x-1">
+                <Phone className="w-3 md:w-4 h-3 md:h-4" />
+                <Link href="tel:+420735014112" className="hover:underline whitespace-nowrap">
+                  <span className="text-xs md:text-sm">| +420 735 014 112</span>
+                </Link>
+              </div>
+              
+              {/* Location */}
+              <div className="hidden sm:flex items-center space-x-1">
+                <MapPin className="w-3 md:w-4 h-3 md:h-4" />
+                <span className="hidden lg:inline">|&nbsp;Ostrava, Olomouc a okolí</span>
+                <span className="lg:hidden">Ostrava, Olomouc a okolí</span>
+              </div>
             </div>
           </div>
         </div>
