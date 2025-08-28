@@ -55,34 +55,60 @@ export function ContactForm({
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-
-    const formData = new FormData(e.currentTarget)
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    const form = e.currentTarget;
+    const formData = new FormData(form);
     const data = {
-      name: formData.get("name"),
-      email: formData.get("email"),
-      phone: formData.get("phone"),
-      service: formData.get("service"),
-      message: formData.get("message"),
-      source: source,
+      name: formData.get("name") as string,
+      phone: formData.get("phone") as string,
+      email: formData.get("email") as string,
+      zipCode: formData.get("zipCode") as string || '',
+      service: formData.get("service") as string || source,
+      message: formData.get("message") as string || '',
+      source: source
     }
+    
+    // URL vašeho Google Apps Scriptu - stejný jako u welcome popupu
+    const scriptURL = 'https://script.google.com/macros/s/AKfycby7rp2SXJMyFVrUDEEdKo9uomVt3_OYsg4H2OBhJ2pPa2ZFXDAenzqsqTUNA4dx-GGrAQ/exec';
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      // Vytvoříme FormData pro odeslání na Google Script
+      const googleFormData = new FormData();
+      googleFormData.append('email', data.email);
+      googleFormData.append('phone', data.phone);
+      googleFormData.append('name', data.name);
+      googleFormData.append('zipCode', data.zipCode);
+      googleFormData.append('service', data.service);
+      googleFormData.append('message', data.message);
+      googleFormData.append('source', data.source);
+
+      const response = await fetch(scriptURL, {
+        method: 'POST',
+        body: googleFormData,
+      });
+  
+      if (!response.ok) {
+        throw new Error('Chyba při odesílání na server.');
+      }
+  
+      // Úspěšné odeslání
       toast({
         title: "Poptávka úspěšně odeslána!",
         description: "Děkujeme, brzy se vám ozveme s dalšími kroky.",
-      })
-      ;(e.target as HTMLFormElement).reset()
+      });
+      form.reset();
+  
     } catch (error) {
+      console.error('Chyba při odesílání:', error);
       toast({
         title: "Něco se pokazilo",
         description: "Formulář se nepodařilo odeslat. Zkuste to prosím znovu.",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
   }
 
