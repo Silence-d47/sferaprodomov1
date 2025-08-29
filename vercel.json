@@ -17,11 +17,5 @@
         }
       ]
     }
-  ],
-  "redirects": [
-    {
-      "source": "/sitemap.xml",
-      "destination": "/sitemap.xml"
-    }
   ]
 }

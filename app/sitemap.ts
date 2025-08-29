@@ -1,6 +1,15 @@
-import { client } from './lib/sanity.client';
+import { createClient } from 'next-sanity';
 import { groq } from 'next-sanity';
 import type { MetadataRoute } from 'next';
+
+// Create a separate client for sitemap with explicit configuration
+const client = createClient({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '',
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  apiVersion: '2023-05-03',
+  useCdn: false, // Disable CDN for sitemap to ensure fresh data
+  token: process.env.SANITY_API_TOKEN,
+});
 
 const baseUrl = 'https://sfera-domov.cz';
 
@@ -89,23 +98,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   try {
+    console.log('Starting sitemap generation');
+    console.log('Sanity project ID:', process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ? 'set' : 'missing');
+    console.log('Sanity dataset:', process.env.NEXT_PUBLIC_SANITY_DATASET || 'defaulting to production');
+
     // Fetch blog posts
-    const blogPosts = await client.fetch<BlogPostSitemap[]>(
-      groq`*[_type == "post" && defined(slug.current) && !(_id in path("drafts.**"))]{
-        _updatedAt,
-        publishedAt,
-        slug
-      }`
-    );
+    const blogQuery = groq`*[_type == "post" && defined(slug.current) && !(_id in path("drafts.**"))]{
+      _updatedAt,
+      publishedAt,
+      slug
+    }`;
+    
+    console.log('Fetching blog posts...');
+    const blogPosts = await client.fetch<BlogPostSitemap[]>(blogQuery);
+    console.log(`Fetched ${blogPosts.length} blog posts`);
 
     // Fetch reference projects
-    const referencePages = await client.fetch<ReferencePageSitemap[]>(
-      groq`*[_type == "projectReference" && defined(slug.current) && !(_id in path("drafts.**"))]{
-        _updatedAt,
-        _createdAt,
-        slug
-      }`
-    );
+    const referenceQuery = groq`*[_type == "projectReference" && defined(slug.current) && !(_id in path("drafts.**"))]{
+      _updatedAt,
+      _createdAt,
+      slug
+    }`;
+    
+    console.log('Fetching reference pages...');
+    const referencePages = await client.fetch<ReferencePageSitemap[]>(referenceQuery);
+    console.log(`Fetched ${referencePages.length} reference pages`);
 
     // Map blog posts to sitemap entries
     const blogEntries: SitemapEntry[] = blogPosts.map((post) => ({
@@ -125,7 +142,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     return [...staticPages, ...blogEntries, ...referenceEntries];
   } catch (error) {
-    console.error('Error generating sitemap:', error);
+    console.error('Error generating sitemap:');
+    console.error('Error name:', error.name);
+    console.error('Error message:', error.message);
+    console.error('Error stack:', error.stack);
+    
+    // Log environment info for debugging
+    console.log('Environment:', process.env.NODE_ENV);
+    console.log('Sanity config:', {
+      projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ? 'set' : 'missing',
+      dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'defaulting to production',
+    });
+    
     // Return only static pages in case of error
     return staticPages;
   }
