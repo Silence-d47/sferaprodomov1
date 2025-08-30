@@ -8,31 +8,19 @@ export function useWelcomePopup() {
   const [hasShownPopup, setHasShownPopup] = useState(false)
 
   useEffect(() => {
-    // Kontrola, zda už byl popup zobrazen v této session
-    const popupShown = sessionStorage.getItem("welcome-popup-shown")
-    
-    if (!popupShown) {
-      // Zobrazení popupu po 5 sekundách
-      const timer = setTimeout(() => {
-        setIsPopupOpen(true)
-        setHasShownPopup(true)
-        sessionStorage.setItem("welcome-popup-shown", "true")
-      }, 5000)
-
-      return () => clearTimeout(timer)
-    } else {
-      // Pokud už byl popup zobrazen, zobrazíme plovoucí tlačítko
-      setShowFloatingButton(true)
-    }
+    // Zobrazit plovoucí tlačítko vždy po načtení stránky
+    setShowFloatingButton(true)
   }, [])
 
   const openPopup = () => {
     setIsPopupOpen(true)
+    setHasShownPopup(true)
+    sessionStorage.setItem("welcome-popup-shown", "true")
   }
 
   const closePopup = () => {
     setIsPopupOpen(false)
-    // Po zavření popupu zobrazíme plovoucí tlačítko
+    // Po zavření popupu zůstane plovoucí tlačítko viditelné
     setShowFloatingButton(true)
   }
 
