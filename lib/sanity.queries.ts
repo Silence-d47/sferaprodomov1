@@ -2,7 +2,7 @@ import { groq } from 'next-sanity'
 
 export const heroSlidesQuery = groq`
   *[_type == "heroSlide" && isActive == true] | order(order asc) {
-    _id,
+    "id": _id,
     title,
     subtitle,
     description,

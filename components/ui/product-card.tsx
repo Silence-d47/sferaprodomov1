@@ -63,6 +63,23 @@ export function ProductCard({ title, description, image, gallery, features, isRe
     }
   }, [isModalOpen])
 
+  // Zavření modálu pomocí ESC klávesy
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isModalOpen) {
+        handleClose()
+      }
+    }
+
+    if (isModalOpen) {
+      document.addEventListener('keydown', handleKeyDown)
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isModalOpen])
+
   const handleClose = () => {
     setIsModalOpen(false)
   }
@@ -153,13 +170,21 @@ export function ProductCard({ title, description, image, gallery, features, isRe
       {/* Modální okno s detaily - profesionální design */}
       {isModalOpen && (
         <div
-          className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center p-4 z-50 transition-all duration-300"
+          className="fixed inset-0 bg-black/70 backdrop-blur-md flex justify-center p-4 z-50 transition-all duration-300 lg:items-center items-start"
           onClick={handleOverlayClick}
         >
-          <div className={`bg-gray-50 rounded-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-gray-200/50 transform transition-all duration-300 ${isAnimating ? 'scale-100 opacity-100' : 'scale-95 opacity-0'} grid lg:grid-cols-12`}>
+          <div className={`bg-gray-50 rounded-2xl max-w-6xl w-full max-h-screen lg:max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200/50 transform transition-all duration-300 ${isAnimating ? 'scale-100 opacity-100' : 'scale-95 opacity-0'} grid lg:grid-cols-12`}>
             
             {/* --- LEVÝ SLOUPEC: OBRÁZKY --- */}
             <div className="lg:col-span-5 bg-white p-6 lg:p-8 flex flex-col gap-6">
+              {/* Tlačítko pro zavření modálu */}
+              <div className="flex justify-end">
+                <Button onClick={handleClose} variant="outline" size="sm" className="border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 transition-all duration-200">
+                  <X className="mr-2 h-4 w-4" />
+                  Zavřít
+                </Button>
+              </div>
+              
               <div className="relative w-full aspect-square rounded-xl overflow-hidden border border-gray-100 shadow-sm">
                 <Image src={mainImage} alt={title} fill className="object-contain transition-all duration-300" />
               </div>
@@ -199,8 +224,8 @@ export function ProductCard({ title, description, image, gallery, features, isRe
                   <h2 className="text-2xl font-bold text-gray-900 leading-tight">{title}</h2>
                   {brand && <p className="text-sm text-gray-500 font-medium">Výrobce: {brand}</p>}
                 </div>
-                <Button variant="ghost" size="sm" onClick={handleClose} className="h-10 w-10 p-0 hover:bg-gray-200/70 rounded-full transition-all duration-200 hover:scale-105">
-                  <X className="h-5 w-5 text-gray-500" />
+                <Button variant="ghost" onClick={handleClose} className="h-12 w-12 p-0 bg-gray-100 hover:bg-gray-200 rounded-full transition-all duration-200 hover:scale-105 border border-gray-300">
+                  <X className="h-6 w-6 text-gray-700" />
                 </Button>
               </div>
 

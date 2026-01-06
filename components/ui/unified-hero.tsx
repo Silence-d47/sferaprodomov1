@@ -24,7 +24,7 @@ export interface UnifiedHeroSlide {
   title: string;
   subtitle?: string;
   description?: string;
-  bgImage: string;
+  bgImage?: string;
   features?: string[];
   phoneNumber?: string;
   primaryButton?: { text: string; link: string; isActive: boolean; };
