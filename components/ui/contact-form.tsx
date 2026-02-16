@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import type React from "react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -19,6 +20,7 @@ interface ContactFormProps {
 export function ContactForm({ source = "general" }: ContactFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { toast } = useToast()
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -65,6 +67,7 @@ export function ContactForm({ source = "general" }: ContactFormProps) {
         description: "Děkujeme, brzy se vám ozveme s dalšími kroky.",
       });
       form.reset();
+      router.push("/dekujeme")
   
     } catch (error) {
       console.error('Chyba při odesílání:', error);

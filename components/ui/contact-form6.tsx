@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import type React from "react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -44,6 +45,7 @@ export function ContactForm({
 }: ContactFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { toast } = useToast()
+  const router = useRouter()
 
   // Zjednodušená barevná schémata, hlavní barva je modrá
   const theme = {
@@ -99,6 +101,7 @@ export function ContactForm({
         description: "Děkujeme, brzy se vám ozveme s dalšími kroky.",
       });
       form.reset();
+      router.push("/dekujeme")
   
     } catch (error) {
       console.error('Chyba při odesílání:', error);

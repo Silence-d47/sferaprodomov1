@@ -1,11 +1,11 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { X, Phone, Mail, MapPin, MessageSquare, CheckCircle, Award } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { ThankYouPage } from "@/components/ui/thank-you-page"
-import { useConversionMetrics, type ConversionData } from "@/hooks/use-conversion-metrics"
+import { useConversionMetrics } from "@/hooks/use-conversion-metrics"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface WelcomePopupProps {
@@ -16,9 +16,8 @@ interface WelcomePopupProps {
 export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
-  const [showThankYou, setShowThankYou] = useState(false)
-  const [conversionData, setConversionData] = useState<ConversionData | null>(null)
   const { saveConversion } = useConversionMetrics()
+  const router = useRouter()
 
   useEffect(() => {
     if (isOpen) {
@@ -73,22 +72,10 @@ export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
       const success = saveConversion(data)
       
       if (success) {
-        // Vytvoření conversion data pro thank you stránku
-        const conversionData: ConversionData = {
-          ...data,
-          timestamp: new Date(),
-          userAgent: navigator.userAgent,
-          referrer: document.referrer || 'direct',
-          utmSource: new URLSearchParams(window.location.search).get('utm_source') || undefined,
-          utmMedium: new URLSearchParams(window.location.search).get('utm_medium') || undefined,
-          utmCampaign: new URLSearchParams(window.location.search).get('utm_campaign') || undefined,
-        }
-        
-        setConversionData(conversionData)
-        setShowThankYou(true)
-        
         // Reset formuláře
         formElement.reset()
+        onClose()
+        router.push("/dekujeme")
       } else {
         throw new Error('Nepodařilo se uložit konverzi lokálně.')
       }
@@ -100,24 +87,7 @@ export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
     }
   }
 
-
-  const handleThankYouClose = () => {
-    setShowThankYou(false)
-    setConversionData(null)
-    onClose()
-  }
-
   if (!isOpen) return null
-
-  // Zobrazení thank you stránky
-  if (showThankYou && conversionData) {
-    return (
-      <ThankYouPage 
-        conversionData={conversionData}
-        onClose={handleThankYouClose}
-      />
-    )
-  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-3 md:p-4">

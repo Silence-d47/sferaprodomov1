@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
@@ -22,6 +23,7 @@ const formSchema = z.object({
 })
 
 export default function ContactPage() {
+  const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,7 +35,7 @@ export default function ContactPage() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values)
-    alert("Formulář byl odeslán!")
+    router.push("/dekujeme")
   }
 
   return (

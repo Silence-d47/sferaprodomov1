@@ -79,7 +79,7 @@ export function Footer() {
             <p className="text-xs md:text-sm text-gray-400 mb-3 md:mb-4">
               Získejte slevy a tipy z oboru. Žádný spam, slibujeme.
             </p>
-            <form className="flex flex-col sm:flex-row gap-2">
+            <form action="/dekujeme" className="flex flex-col sm:flex-row gap-2">
               <input 
                 type="email" 
                 placeholder="Váš e-mail" 
