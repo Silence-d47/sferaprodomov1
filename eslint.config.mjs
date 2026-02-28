@@ -22,6 +22,9 @@ const eslintConfig = [
       curly: "error",
     },
   },
+  {
+    ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "dist/**", "scripts/**", "types/**", "next-env.d.ts"],
+  },
 ];
 
 export default eslintConfig;
