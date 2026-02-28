@@ -2,12 +2,14 @@
 
 import { PortableText } from '@portabletext/react'
 import type { PortableTextComponents } from '@portabletext/react'
+import type { PortableTextBlock } from '@portabletext/types'
 
 const components: PortableTextComponents = {
   types: {
     image: ({ value }) => {
       return (
         <div className="relative w-full h-96 my-8">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={value.asset?.url || value.url || ''}
             alt={value.alt || 'Image'}
@@ -33,6 +35,6 @@ const components: PortableTextComponents = {
   },
 }
 
-export function CustomPortableText({ value }: { value: any }) {
+export function CustomPortableText({ value }: { value: PortableTextBlock | PortableTextBlock[] }) {
   return <PortableText value={value} components={components} />
-} 
+}

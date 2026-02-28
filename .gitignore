@@ -12,6 +12,7 @@
 
 # production
 /build
+/dist
 
 # debug
 npm-debug.log*
@@ -19,8 +20,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files
+# env files (keep .env.example)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -28,3 +30,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# IDE and local docs
+.idea/
+/docs/

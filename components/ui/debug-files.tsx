@@ -1,5 +1,4 @@
-import { Button } from "@/components/ui/button"
-import { Download } from "lucide-react"
+import { Button } from '@/components/ui/button'
 
 interface DebugFilesProps {
   product: {
@@ -18,15 +17,15 @@ export function DebugFiles({ product }: DebugFilesProps) {
   return (
     <div className="border border-red-500 p-4 m-4 bg-red-50">
       <h3 className="font-bold text-red-700 mb-2">Debug: {product.title}</h3>
-      
+
       <div className="mb-2">
-        <strong>catalogUrl:</strong> {product.catalogUrl || "undefined"}
+        <strong>catalogUrl:</strong> {product.catalogUrl || 'undefined'}
       </div>
-      
+
       <div className="mb-2">
-        <strong>files:</strong> {product.files ? `${product.files.length} souborů` : "undefined"}
+        <strong>files:</strong> {product.files ? `${product.files.length} souborů` : 'undefined'}
       </div>
-      
+
       {product.files && product.files.length > 0 && (
         <div className="mb-2">
           <strong>Detaily souborů:</strong>
@@ -39,7 +38,7 @@ export function DebugFiles({ product }: DebugFilesProps) {
           </ul>
         </div>
       )}
-      
+
       <div className="mt-4">
         <strong>Testovací tlačítka:</strong>
         <div className="flex gap-2 mt-2">
@@ -50,14 +49,15 @@ export function DebugFiles({ product }: DebugFilesProps) {
               </a>
             </Button>
           )}
-          
-          {product.files && product.files.map((file) => (
-            <Button key={file._id} size="sm" variant="outline" asChild>
-              <a href={file.fileUrl} download target="_blank" rel="noopener noreferrer">
-                Test {file.fileType}
-              </a>
-            </Button>
-          ))}
+
+          {product.files &&
+            product.files.map((file) => (
+              <Button key={file._id} size="sm" variant="outline" asChild>
+                <a href={file.fileUrl} download target="_blank" rel="noopener noreferrer">
+                  Test {file.fileType}
+                </a>
+              </Button>
+            ))}
         </div>
       </div>
     </div>

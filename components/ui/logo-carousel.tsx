@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import React from 'react'
 import Image from 'next/image'
@@ -10,9 +10,9 @@ interface LogoCarouselProps {
 }
 
 export function LogoCarousel({
-  speed = 'medium',
-  direction = 'left',
-  pauseOnHover = true
+  speed: _speed = 'medium',
+  direction: _direction = 'left',
+  pauseOnHover: _pauseOnHover = true,
 }: LogoCarouselProps) {
   // List of all logos from public/labels directory
   const logos = [
@@ -21,7 +21,7 @@ export function LogoCarousel({
     { name: 'Nordstar', src: '/labels/nordstar.svg' },
     { name: 'Panasonic', src: '/labels/panasonic.svg' },
     { name: 'Samsung', src: '/labels/samsung.svg' },
-    { name: 'Viessmann', src: '/labels/viessmann.svg' }
+    { name: 'Viessmann', src: '/labels/viessmann.svg' },
   ]
 
   // Duplicate logos multiple times for seamless infinite scroll
@@ -29,7 +29,6 @@ export function LogoCarousel({
 
   return (
     <section className="carousel-section bg-gray-50 relative overflow-hidden">
-      
       <style jsx>{`
         .carousel-section {
           padding: 3rem 0;
@@ -38,7 +37,7 @@ export function LogoCarousel({
           margin-left: calc(-50vw + 50%);
           position: relative;
           filter: blur(0px);
-          background:rgba(229, 229, 230, 0.68);
+          background: rgba(229, 229, 230, 0.68);
         }
         @keyframes scroll {
           0% {
@@ -84,16 +83,13 @@ export function LogoCarousel({
           z-index: 10;
         }
       `}</style>
-      
-      <div className="w-auto px- relative">
-        
 
-        
+      <div className="w-auto px- relative">
         <div className="relative overflow-hidden w-full">
           {/* Gradient fade edges */}
           <div className="fade-left"></div>
           <div className="fade-right"></div>
-          
+
           {/* Scrolling logos container */}
           <div className="scrolling-logos items-center gap-15">
             {duplicatedLogos.map((logo, index) => (
@@ -117,4 +113,3 @@ export function LogoCarousel({
     </section>
   )
 }
-

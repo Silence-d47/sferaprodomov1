@@ -1,13 +1,12 @@
-"use client"
+'use client'
 
 // components/ui/product-card.tsx
-import Image from "next/image"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Download, MessageCircle, Eye, X, Star, Shield, Check, Info, Zap, Volume2, Thermometer, Leaf, GalleryHorizontal, FileDown } from "lucide-react"
-import { ExpandableFeatures } from "./expandable-features"
-import { useState, useEffect } from "react"
+import Image from 'next/image'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { MessageCircle, Eye, X, Shield, Check, Zap, Volume2, Leaf, FileDown } from 'lucide-react'
+import { useState, useEffect } from 'react'
 
 export interface ProductCardProps {
   title: string
@@ -20,18 +19,18 @@ export interface ProductCardProps {
   catalogUrl?: string
   energyClass?: string
   specifications?: {
-    powerRange?: { min?: number; max?: number };
-    coolingCapacityRange?: { min?: number; max?: number };
-    heatingCapacityRange?: { min?: number; max?: number };
-    noiseLevel?: number;
-  };
+    powerRange?: { min?: number; max?: number }
+    coolingCapacityRange?: { min?: number; max?: number }
+    heatingCapacityRange?: { min?: number; max?: number }
+    noiseLevel?: number
+  }
   price?: {
-    basePrice?: number;
-    installationPrice?: number;
-    showPrice?: boolean;
-  };
-  warranty?: number;
-  brand?: string;
+    basePrice?: number
+    installationPrice?: number
+    showPrice?: boolean
+  }
+  warranty?: number
+  brand?: string
   files?: Array<{
     _id: string
     title: string
@@ -40,9 +39,23 @@ export interface ProductCardProps {
   }>
 }
 
-export function ProductCard({ title, description, image, gallery, features, isRecommended, isBestSelling, catalogUrl, energyClass, specifications, price, warranty, brand, files }: ProductCardProps) {
-  const placeholder = "/placeholder.jpg"
-  const safe = (src?: string | null) => (typeof src === 'string' && src.trim() !== "" ? src : placeholder)
+export function ProductCard({
+  title,
+  description,
+  image,
+  gallery,
+  features,
+  isRecommended,
+  isBestSelling,
+  energyClass,
+  specifications,
+  warranty,
+  brand,
+  files,
+}: ProductCardProps) {
+  const placeholder = '/placeholder.jpg'
+  const safe = (src?: string | null) =>
+    typeof src === 'string' && src.trim() !== '' ? src : placeholder
   const safeImage = safe(image)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
@@ -51,7 +64,7 @@ export function ProductCard({ title, description, image, gallery, features, isRe
   useEffect(() => {
     setMainImage(safeImage)
   }, [safeImage])
-  
+
   // Animace při otevírání/zavírání modálu
   useEffect(() => {
     if (isModalOpen) {
@@ -94,16 +107,19 @@ export function ProductCard({ title, description, image, gallery, features, isRe
   return (
     <>
       {/* Kompaktní karta - vylepšený design */}
-      <div 
-        className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 h-full group overflow-hidden flex flex-col"
-      >
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 h-full group overflow-hidden flex flex-col">
         {/* Obrázek s badge */}
-        <div 
+        <div
           className="relative w-full overflow-hidden aspect-[4/3] bg-gray-50 cursor-pointer"
           onClick={() => setIsModalOpen(true)}
         >
-          <Image src={safeImage} alt={title} fill className="object-contain transition-transform duration-700 group-hover:scale-110" />
-          
+          <Image
+            src={safeImage}
+            alt={title}
+            fill
+            className="object-contain transition-transform duration-700 group-hover:scale-110"
+          />
+
           <div className="absolute top-3 right-3 bg-white/80 backdrop-blur-sm p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100">
             <Eye className="h-5 w-5 text-gray-800" />
           </div>
@@ -120,14 +136,14 @@ export function ProductCard({ title, description, image, gallery, features, isRe
             </Badge>
           )}
         </div>
-        
+
         {/* Obsah karty - vylepšený spacing a typografie */}
         <div className="p-5 flex-grow flex flex-col">
           {/* Název produktu - lepší typografie */}
           <h3 className="font-bold text-lg text-gray-900 mb-3 group-hover:text-gray-700 transition-colors duration-300 leading-tight line-clamp-2 min-h-[3.5rem]">
             {title}
           </h3>
-          
+
           {/* Značka a energetická třída - lepší layout */}
           <div className="space-y-2 mb-4 min-h-[3rem]">
             {brand && (
@@ -139,7 +155,10 @@ export function ProductCard({ title, description, image, gallery, features, isRe
             {energyClass && (
               <div className="flex items-center text-sm">
                 <span className="font-medium text-gray-600 mr-2">Třída:</span>
-                <Badge variant="outline" className="text-xs px-2.5 py-1 border-gray-300 text-gray-700 font-medium">
+                <Badge
+                  variant="outline"
+                  className="text-xs px-2.5 py-1 border-gray-300 text-gray-700 font-medium"
+                >
                   {energyClass}
                 </Badge>
               </div>
@@ -148,16 +167,19 @@ export function ProductCard({ title, description, image, gallery, features, isRe
 
           {/* Tlačítka - lepší design a spacing */}
           <div className="mt-auto space-y-3 pt-3">
-            <Button 
+            <Button
               onClick={() => setIsModalOpen(true)}
-              variant="outline" 
+              variant="outline"
               className="w-full border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 hover:scale-[1.02] transition-all duration-300 font-medium"
             >
               <Eye className="mr-2 h-4 w-4" />
               Zobrazit detaily
             </Button>
-            
-            <Button asChild className="w-full bg-gray-800 text-white hover:bg-gray-900 hover:scale-[1.02] transition-all duration-300 font-medium shadow-md">
+
+            <Button
+              asChild
+              className="w-full bg-gray-800 text-white hover:bg-gray-900 hover:scale-[1.02] transition-all duration-300 font-medium shadow-md"
+            >
               <Link href="#kontakt">
                 <MessageCircle className="mr-2 h-4 w-4" />
                 Poptávka
@@ -173,22 +195,33 @@ export function ProductCard({ title, description, image, gallery, features, isRe
           className="fixed inset-0 bg-black/70 backdrop-blur-md flex justify-center p-4 z-50 transition-all duration-300 lg:items-center items-start"
           onClick={handleOverlayClick}
         >
-          <div className={`bg-gray-50 rounded-2xl max-w-6xl w-full max-h-screen lg:max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200/50 transform transition-all duration-300 ${isAnimating ? 'scale-100 opacity-100' : 'scale-95 opacity-0'} grid lg:grid-cols-12`}>
-            
+          <div
+            className={`bg-gray-50 rounded-2xl max-w-6xl w-full max-h-screen lg:max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200/50 transform transition-all duration-300 ${isAnimating ? 'scale-100 opacity-100' : 'scale-95 opacity-0'} grid lg:grid-cols-12`}
+          >
             {/* --- LEVÝ SLOUPEC: OBRÁZKY --- */}
             <div className="lg:col-span-5 bg-white p-6 lg:p-8 flex flex-col gap-6">
               {/* Tlačítko pro zavření modálu */}
               <div className="flex justify-end">
-                <Button onClick={handleClose} variant="outline" size="sm" className="border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 transition-all duration-200">
+                <Button
+                  onClick={handleClose}
+                  variant="outline"
+                  size="sm"
+                  className="border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 transition-all duration-200"
+                >
                   <X className="mr-2 h-4 w-4" />
                   Zavřít
                 </Button>
               </div>
-              
+
               <div className="relative w-full aspect-square rounded-xl overflow-hidden border border-gray-100 shadow-sm">
-                <Image src={mainImage} alt={title} fill className="object-contain transition-all duration-300" />
+                <Image
+                  src={mainImage}
+                  alt={title}
+                  fill
+                  className="object-contain transition-all duration-300"
+                />
               </div>
-              
+
               {gallery && gallery.length > 0 && (
                 <div className="grid grid-cols-4 gap-3">
                   {/* Původní hlavní obrázek */}
@@ -204,12 +237,17 @@ export function ProductCard({ title, description, image, gallery, features, isRe
                   </button>
                   {/* Galerie */}
                   {gallery.map((img, idx) => (
-                    <button 
-                      key={idx} 
+                    <button
+                      key={idx}
                       onClick={() => setMainImage(safe(img.url))}
                       className={`relative aspect-square rounded-md overflow-hidden border-2 transition-all ${mainImage === safe(img.url) ? 'border-blue-600 shadow-md' : 'border-gray-200 hover:border-blue-400'}`}
                     >
-                      <Image src={safe(img.url)} alt={img.alt || title} fill className="object-contain" />
+                      <Image
+                        src={safe(img.url)}
+                        alt={img.alt || title}
+                        fill
+                        className="object-contain"
+                      />
                     </button>
                   ))}
                 </div>
@@ -224,14 +262,17 @@ export function ProductCard({ title, description, image, gallery, features, isRe
                   <h2 className="text-2xl font-bold text-gray-900 leading-tight">{title}</h2>
                   {brand && <p className="text-sm text-gray-500 font-medium">Výrobce: {brand}</p>}
                 </div>
-                <Button variant="ghost" onClick={handleClose} className="h-12 w-12 p-0 bg-gray-100 hover:bg-gray-200 rounded-full transition-all duration-200 hover:scale-105 border border-gray-300">
+                <Button
+                  variant="ghost"
+                  onClick={handleClose}
+                  className="h-12 w-12 p-0 bg-gray-100 hover:bg-gray-200 rounded-full transition-all duration-200 hover:scale-105 border border-gray-300"
+                >
                   <X className="h-6 w-6 text-gray-700" />
                 </Button>
               </div>
 
               {/* Scrollovatelný obsah */}
               <div className="p-6 lg:p-8 space-y-8 overflow-y-auto">
-                
                 {/* Základní přehled */}
                 <div>
                   <h3 className="font-semibold text-gray-800 mb-4 text-base">Základní přehled</h3>
@@ -240,14 +281,18 @@ export function ProductCard({ title, description, image, gallery, features, isRe
                       <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
                         <Zap className="mx-auto h-6 w-6 text-blue-600 mb-2" />
                         <p className="text-xs text-gray-500">Výkon</p>
-                        <p className="font-bold text-sm text-gray-900">{specifications.powerRange.min}-{specifications.powerRange.max} kW</p>
+                        <p className="font-bold text-sm text-gray-900">
+                          {specifications.powerRange.min}-{specifications.powerRange.max} kW
+                        </p>
                       </div>
                     )}
                     {specifications?.noiseLevel && (
                       <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
                         <Volume2 className="mx-auto h-6 w-6 text-blue-600 mb-2" />
                         <p className="text-xs text-gray-500">Hluk</p>
-                        <p className="font-bold text-sm text-gray-900">{specifications.noiseLevel} dB</p>
+                        <p className="font-bold text-sm text-gray-900">
+                          {specifications.noiseLevel} dB
+                        </p>
                       </div>
                     )}
                     {energyClass && (
@@ -257,7 +302,7 @@ export function ProductCard({ title, description, image, gallery, features, isRe
                         <p className="font-bold text-sm text-gray-900">{energyClass}</p>
                       </div>
                     )}
-                     {warranty && (
+                    {warranty && (
                       <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
                         <Shield className="mx-auto h-6 w-6 text-blue-600 mb-2" />
                         <p className="text-xs text-gray-500">Záruka</p>
@@ -276,7 +321,9 @@ export function ProductCard({ title, description, image, gallery, features, isRe
                 {/* Klíčové vlastnosti */}
                 {features && features.length > 0 && (
                   <div>
-                    <h3 className="font-semibold text-gray-800 mb-4 text-base">Klíčové vlastnosti</h3>
+                    <h3 className="font-semibold text-gray-800 mb-4 text-base">
+                      Klíčové vlastnosti
+                    </h3>
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
                       {features.map((feature, index) => (
                         <li key={index} className="flex items-start text-sm">
@@ -287,41 +334,62 @@ export function ProductCard({ title, description, image, gallery, features, isRe
                     </ul>
                   </div>
                 )}
-                
+
                 {/* Technické specifikace */}
-                 {specifications && (specifications.coolingCapacityRange || specifications.heatingCapacityRange) && (
+                {specifications &&
+                  (specifications.coolingCapacityRange || specifications.heatingCapacityRange) && (
                     <div>
-                        <h3 className="font-semibold text-gray-800 mb-4 text-base">Technické specifikace</h3>
-                        <div className="bg-white rounded-lg border border-gray-200 divide-y divide-gray-200">
+                      <h3 className="font-semibold text-gray-800 mb-4 text-base">
+                        Technické specifikace
+                      </h3>
+                      <div className="bg-white rounded-lg border border-gray-200 divide-y divide-gray-200">
                         {specifications.coolingCapacityRange && (
                           <div className="flex items-center justify-between p-3">
-                            <span className="font-medium text-gray-600 text-sm">Chladící výkon</span>
-                            <span className="text-gray-800 font-semibold text-sm">{specifications.coolingCapacityRange.min}-{specifications.coolingCapacityRange.max} kW</span>
+                            <span className="font-medium text-gray-600 text-sm">
+                              Chladící výkon
+                            </span>
+                            <span className="text-gray-800 font-semibold text-sm">
+                              {specifications.coolingCapacityRange.min}-
+                              {specifications.coolingCapacityRange.max} kW
+                            </span>
                           </div>
                         )}
                         {specifications.heatingCapacityRange && (
                           <div className="flex items-center justify-between p-3">
                             <span className="font-medium text-gray-600 text-sm">Topný výkon</span>
-                            <span className="text-gray-800 font-semibold text-sm">{specifications.heatingCapacityRange.min}-{specifications.heatingCapacityRange.max} kW</span>
+                            <span className="text-gray-800 font-semibold text-sm">
+                              {specifications.heatingCapacityRange.min}-
+                              {specifications.heatingCapacityRange.max} kW
+                            </span>
                           </div>
                         )}
-                        </div>
+                      </div>
                     </div>
-                 )}
+                  )}
 
                 {/* Soubory ke stažení */}
-                {(files && files.length > 0) && (
+                {files && files.length > 0 && (
                   <div>
-                    <h3 className="font-semibold text-gray-800 mb-4 text-base">Dokumentace ke stažení</h3>
+                    <h3 className="font-semibold text-gray-800 mb-4 text-base">
+                      Dokumentace ke stažení
+                    </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {files.map((file) => (
-                        <Button key={file._id} variant="outline" asChild className="border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 transition-all duration-200 justify-start">
+                        <Button
+                          key={file._id}
+                          variant="outline"
+                          asChild
+                          className="border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400 transition-all duration-200 justify-start"
+                        >
                           <a href={file.fileUrl} download target="_blank" rel="noopener noreferrer">
                             <FileDown className="mr-2 h-4 w-4" />
-                            {file.fileType === 'catalog' ? 'Katalog' : 
-                             file.fileType === 'manual' ? 'Návod' :
-                             file.fileType === 'datasheet' ? 'Datasheet' :
-                             file.title}
+                            {file.fileType === 'catalog'
+                              ? 'Katalog'
+                              : file.fileType === 'manual'
+                                ? 'Návod'
+                                : file.fileType === 'datasheet'
+                                  ? 'Datasheet'
+                                  : file.title}
                           </a>
                         </Button>
                       ))}
@@ -329,7 +397,6 @@ export function ProductCard({ title, description, image, gallery, features, isRe
                   </div>
                 )}
               </div>
-
             </div>
           </div>
         </div>

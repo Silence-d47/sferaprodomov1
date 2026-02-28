@@ -1,24 +1,30 @@
-"use client"
+'use client'
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useRouter } from "next/navigation"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
 
 const formSchema = z.object({
   name: z.string().min(2, {
-    message: "Jméno musí mít alespoň 2 znaky.",
+    message: 'Jméno musí mít alespoň 2 znaky.',
   }),
   email: z.string().email({
-    message: "Zadejte platnou emailovou adresu.",
+    message: 'Zadejte platnou emailovou adresu.',
   }),
   message: z.string().min(10, {
-    message: "Zpráva musí mít alespoň 10 znaků.",
+    message: 'Zpráva musí mít alespoň 10 znaků.',
   }),
 })
 
@@ -27,15 +33,15 @@ export default function ContactPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      message: "",
+      name: '',
+      email: '',
+      message: '',
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
-    router.push("/dekujeme")
+  function onSubmit() {
+    // TODO: Send form data to API
+    router.push('/dekujeme')
   }
 
   return (
@@ -66,7 +72,7 @@ export default function ContactPage() {
                     </FormItem>
                   )}
                 />
-                
+
                 <FormField
                   control={form.control}
                   name="email"
@@ -80,7 +86,7 @@ export default function ContactPage() {
                     </FormItem>
                   )}
                 />
-                
+
                 <FormField
                   control={form.control}
                   name="message"
@@ -98,7 +104,7 @@ export default function ContactPage() {
                     </FormItem>
                   )}
                 />
-                
+
                 <Button type="submit" className="w-full" size="lg">
                   Odeslat zprávu
                 </Button>
@@ -109,4 +115,4 @@ export default function ContactPage() {
       </div>
     </div>
   )
-} 
+}

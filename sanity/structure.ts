@@ -1,6 +1,6 @@
-import { type StructureBuilder } from 'sanity/desk'
+import type { StructureResolver } from 'sanity/structure'
 
-export const structure = (S: StructureBuilder) =>
+export const structure: StructureResolver = (S) =>
   S.list()
     .title('Content')
     .items([
@@ -13,11 +13,7 @@ export const structure = (S: StructureBuilder) =>
             .items([
               S.listItem()
                 .title('All Posts')
-                .child(
-                  S.documentList()
-                    .title('All Posts')
-                    .filter('_type == "post"')
-                ),
+                .child(S.documentList().title('All Posts').filter('_type == "post"')),
               S.listItem()
                 .title('Posts by Category')
                 .child(
@@ -27,29 +23,21 @@ export const structure = (S: StructureBuilder) =>
                       S.documentList()
                         .title('Posts')
                         .filter('_type == "post" && $categoryId in categories[]._ref')
-                        .params({ categoryId })
-                    )
+                        .params({ categoryId }),
+                    ),
                 ),
-            ])
+            ]),
         ),
       // Authors
       S.listItem()
         .title('Authors')
-        .child(
-          S.documentList()
-            .title('Authors')
-            .filter('_type == "author"')
-        ),
+        .child(S.documentList().title('Authors').filter('_type == "author"')),
       // Categories
       S.listItem()
         .title('Categories')
-        .child(
-          S.documentList()
-            .title('Categories')
-            .filter('_type == "category"')
-        ),
+        .child(S.documentList().title('Categories').filter('_type == "category"')),
       // Regular document types
       ...S.documentTypeListItems().filter(
-        (listItem) => !['post', 'author', 'category'].includes(listItem.getId() as string)
+        (listItem) => !['post', 'author', 'category'].includes(listItem.getId() as string),
       ),
-    ]) 
+    ])
