@@ -7,7 +7,6 @@ import { ContactFormSection } from '@/components/ui/contact-form-section'
 import { OrganicWaveDivider } from '@/components/ui/organic-wave-divider'
 import { UnifiedHero, type UnifiedHeroSlide } from '@/components/ui/unified-hero'
 import { LogoCarousel } from '@/components/ui/logo-carousel'
-import { ServiceHub } from '@/components/ui/service-hub'
 import {
   Clock,
   CheckCircle,
@@ -161,7 +160,6 @@ export default async function HomePage() {
       <div className="animate-fade-in">
         <UnifiedHero slides={slides} />
       </div>
-      <ServiceHub />
 
       {/* Logo Carousel - Brand Partners */}
       <section className="relative">
