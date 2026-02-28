@@ -76,8 +76,11 @@ export default async function ElektroinstalacePage() {
   const leftDynamicFaqs: FaqEntry[] = []
   const rightDynamicFaqs: FaqEntry[] = []
   faqs?.forEach((item, index) => {
-    if (index % 2 === 0) leftDynamicFaqs.push(item)
-    else rightDynamicFaqs.push(item)
+    if (index % 2 === 0) {
+      leftDynamicFaqs.push(item)
+    } else {
+      rightDynamicFaqs.push(item)
+    }
   })
 
   return (

@@ -76,7 +76,9 @@ export default function ReferenceDetailPage() {
   // Fetch data on component mount
   useEffect(() => {
     const fetchData = async () => {
-      if (!slug) return
+      if (!slug) {
+        return
+      }
       setIsLoading(true)
       try {
         const data = await client.fetch<Reference>(queryBySlug, { slug })
@@ -90,8 +92,12 @@ export default function ReferenceDetailPage() {
     fetchData()
   }, [slug])
 
-  if (isLoading) return <div className="container py-20">Načítání…</div>
-  if (!reference) return <div className="container py-20">Reference nenalezena.</div>
+  if (isLoading) {
+    return <div className="container py-20">Načítání…</div>
+  }
+  if (!reference) {
+    return <div className="container py-20">Reference nenalezena.</div>
+  }
 
   const showReview = Boolean(reference.testimonial?.quote)
   const handleNextImage = () => {

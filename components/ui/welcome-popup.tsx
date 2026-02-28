@@ -1,12 +1,18 @@
-"use client"
+'use client'
 
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { X, Phone, Mail, MapPin, MessageSquare, CheckCircle, Award } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { useConversionMetrics } from "@/hooks/use-conversion-metrics"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { X, Phone, Mail, MapPin, MessageSquare, CheckCircle, Award } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { useConversionMetrics } from '@/hooks/use-conversion-metrics'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 interface WelcomePopupProps {
   isOpen: boolean
@@ -35,33 +41,33 @@ export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
     const formElement = e.currentTarget
     const formData = new FormData(formElement)
     const data = {
-      name: "", // Prázdné, protože jsme odstranili pole
-      phone: formData.get("phone") as string,
-      email: formData.get("email") as string,
-      zipCode: formData.get("zipCode") as string,
-      service: formData.get("service") as string, // Přidáno pro sběr vybrané služby
-      source: "welcome-popup"
+      name: '', // Prázdné, protože jsme odstranili pole
+      phone: formData.get('phone') as string,
+      email: formData.get('email') as string,
+      zipCode: formData.get('zipCode') as string,
+      service: formData.get('service') as string, // Přidáno pro sběr vybrané služby
+      source: 'welcome-popup',
     }
-    
+
     // URL vašeho Google Apps Scriptu
-    const scriptURL = 'https://script.google.com/macros/s/AKfycby7rp2SXJMyFVrUDEEdKo9uomVt3_OYsg4H2OBhJ2pPa2ZFXDAenzqsqTUNA4dx-GGrAQ/exec'
+    const scriptURL =
+      'https://script.google.com/macros/s/AKfycby7rp2SXJMyFVrUDEEdKo9uomVt3_OYsg4H2OBhJ2pPa2ZFXDAenzqsqTUNA4dx-GGrAQ/exec'
 
     try {
       // 1. Odeslání dat na Google Script
       // Vytvoříme FormData znovu, protože Google Script očekává tento formát.
       // Přidáme datum, pokud ho chceme poslat z frontendu (lepší je ale nechat ho generovat scriptem)
-      const googleFormData = new FormData();
-      googleFormData.append('email', data.email);
-      googleFormData.append('phone', data.phone);
-      googleFormData.append('zipCode', data.zipCode);
-      googleFormData.append('service', data.service);
+      const googleFormData = new FormData()
+      googleFormData.append('email', data.email)
+      googleFormData.append('phone', data.phone)
+      googleFormData.append('zipCode', data.zipCode)
+      googleFormData.append('service', data.service)
       // Můžete přidat i další skrytá pole, pokud je váš script očekává
       // googleFormData.append('source', data.source);
 
-
-      const response = await fetch(scriptURL, { 
-        method: 'POST', 
-        body: googleFormData
+      const response = await fetch(scriptURL, {
+        method: 'POST',
+        body: googleFormData,
       })
 
       if (!response.ok) {
@@ -70,12 +76,12 @@ export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
 
       // 2. Uložení konverze lokálně (původní kód)
       const success = saveConversion(data)
-      
+
       if (success) {
         // Reset formuláře
         formElement.reset()
         onClose()
-        router.push("/dekujeme")
+        router.push('/dekujeme')
       } else {
         throw new Error('Nepodařilo se uložit konverzi lokálně.')
       }
@@ -87,22 +93,26 @@ export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
     }
   }
 
-  if (!isOpen) return null
+  if (!isOpen) {
+    return null
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-3 md:p-4">
       {/* Backdrop s rozmazaným pozadím */}
-      <div 
+      <div
         className={`absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300 ${
           isVisible ? 'opacity-100' : 'opacity-0'
-        }`} 
-        onClick={onClose} 
+        }`}
+        onClick={onClose}
       />
-      
+
       {/* Popup - optimalizovaný pro mobilní zařízení */}
-      <div className={`relative bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-[95vw] sm:max-w-sm md:max-w-md mx-2 sm:mx-4 max-h-[90vh] sm:max-h-[85vh] overflow-hidden transition-all duration-500 transform ${
-        isVisible ? 'scale-100 opacity-100 translate-y-0' : 'scale-95 opacity-0 translate-y-4'
-      }`}>
+      <div
+        className={`relative bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-[95vw] sm:max-w-sm md:max-w-md mx-2 sm:mx-4 max-h-[90vh] sm:max-h-[85vh] overflow-hidden transition-all duration-500 transform ${
+          isVisible ? 'scale-100 opacity-100 translate-y-0' : 'scale-95 opacity-0 translate-y-4'
+        }`}
+      >
         {/* Zavírací tlačítko */}
         <button
           onClick={onClose}
@@ -134,13 +144,22 @@ export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
           <div className="mb-3 sm:mb-4">
             <div className="space-y-1.5 sm:space-y-2">
               {[
-                "Nezávazná konzultace a nacenění zdarma",
-                "Návrhneme vám řešení na míru",
-                "Garance 5% slevy na finální realizaci"
+                'Nezávazná konzultace a nacenění zdarma',
+                'Návrhneme vám řešení na míru',
+                'Garance 5% slevy na finální realizaci',
               ].map((feature, index) => (
-                <div key={index} className="flex items-start gap-1.5 sm:gap-2 animate-fade-in-left" style={{ animationDelay: `${300 + index * 100}ms` }}>
-                  <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-green-500 mt-0.5 flex-shrink-0 animate-bounce" style={{ animationDelay: `${400 + index * 100}ms` }} />
-                  <span className="text-xs sm:text-sm text-slate-700 leading-relaxed">{feature}</span>
+                <div
+                  key={index}
+                  className="flex items-start gap-1.5 sm:gap-2 animate-fade-in-left"
+                  style={{ animationDelay: `${300 + index * 100}ms` }}
+                >
+                  <CheckCircle
+                    className="h-3 w-3 sm:h-4 sm:w-4 text-green-500 mt-0.5 flex-shrink-0 animate-bounce"
+                    style={{ animationDelay: `${400 + index * 100}ms` }}
+                  />
+                  <span className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                    {feature}
+                  </span>
                 </div>
               ))}
             </div>
@@ -175,7 +194,7 @@ export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
                 />
                 <Mail className="absolute right-2.5 sm:right-3 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-400 group-hover:text-blue-500 transition-colors duration-300" />
               </div>
-              
+
               <div className="relative animate-fade-in-up animation-delay-800 group">
                 <Input
                   name="phone"
@@ -186,7 +205,7 @@ export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
                 />
                 <Phone className="absolute right-2.5 sm:right-3 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-400 group-hover:text-blue-500 transition-colors duration-300" />
               </div>
-              
+
               <div className="relative animate-fade-in-up animation-delay-900 group">
                 <Input
                   name="zipCode"

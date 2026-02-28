@@ -205,7 +205,9 @@ export function UnifiedHero({ slides, options }: UnifiedHeroProps) {
   )
 
   useEffect(() => {
-    if (!emblaApi) return
+    if (!emblaApi) {
+      return
+    }
 
     const onSelect = () => {
       const newIndex = emblaApi.selectedScrollSnap()

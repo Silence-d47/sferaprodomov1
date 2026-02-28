@@ -228,8 +228,12 @@ export default function BlogPostPage() {
 
   // Helper to resolve image URL correctly (string URL vs. Sanity image object)
   const getImageUrl = (img: SanityImage | string | null | undefined) => {
-    if (!img) return '/placeholder.svg'
-    if (typeof img === 'string') return img
+    if (!img) {
+      return '/placeholder.svg'
+    }
+    if (typeof img === 'string') {
+      return img
+    }
     return urlForImage(img).url()
   }
 

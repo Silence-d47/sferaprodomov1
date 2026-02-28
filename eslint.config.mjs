@@ -19,6 +19,7 @@ const eslintConfig = [
       ],
       "@typescript-eslint/no-explicit-any": "warn",
       "no-console": ["warn", { allow: ["warn", "error"] }],
+      curly: "error",
     },
   },
 ];
