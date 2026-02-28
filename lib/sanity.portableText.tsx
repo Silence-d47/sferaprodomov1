@@ -3,17 +3,26 @@
 import { PortableText } from '@portabletext/react'
 import type { PortableTextComponents } from '@portabletext/react'
 import type { PortableTextBlock } from '@portabletext/types'
+import Image from 'next/image'
+import { urlForImage } from '@/lib/sanity.image'
 
 const components: PortableTextComponents = {
   types: {
     image: ({ value }) => {
+      const imageUrl = value.url || (value.asset ? urlForImage(value)?.url() : '') || ''
+
+      if (!imageUrl) {
+        return null
+      }
+
       return (
-        <div className="relative w-full h-96 my-8">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={value.asset?.url || value.url || ''}
+        <div className="relative w-full aspect-video my-8">
+          <Image
+            src={imageUrl}
             alt={value.alt || 'Image'}
-            className="w-full h-full object-cover rounded-lg"
+            fill
+            sizes="(max-width: 960px) 100vw, 896px"
+            className="object-cover rounded-lg"
           />
         </div>
       )

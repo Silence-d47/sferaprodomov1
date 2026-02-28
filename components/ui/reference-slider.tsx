@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import Image from "next/image"
-import Link from "next/link"
-import { Badge } from "@/components/ui/badge"
-import { MapPin, Star } from "lucide-react"
+import Image from 'next/image'
+import Link from 'next/link'
+import { Badge } from '@/components/ui/badge'
+import { MapPin, Star } from 'lucide-react'
 
 interface Reference {
   id: string
@@ -24,13 +24,18 @@ export function ReferenceSlider({ references }: ReferenceSliderProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {references.map((reference) => (
-        <Link key={reference.id} href={`/reference/${reference.id.startsWith('drafts.') ? reference.id.substring(7) : reference.id}`} className="block h-full group hover:shadow-xl transition-all duration-300 border-0 bg-white overflow-hidden flex flex-col rounded-lg">
+        <Link
+          key={reference.id}
+          href={`/reference/${reference.id.startsWith('drafts.') ? reference.id.substring(7) : reference.id}`}
+          className="block h-full group hover:shadow-xl transition-all duration-300 border-0 bg-white overflow-hidden flex flex-col rounded-lg"
+        >
           <div className="p-0 flex flex-col h-full">
             <div className="relative overflow-hidden aspect-[5/4]">
               <Image
-                src={reference.image || "/placeholder.svg"}
+                src={reference.image || '/placeholder.svg'}
                 alt={reference.title}
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 300px"
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
               />
               {reference.isTopReference && (
@@ -60,7 +65,7 @@ export function ReferenceSlider({ references }: ReferenceSliderProps) {
               {reference.logo && (
                 <div className="mb-4">
                   <Image
-                    src={reference.logo || "/placeholder.svg"}
+                    src={reference.logo || '/placeholder.svg'}
                     alt={`${reference.title} logo`}
                     width={80}
                     height={40}

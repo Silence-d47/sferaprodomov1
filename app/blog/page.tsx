@@ -22,11 +22,8 @@ import {
 } from 'lucide-react'
 import { client } from '@/lib/sanity.client'
 import { postsQuery, categoriesQuery } from '@/lib/sanity.queries'
-import { urlForImage } from '@/lib/sanity.image'
 import { EnhancedSectionDivider } from '@/components/ui/enhanced-section-divider'
 import { useState, useEffect, useMemo } from 'react'
-import type { Image as SanityImage } from 'sanity'
-
 // Types
 interface Post {
   _id: string
@@ -36,7 +33,7 @@ interface Post {
   categories: string[]
   author: string
   publishedAt: string
-  mainImage: SanityImage | null
+  mainImage: string | null
   readingTime?: number
 }
 
@@ -357,11 +354,10 @@ export default function BlogPage() {
                   >
                     <div className="relative overflow-hidden aspect-[4/3]">
                       <Image
-                        src={
-                          post.mainImage ? urlForImage(post.mainImage).url() : '/placeholder.svg'
-                        }
+                        src={post.mainImage ?? '/placeholder.svg'}
                         alt={post.title}
                         fill
+                        sizes="(max-width: 1024px) 100vw, 33vw"
                         className="object-cover group-hover:scale-110 transition-transform duration-500"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
@@ -469,11 +465,10 @@ export default function BlogPage() {
                     >
                       <div className="relative overflow-hidden aspect-[4/3]">
                         <Image
-                          src={
-                            post.mainImage ? urlForImage(post.mainImage).url() : '/placeholder.svg'
-                          }
+                          src={post.mainImage ?? '/placeholder.svg'}
                           alt={post.title}
                           fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                           className="object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

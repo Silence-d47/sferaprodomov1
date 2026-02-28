@@ -1,8 +1,8 @@
 declare global {
   interface Window {
-    dataLayer: any[];
-    gtm: (...args: any[]) => void;
+    dataLayer?: Record<string, unknown>[]
+    gtm?: (...args: unknown[]) => void
   }
 }
 
-export {};
+export {}

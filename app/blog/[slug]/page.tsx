@@ -32,11 +32,9 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import { EnhancedSectionDivider } from '@/components/ui/enhanced-section-divider'
-import { urlForImage } from '@/lib/sanity.image'
 import { Toaster, toast } from 'react-hot-toast'
 import { useEffect, useState } from 'react'
 import { CustomPortableText } from '@/lib/sanity.portableText'
-import type { Image as SanityImage } from 'sanity'
 import type { PortableTextBlock } from '@portabletext/types'
 
 // Hooks for fetching data on client
@@ -68,7 +66,7 @@ interface Post {
   categories: string[]
   author: string
   publishedAt: string
-  mainImage: SanityImage | null
+  mainImage: string | null
   body: PortableTextBlock[]
   readingTime?: number
   seoTitle?: string
@@ -227,14 +225,8 @@ export default function BlogPostPage() {
   }
 
   // Helper to resolve image URL correctly (string URL vs. Sanity image object)
-  const getImageUrl = (img: SanityImage | string | null | undefined) => {
-    if (!img) {
-      return '/placeholder.svg'
-    }
-    if (typeof img === 'string') {
-      return img
-    }
-    return urlForImage(img).url()
+  const getImageUrl = (img: string | null | undefined) => {
+    return img || '/placeholder.svg'
   }
 
   return (
@@ -328,13 +320,14 @@ export default function BlogPostPage() {
 
               {/* Right side - Image */}
               <div className="relative">
-                <div className="relative overflow-hidden rounded-2xl shadow-2xl border border-white/20">
+                <div className="relative overflow-hidden rounded-2xl shadow-2xl border border-white/20 aspect-[3/2]">
                   <Image
                     src={getImageUrl(post.mainImage)}
                     alt={post.title}
-                    width={600}
-                    height={400}
-                    className="w-full h-auto object-cover"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover"
+                    priority
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                 </div>
@@ -454,6 +447,7 @@ export default function BlogPostPage() {
                         src={getImageUrl(relatedPost.mainImage)}
                         alt={relatedPost.title}
                         fill
+                        sizes="(max-width: 768px) 100vw, 33vw"
                         className="object-cover group-hover:scale-110 transition-transform duration-500"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />

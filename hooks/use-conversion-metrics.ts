@@ -85,8 +85,8 @@ export function useConversionMetrics() {
   // Sledování v analytics službách
   const trackAnalytics = (data: ConversionData) => {
     // Google Analytics 4
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      ;(window as any).gtag('event', 'form_submit', {
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'form_submit', {
         event_category: 'engagement',
         event_label: data.source,
         value: 1,
@@ -98,8 +98,8 @@ export function useConversionMetrics() {
     }
 
     // Facebook Pixel
-    if (typeof window !== 'undefined' && (window as any).fbq) {
-      ;(window as any).fbq('track', 'Lead', {
+    if (typeof window !== 'undefined' && window.fbq) {
+      window.fbq('track', 'Lead', {
         content_name: 'welcome-popup',
         content_category: data.source,
         value: 1,
@@ -108,8 +108,8 @@ export function useConversionMetrics() {
     }
 
     // Google Tag Manager
-    if (typeof window !== 'undefined' && (window as any).dataLayer) {
-      ;(window as any).dataLayer.push({
+    if (typeof window !== 'undefined' && window.dataLayer) {
+      window.dataLayer.push({
         event: 'form_submit',
         form_name: 'welcome-popup',
         form_source: data.source,

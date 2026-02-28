@@ -117,6 +117,7 @@ export function ProductCard({
             src={safeImage}
             alt={title}
             fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
             className="object-contain transition-transform duration-700 group-hover:scale-110"
           />
 
@@ -218,6 +219,7 @@ export function ProductCard({
                   src={mainImage}
                   alt={title}
                   fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-contain transition-all duration-300"
                 />
               </div>
@@ -233,7 +235,13 @@ export function ProductCard({
                         : 'border-gray-200 hover:border-blue-400'
                     }`}
                   >
-                    <Image src={safeImage} alt={title} fill className="object-contain" />
+                    <Image
+                      src={safeImage}
+                      alt={title}
+                      fill
+                      sizes="80px"
+                      className="object-contain"
+                    />
                   </button>
                   {/* Galerie */}
                   {gallery.map((img, idx) => (
@@ -246,6 +254,7 @@ export function ProductCard({
                         src={safe(img.url)}
                         alt={img.alt || title}
                         fill
+                        sizes="80px"
                         className="object-contain"
                       />
                     </button>

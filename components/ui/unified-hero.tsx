@@ -277,6 +277,7 @@ export function UnifiedHero({ slides, options }: UnifiedHeroProps) {
                     src={slide.bgImage}
                     alt={slide.title || 'Slide background'}
                     fill
+                    sizes="100vw"
                     style={{
                       objectFit: 'cover',
                       opacity: selectedIndex === index ? 1 : 0,
@@ -284,7 +285,7 @@ export function UnifiedHero({ slides, options }: UnifiedHeroProps) {
 
                       transition: 'opacity 0.5s ease-in-out',
                     }}
-                    priority={true}
+                    priority={index === 0}
                   />
                 </div>
               ) : (
