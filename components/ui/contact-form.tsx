@@ -1,85 +1,93 @@
-"use client"
+'use client'
 
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import type React from "react"
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useToast } from "@/hooks/use-toast"
-import { Loader2, ArrowRight } from "lucide-react"
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import type React from 'react'
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { useToast } from '@/hooks/use-toast'
+import { appendUtmToFormData } from '@/lib/utm-params'
+import { Loader2, ArrowRight } from 'lucide-react'
 
 // Props jsou zjednodušené. Komponenta se stará pouze o formulář.
 interface ContactFormProps {
   source?: string
 }
 
-export function ContactForm({ source = "general" }: ContactFormProps) {
+export function ContactForm({ source = 'general' }: ContactFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { toast } = useToast()
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    const form = e.currentTarget;
-    const formData = new FormData(form);
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    const form = e.currentTarget
+    const formData = new FormData(form)
     const data = {
-      name: formData.get("name") as string,
-      phone: formData.get("phone") as string,
-      email: formData.get("email") as string,
-      zipCode: formData.get("zipCode") as string || '',
-      service: formData.get("service") as string || source,
-      message: formData.get("message") as string || '',
-      source: source
+      name: formData.get('name') as string,
+      phone: formData.get('phone') as string,
+      email: formData.get('email') as string,
+      zipCode: (formData.get('zipCode') as string) || '',
+      service: (formData.get('service') as string) || source,
+      message: (formData.get('message') as string) || '',
+      source: source,
     }
-    
+
     // URL vašeho Google Apps Scriptu - stejný jako u welcome popupu
-    const scriptURL = 'https://script.google.com/macros/s/AKfycby7rp2SXJMyFVrUDEEdKo9uomVt3_OYsg4H2OBhJ2pPa2ZFXDAenzqsqTUNA4dx-GGrAQ/exec';
+    const scriptURL =
+      'https://script.google.com/macros/s/AKfycbx-qf_oc0ftJqcPvfZSsYhnm37vu89MDHKtKw2TdATRRGNrG8mXboPol4sWXV9JDBKigQ/exec'
 
     try {
       // Vytvoříme FormData pro odeslání na Google Script
-      const googleFormData = new FormData();
-      googleFormData.append('email', data.email);
-      googleFormData.append('phone', data.phone);
-      googleFormData.append('name', data.name);
-      googleFormData.append('zipCode', data.zipCode);
-      googleFormData.append('service', data.service);
-      googleFormData.append('message', data.message);
-      googleFormData.append('source', data.source);
+      const googleFormData = new FormData()
+      googleFormData.append('email', data.email)
+      googleFormData.append('phone', data.phone)
+      googleFormData.append('name', data.name)
+      googleFormData.append('zipCode', data.zipCode)
+      googleFormData.append('service', data.service)
+      googleFormData.append('message', data.message)
+      googleFormData.append('source', data.source)
+      appendUtmToFormData(googleFormData)
 
       const response = await fetch(scriptURL, {
         method: 'POST',
         body: googleFormData,
-      });
-  
+      })
+
       if (!response.ok) {
-        throw new Error('Chyba při odesílání na server.');
+        throw new Error('Chyba při odesílání na server.')
       }
-  
+
       // Úspěšné odeslání
       toast({
-        title: "Poptávka úspěšně odeslána!",
-        description: "Děkujeme, brzy se vám ozveme s dalšími kroky.",
-      });
-      form.reset();
-      router.push("/dekujeme")
-  
+        title: 'Poptávka úspěšně odeslána!',
+        description: 'Děkujeme, brzy se vám ozveme s dalšími kroky.',
+      })
+      form.reset()
+      router.push('/dekujeme')
     } catch (error) {
-      console.error('Chyba při odesílání:', error);
+      console.error('Chyba při odesílání:', error)
       toast({
-        title: "Něco se pokazilo",
-        description: "Formulář se nepodařilo odeslat. Zkuste to prosím znovu.",
-        variant: "destructive",
-      });
+        title: 'Něco se pokazilo',
+        description: 'Formulář se nepodařilo odeslat. Zkuste to prosím znovu.',
+        variant: 'destructive',
+      })
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   // Komponenta nyní vrací přímo formulář, bez nadbytečných obalů.
   return (
@@ -94,7 +102,7 @@ export function ContactForm({ source = "general" }: ContactFormProps) {
           <Input id="phone" name="phone" type="tel" required placeholder="+420 123 456 789" />
         </div>
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="email">E-mail</Label>
         <Input id="email" name="email" type="email" required placeholder="vas@email.cz" />
@@ -103,7 +111,9 @@ export function ContactForm({ source = "general" }: ContactFormProps) {
       <div className="space-y-2">
         <Label htmlFor="service">O co máte zájem?</Label>
         <Select name="service">
-          <SelectTrigger><SelectValue placeholder="Vyberte službu" /></SelectTrigger>
+          <SelectTrigger>
+            <SelectValue placeholder="Vyberte službu" />
+          </SelectTrigger>
           <SelectContent>
             <SelectItem value="klimatizace">Klimatizace</SelectItem>
             <SelectItem value="tepelna-cerpadla">Tepelná čerpadla</SelectItem>
@@ -118,13 +128,19 @@ export function ContactForm({ source = "general" }: ContactFormProps) {
 
       <div className="space-y-2">
         <Label htmlFor="message">Vaše zpráva</Label>
-        <Textarea id="message" name="message" rows={4} placeholder="Popište nám stručně vaši představu, na co se máme zaměřit, nebo na co se chcete zeptat..." className="resize-y" />
+        <Textarea
+          id="message"
+          name="message"
+          rows={4}
+          placeholder="Popište nám stručně vaši představu, na co se máme zaměřit, nebo na co se chcete zeptat..."
+          className="resize-y"
+        />
       </div>
 
       <div className="pt-2">
-        <Button 
-          type="submit" 
-          disabled={isSubmitting} 
+        <Button
+          type="submit"
+          disabled={isSubmitting}
           className="w-full h-12 text-base font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 flex items-center justify-center gap-2"
         >
           {isSubmitting ? (
@@ -142,7 +158,11 @@ export function ContactForm({ source = "general" }: ContactFormProps) {
       </div>
 
       <p className="text-xs text-slate-500 text-center pt-2">
-        Odesláním formuláře souhlasíte s našimi <Link href="/gdpr" className="font-medium text-slate-600 hover:text-blue-600 underline">zásadami ochrany os. údajů</Link>.
+        Odesláním formuláře souhlasíte s našimi{' '}
+        <Link href="/gdpr" className="font-medium text-slate-600 hover:text-blue-600 underline">
+          zásadami ochrany os. údajů
+        </Link>
+        .
       </p>
     </form>
   )

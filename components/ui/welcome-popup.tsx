@@ -6,6 +6,7 @@ import { X, Phone, Mail, MapPin, MessageSquare, CheckCircle, Award } from 'lucid
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useConversionMetrics } from '@/hooks/use-conversion-metrics'
+import { appendUtmToFormData } from '@/lib/utm-params'
 import {
   Select,
   SelectContent,
@@ -51,7 +52,7 @@ export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
 
     // URL vašeho Google Apps Scriptu
     const scriptURL =
-      'https://script.google.com/macros/s/AKfycby7rp2SXJMyFVrUDEEdKo9uomVt3_OYsg4H2OBhJ2pPa2ZFXDAenzqsqTUNA4dx-GGrAQ/exec'
+      'https://script.google.com/macros/s/AKfycbx-qf_oc0ftJqcPvfZSsYhnm37vu89MDHKtKw2TdATRRGNrG8mXboPol4sWXV9JDBKigQ/exec'
 
     try {
       // 1. Odeslání dat na Google Script
@@ -62,8 +63,8 @@ export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
       googleFormData.append('phone', data.phone)
       googleFormData.append('zipCode', data.zipCode)
       googleFormData.append('service', data.service)
-      // Můžete přidat i další skrytá pole, pokud je váš script očekává
-      // googleFormData.append('source', data.source);
+      googleFormData.append('source', data.source)
+      appendUtmToFormData(googleFormData)
 
       const response = await fetch(scriptURL, {
         method: 'POST',
