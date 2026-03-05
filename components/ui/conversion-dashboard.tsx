@@ -1,9 +1,13 @@
-"use client"
+'use client'
 
-import { useState, useEffect } from "react"
-import { TrendingUp, Users, Calendar, Source, Download, RefreshCw } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { useConversionMetrics, type ConversionMetrics, type ConversionData } from "@/hooks/use-conversion-metrics"
+import { useState, useEffect, useCallback } from 'react'
+import { TrendingUp, Users, Calendar, BarChart3, Download, RefreshCw } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import {
+  useConversionMetrics,
+  type ConversionMetrics,
+  type ConversionData,
+} from '@/hooks/use-conversion-metrics'
 
 export function ConversionDashboard() {
   const { getMetrics } = useConversionMetrics()
@@ -12,16 +16,12 @@ export function ConversionDashboard() {
   const [isLoading, setIsLoading] = useState(false)
   const [selectedPeriod, setSelectedPeriod] = useState<'7d' | '30d' | '90d' | 'all'>('30d')
 
-  useEffect(() => {
-    loadData()
-  }, [selectedPeriod])
-
-  const loadData = () => {
+  const loadData = useCallback(() => {
     setIsLoading(true)
     try {
       const newMetrics = getMetrics()
       setMetrics(newMetrics)
-      
+
       // Načtení detailních dat
       const conversionsData = localStorage.getItem('sfera-conversions')
       if (conversionsData) {
@@ -34,12 +34,16 @@ export function ConversionDashboard() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [selectedPeriod, getMetrics])
+
+  useEffect(() => {
+    loadData()
+  }, [loadData])
 
   const filterConversionsByPeriod = (data: ConversionData[], period: string) => {
     const now = new Date()
     const filterDate = new Date()
-    
+
     switch (period) {
       case '7d':
         filterDate.setDate(now.getDate() - 7)
@@ -53,8 +57,8 @@ export function ConversionDashboard() {
       case 'all':
         return data
     }
-    
-    return data.filter(conv => new Date(conv.timestamp) >= filterDate)
+
+    return data.filter((conv) => new Date(conv.timestamp) >= filterDate)
   }
 
   const exportData = () => {
@@ -77,7 +81,7 @@ export function ConversionDashboard() {
       'welcome-popup': 'Uvítací popup',
       'contact-form': 'Kontaktní formulář',
       'service-page': 'Stránka služby',
-      'general': 'Obecný formulář'
+      general: 'Obecný formulář',
     }
     return labels[source] || source
   }
@@ -88,7 +92,7 @@ export function ConversionDashboard() {
       month: '2-digit',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     })
   }
 
@@ -106,11 +110,11 @@ export function ConversionDashboard() {
           <h2 className="text-3xl font-bold text-slate-800 mb-2">Konverzní Dashboard</h2>
           <p className="text-slate-600">Přehled konverzí a výkonnosti formulářů</p>
         </div>
-        
+
         <div className="flex gap-3 mt-4 sm:mt-0">
           <select
             value={selectedPeriod}
-            onChange={(e) => setSelectedPeriod(e.target.value as any)}
+            onChange={(e) => setSelectedPeriod(e.target.value as '7d' | '30d' | '90d' | 'all')}
             className="px-4 py-2 border border-slate-200 rounded-lg text-slate-700 focus:border-blue-500 focus:ring-blue-500/50"
           >
             <option value="7d">Posledních 7 dní</option>
@@ -118,7 +122,7 @@ export function ConversionDashboard() {
             <option value="90d">Posledních 90 dní</option>
             <option value="all">Všechny</option>
           </select>
-          
+
           <Button
             onClick={loadData}
             disabled={isLoading}
@@ -128,12 +132,8 @@ export function ConversionDashboard() {
             <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
             Obnovit
           </Button>
-          
-          <Button
-            onClick={exportData}
-            variant="outline"
-            className="flex items-center gap-2"
-          >
+
+          <Button onClick={exportData} variant="outline" className="flex items-center gap-2">
             <Download className="h-4 w-4" />
             Export
           </Button>
@@ -175,7 +175,7 @@ export function ConversionDashboard() {
               </p>
             </div>
             <div className="w-12 h-12 bg-purple-200 rounded-full flex items-center justify-center">
-              <Source className="h-6 w-6 text-purple-600" />
+              <BarChart3 className="h-6 w-6 text-purple-600" />
             </div>
           </div>
         </div>
@@ -201,16 +201,21 @@ export function ConversionDashboard() {
           <h3 className="text-xl font-bold text-slate-800 mb-4">Konverze podle zdroje</h3>
           <div className="space-y-3">
             {Object.entries(metrics.conversionsBySource).map(([source, count]) => (
-              <div key={source} className="flex justify-between items-center p-3 bg-white rounded-lg border border-slate-200">
+              <div
+                key={source}
+                className="flex justify-between items-center p-3 bg-white rounded-lg border border-slate-200"
+              >
                 <span className="text-slate-700">{getSourceLabel(source)}</span>
                 <div className="flex items-center gap-2">
                   <div className="w-20 bg-slate-200 rounded-full h-2">
-                    <div 
-                      className="bg-blue-600 h-2 rounded-full" 
+                    <div
+                      className="bg-blue-600 h-2 rounded-full"
                       style={{ width: `${(count / metrics.totalConversions) * 100}%` }}
                     ></div>
                   </div>
-                  <span className="font-semibold text-blue-600 min-w-[3rem] text-right">{count}</span>
+                  <span className="font-semibold text-blue-600 min-w-[3rem] text-right">
+                    {count}
+                  </span>
                 </div>
               </div>
             ))}
@@ -224,7 +229,10 @@ export function ConversionDashboard() {
               .sort((a, b) => new Date(b[0]).getTime() - new Date(a[0]).getTime())
               .slice(0, 7)
               .map(([date, count]) => (
-                <div key={date} className="flex justify-between items-center p-3 bg-white rounded-lg border border-slate-200">
+                <div
+                  key={date}
+                  className="flex justify-between items-center p-3 bg-white rounded-lg border border-slate-200"
+                >
                   <span className="text-slate-700">{formatDate(date)}</span>
                   <span className="font-semibold text-green-600">{count}</span>
                 </div>
@@ -254,7 +262,9 @@ export function ConversionDashboard() {
                 .slice(0, 10)
                 .map((conv, index) => (
                   <tr key={index} className="border-b border-slate-100 hover:bg-white">
-                    <td className="p-3 text-sm text-slate-700">{formatDate(conv.timestamp.toString())}</td>
+                    <td className="p-3 text-sm text-slate-700">
+                      {formatDate(conv.timestamp.toString())}
+                    </td>
                     <td className="p-3 text-sm text-slate-700">{conv.name}</td>
                     <td className="p-3 text-sm text-slate-700">{conv.email}</td>
                     <td className="p-3 text-sm text-slate-700">{getSourceLabel(conv.source)}</td>

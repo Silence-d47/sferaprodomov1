@@ -1,8 +1,8 @@
 declare global {
   interface Window {
-    fbq: (...args: any[]) => void;
-    _fbq: any;
+    fbq?: (...args: unknown[]) => void
+    _fbq?: unknown
   }
 }
 
-export {};
+export {}

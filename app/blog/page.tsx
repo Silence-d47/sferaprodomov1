@@ -1,17 +1,29 @@
-"use client"
+'use client'
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Calendar, User, Clock, ArrowRight, Filter, Search, BookOpen, TrendingUp, Star, Lightbulb, Zap, Thermometer, Wrench, Home, Building2 } from 'lucide-react'
+import {
+  Calendar,
+  User,
+  Clock,
+  ArrowRight,
+  Search,
+  BookOpen,
+  Star,
+  Lightbulb,
+  Zap,
+  Thermometer,
+  Wrench,
+  Home,
+  Building2,
+} from 'lucide-react'
 import { client } from '@/lib/sanity.client'
 import { postsQuery, categoriesQuery } from '@/lib/sanity.queries'
-import { urlForImage } from '@/lib/sanity.image'
 import { EnhancedSectionDivider } from '@/components/ui/enhanced-section-divider'
 import { useState, useEffect, useMemo } from 'react'
-
 // Types
 interface Post {
   _id: string
@@ -21,7 +33,7 @@ interface Post {
   categories: string[]
   author: string
   publishedAt: string
-  mainImage: any
+  mainImage: string | null
   readingTime?: number
 }
 
@@ -32,62 +44,65 @@ interface Category {
 }
 
 // Category mapping with icons and colors
-const categoryConfig: Record<string, { 
-  bg: string; 
-  text: string; 
-  border: string; 
-  icon: any; 
-  description: string;
-  gradient: string;
-}> = {
-  'Klimatizace': { 
-    bg: 'bg-blue-50', 
-    text: 'text-blue-700', 
+const categoryConfig: Record<
+  string,
+  {
+    bg: string
+    text: string
+    border: string
+    icon: React.ComponentType<{ className?: string }>
+    description: string
+    gradient: string
+  }
+> = {
+  Klimatizace: {
+    bg: 'bg-blue-50',
+    text: 'text-blue-700',
     border: 'border-blue-200',
     icon: Thermometer,
     description: 'Tipy pro správnou klimatizaci',
-    gradient: 'from-blue-500 to-cyan-500'
+    gradient: 'from-blue-500 to-cyan-500',
   },
-  'Tepelná čerpadla': { 
-    bg: 'bg-green-50', 
-    text: 'text-green-700', 
+  'Tepelná čerpadla': {
+    bg: 'bg-green-50',
+    text: 'text-green-700',
     border: 'border-green-200',
     icon: Zap,
     description: 'Úsporné vytápění domácnosti',
-    gradient: 'from-green-500 to-emerald-500'
+    gradient: 'from-green-500 to-emerald-500',
   },
-  'Rekuperace': { 
-    bg: 'bg-purple-50', 
-    text: 'text-purple-700', 
+  Rekuperace: {
+    bg: 'bg-purple-50',
+    text: 'text-purple-700',
     border: 'border-purple-200',
     icon: Home,
     description: 'Čerstvý vzduch bez ztrát',
-    gradient: 'from-purple-500 to-violet-500'
+    gradient: 'from-purple-500 to-violet-500',
   },
-  'Elektroinstalace': { 
-    bg: 'bg-orange-50', 
-    text: 'text-orange-700', 
+  Elektroinstalace: {
+    bg: 'bg-orange-50',
+    text: 'text-orange-700',
     border: 'border-orange-200',
     icon: Wrench,
     description: 'Bezpečná elektroinstalace',
-    gradient: 'from-orange-500 to-amber-500'
+    gradient: 'from-orange-500 to-amber-500',
   },
-  'Fotovoltaika': { 
-    bg: 'bg-yellow-50', 
-    text: 'text-yellow-700', 
+  Fotovoltaika: {
+    bg: 'bg-yellow-50',
+    text: 'text-yellow-700',
     border: 'border-yellow-200',
     icon: Lightbulb,
     description: 'Solární energie pro váš dům',
-    gradient: 'from-yellow-500 to-orange-500'
+    gradient: 'from-yellow-500 to-orange-500',
   },
-  'Komerční': { 
-    bg: 'bg-gray-50', 
-    text: 'text-gray-700', 
+  Komerční: {
+    bg: 'bg-gray-50',
+    text: 'text-gray-700',
     border: 'border-gray-200',
     icon: Building2,
     description: 'Řešení pro firmy a podniky',
-    gradient: 'from-gray-500 to-slate-500'
-  }
+    gradient: 'from-gray-500 to-slate-500',
+  },
 }
 
 // Fetch data from Sanity
@@ -95,9 +110,9 @@ async function getBlogData() {
   try {
     const [posts, categories] = await Promise.all([
       client.fetch<Post[]>(postsQuery),
-      client.fetch<Category[]>(categoriesQuery)
+      client.fetch<Category[]>(categoriesQuery),
     ])
-    
+
     return { posts, categories }
   } catch (error) {
     console.error('Error fetching blog data:', error)
@@ -107,7 +122,7 @@ async function getBlogData() {
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<Post[]>([])
-  const [ categories, setCategories] = useState<Category[]>([])
+  const [, setCategories] = useState<Category[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'popular'>('newest')
   const [searchTerm, setSearchTerm] = useState<string>('')
@@ -131,17 +146,16 @@ export default function BlogPage() {
 
     // Filter by category
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter(post => 
-        post.categories?.some(cat => cat === selectedCategory)
-      )
+      filtered = filtered.filter((post) => post.categories?.some((cat) => cat === selectedCategory))
     }
 
     // Filter by search term
     if (searchTerm) {
-      filtered = filtered.filter(post =>
-        post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        post.categories?.some(cat => cat.toLowerCase().includes(searchTerm.toLowerCase()))
+      filtered = filtered.filter(
+        (post) =>
+          post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          post.categories?.some((cat) => cat.toLowerCase().includes(searchTerm.toLowerCase())),
       )
     }
 
@@ -164,13 +178,6 @@ export default function BlogPage() {
   const featuredPosts = filteredPosts.slice(0, 3)
   // Regular posts (all except featured to avoid duplication)
   const regularPosts = filteredPosts.slice(3)
-
-  // Debug logging
-  console.log('Total posts:', posts.length)
-  console.log('Filtered posts:', filteredPosts.length)
-  console.log('Featured posts:', featuredPosts.length)
-  console.log('Regular posts:', regularPosts.length)
-  console.log('Selected category:', selectedCategory)
 
   // Show featured posts section only if there are posts
   const showFeaturedSection = featuredPosts.length > 0
@@ -200,7 +207,7 @@ export default function BlogPage() {
         {/* Background pattern */}
         <div className="absolute inset-0 bg-grid-white/[0.05] bg-[length:20px_20px]"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"></div>
-        
+
         <div className="container relative z-10">
           <div className="max-w-6xl mx-auto text-center text-white">
             {/* Main heading */}
@@ -212,8 +219,8 @@ export default function BlogPage() {
                 Články a zajímavosti
               </h1>
               <p className="text-xl md:text-2xl text-blue-100 leading-relaxed max-w-4xl mx-auto drop-shadow-lg">
-                Odborné články, tipy a triky od našich techniků pro správné fungování 
-                klimatizace, tepelných čerpadel a dalších systémů ve vašem domě
+                Odborné články, tipy a triky od našich techniků pro správné fungování klimatizace,
+                tepelných čerpadel a dalších systémů ve vašem domě
               </p>
             </div>
 
@@ -247,7 +254,14 @@ export default function BlogPage() {
 
         {/* Wave divider */}
         <div className="absolute bottom-0 left-0 right-0">
-          <EnhancedSectionDivider variant="wave" animated={true} height="xl" fromColor="from-blue-600" toColor="to-white" particles={false} />
+          <EnhancedSectionDivider
+            variant="wave"
+            animated={true}
+            height="xl"
+            fromColor="from-blue-600"
+            toColor="to-white"
+            particles={false}
+          />
         </div>
       </section>
 
@@ -268,23 +282,25 @@ export default function BlogPage() {
             {Object.entries(categoryConfig).map(([category, config]) => {
               const IconComponent = config.icon
               const isSelected = selectedCategory === category
-              
+
               return (
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(isSelected ? 'all' : category)}
                   className={`group relative overflow-hidden rounded-2xl p-8 text-left transition-all duration-300 hover:scale-105 ${
-                    isSelected 
-                      ? 'ring-2 ring-blue-500 shadow-2xl' 
-                      : 'hover:shadow-xl'
+                    isSelected ? 'ring-2 ring-blue-500 shadow-2xl' : 'hover:shadow-xl'
                   }`}
                 >
                   {/* Background gradient */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${config.gradient} opacity-10 group-hover:opacity-20 transition-opacity duration-300`} />
-                  
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${config.gradient} opacity-10 group-hover:opacity-20 transition-opacity duration-300`}
+                  />
+
                   {/* Content */}
                   <div className="relative z-10">
-                    <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl ${config.bg} mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                    <div
+                      className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl ${config.bg} mb-6 group-hover:scale-110 transition-transform duration-300`}
+                    >
                       <IconComponent className={`h-8 w-8 ${config.text}`} />
                     </div>
                     <h3 className="text-xl font-bold text-gray-900 mb-3">{category}</h3>
@@ -315,9 +331,7 @@ export default function BlogPage() {
             <div className="text-center mb-16">
               <div className="flex items-center justify-center mb-6">
                 <Star className="h-8 w-8 text-yellow-500 mr-3" />
-                <Badge className="bg-yellow-100 text-yellow-800 px-4 py-2">
-                  Doporučené články
-                </Badge>
+                <Badge className="bg-yellow-100 text-yellow-800 px-4 py-2">Doporučené články</Badge>
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 Nejdůležitější články
@@ -329,26 +343,28 @@ export default function BlogPage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              {featuredPosts.map((post, index) => {
+              {featuredPosts.map((post) => {
                 const category = post.categories?.[0] || 'Klimatizace'
                 const config = getCategoryConfig(category)
-                
+
                 return (
-                  <Card key={post._id} className="group relative overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                  <Card
+                    key={post._id}
+                    className="group relative overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                  >
                     <div className="relative overflow-hidden aspect-[4/3]">
                       <Image
-                        src={post.mainImage ? urlForImage(post.mainImage).url() : "/placeholder.svg"}
+                        src={post.mainImage ?? '/placeholder.svg'}
                         alt={post.title}
                         fill
+                        sizes="(max-width: 1024px) 100vw, 33vw"
                         className="object-cover group-hover:scale-110 transition-transform duration-500"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                      
+
                       {/* Category badge */}
                       <div className="absolute top-4 left-4">
-                        <Badge className={`${config.bg} ${config.text} border-0`}>
-                          {category}
-                        </Badge>
+                        <Badge className={`${config.bg} ${config.text} border-0`}>{category}</Badge>
                       </div>
 
                       {/* Reading time */}
@@ -376,11 +392,11 @@ export default function BlogPage() {
                         <User className="h-4 w-4 mr-2" />
                         {post.author}
                       </div>
-                      
+
                       <CardTitle className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
                         {post.title}
                       </CardTitle>
-                      
+
                       <CardDescription className="text-gray-600 mb-4 line-clamp-3">
                         {post.excerpt}
                       </CardDescription>
@@ -393,7 +409,11 @@ export default function BlogPage() {
                         </Button>
                       </span>
                     </CardContent>
-                    <Link href={`/blog/${post.slug.current}`} className="absolute inset-0 z-20" aria-label={post.title}></Link>
+                    <Link
+                      href={`/blog/${post.slug.current}`}
+                      className="absolute inset-0 z-20"
+                      aria-label={post.title}
+                    ></Link>
                   </Card>
                 )
               })}
@@ -412,10 +432,9 @@ export default function BlogPage() {
                   Všechny články
                 </h2>
                 <p className="text-xl text-gray-600">
-                  {selectedCategory !== 'all' 
-                    ? `Články v kategorii: ${selectedCategory}` 
-                    : 'Kompletní přehled všech odborných článků'
-                  }
+                  {selectedCategory !== 'all'
+                    ? `Články v kategorii: ${selectedCategory}`
+                    : 'Kompletní přehled všech odborných článků'}
                 </p>
               </div>
 
@@ -438,18 +457,22 @@ export default function BlogPage() {
                 {regularPosts.map((post) => {
                   const category = post.categories?.[0] || 'Klimatizace'
                   const config = getCategoryConfig(category)
-                  
+
                   return (
-                    <Card key={post._id} className="group relative overflow-hidden border border-gray-200 hover:border-blue-300 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                    <Card
+                      key={post._id}
+                      className="group relative overflow-hidden border border-gray-200 hover:border-blue-300 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                    >
                       <div className="relative overflow-hidden aspect-[4/3]">
                         <Image
-                          src={post.mainImage ? urlForImage(post.mainImage).url() : "/placeholder.svg"}
+                          src={post.mainImage ?? '/placeholder.svg'}
                           alt={post.title}
                           fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                           className="object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                        
+
                         {/* Category badge */}
                         <div className="absolute top-3 left-3">
                           <Badge className={`${config.bg} ${config.text} border-0 text-xs`}>
@@ -474,24 +497,31 @@ export default function BlogPage() {
                           <User className="h-3 w-3 mr-1" />
                           {post.author}
                         </div>
-                        
+
                         <CardTitle className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
                           {post.title}
                         </CardTitle>
-                        
+
                         <CardDescription className="text-gray-600 mb-4 line-clamp-3 text-sm">
                           {post.excerpt}
                         </CardDescription>
 
                         <span>
-                          <Button variant="outline" className="w-full border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300 transition-colors">
+                          <Button
+                            variant="outline"
+                            className="w-full border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300 transition-colors"
+                          >
                             Přečíst článek
                             <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
                           </Button>
-                       </span>
-                    </CardContent>
-                    <Link href={`/blog/${post.slug.current}`} className="absolute inset-0 z-20" aria-label={post.title}></Link>
-                  </Card>
+                        </span>
+                      </CardContent>
+                      <Link
+                        href={`/blog/${post.slug.current}`}
+                        className="absolute inset-0 z-20"
+                        aria-label={post.title}
+                      ></Link>
+                    </Card>
                   )
                 })}
               </div>
@@ -504,8 +534,7 @@ export default function BlogPage() {
                 <p className="text-gray-500 mb-6">
                   {searchTerm
                     ? `Pro hledaný výraz "${searchTerm}" nebyly nalezeny žádné články.`
-                    : 'Žádné články nejsou v tuto chvíli k dispozici.'
-                  }
+                    : 'Žádné články nejsou v tuto chvíli k dispozici.'}
                 </p>
                 {searchTerm && (
                   <Button
@@ -532,20 +561,27 @@ export default function BlogPage() {
               Potřebujete odbornou radu?
             </h2>
             <p className="text-xl text-blue-100 mb-8 leading-relaxed max-w-3xl mx-auto">
-              Nenašli jste odpověď v našich článcích? Kontaktujte naše techniky 
-              a získejte osobní konzultaci pro váš konkrétní problém.
+              Nenašli jste odpověď v našich článcích? Kontaktujte naše techniky a získejte osobní
+              konzultaci pro váš konkrétní problém.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold shadow-lg" asChild>
+              <Button
+                size="lg"
+                className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold shadow-lg"
+                asChild
+              >
                 <Link href="/kontakt">
                   <Zap className="h-5 w-5 mr-2" />
                   Nezávazná konzultace
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-blue-800 hover:text-white font-semibold bg-white/10 backdrop-blur-sm" asChild>
-                <Link href="/sluzby">
-                  Naše služby
-                </Link>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-white text-white hover:bg-blue-800 hover:text-white font-semibold bg-white/10 backdrop-blur-sm"
+                asChild
+              >
+                <Link href="/sluzby">Naše služby</Link>
               </Button>
             </div>
           </div>

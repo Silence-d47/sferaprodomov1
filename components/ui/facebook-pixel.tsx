@@ -1,10 +1,10 @@
-"use client";
+'use client'
 
-import Script from 'next/script';
+import Script from 'next/script'
 
 export function FacebookPixel() {
-  const pixelId = process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID || '24681283014791075';
-  
+  const pixelId = process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID || '24681283014791075'
+
   return (
     <>
       <Script id="facebook-pixel" strategy="afterInteractive">
@@ -22,14 +22,15 @@ export function FacebookPixel() {
         `}
       </Script>
       <noscript>
-        <img 
-          height="1" 
-          width="1" 
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          height="1"
+          width="1"
           style={{ display: 'none' }}
           src={`https://www.facebook.com/tr?id=${pixelId}&ev=PageView&noscript=1`}
           alt=""
         />
       </noscript>
     </>
-  );
+  )
 }

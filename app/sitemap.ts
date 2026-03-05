@@ -1,41 +1,32 @@
-import { createClient } from 'next-sanity';
-import { groq } from 'next-sanity';
-import type { MetadataRoute } from 'next';
+import { groq } from 'next-sanity'
+import type { MetadataRoute } from 'next'
+import { client } from '@/lib/sanity.client'
 
-// Create a separate client for sitemap with explicit configuration
-const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: '2023-05-03',
-  useCdn: false, // Disable CDN for sitemap to ensure fresh data
-  token: process.env.SANITY_API_TOKEN,
-});
+const baseUrl = 'https://sfera-domov.cz'
 
-const baseUrl = 'https://sfera-domov.cz';
-
-type ChangeFrequency = 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
+type ChangeFrequency = 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never'
 
 interface SitemapEntry {
-  url: string;
-  lastModified: Date | string;
-  changeFrequency: ChangeFrequency;
-  priority: number;
+  url: string
+  lastModified: Date | string
+  changeFrequency: ChangeFrequency
+  priority: number
 }
 
 interface BlogPostSitemap {
-  _updatedAt: string;
-  publishedAt?: string;
+  _updatedAt: string
+  publishedAt?: string
   slug: {
-    current: string;
-  };
+    current: string
+  }
 }
 
 interface ReferencePageSitemap {
-  _updatedAt: string;
-  _createdAt: string;
+  _updatedAt: string
+  _createdAt: string
   slug: {
-    current: string;
-  };
+    current: string
+  }
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -95,34 +86,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'yearly',
       priority: 0.1,
     },
-  ];
+  ]
 
   try {
-    console.log('Starting sitemap generation');
-    console.log('Sanity project ID:', process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ? 'set' : 'missing');
-    console.log('Sanity dataset:', process.env.NEXT_PUBLIC_SANITY_DATASET || 'defaulting to production');
-
     // Fetch blog posts
     const blogQuery = groq`*[_type == "post" && defined(slug.current) && !(_id in path("drafts.**"))]{
       _updatedAt,
       publishedAt,
       slug
-    }`;
-    
-    console.log('Fetching blog posts...');
-    const blogPosts = await client.fetch<BlogPostSitemap[]>(blogQuery);
-    console.log(`Fetched ${blogPosts.length} blog posts`);
+    }`
+    const blogPosts = await client.fetch<BlogPostSitemap[]>(blogQuery)
 
     // Fetch reference projects
     const referenceQuery = groq`*[_type == "projectReference" && defined(slug.current) && !(_id in path("drafts.**"))]{
       _updatedAt,
       _createdAt,
       slug
-    }`;
-    
-    console.log('Fetching reference pages...');
-    const referencePages = await client.fetch<ReferencePageSitemap[]>(referenceQuery);
-    console.log(`Fetched ${referencePages.length} reference pages`);
+    }`
+    const referencePages = await client.fetch<ReferencePageSitemap[]>(referenceQuery)
 
     // Map blog posts to sitemap entries
     const blogEntries: SitemapEntry[] = blogPosts.map((post) => ({
@@ -130,7 +111,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(post._updatedAt || post.publishedAt || new Date().toISOString()),
       changeFrequency: 'weekly',
       priority: 0.6,
-    }));
+    }))
 
     // Map reference projects to sitemap entries
     const referenceEntries: SitemapEntry[] = referencePages.map((ref) => ({
@@ -138,23 +119,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(ref._updatedAt || ref._createdAt || new Date().toISOString()),
       changeFrequency: 'monthly',
       priority: 0.5,
-    }));
+    }))
 
-    return [...staticPages, ...blogEntries, ...referenceEntries];
-  } catch (error) {
-    console.error('Error generating sitemap:');
-    console.error('Error name:', error.name);
-    console.error('Error message:', error.message);
-    console.error('Error stack:', error.stack);
-    
-    // Log environment info for debugging
-    console.log('Environment:', process.env.NODE_ENV);
-    console.log('Sanity config:', {
-      projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ? 'set' : 'missing',
-      dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'defaulting to production',
-    });
-    
+    return [...staticPages, ...blogEntries, ...referenceEntries]
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error)
+    console.error('Error generating sitemap:', message)
+
     // Return only static pages in case of error
-    return staticPages;
+    return staticPages
   }
 }

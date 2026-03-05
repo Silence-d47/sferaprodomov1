@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import { useState } from "react"
+import { useState } from 'react'
 
 export interface ConversionData {
   name: string
@@ -28,8 +28,10 @@ export function useConversionMetrics() {
 
   // Zachytání UTM parametrů z URL
   const getUTMParams = () => {
-    if (typeof window === 'undefined') return {}
-    
+    if (typeof window === 'undefined') {
+      return {}
+    }
+
     const urlParams = new URLSearchParams(window.location.search)
     return {
       utmSource: urlParams.get('utm_source') || undefined,
@@ -40,8 +42,10 @@ export function useConversionMetrics() {
 
   // Zachytání referrer informací
   const getReferrerInfo = () => {
-    if (typeof window === 'undefined') return { referrer: '', userAgent: '' }
-    
+    if (typeof window === 'undefined') {
+      return { referrer: '', userAgent: '' }
+    }
+
     return {
       referrer: document.referrer || 'direct',
       userAgent: navigator.userAgent,
@@ -81,21 +85,21 @@ export function useConversionMetrics() {
   // Sledování v analytics službách
   const trackAnalytics = (data: ConversionData) => {
     // Google Analytics 4
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'form_submit', {
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'form_submit', {
         event_category: 'engagement',
         event_label: data.source,
         value: 1,
         custom_parameters: {
           form_name: 'welcome-popup',
           user_location: data.zipCode,
-        }
+        },
       })
     }
 
     // Facebook Pixel
-    if (typeof window !== 'undefined' && (window as any).fbq) {
-      (window as any).fbq('track', 'Lead', {
+    if (typeof window !== 'undefined' && window.fbq) {
+      window.fbq('track', 'Lead', {
         content_name: 'welcome-popup',
         content_category: data.source,
         value: 1,
@@ -104,8 +108,8 @@ export function useConversionMetrics() {
     }
 
     // Google Tag Manager
-    if (typeof window !== 'undefined' && (window as any).dataLayer) {
-      (window as any).dataLayer.push({
+    if (typeof window !== 'undefined' && window.dataLayer) {
+      window.dataLayer.push({
         event: 'form_submit',
         form_name: 'welcome-popup',
         form_source: data.source,
@@ -129,16 +133,16 @@ export function useConversionMetrics() {
       }
 
       const data: ConversionData[] = JSON.parse(conversions)
-      
+
       // Počítání podle zdroje
       const bySource: Record<string, number> = {}
-      data.forEach(conv => {
+      data.forEach((conv) => {
         bySource[conv.source] = (bySource[conv.source] || 0) + 1
       })
 
       // Počítání podle data
       const byDate: Record<string, number> = {}
-      data.forEach(conv => {
+      data.forEach((conv) => {
         const date = conv.timestamp.toDateString()
         byDate[date] = (byDate[date] || 0) + 1
       })

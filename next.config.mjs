@@ -1,14 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
+  experimental: {
+    optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  poweredByHeader: false,
+  compress: true,
+  generateEtags: true,
   images: {
-    unoptimized: true,
-    domains: ['cdn.sanity.io'],
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 86400,
     remotePatterns: [
       {
         protocol: 'https',

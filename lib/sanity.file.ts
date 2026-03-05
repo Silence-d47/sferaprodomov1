@@ -7,13 +7,21 @@ export interface SanityFile {
   fileType: string
 }
 
-export function getFileUrl(fileAsset: any): string | null {
+interface SanityFileReference {
+  file?: {
+    asset?: {
+      url?: string
+    }
+  }
+}
+
+export function getFileUrl(fileAsset: SanityFileReference | null | undefined): string | null {
   if (!fileAsset || !fileAsset.file || !fileAsset.file.asset) {
     return null
   }
-  
+
   // Pro soubory v Sanity se používá asset->url
-  return fileAsset.file.asset.url
+  return fileAsset.file.asset.url ?? null
 }
 
 export async function getProductFiles(productId: string): Promise<SanityFile[]> {
@@ -25,7 +33,7 @@ export async function getProductFiles(productId: string): Promise<SanityFile[]> 
       fileType
     }
   }`
-  
+
   const result = await client.fetch(query, { productId })
   return result?.files || []
 }

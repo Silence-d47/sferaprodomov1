@@ -1,128 +1,132 @@
-"use client"
+'use client'
 
-import { ProductCard } from "./product-card"
+import { ProductCard } from './product-card'
 
 // Ukázkové produkty pro demonstraci
 const sampleProducts = [
   {
-    _id: "1",
-    title: "Rekuperační jednotka Daikin VAM 250 G",
-    description: "Vysokovýkonná rekuperační jednotka s účinností až 90% pro rodinné domy. Ideální pro novostavby i rekonstrukce s možností chlazení a vlhčení vzduchu.",
-    image: "/images/rekuperace/rekuperace_homepage_hero.png",
+    _id: '1',
+    title: 'Rekuperační jednotka Daikin VAM 250 G',
+    description:
+      'Vysokovýkonná rekuperační jednotka s účinností až 90% pro rodinné domy. Ideální pro novostavby i rekonstrukce s možností chlazení a vlhčení vzduchu.',
+    image: '/images/rekuperace/rekuperace_homepage_hero.png',
     features: [
-      "Účinnost až 90%",
-      "Tichý provoz pod 30 dB",
-      "Možnost chlazení",
-      "Automatické ovládání",
-      "Filtrace vzduchu"
+      'Účinnost až 90%',
+      'Tichý provoz pod 30 dB',
+      'Možnost chlazení',
+      'Automatické ovládání',
+      'Filtrace vzduchu',
     ],
     isRecommended: true,
     isBestSelling: false,
-    energyClass: "A+",
+    energyClass: 'A+',
     specifications: {
       powerRange: { min: 0.5, max: 2.5 },
-      noiseLevel: 28
+      noiseLevel: 28,
     },
     warranty: 5,
-    brand: "Daikin",
+    brand: 'Daikin',
     files: [
       {
-        _id: "file1",
-        title: "Technický list",
-        fileUrl: "#",
-        fileType: "datasheet"
+        _id: 'file1',
+        title: 'Technický list',
+        fileUrl: '#',
+        fileType: 'datasheet',
       },
       {
-        _id: "file2", 
-        title: "Montážní návod",
-        fileUrl: "#",
-        fileType: "manual"
-      }
-    ]
+        _id: 'file2',
+        title: 'Montážní návod',
+        fileUrl: '#',
+        fileType: 'manual',
+      },
+    ],
   },
   {
-    _id: "2",
-    title: "Klimatizace Midea Oasis Plus",
-    description: "Invertorová klimatizace s WiFi ovládáním a vysokou účinností. Vhodná pro obývací pokoje a ložnice s možností topení i chlazení.",
-    image: "/images/klimatizace/klimatizace_hero.jpg",
+    _id: '2',
+    title: 'Klimatizace Midea Oasis Plus',
+    description:
+      'Invertorová klimatizace s WiFi ovládáním a vysokou účinností. Vhodná pro obývací pokoje a ložnice s možností topení i chlazení.',
+    image: '/images/klimatizace/klimatizace_hero.jpg',
     features: [
-      "Invertorová technologie",
-      "WiFi ovládání",
-      "Topení i chlazení",
-      "Tichý provoz",
-      "Energeticky úsporná"
+      'Invertorová technologie',
+      'WiFi ovládání',
+      'Topení i chlazení',
+      'Tichý provoz',
+      'Energeticky úsporná',
     ],
     isRecommended: false,
     isBestSelling: true,
-    energyClass: "A+++",
+    energyClass: 'A+++',
     specifications: {
       coolingCapacityRange: { min: 2.5, max: 3.5 },
       heatingCapacityRange: { min: 2.8, max: 4.0 },
-      noiseLevel: 22
+      noiseLevel: 22,
     },
     warranty: 3,
-    brand: "Midea",
+    brand: 'Midea',
     files: [
       {
-        _id: "file3",
-        title: "Katalog",
-        fileUrl: "#", 
-        fileType: "catalog"
-      }
-    ]
+        _id: 'file3',
+        title: 'Katalog',
+        fileUrl: '#',
+        fileType: 'catalog',
+      },
+    ],
   },
   {
-    _id: "3",
-    title: "Tepelné čerpadlo vzduch-voda Viessmann",
-    description: "Efektivní tepelné čerpadlo pro vytápění a ohřev TUV. Vhodné pro rodinné domy s možností chlazení v létě.",
-    image: "/images/tep_cer_homepage_hero.png",
+    _id: '3',
+    title: 'Tepelné čerpadlo vzduch-voda Viessmann',
+    description:
+      'Efektivní tepelné čerpadlo pro vytápění a ohřev TUV. Vhodné pro rodinné domy s možností chlazení v létě.',
+    image: '/images/tep_cer_homepage_hero.png',
     features: [
-      "Vzduch-voda systém",
-      "Vytápění i chlazení",
-      "Ohřev TUV",
-      "Nízké provozní náklady",
-      "Dotace Nová zelená úsporám"
+      'Vzduch-voda systém',
+      'Vytápění i chlazení',
+      'Ohřev TUV',
+      'Nízké provozní náklady',
+      'Dotace Nová zelená úsporám',
     ],
     isRecommended: true,
     isBestSelling: true,
-    energyClass: "A++",
+    energyClass: 'A++',
     specifications: {
       powerRange: { min: 5, max: 16 },
-      heatingCapacityRange: { min: 6, max: 18 }
+      heatingCapacityRange: { min: 6, max: 18 },
     },
     warranty: 7,
-    brand: "Viessmann",
+    brand: 'Viessmann',
     files: [
       {
-        _id: "file4",
-        title: "Technický list",
-        fileUrl: "#",
-        fileType: "datasheet"
-      }
-    ]
+        _id: 'file4',
+        title: 'Technický list',
+        fileUrl: '#',
+        fileType: 'datasheet',
+      },
+    ],
   },
   {
-    _id: "4",
-    title: "Rekuperační jednotka Zehnder ComfoAir 200",
-    description: "Decentralizovaná rekuperační jednotka pro jednotlivé místnosti. Ideální pro rekonstrukce bytů a domů bez nutnosti rozvodů.",
-    image: "/images/rekuperace/rekuperace.webp",
+    _id: '4',
+    title: 'Rekuperační jednotka Zehnder ComfoAir 200',
+    description:
+      'Decentralizovaná rekuperační jednotka pro jednotlivé místnosti. Ideální pro rekonstrukce bytů a domů bez nutnosti rozvodů.',
+    image: '/images/rekuperace/rekuperace.webp',
     features: [
-      "Decentralizovaná jednotka",
-      "Jednoduchá instalace",
-      "Bez potrubí",
-      "Tichý provoz",
-      "Účinnost až 85%"
+      'Decentralizovaná jednotka',
+      'Jednoduchá instalace',
+      'Bez potrubí',
+      'Tichý provoz',
+      'Účinnost až 85%',
     ],
     isRecommended: false,
     isBestSelling: false,
-    energyClass: "A",
+    energyClass: 'A',
     specifications: {
       powerRange: { min: 0.3, max: 1.2 },
-      noiseLevel: 32
+      noiseLevel: 32,
     },
     warranty: 3,
-    brand: "Zehnder"
-  }
+    brand: 'Zehnder',
+  },
 ]
 
 export function ProductShowcase() {
@@ -134,10 +138,11 @@ export function ProductShowcase() {
             Ukázka nové implementace produktů
           </h2>
           <p className="text-base md:text-lg text-muted-foreground">
-            Nová kompaktní karta s modálním oknem pro detaily. Všechny karty mají stejnou výšku a konzistentní layout.
+            Nová kompaktní karta s modálním oknem pro detaily. Všechny karty mají stejnou výšku a
+            konzistentní layout.
           </p>
         </div>
-        
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6">
           {sampleProducts.map((product) => (
             <ProductCard
@@ -156,10 +161,11 @@ export function ProductShowcase() {
             />
           ))}
         </div>
-        
+
         <div className="mt-8 text-center">
           <p className="text-sm text-muted-foreground">
-            Klikněte na "Zobrazit detaily" pro otevření modálního okna s kompletními informacemi o produktu.
+            Klikněte na &ldquo;Zobrazit detaily&rdquo; pro otevření modálního okna s kompletními
+            informacemi o produktu.
           </p>
         </div>
       </div>
