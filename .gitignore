@@ -34,3 +34,4 @@ next-env.d.ts
 # IDE and local docs
 .idea/
 /docs/
+/local/
