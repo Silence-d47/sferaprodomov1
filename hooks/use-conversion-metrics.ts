@@ -1,7 +1,5 @@
 'use client'
 
-import { useState } from 'react'
-
 export interface ConversionData {
   name: string
   email: string
@@ -16,16 +14,7 @@ export interface ConversionData {
   utmCampaign?: string
 }
 
-export interface ConversionMetrics {
-  totalConversions: number
-  conversionsBySource: Record<string, number>
-  conversionsByDate: Record<string, number>
-  averageTimeToConvert: number
-}
-
 export function useConversionMetrics() {
-  const [isTracking, setIsTracking] = useState(false)
-
   // Zachytání UTM parametrů z URL
   const getUTMParams = () => {
     if (typeof window === 'undefined') {
@@ -129,66 +118,7 @@ export function useConversionMetrics() {
     }
   }
 
-  // Získání metrik
-  const getMetrics = (): ConversionMetrics => {
-    try {
-      const conversions = localStorage.getItem('sfera-conversions')
-      if (!conversions) {
-        return {
-          totalConversions: 0,
-          conversionsBySource: {},
-          conversionsByDate: {},
-          averageTimeToConvert: 0,
-        }
-      }
-
-      const data: ConversionData[] = JSON.parse(conversions)
-
-      // Počítání podle zdroje
-      const bySource: Record<string, number> = {}
-      data.forEach((conv) => {
-        bySource[conv.source] = (bySource[conv.source] || 0) + 1
-      })
-
-      // Počítání podle data
-      const byDate: Record<string, number> = {}
-      data.forEach((conv) => {
-        const date = conv.timestamp.toDateString()
-        byDate[date] = (byDate[date] || 0) + 1
-      })
-
-      return {
-        totalConversions: data.length,
-        conversionsBySource: bySource,
-        conversionsByDate: byDate,
-        averageTimeToConvert: 0, // Vypočítat podle potřeby
-      }
-    } catch (error) {
-      console.error('Chyba při načítání metrik:', error)
-      return {
-        totalConversions: 0,
-        conversionsBySource: {},
-        conversionsByDate: {},
-        averageTimeToConvert: 0,
-      }
-    }
-  }
-
-  // Získání poslední konverze
-  const getLastConversion = (): ConversionData | null => {
-    try {
-      const last = sessionStorage.getItem('sfera-last-conversion')
-      return last ? JSON.parse(last) : null
-    } catch {
-      return null
-    }
-  }
-
   return {
     saveConversion,
-    getMetrics,
-    getLastConversion,
-    isTracking,
-    setIsTracking,
   }
 }
