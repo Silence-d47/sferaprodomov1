@@ -128,7 +128,7 @@ export function ContactFormSection({
       name: formData.get('name') as string,
       phone: formData.get('phone') as string,
       email: formData.get('email') as string,
-      zipCode: (formData.get('zipCode') as string) || '',
+      zipCode: formData.get('zipCode') as string,
       service: (formData.get('service') as string) || source,
       message: (formData.get('message') as string) || '',
       source: source,
@@ -262,21 +262,33 @@ export function ContactFormSection({
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="email">E-mail</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                required
-                placeholder="vas@email.cz"
-                className={theme.focus}
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="email">E-mail</Label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  placeholder="vas@email.cz"
+                  className={theme.focus}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="zipCode">PSČ</Label>
+                <Input
+                  id="zipCode"
+                  name="zipCode"
+                  required
+                  placeholder="746 01"
+                  className={theme.focus}
+                />
+              </div>
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="service">O co máte zájem?</Label>
-              <Select name="service">
+              <Select name="service" required>
                 <SelectTrigger className={theme.focus}>
                   <SelectValue placeholder="Vyberte službu" />
                 </SelectTrigger>

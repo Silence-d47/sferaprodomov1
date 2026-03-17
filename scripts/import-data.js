@@ -10,7 +10,7 @@ const client = createClient({
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   useCdn: false,
   token: process.env.SANITY_API_TOKEN, // You'll need to create this token
-  apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-01-01',
+  apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2026-03-05',
 })
 
 // Import data from your existing website
@@ -20,30 +20,29 @@ async function importData() {
   try {
     // 1. Import Categories
     await importCategories()
-    
+
     // 2. Import Authors
     await importAuthors()
-    
+
     // 3. Import Products
     await importProducts()
-    
+
     // 4. Import Blog Posts
     await importBlogPosts()
-    
+
     // 5. Import Project References
     await importProjectReferences()
-    
+
     // 6. Import FAQ
     await importFAQ()
-    
+
     // 7. Import Hero Slides
     await importHeroSlides()
-    
+
     // 8. Import Site Settings
     await importSiteSettings()
-    
+
     console.log('✅ Data import completed successfully!')
-    
   } catch (error) {
     console.error('❌ Import failed:', error)
   }
@@ -52,7 +51,7 @@ async function importData() {
 // Categories
 async function importCategories() {
   console.log('📂 Importing categories...')
-  
+
   const categories = [
     {
       _type: 'category',
@@ -60,7 +59,7 @@ async function importCategories() {
       title: 'Klimatizace',
       slug: { current: 'klimatizace' },
       description: 'Klimatizační systémy a jednotky',
-      color: 'blue'
+      color: 'blue',
     },
     {
       _type: 'category',
@@ -68,7 +67,7 @@ async function importCategories() {
       title: 'Tepelná čerpadla',
       slug: { current: 'tepelna-cerpadla' },
       description: 'Tepelná čerpadla pro vytápění a chlazení',
-      color: 'green'
+      color: 'green',
     },
     {
       _type: 'category',
@@ -76,7 +75,7 @@ async function importCategories() {
       title: 'Rekuperace',
       slug: { current: 'rekuperace' },
       description: 'Rekuperační jednotky a systémy',
-      color: 'purple'
+      color: 'purple',
     },
     {
       _type: 'category',
@@ -84,8 +83,8 @@ async function importCategories() {
       title: 'Elektroinstalace',
       slug: { current: 'elektroinstalace' },
       description: 'Elektroinstalační práce a služby',
-      color: 'orange'
-    }
+      color: 'orange',
+    },
   ]
 
   for (const category of categories) {
@@ -97,7 +96,7 @@ async function importCategories() {
 // Authors
 async function importAuthors() {
   console.log('👤 Importing authors...')
-  
+
   const authors = [
     {
       _type: 'author',
@@ -112,11 +111,11 @@ async function importAuthors() {
           children: [
             {
               _type: 'span',
-              text: 'Odborník na klimatizační systémy s více než 10 lety zkušeností.'
-            }
-          ]
-        }
-      ]
+              text: 'Odborník na klimatizační systémy s více než 10 lety zkušeností.',
+            },
+          ],
+        },
+      ],
     },
     {
       _type: 'author',
@@ -131,11 +130,11 @@ async function importAuthors() {
           children: [
             {
               _type: 'span',
-              text: 'Expertka na tepelná čerpadla a úsporné vytápění.'
-            }
-          ]
-        }
-      ]
+              text: 'Expertka na tepelná čerpadla a úsporné vytápění.',
+            },
+          ],
+        },
+      ],
     },
     {
       _type: 'author',
@@ -150,12 +149,12 @@ async function importAuthors() {
           children: [
             {
               _type: 'span',
-              text: 'Odborník na elektroinstalace a chytré domácnosti.'
-            }
-          ]
-        }
-      ]
-    }
+              text: 'Odborník na elektroinstalace a chytré domácnosti.',
+            },
+          ],
+        },
+      ],
+    },
   ]
 
   for (const author of authors) {
@@ -167,20 +166,21 @@ async function importAuthors() {
 // Products
 async function importProducts() {
   console.log('🛍️ Importing products...')
-  
+
   const products = [
     {
       _type: 'product',
       _id: 'daikin-emura-ftxj-ms',
       title: 'Daikin Emura FTXJ-MS',
       slug: { current: 'daikin-emura-ftxj-ms' },
-      description: 'Prémiová nástěnná klimatizace s elegantním designem a nejvyšší energetickou účinností.',
+      description:
+        'Prémiová nástěnná klimatizace s elegantním designem a nejvyšší energetickou účinností.',
       features: [
         'Energetická třída A+++',
         'Inverterová technologie',
         'Wi-Fi ovládání',
         'Tichý provoz 19 dB(A)',
-        '3D proudění vzduchu'
+        '3D proudění vzduchu',
       ],
       isRecommended: true,
       isBestSelling: true,
@@ -188,7 +188,7 @@ async function importProducts() {
       energyClass: 'A+++',
       brand: 'daikin',
       warranty: 5,
-      category: { _type: 'reference', _ref: 'klimatizace' }
+      category: { _type: 'reference', _ref: 'klimatizace' },
     },
     {
       _type: 'product',
@@ -201,14 +201,14 @@ async function importProducts() {
         '3D i-see senzor',
         'Plasma Quad filtr',
         'Rychlé chlazení',
-        'Automatické čištění'
+        'Automatické čištění',
       ],
       isBestSelling: true,
       catalogUrl: '/katalogy/mitsubishi-ln.pdf',
       energyClass: 'A++',
       brand: 'mitsubishi',
       warranty: 3,
-      category: { _type: 'reference', _ref: 'klimatizace' }
+      category: { _type: 'reference', _ref: 'klimatizace' },
     },
     {
       _type: 'product',
@@ -221,15 +221,15 @@ async function importProducts() {
         'Energetická třída A+++',
         'Dual Inverter technologie',
         'ThinQ aplikace',
-        'UV nano technologie'
+        'UV nano technologie',
       ],
       isBestSelling: true,
       catalogUrl: '/katalogy/lg-gallery.pdf',
       energyClass: 'A+++',
       brand: 'lg',
       warranty: 3,
-      category: { _type: 'reference', _ref: 'klimatizace' }
-    }
+      category: { _type: 'reference', _ref: 'klimatizace' },
+    },
   ]
 
   for (const product of products) {
@@ -241,14 +241,15 @@ async function importProducts() {
 // Blog Posts
 async function importBlogPosts() {
   console.log('📝 Importing blog posts...')
-  
+
   const posts = [
     {
       _type: 'post',
       _id: 'jak-vybrat-klimatizaci',
       title: 'Jak vybrat správnou klimatizaci pro váš domov',
       slug: { current: 'jak-vybrat-klimatizaci' },
-      excerpt: 'Kompletní průvodce výběrem klimatizace podle velikosti místnosti a energetické náročnosti.',
+      excerpt:
+        'Kompletní průvodce výběrem klimatizace podle velikosti místnosti a energetické náročnosti.',
       author: { _type: 'reference', _ref: 'jan-novak' },
       categories: [{ _type: 'reference', _ref: 'klimatizace' }],
       publishedAt: '2024-01-15T10:00:00Z',
@@ -260,11 +261,11 @@ async function importBlogPosts() {
           children: [
             {
               _type: 'span',
-              text: 'Výběr správné klimatizace je klíčový pro pohodlí vašeho domova. V tomto článku vám ukážeme, na co se zaměřit.'
-            }
-          ]
-        }
-      ]
+              text: 'Výběr správné klimatizace je klíčový pro pohodlí vašeho domova. V tomto článku vám ukážeme, na co se zaměřit.',
+            },
+          ],
+        },
+      ],
     },
     {
       _type: 'post',
@@ -282,11 +283,11 @@ async function importBlogPosts() {
           children: [
             {
               _type: 'span',
-              text: 'Přehled aktuálních dotačních programů pro tepelná čerpadla v roce 2024.'
-            }
-          ]
-        }
-      ]
+              text: 'Přehled aktuálních dotačních programů pro tepelná čerpadla v roce 2024.',
+            },
+          ],
+        },
+      ],
     },
     {
       _type: 'post',
@@ -304,12 +305,12 @@ async function importBlogPosts() {
           children: [
             {
               _type: 'span',
-              text: 'Jak připravit elektroinstalaci pro chytrou domácnost a na co nezapomenout.'
-            }
-          ]
-        }
-      ]
-    }
+              text: 'Jak připravit elektroinstalaci pro chytrou domácnost a na co nezapomenout.',
+            },
+          ],
+        },
+      ],
+    },
   ]
 
   for (const post of posts) {
@@ -321,7 +322,7 @@ async function importBlogPosts() {
 // Project References
 async function importProjectReferences() {
   console.log('🏆 Importing project references...')
-  
+
   const references = [
     {
       _type: 'projectReference',
@@ -336,7 +337,7 @@ async function importProjectReferences() {
       highlights: ['Multi-split systém', 'Tepelné čerpadlo', 'Rekuperace', 'Chytrá domácnost'],
       savings: '65% úspora nákladů',
       isFeatured: true,
-      isTopReference: true
+      isTopReference: true,
     },
     {
       _type: 'projectReference',
@@ -351,7 +352,7 @@ async function importProjectReferences() {
       highlights: ['VRV systém', 'Inteligentní řízení', 'Monitoring', 'Údržba 24/7'],
       savings: '40% snížení spotřeby',
       isFeatured: true,
-      isTopReference: true
+      isTopReference: true,
     },
     {
       _type: 'projectReference',
@@ -366,8 +367,8 @@ async function importProjectReferences() {
       highlights: ['Odolnost vlhkosti', 'Speciální filtrace', 'Tichý provoz', 'Úspora energie'],
       savings: '50% čerstvější vzduch',
       isFeatured: true,
-      isTopReference: true
-    }
+      isTopReference: true,
+    },
   ]
 
   for (const reference of references) {
@@ -379,7 +380,7 @@ async function importProjectReferences() {
 // FAQ
 async function importFAQ() {
   console.log('❓ Importing FAQ...')
-  
+
   const faqs = [
     {
       _type: 'faq',
@@ -391,14 +392,14 @@ async function importFAQ() {
           children: [
             {
               _type: 'span',
-              text: 'Standardní instalace klimatizace trvá 4-8 hodin v závislosti na složitosti instalace a typu jednotky.'
-            }
-          ]
-        }
+              text: 'Standardní instalace klimatizace trvá 4-8 hodin v závislosti na složitosti instalace a typu jednotky.',
+            },
+          ],
+        },
       ],
       category: 'klimatizace',
       order: 1,
-      isActive: true
+      isActive: true,
     },
     {
       _type: 'faq',
@@ -410,14 +411,14 @@ async function importFAQ() {
           children: [
             {
               _type: 'span',
-              text: 'Moderní klimatizace s inverterovou technologií spotřebují 0,5-2 kW/h v závislosti na výkonu a energetické třídě.'
-            }
-          ]
-        }
+              text: 'Moderní klimatizace s inverterovou technologií spotřebují 0,5-2 kW/h v závislosti na výkonu a energetické třídě.',
+            },
+          ],
+        },
       ],
       category: 'klimatizace',
       order: 2,
-      isActive: true
+      isActive: true,
     },
     {
       _type: 'faq',
@@ -429,15 +430,15 @@ async function importFAQ() {
           children: [
             {
               _type: 'span',
-              text: 'Tepelné čerpadlo může ušetřit až 60% nákladů na vytápění oproti klasickému plynovému kotli.'
-            }
-          ]
-        }
+              text: 'Tepelné čerpadlo může ušetřit až 60% nákladů na vytápění oproti klasickému plynovému kotli.',
+            },
+          ],
+        },
       ],
       category: 'tepelna-cerpadla',
       order: 1,
-      isActive: true
-    }
+      isActive: true,
+    },
   ]
 
   for (const faq of faqs) {
@@ -449,54 +450,56 @@ async function importFAQ() {
 // Hero Slides
 async function importHeroSlides() {
   console.log('🏆 Importing hero slides...')
-  
+
   const slides = [
     {
       _type: 'heroSlide',
       _id: 'hero-slide-1',
       title: 'Porucha elektřiny? Jsme u vás do 24 hodin.',
       subtitle: 'Vaše spolehlivá elektro pohotovost pro Opavu a okolí, 7 dní v týdnu.',
-      description: 'Nenechte se omezovat nefunkční zásuvkou nebo vypadlým jističem. Náš tým rychle a profesionálně vyřeší jakoukoliv drobnou poruchu elektroinstalace. Spolehlivě, bezpečně a bez zbytečného čekání.',
+      description:
+        'Nenechte se omezovat nefunkční zásuvkou nebo vypadlým jističem. Náš tým rychle a profesionálně vyřeší jakoukoliv drobnou poruchu elektroinstalace. Spolehlivě, bezpečně a bez zbytečného čekání.',
       bgImage: {
         _type: 'image',
         asset: {
           _type: 'reference',
-          _ref: 'image-elektroinstalace-1' // Reference to an image asset
-        }
+          _ref: 'image-elektroinstalace-1', // Reference to an image asset
+        },
       },
       slideType: 'intro',
       features: [
         'Rychlá reakce do 24 hodin',
         'Profesionální servis',
         '7 dní v týdnu',
-        'Opava a okolí'
+        'Opava a okolí',
       ],
       primaryButton: {
         text: 'Potřebuji rychlou opravu',
         link: '/kontakt',
-        isActive: true
+        isActive: true,
       },
       secondaryButton: {
         text: 'Zavolejte nám',
         link: 'tel:+420735014112',
-        isActive: true
+        isActive: true,
       },
       phoneNumber: '+420 735 014 112',
       order: 1,
-      isActive: true
+      isActive: true,
     },
     {
       _type: 'heroSlide',
       _id: 'hero-slide-2',
       title: 'Profesionální klimatizace a tepelná čerpadla',
       subtitle: 'Nadstandardní servis a montáž do 14 dnů',
-      description: 'Specializujeme se na instalaci klimatizací, tepelných čerpadel a rekuperačních systémů. Garantujeme kvalitu, spolehlivost a rychlou realizaci.',
+      description:
+        'Specializujeme se na instalaci klimatizací, tepelných čerpadel a rekuperačních systémů. Garantujeme kvalitu, spolehlivost a rychlou realizaci.',
       bgImage: {
         _type: 'image',
         asset: {
           _type: 'reference',
-          _ref: 'image-klimatizace-1' // Reference to an image asset
-        }
+          _ref: 'image-klimatizace-1', // Reference to an image asset
+        },
       },
       slideType: 'service',
       features: [
@@ -504,56 +507,57 @@ async function importHeroSlides() {
         '0% záloha na skladové zboží',
         'Platba po realizaci',
         'Servis do 7 dnů',
-        'Technická podpora 24/7'
+        'Technická podpora 24/7',
       ],
       primaryButton: {
         text: 'Nezávazná nabídka',
         link: '/kontakt',
-        isActive: true
+        isActive: true,
       },
       secondaryButton: {
         text: 'Zavolejte nám',
         link: 'tel:+420735014112',
-        isActive: true
+        isActive: true,
       },
       phoneNumber: '+420 735 014 112',
       order: 2,
-      isActive: true
+      isActive: true,
     },
     {
       _type: 'heroSlide',
       _id: 'hero-slide-3',
       title: 'Reference a realizace',
       subtitle: 'Podívejte se na naše úspěšné projekty',
-      description: 'Máme za sebou stovky spokojených zákazníků a úspěšných realizací. Naše práce mluví za nás.',
+      description:
+        'Máme za sebou stovky spokojených zákazníků a úspěšných realizací. Naše práce mluví za nás.',
       bgImage: {
         _type: 'image',
         asset: {
           _type: 'reference',
-          _ref: 'image-reference-1' // Reference to an image asset
-        }
+          _ref: 'image-reference-1', // Reference to an image asset
+        },
       },
       slideType: 'reference',
       features: [
         'Stovky spokojených zákazníků',
         'Profesionální realizace',
         'Garance kvality',
-        'Kompletní servis'
+        'Kompletní servis',
       ],
       primaryButton: {
         text: 'Zobrazit reference',
         link: '/reference',
-        isActive: true
+        isActive: true,
       },
       secondaryButton: {
         text: 'Kontaktujte nás',
         link: '/kontakt',
-        isActive: true
+        isActive: true,
       },
       phoneNumber: '+420 735 014 112',
       order: 3,
-      isActive: true
-    }
+      isActive: true,
+    },
   ]
 
   for (const slide of slides) {
@@ -565,7 +569,7 @@ async function importHeroSlides() {
 // Site Settings
 async function importSiteSettings() {
   console.log('⚙️ Importing site settings...')
-  
+
   const siteSettings = {
     _type: 'siteSettings',
     _id: 'siteSettings',
@@ -575,19 +579,19 @@ async function importSiteSettings() {
       phone: '+420 735 014 112',
       email: 'info@sferaprodomov.cz',
       address: 'Moravskoslezský kraj',
-      openingHours: 'Pondělí - Pátek: 8:00 - 20:00\nSobota: 9:00 - 16:00\nNeděle: Na zavolání'
+      openingHours: 'Pondělí - Pátek: 8:00 - 20:00\nSobota: 9:00 - 16:00\nNeděle: Na zavolání',
     },
     ratings: {
       googleRating: 4.9,
       googleReviews: 127,
       seznamRating: 4.8,
-      seznamReviews: 89
+      seznamReviews: 89,
     },
     companyInfo: {
       companyName: 'SFÉRA PRO DOMOV s.r.o.',
       ico: '12345678',
-      foundedYear: 2015
-    }
+      foundedYear: 2015,
+    },
   }
 
   await client.createOrReplace(siteSettings)
