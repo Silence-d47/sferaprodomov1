@@ -75,17 +75,13 @@ export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
         throw new Error('Chyba při odesílání do Google Sheets.')
       }
 
-      // 2. Uložení konverze lokálně (původní kód)
-      const success = saveConversion(data)
+      // 2. Uložení konverze lokálně (best-effort — neblokuje redirect)
+      saveConversion(data)
 
-      if (success) {
-        // Reset formuláře
-        formElement.reset()
-        onClose()
-        router.push('/dekujeme')
-      } else {
-        throw new Error('Nepodařilo se uložit konverzi lokálně.')
-      }
+      // 3. Redirect na děkovnou stránku
+      formElement.reset()
+      onClose()
+      router.push('/dekujeme')
     } catch (error) {
       console.error('Chyba při odesílání:', error)
       alert('Formulář se nepodařilo odeslat. Zkuste to prosím znovu.')

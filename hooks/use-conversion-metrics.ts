@@ -52,34 +52,44 @@ export function useConversionMetrics() {
     }
   }
 
-  // Uložení konverze do localStorage (pro demo účely)
-  // V produkci byste použili API endpoint nebo analytics službu
+  // Uložení konverze — každý krok běží nezávisle, selhání jednoho neblokuje ostatní.
+  // Vždy vrací true, aby se neblokoval redirect. Chyby se logují do console.error (Vercel error log).
   const saveConversion = (data: Omit<ConversionData, 'timestamp' | 'userAgent' | 'referrer'>) => {
-    try {
-      const conversionData: ConversionData = {
-        ...data,
-        timestamp: new Date(),
-        ...getReferrerInfo(),
-        ...getUTMParams(),
-      }
+    const conversionData: ConversionData = {
+      ...data,
+      timestamp: new Date(),
+      ...getReferrerInfo(),
+      ...getUTMParams(),
+    }
 
-      // Uložení do localStorage
+    // 1. Uložení do localStorage
+    try {
       const existingConversions = localStorage.getItem('sfera-conversions')
       const conversions = existingConversions ? JSON.parse(existingConversions) : []
       conversions.push(conversionData)
       localStorage.setItem('sfera-conversions', JSON.stringify(conversions))
-
-      // Uložení do sessionStorage pro aktuální session
-      sessionStorage.setItem('sfera-last-conversion', JSON.stringify(conversionData))
-
-      // Simulace odeslání do analytics (Google Analytics, Facebook Pixel, atd.)
-      trackAnalytics(conversionData)
-
-      return true
     } catch (error) {
-      console.error('Chyba při ukládání konverze:', error)
-      return false
+      console.error('[Sféra] Chyba při ukládání konverze do localStorage:', error)
     }
+
+    // 2. Uložení do sessionStorage
+    try {
+      sessionStorage.setItem('sfera-last-conversion', JSON.stringify(conversionData))
+    } catch (error) {
+      console.error('[Sféra] Chyba při ukládání konverze do sessionStorage:', error)
+    }
+
+    // 3. Odeslání do analytics (GA4, Facebook Pixel, GTM)
+    try {
+      trackAnalytics(conversionData)
+    } catch (error) {
+      console.error(
+        '[Sféra] Chyba při odesílání analytics — data formuláře byla odeslána, ale analytics tracking selhal:',
+        error,
+      )
+    }
+
+    return true
   }
 
   // Sledování v analytics službách
