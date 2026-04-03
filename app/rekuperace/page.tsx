@@ -9,6 +9,8 @@ import { Badge } from '@/components/ui/badge'
 import { ThemeProvider } from '@/components/theme-provider'
 
 import { groq } from 'next-sanity'
+import { serviceCatalogQuery } from '@/lib/sanity.queries'
+import { getCroppedImageUrl } from '@/lib/sanity.image-crops'
 import { CustomPortableText } from '@/lib/sanity.portableText'
 import { urlForImage } from '@/lib/sanity.image'
 import type { Image as SanityImage } from 'sanity'
@@ -100,10 +102,12 @@ interface Product {
   title: string
   description: string
   image: SanityImage | null
+  imageRef?: string
+  imageCrops?: Record<string, CropData>
   features: string[]
   isRecommended?: boolean
   isBestSelling?: boolean
-  catalogUrl?: string // Legacy field
+  catalogUrl?: string
   energyClass?: string
   specifications?: {
     powerRange?: { min?: number; max?: number }
@@ -131,11 +135,15 @@ type FaqEntry = {
   answer: PortableTextBlock[]
 }
 
+type CropData = { x: number; y: number; width: number; height: number }
+
 type ReferenceCard = {
   id: string
   title: string
   description: string
   image: string
+  imageRef?: string
+  deviceCrops?: Record<string, CropData>
   category: string
   location?: string
   isTopReference?: boolean
@@ -155,6 +163,8 @@ const referencesQuery = groq`
     title,
     description,
     "image": image.asset->url,
+    "imageRef": image.asset._ref,
+    "deviceCrops": image.deviceCrops,
     category,
     location,
     isTopReference
@@ -165,12 +175,14 @@ export default async function RekuperacePage() {
   // Import Sanity client inside the component
   const { client } = await import('@/lib/sanity.client')
 
-  const [products, faqs, references] = await Promise.all([
+  const [products, faqs, references, catalog] = await Promise.all([
     client.fetch<Product[]>(`*[_type == "product" && category->slug.current == "rekuperace"] {
       _id,
       title,
       description,
       image,
+      "imageRef": image.asset._ref,
+      "imageCrops": image.deviceCrops,
       features,
       isRecommended,
       isBestSelling,
@@ -189,6 +201,9 @@ export default async function RekuperacePage() {
     }`),
     client.fetch<FaqEntry[]>(faqsQuery),
     client.fetch<ReferenceCard[]>(referencesQuery),
+    client.fetch<{ title: string; fileUrl: string } | null>(serviceCatalogQuery, {
+      service: 'rekuperace',
+    }),
   ])
 
   const leftDynamicFaqs: FaqEntry[] = []
@@ -342,7 +357,13 @@ export default async function RekuperacePage() {
                     key={product._id}
                     title={product.title}
                     description={product.description}
-                    image={product.image ? urlForImage(product.image).url() : ''}
+                    image={
+                      getCroppedImageUrl(
+                        { ref: product.imageRef, deviceCrops: product.imageCrops },
+                        'card',
+                        600,
+                      ) || (product.image ? urlForImage(product.image).url() : '')
+                    }
                     features={product.features || []}
                     isRecommended={product.isRecommended}
                     isBestSelling={product.isBestSelling}
@@ -366,13 +387,15 @@ export default async function RekuperacePage() {
                 </div>
               )}
             </div>
-            <div className="mt-8 md:mt-16 text-center">
-              <PDFDownloadButton
-                url="/katalogy/rekuperace-kompletni-katalog.pdf"
-                filename="sfera-rekuperace-katalog.pdf"
-                title="Stáhnout kompletní katalog"
-              />
-            </div>
+            {catalog?.fileUrl && (
+              <div className="mt-8 md:mt-16 text-center">
+                <PDFDownloadButton
+                  url={catalog.fileUrl}
+                  filename="sfera-rekuperace-katalog.pdf"
+                  title={catalog.title || 'Stáhnout kompletní katalog'}
+                />
+              </div>
+            )}
           </div>
         </section>
 
@@ -432,7 +455,15 @@ export default async function RekuperacePage() {
                   >
                     <div className="relative w-full overflow-hidden aspect-[5/4]">
                       <Image
-                        src={ref.image || '/placeholder.svg'}
+                        src={
+                          getCroppedImageUrl(
+                            { url: ref.image, ref: ref.imageRef, deviceCrops: ref.deviceCrops },
+                            'slider',
+                            600,
+                          ) ||
+                          ref.image ||
+                          '/placeholder.svg'
+                        }
                         alt={ref.title}
                         fill
                         className="object-cover rounded-t-xl md:rounded-t-2xl"

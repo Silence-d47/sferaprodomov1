@@ -9,7 +9,8 @@ import { ProductCard } from '@/components/ui/product-card'
 import { PDFDownloadButton } from '@/components/ui/pdf-download-button'
 import { groq } from 'next-sanity'
 import { urlForImage } from '@/lib/sanity.image'
-import { productsByCategoryWithFilesQuery } from '@/lib/sanity.queries'
+import { productsByCategoryWithFilesQuery, serviceCatalogQuery } from '@/lib/sanity.queries'
+import { getCroppedImageUrl } from '@/lib/sanity.image-crops'
 import type { Image as SanityImage } from 'sanity'
 import type { PortableTextBlock } from '@portabletext/types'
 import {
@@ -30,10 +31,12 @@ interface Product {
   title: string
   description: string
   image: SanityImage | null
+  imageRef?: string
+  imageCrops?: Record<string, CropData>
   features: string[]
   isRecommended?: boolean
   isBestSelling?: boolean
-  catalogUrl?: string // Legacy field
+  catalogUrl?: string
   energyClass?: string
   specifications?: {
     powerRange?: { min?: number; max?: number }
@@ -58,11 +61,15 @@ interface Product {
 
 // Používáme importovaný dotaz z sanity.queries.ts
 
+type CropData = { x: number; y: number; width: number; height: number }
+
 type ReferenceCard = {
   id: string
   title: string
   description: string
   image: string
+  imageRef?: string
+  deviceCrops?: Record<string, CropData>
   category: string
   location?: string
   isTopReference?: boolean
@@ -74,6 +81,8 @@ const referencesQuery = groq`
     title,
     description,
     "image": image.asset->url,
+    "imageRef": image.asset._ref,
+    "deviceCrops": image.deviceCrops,
     category,
     location,
     isTopReference
@@ -171,10 +180,13 @@ export default async function KlimatizacePageRefined() {
   // Import Sanity client inside the component
   const { client } = await import('@/lib/sanity.client')
 
-  const [products, references, faqs] = await Promise.all([
+  const [products, references, faqs, catalog] = await Promise.all([
     client.fetch<Product[]>(productsByCategoryWithFilesQuery, { category: 'klimatizace' }),
     client.fetch<ReferenceCard[]>(referencesQuery),
     client.fetch<FaqEntry[]>(faqsQuery),
+    client.fetch<{ title: string; fileUrl: string } | null>(serviceCatalogQuery, {
+      service: 'klimatizace',
+    }),
   ])
 
   const leftDynamicFaqs: FaqEntry[] = []
@@ -335,7 +347,13 @@ export default async function KlimatizacePageRefined() {
                   key={product._id}
                   title={product.title}
                   description={product.description}
-                  image={product.image ? urlForImage(product.image).url() : ''}
+                  image={
+                    getCroppedImageUrl(
+                      { ref: product.imageRef, deviceCrops: product.imageCrops },
+                      'card',
+                      600,
+                    ) || (product.image ? urlForImage(product.image).url() : '')
+                  }
                   features={product.features || []}
                   isRecommended={product.isRecommended}
                   isBestSelling={product.isBestSelling}
@@ -349,13 +367,15 @@ export default async function KlimatizacePageRefined() {
                 />
               ))}
             </div>
-            <div className="mt-8 md:mt-16 text-center">
-              <PDFDownloadButton
-                url="/katalogy/klimatizace-kompletni-katalog.pdf"
-                filename="sfera-klimatizace-katalog.pdf"
-                title="Stáhnout kompletní katalog všech modelů"
-              />
-            </div>
+            {catalog?.fileUrl && (
+              <div className="mt-8 md:mt-16 text-center">
+                <PDFDownloadButton
+                  url={catalog.fileUrl}
+                  filename="sfera-klimatizace-katalog.pdf"
+                  title={catalog.title || 'Stáhnout kompletní katalog'}
+                />
+              </div>
+            )}
           </div>
         </section>
 
@@ -411,7 +431,17 @@ export default async function KlimatizacePageRefined() {
 
             <div className="rounded-3xl bg-white/60 p-2 shadow-2xl shadow-slate-900/10 ring-1 ring-gray-200 backdrop-blur-md">
               {references && references.length > 0 ? (
-                <ReferenceSlider references={references} />
+                <ReferenceSlider
+                  references={references.map((r) => ({
+                    ...r,
+                    image:
+                      getCroppedImageUrl(
+                        { url: r.image, ref: r.imageRef, deviceCrops: r.deviceCrops },
+                        'slider',
+                        600,
+                      ) || r.image,
+                  }))}
+                />
               ) : (
                 <div className="text-center py-12 text-muted-foreground">
                   Zatím nemáme zveřejněné realizace v této kategorii.
