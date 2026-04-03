@@ -4,21 +4,21 @@ export const structure: StructureResolver = (S) =>
   S.list()
     .title('Content')
     .items([
-      // Posts
+      // Blog
       S.listItem()
-        .title('Posts')
+        .title('Blog')
         .child(
           S.list()
-            .title('Posts')
+            .title('Blog')
             .items([
               S.listItem()
-                .title('All Posts')
-                .child(S.documentList().title('All Posts').filter('_type == "post"')),
+                .title('Všechny články')
+                .child(S.documentList().title('Všechny články').filter('_type == "post"')),
               S.listItem()
-                .title('Posts by Category')
+                .title('Články podle kategorie')
                 .child(
                   S.documentTypeList('category')
-                    .title('Posts by Category')
+                    .title('Články podle kategorie')
                     .child((categoryId) =>
                       S.documentList()
                         .title('Posts')
@@ -30,18 +30,18 @@ export const structure: StructureResolver = (S) =>
         ),
       // Authors
       S.listItem()
-        .title('Authors')
-        .child(S.documentList().title('Authors').filter('_type == "author"')),
+        .title('Autoři')
+        .child(S.documentList().title('Autoři').filter('_type == "author"')),
       // Categories
       S.listItem()
-        .title('Categories')
-        .child(S.documentList().title('Categories').filter('_type == "category"')),
+        .title('Kategorie')
+        .child(S.documentList().title('Kategorie').filter('_type == "category"')),
       // References
       S.listItem()
-        .title('Projektová reference')
+        .title('Reference')
         .child(
           S.list()
-            .title('Projektová reference')
+            .title('Reference')
             .items([
               S.listItem()
                 .title('Všechny reference')
