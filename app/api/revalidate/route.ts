@@ -1,16 +1,21 @@
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { type NextRequest, NextResponse } from 'next/server'
 
+const SLUG_PATTERN = /^[a-z0-9-]+$/
+
 const TAG_MAP: Record<string, string[]> = {
   projectReference: ['references'],
   post: ['posts'],
   product: ['products'],
-  serviceCatalog: ['products'],
   heroSlide: ['hero'],
   referencePageSettings: ['references'],
 }
 
 export async function POST(req: NextRequest) {
+  if (!process.env.SANITY_REVALIDATE_SECRET) {
+    return NextResponse.json({ message: 'Server misconfigured' }, { status: 500 })
+  }
+
   const secret = req.headers.get('x-sanity-webhook-secret')
   if (secret !== process.env.SANITY_REVALIDATE_SECRET) {
     return NextResponse.json({ message: 'Invalid secret' }, { status: 401 })
@@ -28,17 +33,21 @@ export async function POST(req: NextRequest) {
     revalidateTag(tag)
   }
 
-  // Also revalidate specific paths for immediate effect
+  const slug = body?.slug?.current
+  const validSlug = typeof slug === 'string' && SLUG_PATTERN.test(slug) ? slug : null
+
   if (docType === 'projectReference') {
     revalidatePath('/reference')
-    if (body?.slug?.current) {
-      revalidatePath(`/reference/${body.slug.current}`)
+    if (validSlug) {
+      revalidatePath(`/reference/${validSlug}`)
     }
   } else if (docType === 'post') {
     revalidatePath('/blog')
-    if (body?.slug?.current) {
-      revalidatePath(`/blog/${body.slug.current}`)
+    if (validSlug) {
+      revalidatePath(`/blog/${validSlug}`)
     }
+  } else if (docType === 'referencePageSettings') {
+    revalidatePath('/reference')
   }
 
   return NextResponse.json({ revalidated: true, tags, now: Date.now() })

@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import { defineField, defineType } from 'sanity'
 
 export default defineType({
   name: 'category',
@@ -30,13 +30,27 @@ export default defineType({
       type: 'string',
       options: {
         list: [
-          {title: 'Modrá', value: 'blue'},
-          {title: 'Zelená', value: 'green'},
-          {title: 'Fialová', value: 'purple'},
-          {title: 'Oranžová', value: 'orange'},
-          {title: 'Červená', value: 'red'},
-          {title: 'Žlutá', value: 'yellow'},
+          { title: 'Modrá', value: 'blue' },
+          { title: 'Zelená', value: 'green' },
+          { title: 'Fialová', value: 'purple' },
+          { title: 'Oranžová', value: 'orange' },
+          { title: 'Červená', value: 'red' },
+          { title: 'Žlutá', value: 'yellow' },
         ],
+      },
+    }),
+    defineField({
+      name: 'catalogButtonText',
+      title: 'Text tlačítka katalogu',
+      description: 'Např. "Stáhnout kompletní katalog klimatizací"',
+      type: 'string',
+    }),
+    defineField({
+      name: 'catalogFile',
+      title: 'PDF katalog',
+      type: 'file',
+      options: {
+        accept: '.pdf',
       },
     }),
   ],

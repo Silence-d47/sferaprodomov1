@@ -1,5 +1,21 @@
 import { groq } from 'next-sanity'
 
+// Shared GROQ projection for body blocks with image and YouTube support
+export const bodyProjection = `"body": body[]{
+    ...,
+    _type == "image" => {
+      ...,
+      "url": asset->url
+    },
+    _type == "youtube" => {
+      ...,
+      "posterImage": posterImage{
+        ...,
+        "url": asset->url
+      }
+    }
+  }`
+
 export const heroSlidesQuery = groq`
   *[_type == "heroSlide" && isActive == true] | order(order asc) {
     "id": _id,
@@ -38,7 +54,8 @@ export const postsQuery = groq`
     "author": author->name,
     "categories": categories[]->title,
     excerpt,
-    readingTime
+    readingTime,
+    subtitle
   }
 `
 
@@ -53,20 +70,7 @@ export const postQuery = groq`
     "author": author->name,
     "categories": categories[]->title,
     excerpt,
-    "body": body[]{
-      ...,
-      _type == "image" => {
-        ...,
-        "url": asset->url
-      },
-      _type == "youtube" => {
-        ...,
-        "posterImage": posterImage{
-          ...,
-          "url": asset->url
-        }
-      }
-    },
+    ${bodyProjection},
     readingTime,
     keywords,
     seo
@@ -140,46 +144,6 @@ export const featuredReferencesQuery = groq`
     savings,
     isFeatured,
     isTopReference,
-    _createdAt
-  }
-`
-
-export const referenceBySlugQuery = groq`
-  *[_type == "projectReference" && slug.current == $slug][0] {
-    _id,
-    title,
-    subtitle,
-    slug,
-    description,
-    "image": image.asset->url,
-    youtubeUrl,
-    "gallery": gallery[]{
-      "url": asset->url,
-      "alt": alt
-    },
-    "body": body[]{
-      ...,
-      _type == "image" => {
-        ...,
-        "url": asset->url
-      },
-      _type == "youtube" => {
-        ...,
-        "posterImage": posterImage{
-          ...,
-          "url": asset->url
-        }
-      }
-    },
-    category,
-    location,
-    year,
-    rating,
-    highlights,
-    savings,
-    isFeatured,
-    isTopReference,
-    seo,
     _createdAt
   }
 `
@@ -273,10 +237,10 @@ export const productsByCategoryWithFilesQuery = groq`
   }
 `
 
-// Service catalog (PDF downloads per service)
+// Service catalog (PDF download from category)
 export const serviceCatalogQuery = groq`
-  *[_type == "serviceCatalog" && service == $service][0]{
-    title,
+  *[_type == "category" && slug.current == $service][0]{
+    "title": catalogButtonText,
     "fileUrl": catalogFile.asset->url
   }
 `

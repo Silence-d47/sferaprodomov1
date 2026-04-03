@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { serverClient } from '@/lib/sanity.client'
+import { bodyProjection } from '@/lib/sanity.queries'
+import { BASE_URL } from '@/lib/constants'
 import { groq } from 'next-sanity'
 import ReferenceDetail from './reference-detail'
 import type { ReferenceData } from './reference-detail'
-
-const BASE_URL = 'https://www.sfera-domov.cz'
 
 export const revalidate = 3600
 
@@ -14,20 +14,7 @@ const referenceQuery = groq`
     title,
     subtitle,
     description,
-    "body": body[]{
-      ...,
-      _type == "image" => {
-        ...,
-        "url": asset->url
-      },
-      _type == "youtube" => {
-        ...,
-        "posterImage": posterImage{
-          ...,
-          "url": asset->url
-        }
-      }
-    },
+    ${bodyProjection},
     category,
     location,
     year,

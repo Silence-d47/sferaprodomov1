@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
@@ -61,6 +61,16 @@ interface Props {
   heroVideo: HeroVideo | null
 }
 
+const CATEGORY_STYLES: Record<string, { bg: string; text: string }> = {
+  klimatizace: { bg: 'bg-blue-50', text: 'text-blue-600' },
+  'tepelna-cerpadla': { bg: 'bg-green-50', text: 'text-green-600' },
+  rekuperace: { bg: 'bg-purple-50', text: 'text-purple-600' },
+  elektroinstalace: { bg: 'bg-orange-50', text: 'text-orange-600' },
+}
+
+const getCategoryStyle = (category: string) =>
+  CATEGORY_STYLES[category] ?? { bg: 'bg-gray-50', text: 'text-gray-700' }
+
 const CustomPrevArrow = ({ onClick }: { onClick?: () => void }) => (
   <button
     onClick={onClick}
@@ -81,24 +91,6 @@ const CustomNextArrow = ({ onClick }: { onClick?: () => void }) => (
 
 export function ReferenceClient({ featuredReferences, otherReferences, heroVideo }: Props) {
   const [currentSlide, setCurrentSlide] = useState(0)
-
-  const categoryStyles = useMemo(() => {
-    return (category: string) => {
-      switch (category) {
-        case 'Klimatizace':
-          return { bg: 'bg-blue-50', text: 'text-blue-600' }
-        case 'Tepelná čerpadla':
-        case 'tepelna-cerpadla':
-          return { bg: 'bg-green-50', text: 'text-green-600' }
-        case 'Rekuperace':
-          return { bg: 'bg-purple-50', text: 'text-purple-600' }
-        case 'Elektroinstalace':
-          return { bg: 'bg-orange-50', text: 'text-orange-600' }
-        default:
-          return { bg: 'bg-gray-50', text: 'text-gray-700' }
-      }
-    }
-  }, [])
 
   const carouselSettings = {
     dots: true,
@@ -394,7 +386,7 @@ export function ReferenceClient({ featuredReferences, otherReferences, heroVideo
 
                           <div className="p-8 lg:p-10 flex flex-col justify-center">
                             <Badge
-                              className={`${categoryStyles(reference.category).bg} ${categoryStyles(reference.category).text} border-0 mb-4 w-fit`}
+                              className={`${getCategoryStyle(reference.category).bg} ${getCategoryStyle(reference.category).text} border-0 mb-4 w-fit`}
                             >
                               {reference.category}
                             </Badge>
@@ -473,7 +465,7 @@ export function ReferenceClient({ featuredReferences, otherReferences, heroVideo
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                   <div className="absolute top-3 left-3">
                     <Badge
-                      className={`${categoryStyles(reference.category).bg} ${categoryStyles(reference.category).text} border-0 text-xs`}
+                      className={`${getCategoryStyle(reference.category).bg} ${getCategoryStyle(reference.category).text} border-0 text-xs`}
                     >
                       {reference.category}
                     </Badge>

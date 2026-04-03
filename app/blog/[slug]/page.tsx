@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { serverClient } from '@/lib/sanity.client'
+import { bodyProjection, postsQuery } from '@/lib/sanity.queries'
+import { BASE_URL } from '@/lib/constants'
 import { groq } from 'next-sanity'
 import BlogPostDetail from './blog-post-detail'
 import type { PostData } from './blog-post-detail'
-
-const BASE_URL = 'https://www.sfera-domov.cz'
 
 export const revalidate = 3600
 
@@ -22,40 +22,10 @@ const postDetailQuery = groq`
     "author": author->name,
     "categories": categories[]->title,
     excerpt,
-    "body": body[]{
-      ...,
-      _type == "image" => {
-        ...,
-        "url": asset->url
-      },
-      _type == "youtube" => {
-        ...,
-        "posterImage": posterImage{
-          ...,
-          "url": asset->url
-        }
-      }
-    },
+    ${bodyProjection},
     readingTime,
     keywords,
     seo
-  }
-`
-
-const allPostsQuery = groq`
-  *[_type == "post" && defined(publishedAt)] | order(publishedAt desc) {
-    _id,
-    title,
-    subtitle,
-    slug,
-    publishedAt,
-    "mainImage": mainImage.asset->url,
-    "mainImageRef": mainImage.asset._ref,
-    "mainImageCrops": mainImage.deviceCrops,
-    "author": author->name,
-    "categories": categories[]->title,
-    excerpt,
-    readingTime
   }
 `
 
@@ -95,7 +65,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   const [post, allPosts] = await Promise.all([
     serverClient.fetch<PostData | null>(postDetailQuery, { slug }, fetchOpts),
-    serverClient.fetch<PostData[]>(allPostsQuery, {}, fetchOpts),
+    serverClient.fetch<PostData[]>(postsQuery, {}, fetchOpts),
   ])
 
   if (!post) {

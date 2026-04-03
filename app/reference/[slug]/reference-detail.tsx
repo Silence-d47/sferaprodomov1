@@ -88,7 +88,7 @@ export default function ReferenceDetail({ reference }: Props) {
       <section className="relative h-[700px] overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600">
         <div className="absolute inset-0">
           <Image
-            src="/images/hero_reference.jpg"
+            src="/images/hero_reference.png"
             alt="Reference Hero"
             fill
             className="object-cover opacity-20"
@@ -249,7 +249,7 @@ export default function ReferenceDetail({ reference }: Props) {
                 )}
               </div>
 
-              <div className="lg:sticky lg:top-8">
+              <div className="lg:sticky lg:top-[160px]">
                 {reference.youtubeUrl ? (
                   <YouTubePlayer youtubeUrl={reference.youtubeUrl} title={reference.title} />
                 ) : (

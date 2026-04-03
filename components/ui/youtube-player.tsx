@@ -72,7 +72,7 @@ interface YouTubePlayerProps {
   title?: string
 }
 
-export function YouTubePlayer({ youtubeUrl, title: _title = 'Video' }: YouTubePlayerProps) {
+export function YouTubePlayer({ youtubeUrl, title = 'Video' }: YouTubePlayerProps) {
   const wrapperRef = useRef<HTMLDivElement>(null)
   const playerDivRef = useRef<HTMLDivElement>(null)
   const playerRef = useRef<YTPlayer | null>(null)
@@ -179,7 +179,7 @@ export function YouTubePlayer({ youtubeUrl, title: _title = 'Video' }: YouTubePl
           <button
             onClick={toggleFullscreen}
             className="absolute bottom-4 right-4 z-10 p-2.5 bg-black/50 hover:bg-black/70 rounded-full text-white backdrop-blur-sm transition-colors"
-            aria-label="Celá obrazovka"
+            aria-label={`${title} - Celá obrazovka`}
           >
             <Maximize className="w-5 h-5" />
           </button>
