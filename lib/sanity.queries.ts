@@ -33,6 +33,8 @@ export const postsQuery = groq`
     slug,
     publishedAt,
     "mainImage": mainImage.asset->url,
+    "mainImageRef": mainImage.asset._ref,
+    "mainImageCrops": mainImage.deviceCrops,
     "author": author->name,
     "categories": categories[]->title,
     excerpt,
@@ -44,6 +46,7 @@ export const postQuery = groq`
   *[_type == "post" && slug.current == $slug][0] {
     _id,
     title,
+    subtitle,
     slug,
     publishedAt,
     "mainImage": mainImage.asset->url,
@@ -55,10 +58,18 @@ export const postQuery = groq`
       _type == "image" => {
         ...,
         "url": asset->url
+      },
+      _type == "youtube" => {
+        ...,
+        "posterImage": posterImage{
+          ...,
+          "url": asset->url
+        }
       }
     },
     readingTime,
-    keywords
+    keywords,
+    seo
   }
 `
 
@@ -85,9 +96,12 @@ export const projectReferencesQuery = groq`
   *[_type == "projectReference"] | order(_createdAt desc) {
     _id,
     title,
+    subtitle,
     slug,
     description,
     "image": image.asset->url,
+    "imageRef": image.asset._ref,
+    "deviceCrops": image.deviceCrops,
     "gallery": gallery[]{
       "url": asset->url,
       "alt": alt
@@ -108,9 +122,12 @@ export const featuredReferencesQuery = groq`
   *[_type == "projectReference" && isTopReference == true] | order(_createdAt desc)[0...6] {
     _id,
     title,
+    subtitle,
     slug,
     description,
     "image": image.asset->url,
+    "imageRef": image.asset._ref,
+    "deviceCrops": image.deviceCrops,
     "gallery": gallery[]{
       "url": asset->url,
       "alt": alt
@@ -131,12 +148,28 @@ export const referenceBySlugQuery = groq`
   *[_type == "projectReference" && slug.current == $slug][0] {
     _id,
     title,
+    subtitle,
     slug,
     description,
     "image": image.asset->url,
+    youtubeUrl,
     "gallery": gallery[]{
       "url": asset->url,
       "alt": alt
+    },
+    "body": body[]{
+      ...,
+      _type == "image" => {
+        ...,
+        "url": asset->url
+      },
+      _type == "youtube" => {
+        ...,
+        "posterImage": posterImage{
+          ...,
+          "url": asset->url
+        }
+      }
     },
     category,
     location,
@@ -146,6 +179,7 @@ export const referenceBySlugQuery = groq`
     savings,
     isFeatured,
     isTopReference,
+    seo,
     _createdAt
   }
 `
@@ -168,6 +202,8 @@ export const productsByCategoryQuery = groq`
     title,
     description,
     image,
+    "imageRef": image.asset._ref,
+    "imageCrops": image.deviceCrops,
     features,
     isRecommended,
     isBestSelling,
@@ -217,6 +253,8 @@ export const productsByCategoryWithFilesQuery = groq`
     title,
     description,
     image,
+    "imageRef": image.asset._ref,
+    "imageCrops": image.deviceCrops,
     features,
     isRecommended,
     isBestSelling,
@@ -232,5 +270,13 @@ export const productsByCategoryWithFilesQuery = groq`
       fileType,
       "fileUrl": file.asset->url
     }
+  }
+`
+
+// Service catalog (PDF downloads per service)
+export const serviceCatalogQuery = groq`
+  *[_type == "serviceCatalog" && service == $service][0]{
+    title,
+    "fileUrl": catalogFile.asset->url
   }
 `
