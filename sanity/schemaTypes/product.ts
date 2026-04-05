@@ -180,15 +180,13 @@ export default defineType({
       initialValue: 2,
     }),
 
-    // --- ZDE JE TA ZMĚNA ---
     defineField({
       name: 'brand',
       title: 'Značka',
-      type: 'reference', // Změna z 'string' na 'reference'
-      to: [{ type: 'brand' }], // Říkáme, že se odkazujeme na náš nový typ 'brand'
+      type: 'reference',
+      to: [{ type: 'brand' }],
       validation: (Rule) => Rule.required(),
     }),
-    // --- KONEC ZMĚNY ---
 
     defineField({
       name: 'seo',
@@ -212,7 +210,7 @@ export default defineType({
   preview: {
     select: {
       title: 'title',
-      subtitle: 'brand.title', // Musíme se proklikat k názvu značky
+      subtitle: 'brand.title',
       media: 'image',
     },
   },

@@ -1,4 +1,3 @@
-// Importy inspirované moderním designem
 import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
@@ -9,6 +8,7 @@ import { Badge } from '@/components/ui/badge'
 import { ThemeProvider } from '@/components/theme-provider'
 
 import { groq } from 'next-sanity'
+import { serverClient } from '@/lib/sanity.client'
 import { serviceCatalogQuery } from '@/lib/sanity.queries'
 import { getCroppedImageUrl } from '@/lib/sanity.image-crops'
 import { CustomPortableText } from '@/lib/sanity.portableText'
@@ -29,8 +29,6 @@ import {
   Factory,
   Wrench,
 } from 'lucide-react'
-
-// Import pro dynamické barvy
 
 // Důvody, proč si vybrat rekuperaci (v novém stylu)
 const whyChooseUs = [
@@ -171,12 +169,14 @@ const referencesQuery = groq`
   }
 `
 
+export const revalidate = 3600
+
 export default async function RekuperacePage() {
-  // Import Sanity client inside the component
-  const { client } = await import('@/lib/sanity.client')
+  const fetchOpts = { next: { tags: ['products', 'references'] } }
 
   const [products, faqs, references, catalog] = await Promise.all([
-    client.fetch<Product[]>(`*[_type == "product" && category->slug.current == "rekuperace"] {
+    serverClient.fetch<Product[]>(
+      `*[_type == "product" && category->slug.current == "rekuperace"] {
       _id,
       title,
       description,
@@ -198,12 +198,17 @@ export default async function RekuperacePage() {
         fileType,
         "fileUrl": file.asset->url
       }
-    }`),
-    client.fetch<FaqEntry[]>(faqsQuery),
-    client.fetch<ReferenceCard[]>(referencesQuery),
-    client.fetch<{ title: string; fileUrl: string } | null>(serviceCatalogQuery, {
-      service: 'rekuperace',
-    }),
+    }`,
+      {},
+      fetchOpts,
+    ),
+    serverClient.fetch<FaqEntry[]>(faqsQuery, {}, fetchOpts),
+    serverClient.fetch<ReferenceCard[]>(referencesQuery, {}, fetchOpts),
+    serverClient.fetch<{ title: string; fileUrl: string } | null>(
+      serviceCatalogQuery,
+      { service: 'rekuperace' },
+      fetchOpts,
+    ),
   ])
 
   const leftDynamicFaqs: FaqEntry[] = []

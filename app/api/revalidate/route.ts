@@ -7,6 +7,7 @@ const TAG_MAP: Record<string, string[]> = {
   projectReference: ['references'],
   post: ['posts'],
   product: ['products'],
+  category: ['products'],
   heroSlide: ['hero'],
   referencePageSettings: ['references'],
 }
@@ -48,6 +49,11 @@ export async function POST(req: NextRequest) {
     }
   } else if (docType === 'referencePageSettings') {
     revalidatePath('/reference')
+  } else if (docType === 'category') {
+    revalidatePath('/klimatizace')
+    revalidatePath('/rekuperace')
+    revalidatePath('/tepelna-cerpadla')
+    revalidatePath('/elektroinstalace')
   }
 
   return NextResponse.json({ revalidated: true, tags, now: Date.now() })

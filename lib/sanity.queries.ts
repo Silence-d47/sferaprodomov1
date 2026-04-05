@@ -210,7 +210,6 @@ export const referenceHeroVideoQuery = groq`
   }
 `
 
-// Správný způsob pro získání URL souboru v Sanity
 export const productsByCategoryWithFilesQuery = groq`
   *[_type == "product" && category->slug.current == $category] {
     _id,

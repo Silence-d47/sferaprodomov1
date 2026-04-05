@@ -8,6 +8,7 @@ import { ReferenceSlider } from '@/components/ui/reference-slider'
 import { ProductCard } from '@/components/ui/product-card'
 import { PDFDownloadButton } from '@/components/ui/pdf-download-button'
 import { groq } from 'next-sanity'
+import { serverClient } from '@/lib/sanity.client'
 import { urlForImage } from '@/lib/sanity.image'
 import { productsByCategoryWithFilesQuery, serviceCatalogQuery } from '@/lib/sanity.queries'
 import { getCroppedImageUrl } from '@/lib/sanity.image-crops'
@@ -58,8 +59,6 @@ interface Product {
     fileType: string
   }>
 }
-
-// Používáme importovaný dotaz z sanity.queries.ts
 
 type CropData = { x: number; y: number; width: number; height: number }
 
@@ -176,17 +175,24 @@ const acTypes = [
   },
 ]
 
+export const revalidate = 3600
+
 export default async function KlimatizacePageRefined() {
-  // Import Sanity client inside the component
-  const { client } = await import('@/lib/sanity.client')
+  const fetchOpts = { next: { tags: ['products', 'references'] } }
 
   const [products, references, faqs, catalog] = await Promise.all([
-    client.fetch<Product[]>(productsByCategoryWithFilesQuery, { category: 'klimatizace' }),
-    client.fetch<ReferenceCard[]>(referencesQuery),
-    client.fetch<FaqEntry[]>(faqsQuery),
-    client.fetch<{ title: string; fileUrl: string } | null>(serviceCatalogQuery, {
-      service: 'klimatizace',
-    }),
+    serverClient.fetch<Product[]>(
+      productsByCategoryWithFilesQuery,
+      { category: 'klimatizace' },
+      fetchOpts,
+    ),
+    serverClient.fetch<ReferenceCard[]>(referencesQuery, {}, fetchOpts),
+    serverClient.fetch<FaqEntry[]>(faqsQuery, {}, fetchOpts),
+    serverClient.fetch<{ title: string; fileUrl: string } | null>(
+      serviceCatalogQuery,
+      { service: 'klimatizace' },
+      fetchOpts,
+    ),
   ])
 
   const leftDynamicFaqs: FaqEntry[] = []
