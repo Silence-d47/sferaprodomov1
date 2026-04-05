@@ -7,7 +7,7 @@
   },
   "scripts": {
     "build": "next build",
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "lint": "eslint .",
     "start": "next start",
     "format": "prettier --write .",
@@ -81,6 +81,7 @@
     "react-dom": "^19",
     "react-hook-form": "^7.54.1",
     "react-hot-toast": "^2.6.0",
+    "react-image-crop": "^11.0.10",
     "react-resizable-panels": "^2.1.7",
     "react-slick": "^0.30.3",
     "recharts": "2.15.0",

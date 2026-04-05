@@ -22,9 +22,12 @@ import {
 } from 'lucide-react'
 import { client } from '@/lib/sanity.client'
 import { postsQuery, categoriesQuery } from '@/lib/sanity.queries'
+import { getCroppedImageUrl } from '@/lib/sanity.image-crops'
 import { EnhancedSectionDivider } from '@/components/ui/enhanced-section-divider'
 import { useState, useEffect, useMemo } from 'react'
-// Types
+
+type CropData = { x: number; y: number; width: number; height: number }
+
 interface Post {
   _id: string
   title: string
@@ -34,6 +37,8 @@ interface Post {
   author: string
   publishedAt: string
   mainImage: string | null
+  mainImageRef?: string
+  mainImageCrops?: Record<string, CropData>
   readingTime?: number
 }
 
@@ -354,7 +359,19 @@ export default function BlogPage() {
                   >
                     <div className="relative overflow-hidden aspect-[4/3]">
                       <Image
-                        src={post.mainImage ?? '/placeholder.svg'}
+                        src={
+                          getCroppedImageUrl(
+                            {
+                              url: post.mainImage ?? undefined,
+                              ref: post.mainImageRef,
+                              deviceCrops: post.mainImageCrops,
+                            },
+                            'card',
+                            600,
+                          ) ||
+                          post.mainImage ||
+                          '/placeholder.svg'
+                        }
                         alt={post.title}
                         fill
                         sizes="(max-width: 1024px) 100vw, 33vw"
@@ -465,7 +482,19 @@ export default function BlogPage() {
                     >
                       <div className="relative overflow-hidden aspect-[4/3]">
                         <Image
-                          src={post.mainImage ?? '/placeholder.svg'}
+                          src={
+                            getCroppedImageUrl(
+                              {
+                                url: post.mainImage ?? undefined,
+                                ref: post.mainImageRef,
+                                deviceCrops: post.mainImageCrops,
+                              },
+                              'card',
+                              600,
+                            ) ||
+                            post.mainImage ||
+                            '/placeholder.svg'
+                          }
                           alt={post.title}
                           fill
                           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"

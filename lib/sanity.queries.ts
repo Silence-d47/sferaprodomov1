@@ -1,5 +1,21 @@
 import { groq } from 'next-sanity'
 
+// Shared GROQ projection for body blocks with image and YouTube support
+export const bodyProjection = `"body": body[]{
+    ...,
+    _type == "image" => {
+      ...,
+      "url": asset->url
+    },
+    _type == "youtube" => {
+      ...,
+      "posterImage": posterImage{
+        ...,
+        "url": asset->url
+      }
+    }
+  }`
+
 export const heroSlidesQuery = groq`
   *[_type == "heroSlide" && isActive == true] | order(order asc) {
     "id": _id,
@@ -33,10 +49,13 @@ export const postsQuery = groq`
     slug,
     publishedAt,
     "mainImage": mainImage.asset->url,
+    "mainImageRef": mainImage.asset._ref,
+    "mainImageCrops": mainImage.deviceCrops,
     "author": author->name,
     "categories": categories[]->title,
     excerpt,
-    readingTime
+    readingTime,
+    subtitle
   }
 `
 
@@ -44,21 +63,17 @@ export const postQuery = groq`
   *[_type == "post" && slug.current == $slug][0] {
     _id,
     title,
+    subtitle,
     slug,
     publishedAt,
     "mainImage": mainImage.asset->url,
     "author": author->name,
     "categories": categories[]->title,
     excerpt,
-    "body": body[]{
-      ...,
-      _type == "image" => {
-        ...,
-        "url": asset->url
-      }
-    },
+    ${bodyProjection},
     readingTime,
-    keywords
+    keywords,
+    seo
   }
 `
 
@@ -85,9 +100,12 @@ export const projectReferencesQuery = groq`
   *[_type == "projectReference"] | order(_createdAt desc) {
     _id,
     title,
+    subtitle,
     slug,
     description,
     "image": image.asset->url,
+    "imageRef": image.asset._ref,
+    "deviceCrops": image.deviceCrops,
     "gallery": gallery[]{
       "url": asset->url,
       "alt": alt
@@ -108,32 +126,12 @@ export const featuredReferencesQuery = groq`
   *[_type == "projectReference" && isTopReference == true] | order(_createdAt desc)[0...6] {
     _id,
     title,
+    subtitle,
     slug,
     description,
     "image": image.asset->url,
-    "gallery": gallery[]{
-      "url": asset->url,
-      "alt": alt
-    },
-    category,
-    location,
-    year,
-    rating,
-    highlights,
-    savings,
-    isFeatured,
-    isTopReference,
-    _createdAt
-  }
-`
-
-export const referenceBySlugQuery = groq`
-  *[_type == "projectReference" && slug.current == $slug][0] {
-    _id,
-    title,
-    slug,
-    description,
-    "image": image.asset->url,
+    "imageRef": image.asset._ref,
+    "deviceCrops": image.deviceCrops,
     "gallery": gallery[]{
       "url": asset->url,
       "alt": alt
@@ -168,6 +166,8 @@ export const productsByCategoryQuery = groq`
     title,
     description,
     image,
+    "imageRef": image.asset._ref,
+    "imageCrops": image.deviceCrops,
     features,
     isRecommended,
     isBestSelling,
@@ -200,13 +200,24 @@ export const bestSellingProductsQuery = groq`
   }
 `
 
-// Správný způsob pro získání URL souboru v Sanity
+// Reference page hero video
+export const referenceHeroVideoQuery = groq`
+  *[_type == "referencePageSettings"][0] {
+    "videoWebm": videoWebm.asset->url,
+    "videoMp4": videoMp4.asset->url,
+    "posterImage": posterImage.asset->url,
+    videoOpacity
+  }
+`
+
 export const productsByCategoryWithFilesQuery = groq`
   *[_type == "product" && category->slug.current == $category] {
     _id,
     title,
     description,
     image,
+    "imageRef": image.asset._ref,
+    "imageCrops": image.deviceCrops,
     features,
     isRecommended,
     isBestSelling,
@@ -222,5 +233,13 @@ export const productsByCategoryWithFilesQuery = groq`
       fileType,
       "fileUrl": file.asset->url
     }
+  }
+`
+
+// Service catalog (PDF download from category)
+export const serviceCatalogQuery = groq`
+  *[_type == "category" && slug.current == $service][0]{
+    "title": catalogButtonText,
+    "fileUrl": catalogFile.asset->url
   }
 `

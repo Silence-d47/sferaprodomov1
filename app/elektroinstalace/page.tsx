@@ -7,7 +7,7 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { ReferenceSlider } from '@/components/ui/reference-slider'
 import { groq } from 'next-sanity'
 import { CustomPortableText } from '@/lib/sanity.portableText'
-import { client } from '@/lib/sanity.client'
+import { serverClient } from '@/lib/sanity.client'
 import type { PortableTextBlock } from '@portabletext/types'
 import {
   Shield,
@@ -64,15 +64,15 @@ const referencesQuery = groq`
   }
 `
 
-// Změna na ASYNC funkci pro server-side data fetching
-export default async function ElektroinstalacePage() {
-  // Načtení dat na serveru pomocí await a Promise.all
-  const [faqs, references] = await Promise.all([
-    client.fetch<FaqEntry[]>(faqsQuery),
-    client.fetch<ReferenceCard[]>(referencesQuery),
-  ])
+export const revalidate = 3600
 
-  // Zpracování dat pro FAQ sloupce
+export default async function ElektroinstalacePage() {
+  const fetchOpts = { next: { tags: ['products', 'references'] } }
+
+  const [faqs, references] = await Promise.all([
+    serverClient.fetch<FaqEntry[]>(faqsQuery, {}, fetchOpts),
+    serverClient.fetch<ReferenceCard[]>(referencesQuery, {}, fetchOpts),
+  ])
   const leftDynamicFaqs: FaqEntry[] = []
   const rightDynamicFaqs: FaqEntry[] = []
   faqs?.forEach((item, index) => {

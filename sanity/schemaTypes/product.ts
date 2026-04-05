@@ -1,4 +1,14 @@
-import {defineField, defineType} from 'sanity'
+import { defineField, defineType } from 'sanity'
+import {
+  createResponsiveImageInput,
+  type CropConfig,
+} from '@/sanity/components/ResponsiveImageInput'
+import { deviceCropsField } from '@/sanity/fields/deviceCrops'
+
+const PRODUCT_IMAGE_CROPS: CropConfig[] = [
+  { key: 'card', label: 'Karta', ratio: '4:3', aspect: 4 / 3 },
+  { key: 'detail', label: 'Detail', ratio: '1:1', aspect: 1 },
+]
 
 export default defineType({
   name: 'product',
@@ -30,22 +40,27 @@ export default defineType({
     defineField({
       name: 'image',
       title: 'Obrázek',
+      description: 'Doporučeno min. 800x800px. Preferovaný formát JPG nebo PNG.',
       type: 'image',
       options: {
         hotspot: true,
+      },
+      fields: [deviceCropsField],
+      components: {
+        input: createResponsiveImageInput(PRODUCT_IMAGE_CROPS),
       },
     }),
     defineField({
       name: 'category',
       title: 'Kategorie (pokud existuje)',
       type: 'reference',
-      to: {type: 'category'},
+      to: { type: 'category' },
     }),
     defineField({
       name: 'features',
       title: 'Funkce',
       type: 'array',
-      of: [{type: 'string'}],
+      of: [{ type: 'string' }],
     }),
     defineField({
       name: 'isRecommended',
@@ -72,7 +87,7 @@ export default defineType({
       of: [
         {
           type: 'reference',
-          to: {type: 'fileAsset'},
+          to: { type: 'fileAsset' },
         },
       ],
       description: 'Datové listy, katalog, manuál a další soubory, které patří k danému produktu',
@@ -83,12 +98,12 @@ export default defineType({
       type: 'string',
       options: {
         list: [
-          {title: 'A+++', value: 'A+++'},
-          {title: 'A++', value: 'A++'},
-          {title: 'A+', value: 'A+'},
-          {title: 'A', value: 'A'},
-          {title: 'B', value: 'B'},
-          {title: 'C', value: 'C'},
+          { title: 'A+++', value: 'A+++' },
+          { title: 'A++', value: 'A++' },
+          { title: 'A+', value: 'A+' },
+          { title: 'A', value: 'A' },
+          { title: 'B', value: 'B' },
+          { title: 'C', value: 'C' },
         ],
       },
     }),
@@ -102,8 +117,8 @@ export default defineType({
           title: 'Výkon (kW)',
           type: 'object',
           fields: [
-            {name: 'min', title: 'Od (kW)', type: 'number'},
-            {name: 'max', title: 'Do (kW)', type: 'number'},
+            { name: 'min', title: 'Od (kW)', type: 'number' },
+            { name: 'max', title: 'Do (kW)', type: 'number' },
           ],
           description: 'Rozsah výkonu v kilowattech (např. od 2 do 5 kW)',
         },
@@ -112,8 +127,8 @@ export default defineType({
           title: 'Chladicí výkon (kW)',
           type: 'object',
           fields: [
-            {name: 'min', title: 'Od (kW)', type: 'number'},
-            {name: 'max', title: 'Do (kW)', type: 'number'},
+            { name: 'min', title: 'Od (kW)', type: 'number' },
+            { name: 'max', title: 'Do (kW)', type: 'number' },
           ],
           description: 'Rozsah chladicího výkonu v kilowattech',
         },
@@ -122,8 +137,8 @@ export default defineType({
           title: 'Topný výkon (kW)',
           type: 'object',
           fields: [
-            {name: 'min', title: 'Od (kW)', type: 'number'},
-            {name: 'max', title: 'Do (kW)', type: 'number'},
+            { name: 'min', title: 'Od (kW)', type: 'number' },
+            { name: 'max', title: 'Do (kW)', type: 'number' },
           ],
           description: 'Rozsah topného výkonu v kilowattech',
         },
@@ -164,16 +179,14 @@ export default defineType({
       type: 'number',
       initialValue: 2,
     }),
-    
-    // --- ZDE JE TA ZMĚNA ---
+
     defineField({
       name: 'brand',
       title: 'Značka',
-      type: 'reference', // Změna z 'string' na 'reference'
-      to: [{type: 'brand'}], // Říkáme, že se odkazujeme na náš nový typ 'brand'
+      type: 'reference',
+      to: [{ type: 'brand' }],
       validation: (Rule) => Rule.required(),
     }),
-    // --- KONEC ZMĚNY ---
 
     defineField({
       name: 'seo',
@@ -197,7 +210,7 @@ export default defineType({
   preview: {
     select: {
       title: 'title',
-      subtitle: 'brand.title', // Musíme se proklikat k názvu značky
+      subtitle: 'brand.title',
       media: 'image',
     },
   },

@@ -1,15 +1,5 @@
-import {defineType, defineArrayMember} from 'sanity'
+import { defineType, defineArrayMember } from 'sanity'
 
-/**
- * This is the schema definition for the rich text fields used for
- * for this blog studio. When you import it in schemas.js it can be
- * reused in other parts of the studio with:
- *  {
- *    name: 'someName',
- *    title: 'Some title',
- *    type: 'blockContent'
- *  }
- */
 export default defineType({
   title: 'Text',
   name: 'blockContent',
@@ -18,28 +8,20 @@ export default defineType({
     defineArrayMember({
       title: 'Blok',
       type: 'block',
-      // Styles let you set what your user can mark up blocks with. These
-      // correspond with HTML tags, but you can set any title or value
-      // you want and decide how you want to deal with it where you want to
-      // use your content.
       styles: [
-        {title: 'Normal', value: 'normal'},
-        {title: 'H1', value: 'h1'},
-        {title: 'H2', value: 'h2'},
-        {title: 'H3', value: 'h3'},
-        {title: 'H4', value: 'h4'},
-        {title: 'Citace', value: 'blockquote'},
+        { title: 'Normal', value: 'normal' },
+        { title: 'H1', value: 'h1' },
+        { title: 'H2', value: 'h2' },
+        { title: 'H3', value: 'h3' },
+        { title: 'H4', value: 'h4' },
+        { title: 'Citace', value: 'blockquote' },
       ],
-      lists: [{title: 'Seznam', value: 'bullet'}],
-      // Marks let you mark up inline text in the block editor.
+      lists: [{ title: 'Seznam', value: 'bullet' }],
       marks: {
-        // Decorators usually describe a single property – e.g. a typographic
-        // preference or highlighting by editors.
         decorators: [
-          {title: 'Tučný', value: 'strong'},
-          {title: 'Kurzíva', value: 'em'},
+          { title: 'Tučný', value: 'strong' },
+          { title: 'Kurzíva', value: 'em' },
         ],
-        // Annotations can be any object structure – e.g. a link or a footnote.
         annotations: [
           {
             title: 'Odkaz',
@@ -56,12 +38,46 @@ export default defineType({
         ],
       },
     }),
-    // You can add additional types here. Note that you can't use
-    // primitive types such as 'string' and 'number' in the same array
-    // as a block type.
     defineArrayMember({
       type: 'image',
-      options: {hotspot: true},
+      options: { hotspot: true },
+    }),
+    defineArrayMember({
+      name: 'youtube',
+      title: 'YouTube video',
+      type: 'object',
+      fields: [
+        {
+          name: 'url',
+          title: 'YouTube URL',
+          description: 'Vložte odkaz na YouTube video (např. https://www.youtube.com/watch?v=...)',
+          type: 'url',
+          validation: (rule) =>
+            rule
+              .required()
+              .uri({ scheme: ['https'] })
+              .custom((url: string | undefined) => {
+                if (!url) {
+                  return true
+                }
+                const pattern = /^https:\/\/(www\.)?(youtube\.com\/(watch\?v=|embed\/)|youtu\.be\/)/
+                return pattern.test(url) || 'Zadejte platný YouTube odkaz'
+              }),
+        },
+        {
+          name: 'posterImage',
+          title: 'Náhledový obrázek',
+          description: 'Volitelný vlastní náhled místo výchozího z YouTube',
+          type: 'image',
+          options: { hotspot: true },
+        },
+      ],
+      preview: {
+        select: { url: 'url' },
+        prepare({ url }) {
+          return { title: 'YouTube video', subtitle: url }
+        },
+      },
     }),
   ],
 })
