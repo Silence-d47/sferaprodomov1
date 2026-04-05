@@ -26,28 +26,31 @@ export default defineType({
     defineField({
       name: 'title',
       title: 'Nadpis H1',
-      description: 'Obecný nadpis stránky, max 70 znaků',
+      description: 'Obecný nadpis stránky',
       type: 'string',
       group: 'content',
       validation: (rule) => [
         rule.required().error('Nadpis je povinný'),
+        rule.min(20).warning('Nadpis by měl mít alespoň 20 znaků'),
         rule.max(70).warning('Nadpis by neměl přesáhnout 70 znaků'),
       ],
     }),
     defineField({
       name: 'subtitle',
       title: 'Podnadpis H2',
-      description: 'Specifický nadpis projektu, max 70 znaků. Slug se generuje z tohoto pole.',
+      description: 'Specifický nadpis projektu',
       type: 'string',
       group: 'content',
       validation: (rule) => [
         rule.required().error('Podnadpis je povinný'),
-        rule.max(70).error('Podnadpis nesmí přesáhnout 70 znaků'),
+        rule.min(20).warning('Podnadpis by měl mít alespoň 20 znaků'),
+        rule.max(70).warning('Podnadpis by neměl přesáhnout 70 znaků'),
       ],
     }),
     defineField({
       name: 'slug',
       title: 'URL slug',
+      description: 'Generuje se z Podnadpis H2',
       type: 'slug',
       group: 'seo',
       options: {
@@ -297,7 +300,7 @@ export default defineType({
           description: 'Doporučeno 30–70 znaků',
           type: 'string',
           validation: (rule) => [
-            rule.max(70).error('Meta nadpis nesmí přesáhnout 70 znaků'),
+            rule.max(70).warning('Meta nadpis by neměl přesáhnout 70 znaků'),
             rule.min(30).warning('Meta nadpis by měl mít alespoň 30 znaků'),
           ],
         },
@@ -308,8 +311,10 @@ export default defineType({
           type: 'text',
           rows: 3,
           validation: (rule) => [
-            rule.max(150).error('Meta popis nesmí přesáhnout 150 znaků'),
-            rule.min(70).warning('Meta popis by měl mít alespoň 70 znaků'),
+            rule.max(150).warning('Meta popis by neměl přesáhnout 150 znaků'),
+            rule
+              .min(120)
+              .warning('Meta popis by měl mít alespoň 120 znaků (Google doporučuje 120-160)'),
           ],
         },
       ],

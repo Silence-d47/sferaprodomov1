@@ -138,39 +138,71 @@ export default function ReferenceDetail({ reference }: Props) {
         <div className="container">
           <div className="max-w-6xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-8 items-start mb-16">
+              {/* Header info */}
+              <div className="space-y-4">
+                <Badge className="bg-blue-100 text-blue-800 border-0">{reference.category}</Badge>
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
+                  {reference.title}
+                </h1>
+                {reference.location && (
+                  <div className="flex items-center text-gray-600">
+                    <MapPin className="h-5 w-5 mr-2" />
+                    <span>{reference.location}</span>
+                  </div>
+                )}
+                {reference.year && (
+                  <div className="flex items-center text-gray-600">
+                    <Calendar className="h-5 w-5 mr-2" />
+                    <span>Rok realizace: {reference.year}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Video/Image - on mobile after year, on desktop right column spanning rows */}
+              <div className="lg:sticky lg:top-[160px] lg:row-span-3">
+                {reference.youtubeUrl ? (
+                  <YouTubePlayer youtubeUrl={reference.youtubeUrl} title={reference.title} />
+                ) : (
+                  <div className="relative overflow-hidden rounded-2xl shadow-2xl border border-gray-200">
+                    <Image
+                      src={reference.mainImage || '/placeholder.svg'}
+                      alt={reference.title}
+                      width={600}
+                      height={400}
+                      className="w-full h-auto object-cover"
+                    />
+                    <div className="absolute top-4 right-4">
+                      <div className="flex items-center bg-white/90 rounded-full px-3 py-1 shadow-lg">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
+                        ))}
+                        {reference.rating && (
+                          <span className="ml-2 text-sm font-medium text-gray-700">
+                            {reference.rating}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* H2 - single DOM element, grid places it after video on mobile, under year on desktop */}
+              {reference.subtitle && (
+                <h2 className="text-xl md:text-2xl font-semibold text-gray-700 leading-snug">
+                  {reference.subtitle}
+                </h2>
+              )}
+
+              {/* Content details - on mobile after H2, on desktop continues left column */}
               <div className="space-y-6">
-                <div>
-                  <Badge className="mb-4 bg-blue-100 text-blue-800 border-0">
-                    {reference.category}
-                  </Badge>
-                  <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2 leading-tight">
-                    {reference.title}
-                  </h1>
-                  {reference.subtitle && (
-                    <h2 className="text-xl md:text-2xl font-semibold text-gray-700 mb-4 leading-snug">
-                      {reference.subtitle}
-                    </h2>
-                  )}
-                  {reference.location && (
-                    <div className="flex items-center text-gray-600 mb-4">
-                      <MapPin className="h-5 w-5 mr-2" />
-                      <span>{reference.location}</span>
-                    </div>
-                  )}
-                  {reference.year && (
-                    <div className="flex items-center text-gray-600 mb-6">
-                      <Calendar className="h-5 w-5 mr-2" />
-                      <span>Rok realizace: {reference.year}</span>
-                    </div>
-                  )}
-                  {reference.body ? (
-                    <div className="prose prose-lg prose-blue max-w-none">
-                      <CustomPortableText value={reference.body} />
-                    </div>
-                  ) : reference.description ? (
-                    <p className="text-lg text-gray-700 leading-relaxed">{reference.description}</p>
-                  ) : null}
-                </div>
+                {reference.body ? (
+                  <div className="prose prose-lg prose-blue max-w-none">
+                    <CustomPortableText value={reference.body} />
+                  </div>
+                ) : reference.description ? (
+                  <p className="text-lg text-gray-700 leading-relaxed">{reference.description}</p>
+                ) : null}
 
                 {reference.highlights && reference.highlights.length > 0 && (
                   <div className="bg-gray-50 rounded-xl p-6">
@@ -244,34 +276,6 @@ export default function ReferenceDetail({ reference }: Props) {
                           <div className="text-sm text-green-700">Členů týmu</div>
                         </div>
                       )}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="lg:sticky lg:top-[160px]">
-                {reference.youtubeUrl ? (
-                  <YouTubePlayer youtubeUrl={reference.youtubeUrl} title={reference.title} />
-                ) : (
-                  <div className="relative overflow-hidden rounded-2xl shadow-2xl border border-gray-200">
-                    <Image
-                      src={reference.mainImage || '/placeholder.svg'}
-                      alt={reference.title}
-                      width={600}
-                      height={400}
-                      className="w-full h-auto object-cover"
-                    />
-                    <div className="absolute top-4 right-4">
-                      <div className="flex items-center bg-white/90 rounded-full px-3 py-1 shadow-lg">
-                        {[...Array(5)].map((_, i) => (
-                          <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
-                        ))}
-                        {reference.rating && (
-                          <span className="ml-2 text-sm font-medium text-gray-700">
-                            {reference.rating}
-                          </span>
-                        )}
-                      </div>
                     </div>
                   </div>
                 )}
