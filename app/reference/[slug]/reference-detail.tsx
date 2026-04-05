@@ -22,6 +22,7 @@ import {
   ChevronRight,
 } from 'lucide-react'
 import { CustomPortableText } from '@/lib/sanity.portableText'
+import { getCroppedImageUrl } from '@/lib/sanity.image-crops'
 import { YouTubePlayer } from '@/components/ui/youtube-player'
 import type { PortableTextBlock } from '@portabletext/types'
 
@@ -34,6 +35,8 @@ export type ReferenceData = {
   location?: string
   year?: string
   mainImage?: string
+  mainImageRef?: string
+  mainImageCrops?: Record<string, { x: number; y: number; width: number; height: number }>
   youtubeUrl?: string
   gallery?: string[]
   rating?: number
@@ -165,7 +168,19 @@ export default function ReferenceDetail({ reference }: Props) {
                 ) : (
                   <div className="relative overflow-hidden rounded-2xl shadow-2xl border border-gray-200">
                     <Image
-                      src={reference.mainImage || '/placeholder.svg'}
+                      src={
+                        getCroppedImageUrl(
+                          {
+                            url: reference.mainImage,
+                            ref: reference.mainImageRef,
+                            deviceCrops: reference.mainImageCrops,
+                          },
+                          'detail',
+                          800,
+                        ) ||
+                        reference.mainImage ||
+                        '/placeholder.svg'
+                      }
                       alt={reference.title}
                       width={600}
                       height={400}

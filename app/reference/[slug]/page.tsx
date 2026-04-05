@@ -19,6 +19,8 @@ const referenceQuery = groq`
     location,
     year,
     "mainImage": image.asset->url,
+    "mainImageRef": image.asset._ref,
+    "mainImageCrops": image.deviceCrops,
     youtubeUrl,
     "gallery": gallery[].asset->url,
     rating,
