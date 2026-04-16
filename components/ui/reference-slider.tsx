@@ -77,13 +77,11 @@ export function ReferenceSlider({ references }: ReferenceSliderProps) {
               <h3 className="font-bold text-lg mb-3 group-hover:text-blue-600 transition-colors">
                 {reference.title}
               </h3>
-              <p className="text-muted-foreground mb-6 text-sm leading-relaxed flex-grow overflow-hidden [display:-webkit-box] [-webkit-line-clamp:5] [-webkit-box-orient:vertical]">
+              <p className="text-muted-foreground text-sm leading-relaxed line-clamp-4">
                 {reference.description}
               </p>
-              {/* Optional: expand toggle could be added later if potřebné */}
 
-              {/* Tlačítko vždy na stejném místě */}
-              <div className="mt-auto">
+              <div className="mt-auto pt-6">
                 <div className="w-full border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white bg-transparent rounded-md px-4 py-2 text-center text-sm font-medium transition-colors duration-200">
                   Zobrazit detail
                 </div>

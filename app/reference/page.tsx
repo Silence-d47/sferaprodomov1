@@ -5,6 +5,7 @@ import {
   referenceHeroVideoQuery,
 } from '@/lib/sanity.queries'
 import { getCroppedImageUrl } from '@/lib/sanity.image-crops'
+import { truncateText } from '@/lib/utils'
 import {
   ReferenceClient,
   type FeaturedReference,
@@ -22,6 +23,7 @@ interface SanityRef {
   slug?: { current: string }
   title: string
   description?: string
+  bodyPreview?: string
   image: string
   imageRef?: string
   deviceCrops?: Record<string, CropData>
@@ -53,7 +55,7 @@ export default async function ReferencePage() {
   const featuredReferences: FeaturedReference[] = (featured || []).map((ref) => ({
     id: ref.slug?.current || ref._id,
     title: ref.title,
-    description: ref.description,
+    description: truncateText(ref.bodyPreview || ref.description),
     image: getCroppedImageUrl(imgData(ref), 'slider', 800) || ref.image,
     category: ref.category,
     location: ref.location,
@@ -66,7 +68,7 @@ export default async function ReferencePage() {
   const otherReferences: ListReference[] = (other || []).map((ref) => ({
     id: ref.slug?.current || ref._id,
     title: ref.title,
-    description: ref.description,
+    description: truncateText(ref.bodyPreview || ref.description),
     image: getCroppedImageUrl(imgData(ref), 'card', 600) || ref.image,
     category: ref.category,
     location: ref.location,

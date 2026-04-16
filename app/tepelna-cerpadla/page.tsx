@@ -6,6 +6,7 @@ import { ContactFormSection } from '@/components/ui/contact-form-section'
 import { PDFDownloadButton } from '@/components/ui/pdf-download-button'
 import { Badge } from '@/components/ui/badge'
 import { ThemeProvider } from '@/components/theme-provider'
+import { truncateText } from '@/lib/utils'
 
 import { groq } from 'next-sanity'
 import { serverClient } from '@/lib/sanity.client'
@@ -137,7 +138,8 @@ type CropData = { x: number; y: number; width: number; height: number }
 type ReferenceCard = {
   id: string
   title: string
-  description: string
+  description?: string
+  bodyPreview?: string
   image: string
   imageRef?: string
   deviceCrops?: Record<string, CropData>
@@ -159,6 +161,7 @@ const referencesQuery = groq`
     "id": slug.current,
     title,
     description,
+    "bodyPreview": pt::text(body),
     "image": image.asset->url,
     "imageRef": image.asset._ref,
     "deviceCrops": image.deviceCrops,
@@ -480,10 +483,10 @@ export default async function TepelnaCerpadlaPage() {
                         className="w-6 md:w-8 h-6 md:h-8 text-green-700/20 mb-3 md:mb-4 flex-shrink-0"
                         fill="currentColor"
                       />
-                      <p className="text-slate-600 italic mb-4 md:mb-6 flex-grow text-sm md:text-base">
-                        &ldquo;{ref.description}&rdquo;
+                      <p className="text-slate-600 italic text-sm md:text-base line-clamp-4">
+                        &ldquo;{truncateText(ref.bodyPreview || ref.description)}&rdquo;
                       </p>
-                      <div className="mt-auto pt-3 md:pt-5 border-t border-slate-200">
+                      <div className="mt-auto pt-4 md:pt-5 border-t border-slate-200">
                         <p className="font-bold text-slate-800 text-sm md:text-base">{ref.title}</p>
                         <p className="text-xs md:text-sm text-slate-500">
                           {ref.location || ref.category}

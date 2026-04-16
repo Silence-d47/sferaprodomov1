@@ -6,6 +6,7 @@ import { ContactFormSection } from '@/components/ui/contact-form-section'
 import { PDFDownloadButton } from '@/components/ui/pdf-download-button'
 import { Badge } from '@/components/ui/badge'
 import { ThemeProvider } from '@/components/theme-provider'
+import { truncateText } from '@/lib/utils'
 
 import { groq } from 'next-sanity'
 import { serverClient } from '@/lib/sanity.client'
@@ -138,7 +139,8 @@ type CropData = { x: number; y: number; width: number; height: number }
 type ReferenceCard = {
   id: string
   title: string
-  description: string
+  description?: string
+  bodyPreview?: string
   image: string
   imageRef?: string
   deviceCrops?: Record<string, CropData>
@@ -160,6 +162,7 @@ const referencesQuery = groq`
     "id": slug.current,
     title,
     description,
+    "bodyPreview": pt::text(body),
     "image": image.asset->url,
     "imageRef": image.asset._ref,
     "deviceCrops": image.deviceCrops,
@@ -479,8 +482,8 @@ export default async function RekuperacePage() {
                         className="w-8 h-8 text-primary/20 mb-4 flex-shrink-0"
                         fill="currentColor"
                       />
-                      <p className="text-slate-600 italic mb-6 flex-grow">
-                        &ldquo;{ref.description}&rdquo;
+                      <p className="text-slate-600 italic line-clamp-4">
+                        &ldquo;{truncateText(ref.bodyPreview || ref.description)}&rdquo;
                       </p>
                       <div className="mt-auto pt-5 border-t border-slate-200">
                         <p className="font-bold text-slate-800">{ref.title}</p>

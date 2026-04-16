@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { ContactFormSection } from '@/components/ui/contact-form-section'
 import { ThemeProvider } from '@/components/theme-provider'
 import { ReferenceSlider } from '@/components/ui/reference-slider'
+import { truncateText } from '@/lib/utils'
 import { groq } from 'next-sanity'
 import { CustomPortableText } from '@/lib/sanity.portableText'
 import { serverClient } from '@/lib/sanity.client'
@@ -36,7 +37,8 @@ type FaqEntry = {
 type ReferenceCard = {
   id: string
   title: string
-  description: string
+  description?: string
+  bodyPreview?: string
   image: string
   category: string
   location?: string
@@ -57,6 +59,7 @@ const referencesQuery = groq`
     "id": slug.current,
     title,
     description,
+    "bodyPreview": pt::text(body),
     "image": image.asset->url,
     category,
     location,
@@ -604,7 +607,12 @@ export default async function ElektroinstalacePage() {
             </div>
             <div className="rounded-3xl bg-white/60 p-2 shadow-2xl shadow-slate-900/10 ring-1 ring-gray-200 backdrop-blur-md">
               {references && references.length > 0 ? (
-                <ReferenceSlider references={references} />
+                <ReferenceSlider
+                  references={references.map((r) => ({
+                    ...r,
+                    description: truncateText(r.bodyPreview || r.description),
+                  }))}
+                />
               ) : (
                 <div className="text-center py-12 text-muted-foreground">
                   Zatím nemáme zveřejněné realizace v této kategorii.

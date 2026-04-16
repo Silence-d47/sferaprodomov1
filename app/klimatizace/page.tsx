@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { ContactFormSection } from '@/components/ui/contact-form-section'
 import { ThemeProvider } from '@/components/theme-provider'
 import { ReferenceSlider } from '@/components/ui/reference-slider'
+import { truncateText } from '@/lib/utils'
 import { ProductCard } from '@/components/ui/product-card'
 import { PDFDownloadButton } from '@/components/ui/pdf-download-button'
 import { groq } from 'next-sanity'
@@ -65,7 +66,8 @@ type CropData = { x: number; y: number; width: number; height: number }
 type ReferenceCard = {
   id: string
   title: string
-  description: string
+  description?: string
+  bodyPreview?: string
   image: string
   imageRef?: string
   deviceCrops?: Record<string, CropData>
@@ -79,6 +81,7 @@ const referencesQuery = groq`
     "id": slug.current,
     title,
     description,
+    "bodyPreview": pt::text(body),
     "image": image.asset->url,
     "imageRef": image.asset._ref,
     "deviceCrops": image.deviceCrops,
@@ -440,6 +443,7 @@ export default async function KlimatizacePageRefined() {
                 <ReferenceSlider
                   references={references.map((r) => ({
                     ...r,
+                    description: truncateText(r.bodyPreview || r.description),
                     image:
                       getCroppedImageUrl(
                         { url: r.image, ref: r.imageRef, deviceCrops: r.deviceCrops },

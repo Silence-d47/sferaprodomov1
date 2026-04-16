@@ -491,7 +491,7 @@ export function ReferenceClient({ featuredReferences, otherReferences, heroVideo
                     {reference.title}
                   </h3>
                   {reference.description && (
-                    <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2 mb-3">
+                    <p className="text-muted-foreground text-sm leading-relaxed line-clamp-4 mb-3">
                       {reference.description}
                     </p>
                   )}
