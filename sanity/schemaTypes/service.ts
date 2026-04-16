@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export default defineType({
   name: 'service',
@@ -9,7 +9,7 @@ export default defineType({
       name: 'title',
       title: 'Název',
       type: 'string',
-      validation: Rule => Rule.required(),
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'slug',
@@ -19,7 +19,7 @@ export default defineType({
         source: 'title',
         maxLength: 96,
       },
-      validation: Rule => Rule.required(),
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'description',
@@ -61,13 +61,13 @@ export default defineType({
       name: 'features',
       title: 'Funkce',
       type: 'array',
-      of: [{type: 'string'}],
+      of: [{ type: 'string' }],
     }),
     defineField({
       name: 'benefits',
       title: 'Výhody (pokud existují)',
       type: 'array',
-      of: [{type: 'string'}],
+      of: [{ type: 'string' }],
     }),
     defineField({
       name: 'heroImage',
@@ -105,10 +105,8 @@ export default defineType({
     {
       title: 'Order',
       name: 'orderAsc',
-      by: [
-        {field: 'order', direction: 'asc'}
-      ]
-    }
+      by: [{ field: 'order', direction: 'asc' }],
+    },
   ],
   preview: {
     select: {
@@ -116,4 +114,4 @@ export default defineType({
       media: 'icon',
     },
   },
-})
+});

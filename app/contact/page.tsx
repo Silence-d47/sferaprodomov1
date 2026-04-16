@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -10,11 +10,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
+} from '@/components/ui/form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -26,10 +26,10 @@ const formSchema = z.object({
   message: z.string().min(10, {
     message: 'Zpráva musí mít alespoň 10 znaků.',
   }),
-})
+});
 
 export default function ContactPage() {
-  const router = useRouter()
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -37,11 +37,11 @@ export default function ContactPage() {
       email: '',
       message: '',
     },
-  })
+  });
 
   function onSubmit() {
     // TODO: Send form data to API
-    router.push('/dekujeme')
+    router.push('/dekujeme');
   }
 
   return (
@@ -114,5 +114,5 @@ export default function ContactPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

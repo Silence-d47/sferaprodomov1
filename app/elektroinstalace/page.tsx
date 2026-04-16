@@ -1,15 +1,15 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { ContactFormSection } from '@/components/ui/contact-form-section'
-import { ThemeProvider } from '@/components/theme-provider'
-import { ReferenceSlider } from '@/components/ui/reference-slider'
-import { truncateText } from '@/lib/utils'
-import { groq } from 'next-sanity'
-import { CustomPortableText } from '@/lib/sanity.portableText'
-import { serverClient } from '@/lib/sanity.client'
-import type { PortableTextBlock } from '@portabletext/types'
+import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { ContactFormSection } from '@/components/ui/contact-form-section';
+import { ThemeProvider } from '@/components/theme-provider';
+import { ReferenceSlider } from '@/components/ui/reference-slider';
+import { truncateText } from '@/lib/utils';
+import { groq } from 'next-sanity';
+import { CustomPortableText } from '@/lib/sanity.portableText';
+import { serverClient } from '@/lib/sanity.client';
+import type { PortableTextBlock } from '@portabletext/types';
 import {
   Shield,
   Clock,
@@ -26,7 +26,7 @@ import {
   ArrowRight,
   Phone,
   Mail,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Definice typů pro data ze Sanity
 type FaqEntry = {
@@ -52,7 +52,7 @@ const faqsQuery = groq`
     question,
     answer
   }
-`
+`;
 
 const referencesQuery = groq`
   *[_type == "projectReference" && isActive != false && category == "elektroinstalace"] | order(_createdAt desc)[0...9] {
@@ -65,26 +65,26 @@ const referencesQuery = groq`
     location,
     isTopReference
   }
-`
+`;
 
-export const revalidate = 3600
+export const revalidate = 3600;
 
 export default async function ElektroinstalacePage() {
-  const fetchOpts = { next: { tags: ['products', 'references'] } }
+  const fetchOpts = { next: { tags: ['products', 'references'] } };
 
   const [faqs, references] = await Promise.all([
     serverClient.fetch<FaqEntry[]>(faqsQuery, {}, fetchOpts),
     serverClient.fetch<ReferenceCard[]>(referencesQuery, {}, fetchOpts),
-  ])
-  const leftDynamicFaqs: FaqEntry[] = []
-  const rightDynamicFaqs: FaqEntry[] = []
+  ]);
+  const leftDynamicFaqs: FaqEntry[] = [];
+  const rightDynamicFaqs: FaqEntry[] = [];
   faqs?.forEach((item, index) => {
     if (index % 2 === 0) {
-      leftDynamicFaqs.push(item)
+      leftDynamicFaqs.push(item);
     } else {
-      rightDynamicFaqs.push(item)
+      rightDynamicFaqs.push(item);
     }
-  })
+  });
 
   return (
     <ThemeProvider theme="elektroinstalace">
@@ -964,5 +964,5 @@ export default async function ElektroinstalacePage() {
         </section>
       </div>
     </ThemeProvider>
-  )
+  );
 }

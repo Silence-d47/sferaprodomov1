@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect, useCallback, useRef } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
-import useEmblaCarousel from 'embla-carousel-react'
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import useEmblaCarousel from 'embla-carousel-react';
 
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
 type CarouselOptions = UseCarouselParameters[0]
-import { motion, AnimatePresence, Variants } from 'framer-motion'
-import Autoplay from 'embla-carousel-autoplay'
-import { Button } from '@/components/ui/button'
-import { EnhancedSectionDivider } from '@/components/ui/enhanced-section-divider'
-import { Calculator, Phone, ChevronLeft, ChevronRight } from 'lucide-react'
-import { cn } from '@/lib/utils' // Pomocná funkce pro spojování classNames (běžná u shadcn/ui)
+import { motion, AnimatePresence, Variants } from 'framer-motion';
+import Autoplay from 'embla-carousel-autoplay';
+import { Button } from '@/components/ui/button';
+import { EnhancedSectionDivider } from '@/components/ui/enhanced-section-divider';
+import { Calculator, Phone, ChevronLeft, ChevronRight } from 'lucide-react';
+import { cn } from '@/lib/utils'; // Pomocná funkce pro spojování classNames (běžná u shadcn/ui)
 
 // Interface zůstává stejný
 export interface UnifiedHeroSlide {
@@ -51,7 +51,7 @@ const containerVariants = {
       ease: [0.22, 1, 0.36, 1],
     },
   },
-}
+};
 
 const titleVariants = {
   hidden: {
@@ -77,7 +77,7 @@ const titleVariants = {
     scale: 0.95,
     transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
   },
-}
+};
 
 const subtitleVariants = {
   hidden: {
@@ -103,7 +103,7 @@ const subtitleVariants = {
     scale: 0.96,
     transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] },
   },
-}
+};
 
 const contentVariants = {
   hidden: {
@@ -129,7 +129,7 @@ const contentVariants = {
     scale: 0.98,
     transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
   },
-}
+};
 
 const buttonsVariants = {
   hidden: {
@@ -155,11 +155,11 @@ const buttonsVariants = {
     scale: 0.95,
     transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] },
   },
-}
+};
 
 export function UnifiedHero({ slides, options }: UnifiedHeroProps) {
   // Opraveno: Přidán watchDrag: true pro lepší detekci interakce
-  const autoplay = useRef(Autoplay({ delay: 5000, stopOnInteraction: false })).current
+  const autoplay = useRef(Autoplay({ delay: 5000, stopOnInteraction: false })).current;
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
@@ -175,76 +175,76 @@ export function UnifiedHero({ slides, options }: UnifiedHeroProps) {
       watchSlides?: boolean
     } & { watchFocus?: boolean },
     [autoplay],
-  )
+  );
 
-  const [selectedIndex, setSelectedIndex] = useState(0)
-  const [isTransitioning, setIsTransitioning] = useState(false)
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const scrollPrev = useCallback(() => {
     if (emblaApi && !isTransitioning) {
-      setIsTransitioning(true)
-      emblaApi.scrollPrev()
+      setIsTransitioning(true);
+      emblaApi.scrollPrev();
     }
-  }, [emblaApi, isTransitioning])
+  }, [emblaApi, isTransitioning]);
 
   const scrollNext = useCallback(() => {
     if (emblaApi && !isTransitioning) {
-      setIsTransitioning(true)
-      emblaApi.scrollNext()
+      setIsTransitioning(true);
+      emblaApi.scrollNext();
     }
-  }, [emblaApi, isTransitioning])
+  }, [emblaApi, isTransitioning]);
 
   const scrollTo = useCallback(
     (index: number) => {
       if (emblaApi && !isTransitioning && index !== selectedIndex) {
-        setIsTransitioning(true)
-        emblaApi.scrollTo(index)
+        setIsTransitioning(true);
+        emblaApi.scrollTo(index);
       }
     },
     [emblaApi, isTransitioning, selectedIndex],
-  )
+  );
 
   useEffect(() => {
     if (!emblaApi) {
-      return
+      return;
     }
 
     const onSelect = () => {
-      const newIndex = emblaApi.selectedScrollSnap()
-      setSelectedIndex(newIndex)
-      setIsTransitioning(false)
-    }
+      const newIndex = emblaApi.selectedScrollSnap();
+      setSelectedIndex(newIndex);
+      setIsTransitioning(false);
+    };
 
     const onScroll = () => {
       // Aktualizace během scrollování
-      const currentSnap = emblaApi.selectedScrollSnap()
+      const currentSnap = emblaApi.selectedScrollSnap();
       if (currentSnap !== selectedIndex) {
-        setSelectedIndex(currentSnap)
+        setSelectedIndex(currentSnap);
       }
-    }
+    };
 
     const onSettle = () => {
-      setIsTransitioning(false)
-      setSelectedIndex(emblaApi.selectedScrollSnap())
-    }
+      setIsTransitioning(false);
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+    };
 
     const onInit = () => {
-      setIsTransitioning(false)
-      setSelectedIndex(emblaApi.selectedScrollSnap())
-    }
+      setIsTransitioning(false);
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+    };
 
-    emblaApi.on('select', onSelect)
-    emblaApi.on('scroll', onScroll)
-    emblaApi.on('settle', onSettle)
-    emblaApi.on('init', onInit)
+    emblaApi.on('select', onSelect);
+    emblaApi.on('scroll', onScroll);
+    emblaApi.on('settle', onSettle);
+    emblaApi.on('init', onInit);
 
     return () => {
-      emblaApi.off('select', onSelect)
-      emblaApi.off('scroll', onScroll)
-      emblaApi.off('settle', onSettle)
-      emblaApi.off('init', onInit)
-    }
-  }, [emblaApi, selectedIndex])
+      emblaApi.off('select', onSelect);
+      emblaApi.off('scroll', onScroll);
+      emblaApi.off('settle', onSettle);
+      emblaApi.off('init', onInit);
+    };
+  }, [emblaApi, selectedIndex]);
 
   // Fallback pokud nejsou slides
   if (!slides || slides.length === 0) {
@@ -255,10 +255,10 @@ export function UnifiedHero({ slides, options }: UnifiedHeroProps) {
           <p>Hero slides are being loaded</p>
         </div>
       </section>
-    )
+    );
   }
 
-  const currentSlideData = slides[selectedIndex] || slides[0]
+  const currentSlideData = slides[selectedIndex] || slides[0];
 
   return (
     <section className="relative min-h-[120svh] md:h-screen min-h-[640px] overflow-hidden bg-gray-900 isolate">
@@ -497,5 +497,5 @@ export function UnifiedHero({ slides, options }: UnifiedHeroProps) {
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import Image from 'next/image'
-import Link from 'next/link'
-import { Badge } from '@/components/ui/badge'
-import { MapPin, Star } from 'lucide-react'
+import Image from 'next/image';
+import Link from 'next/link';
+import { Badge } from '@/components/ui/badge';
+import { MapPin, Star } from 'lucide-react';
 
 interface Reference {
   id: string
@@ -91,5 +91,5 @@ export function ReferenceSlider({ references }: ReferenceSliderProps) {
         </Link>
       ))}
     </div>
-  )
+  );
 }

@@ -1,15 +1,15 @@
-import { defineField, defineType } from 'sanity'
-import { apiVersion } from '@/sanity/env'
+import { defineField, defineType } from 'sanity';
+import { apiVersion } from '@/sanity/env';
 import {
   createResponsiveImageInput,
   type CropConfig,
-} from '@/sanity/components/ResponsiveImageInput'
-import { deviceCropsField } from '@/sanity/fields/deviceCrops'
+} from '@/sanity/components/ResponsiveImageInput';
+import { deviceCropsField } from '@/sanity/fields/deviceCrops';
 
 const BLOG_IMAGE_CROPS: CropConfig[] = [
   { key: 'card', label: 'Karta', ratio: '4:3', aspect: 4 / 3 },
   { key: 'hero', label: 'Hero', ratio: '3:2', aspect: 3 / 2 },
-]
+];
 
 export default defineType({
   name: 'post',
@@ -59,15 +59,15 @@ export default defineType({
       validation: (rule) =>
         rule.required().custom(async (slug, context) => {
           if (!slug?.current) {
-            return 'Slug je povinný'
+            return 'Slug je povinný';
           }
-          const client = context.getClient({ apiVersion })
-          const id = context.document?._id?.replace(/^drafts\./, '')
+          const client = context.getClient({ apiVersion });
+          const id = context.document?._id?.replace(/^drafts\./, '');
           const count = await client.fetch(
             `count(*[_type == "post" && slug.current == $slug && !(_id in [$id, $draftId])])`,
             { slug: slug.current, id, draftId: `drafts.${id}` },
-          )
-          return count > 0 ? 'Tento slug již existuje, zvolte jiný' : true
+          );
+          return count > 0 ? 'Tento slug již existuje, zvolte jiný' : true;
         }),
     }),
     defineField({
@@ -175,7 +175,7 @@ export default defineType({
         title,
         subtitle: [subtitle, author].filter(Boolean).join(' / '),
         media,
-      }
+      };
     },
   },
-})
+});

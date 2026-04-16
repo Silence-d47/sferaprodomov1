@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export default defineType({
   name: 'faq',
@@ -9,7 +9,7 @@ export default defineType({
       name: 'question',
       title: 'Otázka',
       type: 'string',
-      validation: Rule => Rule.required(),
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'answer',
@@ -22,12 +22,12 @@ export default defineType({
       type: 'string',
       options: {
         list: [
-          {title: 'Klimatizace', value: 'klimatizace'},
-          {title: 'Tepelná čerpadla', value: 'tepelna-cerpadla'},
-          {title: 'Rekuperace', value: 'rekuperace'},
-          {title: 'Elektroinstalace', value: 'elektroinstalace'},
-          {title: 'Fotovoltaika', value: 'fotovoltaika'},
-          {title: 'Obecné', value: 'obecne'},
+          { title: 'Klimatizace', value: 'klimatizace' },
+          { title: 'Tepelná čerpadla', value: 'tepelna-cerpadla' },
+          { title: 'Rekuperace', value: 'rekuperace' },
+          { title: 'Elektroinstalace', value: 'elektroinstalace' },
+          { title: 'Fotovoltaika', value: 'fotovoltaika' },
+          { title: 'Obecné', value: 'obecne' },
         ],
       },
     }),
@@ -46,17 +46,15 @@ export default defineType({
       name: 'tags',
       title: 'Štítky',
       type: 'array',
-      of: [{type: 'string'}],
+      of: [{ type: 'string' }],
     }),
   ],
   orderings: [
     {
       title: 'Order',
       name: 'orderAsc',
-      by: [
-        {field: 'order', direction: 'asc'}
-      ]
-    }
+      by: [{ field: 'order', direction: 'asc' }],
+    },
   ],
   preview: {
     select: {
@@ -64,4 +62,4 @@ export default defineType({
       subtitle: 'category',
     },
   },
-})
+});

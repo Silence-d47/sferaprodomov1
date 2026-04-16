@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import Script from 'next/script'
+import Script from 'next/script';
 
 export function FacebookPixel() {
-  const pixelId = process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID || '24681283014791075'
+  const pixelId = process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID || '24681283014791075';
 
   return (
     <>
@@ -32,5 +32,5 @@ export function FacebookPixel() {
         />
       </noscript>
     </>
-  )
+  );
 }

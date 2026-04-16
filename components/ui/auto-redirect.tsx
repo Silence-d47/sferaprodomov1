@@ -1,7 +1,7 @@
-"use client"
+'use client';
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface AutoRedirectProps {
   to: string
@@ -9,30 +9,29 @@ interface AutoRedirectProps {
 }
 
 export function AutoRedirect({ to, seconds }: AutoRedirectProps) {
-  const router = useRouter()
-  const [remaining, setRemaining] = useState(seconds)
+  const router = useRouter();
+  const [remaining, setRemaining] = useState(seconds);
 
   useEffect(() => {
-    setRemaining(seconds)
+    setRemaining(seconds);
 
     const interval = window.setInterval(() => {
-      setRemaining((prev) => Math.max(0, prev - 1))
-    }, 1000)
+      setRemaining((prev) => Math.max(0, prev - 1));
+    }, 1000);
 
     const timeout = window.setTimeout(() => {
-      router.replace(to)
-    }, seconds * 1000)
+      router.replace(to);
+    }, seconds * 1000);
 
     return () => {
-      window.clearInterval(interval)
-      window.clearTimeout(timeout)
-    }
-  }, [router, seconds, to])
+      window.clearInterval(interval);
+      window.clearTimeout(timeout);
+    };
+  }, [router, seconds, to]);
 
   return (
     <p className="text-center text-sm text-slate-600 dark:text-slate-300">
       Za {remaining} s budete přesměrováni na úvodní stránku.
     </p>
-  )
+  );
 }
-

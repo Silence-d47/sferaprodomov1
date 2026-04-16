@@ -1,4 +1,4 @@
-import { client } from './sanity.client'
+import { client } from './sanity.client';
 
 export interface SanityFile {
   _id: string
@@ -17,11 +17,11 @@ interface SanityFileReference {
 
 export function getFileUrl(fileAsset: SanityFileReference | null | undefined): string | null {
   if (!fileAsset || !fileAsset.file || !fileAsset.file.asset) {
-    return null
+    return null;
   }
 
   // Pro soubory v Sanity se používá asset->url
-  return fileAsset.file.asset.url ?? null
+  return fileAsset.file.asset.url ?? null;
 }
 
 export async function getProductFiles(productId: string): Promise<SanityFile[]> {
@@ -32,8 +32,8 @@ export async function getProductFiles(productId: string): Promise<SanityFile[]> 
       "fileUrl": file.asset->url,
       fileType
     }
-  }`
+  }`;
 
-  const result = await client.fetch(query, { productId })
-  return result?.files || []
+  const result = await client.fetch(query, { productId });
+  return result?.files || [];
 }

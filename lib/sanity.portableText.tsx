@@ -1,36 +1,36 @@
-'use client'
+'use client';
 
-import { PortableText } from '@portabletext/react'
-import type { PortableTextComponents } from '@portabletext/react'
-import type { PortableTextBlock } from '@portabletext/types'
-import Image from 'next/image'
-import { urlForImage } from '@/lib/sanity.image'
-import { useState } from 'react'
+import { PortableText } from '@portabletext/react';
+import type { PortableTextComponents } from '@portabletext/react';
+import type { PortableTextBlock } from '@portabletext/types';
+import Image from 'next/image';
+import { urlForImage } from '@/lib/sanity.image';
+import { useState } from 'react';
 
 function extractYouTubeId(url: string): string | null {
   const patterns = [
     /youtube\.com\/watch\?v=([^&]+)/,
     /youtube\.com\/embed\/([^?]+)/,
     /youtu\.be\/([^?]+)/,
-  ]
+  ];
   for (const pattern of patterns) {
-    const match = url.match(pattern)
+    const match = url.match(pattern);
     if (match) {
-      return match[1]
+      return match[1];
     }
   }
-  return null
+  return null;
 }
 
 function YouTubeEmbed({ url, posterImage }: { url: string; posterImage?: { url?: string } }) {
-  const [playing, setPlaying] = useState(false)
-  const videoId = extractYouTubeId(url)
+  const [playing, setPlaying] = useState(false);
+  const videoId = extractYouTubeId(url);
 
   if (!videoId) {
-    return null
+    return null;
   }
 
-  const posterUrl = posterImage?.url || `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+  const posterUrl = posterImage?.url || `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
 
   if (!playing) {
     return (
@@ -53,7 +53,7 @@ function YouTubeEmbed({ url, posterImage }: { url: string; posterImage?: { url?:
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -66,16 +66,16 @@ function YouTubeEmbed({ url, posterImage }: { url: string; posterImage?: { url?:
         className="absolute inset-0 w-full h-full"
       />
     </div>
-  )
+  );
 }
 
 const components: PortableTextComponents = {
   types: {
     image: ({ value }) => {
-      const imageUrl = value.url || (value.asset ? urlForImage(value)?.url() : '') || ''
+      const imageUrl = value.url || (value.asset ? urlForImage(value)?.url() : '') || '';
 
       if (!imageUrl) {
-        return null
+        return null;
       }
 
       return (
@@ -88,18 +88,18 @@ const components: PortableTextComponents = {
             className="object-cover rounded-lg"
           />
         </div>
-      )
+      );
     },
     youtube: ({ value }) => {
       if (!value?.url) {
-        return null
+        return null;
       }
-      return <YouTubeEmbed url={value.url} posterImage={value.posterImage} />
+      return <YouTubeEmbed url={value.url} posterImage={value.posterImage} />;
     },
   },
   marks: {
     link: ({ children, value }) => {
-      const rel = !value.href.startsWith('/') ? 'noreferrer noopener' : undefined
+      const rel = !value.href.startsWith('/') ? 'noreferrer noopener' : undefined;
       return (
         <a
           href={value.href}
@@ -108,11 +108,11 @@ const components: PortableTextComponents = {
         >
           {children}
         </a>
-      )
+      );
     },
   },
-}
+};
 
 export function CustomPortableText({ value }: { value: PortableTextBlock | PortableTextBlock[] }) {
-  return <PortableText value={value} components={components} />
+  return <PortableText value={value} components={components} />;
 }

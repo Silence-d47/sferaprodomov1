@@ -1,5 +1,5 @@
-import { createClient } from 'next-sanity'
-import { apiVersion, dataset, projectId } from '../../sanity/env'
+import { createClient } from 'next-sanity';
+import { apiVersion, dataset, projectId } from '../../sanity/env';
 
 export const client = createClient({
   projectId,
@@ -7,7 +7,7 @@ export const client = createClient({
   apiVersion,
   useCdn: false,
   token: process.env.SANITY_API_TOKEN,
-})
+});
 
 // Types
 export interface SanityDocument {

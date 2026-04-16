@@ -1,4 +1,4 @@
-import type { StructureResolver } from 'sanity/structure'
+import type { StructureResolver } from 'sanity/structure';
 
 export const structure: StructureResolver = (S) =>
   S.list()
@@ -65,4 +65,4 @@ export const structure: StructureResolver = (S) =>
             listItem.getId() as string,
           ),
       ),
-    ])
+    ]);

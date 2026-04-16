@@ -1,20 +1,20 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { ContactFormSection } from '@/components/ui/contact-form-section'
-import { ThemeProvider } from '@/components/theme-provider'
-import { ReferenceSlider } from '@/components/ui/reference-slider'
-import { truncateText } from '@/lib/utils'
-import { ProductCard } from '@/components/ui/product-card'
-import { PDFDownloadButton } from '@/components/ui/pdf-download-button'
-import { groq } from 'next-sanity'
-import { serverClient } from '@/lib/sanity.client'
-import { urlForImage } from '@/lib/sanity.image'
-import { productsByCategoryWithFilesQuery, serviceCatalogQuery } from '@/lib/sanity.queries'
-import { getCroppedImageUrl } from '@/lib/sanity.image-crops'
-import type { Image as SanityImage } from 'sanity'
-import type { PortableTextBlock } from '@portabletext/types'
+import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { ContactFormSection } from '@/components/ui/contact-form-section';
+import { ThemeProvider } from '@/components/theme-provider';
+import { ReferenceSlider } from '@/components/ui/reference-slider';
+import { truncateText } from '@/lib/utils';
+import { ProductCard } from '@/components/ui/product-card';
+import { PDFDownloadButton } from '@/components/ui/pdf-download-button';
+import { groq } from 'next-sanity';
+import { serverClient } from '@/lib/sanity.client';
+import { urlForImage } from '@/lib/sanity.image';
+import { productsByCategoryWithFilesQuery, serviceCatalogQuery } from '@/lib/sanity.queries';
+import { getCroppedImageUrl } from '@/lib/sanity.image-crops';
+import type { Image as SanityImage } from 'sanity';
+import type { PortableTextBlock } from '@portabletext/types';
 import {
   Shield,
   Clock,
@@ -26,7 +26,7 @@ import {
   Split,
   Shuffle,
   Building2,
-} from 'lucide-react'
+} from 'lucide-react';
 
 interface Product {
   _id: string
@@ -89,7 +89,7 @@ const referencesQuery = groq`
     location,
     isTopReference
   }
-`
+`;
 
 type FaqEntry = {
   question: string
@@ -102,7 +102,7 @@ const faqsQuery = groq`
     question,
     answer
   }
-`
+`;
 
 // Důvody proč jsme nejlepší volba
 const whyChooseUs = [
@@ -126,7 +126,7 @@ const whyChooseUs = [
     title: 'Platba po realizaci',
     description: 'U nás platíte až po dokončení práce a odzkoušení systému.',
   },
-]
+];
 
 // Typy klimatizací - nová sekce
 const acTypes = [
@@ -176,12 +176,12 @@ const acTypes = [
       'Vhodné pro hotely, kanceláře, komerční prostory',
     ],
   },
-]
+];
 
-export const revalidate = 3600
+export const revalidate = 3600;
 
 export default async function KlimatizacePageRefined() {
-  const fetchOpts = { next: { tags: ['products', 'references'] } }
+  const fetchOpts = { next: { tags: ['products', 'references'] } };
 
   const [products, references, faqs, catalog] = await Promise.all([
     serverClient.fetch<Product[]>(
@@ -196,17 +196,17 @@ export default async function KlimatizacePageRefined() {
       { service: 'klimatizace' },
       fetchOpts,
     ),
-  ])
+  ]);
 
-  const leftDynamicFaqs: FaqEntry[] = []
-  const rightDynamicFaqs: FaqEntry[] = []
+  const leftDynamicFaqs: FaqEntry[] = [];
+  const rightDynamicFaqs: FaqEntry[] = [];
   faqs?.forEach((item, index) => {
     if (index % 2 === 0) {
-      leftDynamicFaqs.push(item)
+      leftDynamicFaqs.push(item);
     } else {
-      rightDynamicFaqs.push(item)
+      rightDynamicFaqs.push(item);
     }
-  })
+  });
 
   return (
     <ThemeProvider theme="klimatizace">
@@ -762,5 +762,5 @@ export default async function KlimatizacePageRefined() {
         </section>
       </div>
     </ThemeProvider>
-  )
+  );
 }

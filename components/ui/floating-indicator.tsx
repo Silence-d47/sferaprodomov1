@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect } from 'react'
-import { Phone, Activity } from 'lucide-react'
+import React, { useState, useEffect } from 'react';
+import { Phone, Activity } from 'lucide-react';
 
 interface FloatingIndicatorProps {
   phoneNumber?: string
@@ -14,19 +14,19 @@ const FloatingIndicator: React.FC<FloatingIndicatorProps> = ({
   service = '24h Elektropohotovost',
   location = 'Opava a okolí do 25km',
 }) => {
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isHovered, setIsHovered] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   // Scroll detection
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY
-      setIsScrolled(scrollY > 200)
-    }
+      const scrollY = window.scrollY;
+      setIsScrolled(scrollY > 200);
+    };
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <div
@@ -103,7 +103,7 @@ const FloatingIndicator: React.FC<FloatingIndicatorProps> = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default FloatingIndicator
+export default FloatingIndicator;

@@ -1,11 +1,11 @@
-import { defineField } from 'sanity'
+import { defineField } from 'sanity';
 
 const cropFields = [
   { name: 'x', title: 'X', type: 'number' as const },
   { name: 'y', title: 'Y', type: 'number' as const },
   { name: 'width', title: 'Width', type: 'number' as const },
   { name: 'height', title: 'Height', type: 'number' as const },
-]
+];
 
 export const deviceCropsField = defineField({
   name: 'deviceCrops',
@@ -32,4 +32,4 @@ export const deviceCropsField = defineField({
       fields: cropFields,
     },
   ],
-})
+});

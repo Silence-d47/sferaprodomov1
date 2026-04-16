@@ -1,16 +1,16 @@
-import { defineField, defineType } from 'sanity'
-import { apiVersion } from '@/sanity/env'
+import { defineField, defineType } from 'sanity';
+import { apiVersion } from '@/sanity/env';
 import {
   createResponsiveImageInput,
   type CropConfig,
-} from '@/sanity/components/ResponsiveImageInput'
-import { deviceCropsField } from '@/sanity/fields/deviceCrops'
+} from '@/sanity/components/ResponsiveImageInput';
+import { deviceCropsField } from '@/sanity/fields/deviceCrops';
 
 const REFERENCE_IMAGE_CROPS: CropConfig[] = [
   { key: 'card', label: 'Karta', ratio: '1:1', aspect: 1 },
   { key: 'slider', label: 'Slider', ratio: '5:4', aspect: 5 / 4 },
   { key: 'detail', label: 'Detail', ratio: '3:2', aspect: 3 / 2 },
-]
+];
 
 export default defineType({
   name: 'projectReference',
@@ -60,15 +60,15 @@ export default defineType({
       validation: (rule) =>
         rule.required().custom(async (slug, context) => {
           if (!slug?.current) {
-            return 'Slug je povinný'
+            return 'Slug je povinný';
           }
-          const client = context.getClient({ apiVersion })
-          const id = context.document?._id?.replace(/^drafts\./, '')
+          const client = context.getClient({ apiVersion });
+          const id = context.document?._id?.replace(/^drafts\./, '');
           const count = await client.fetch(
             `count(*[_type == "projectReference" && slug.current == $slug && !(_id in [$id, $draftId])])`,
             { slug: slug.current, id, draftId: `drafts.${id}` },
-          )
-          return count > 0 ? 'Tento slug již existuje, zvolte jiný' : true
+          );
+          return count > 0 ? 'Tento slug již existuje, zvolte jiný' : true;
         }),
     }),
     defineField({
@@ -135,10 +135,10 @@ export default defineType({
       validation: (rule) =>
         rule.custom((url: string | undefined) => {
           if (!url) {
-            return true
+            return true;
           }
-          const pattern = /^https:\/\/(www\.)?(youtube\.com\/(watch\?v=|embed\/)|youtu\.be\/)/
-          return pattern.test(url) || 'Zadejte platný YouTube odkaz'
+          const pattern = /^https:\/\/(www\.)?(youtube\.com\/(watch\?v=|embed\/)|youtu\.be\/)/;
+          return pattern.test(url) || 'Zadejte platný YouTube odkaz';
         }),
     }),
     defineField({
@@ -331,7 +331,7 @@ export default defineType({
         title,
         subtitle: subtitle || '',
         media,
-      }
+      };
     },
   },
-})
+});

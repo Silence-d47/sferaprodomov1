@@ -1,21 +1,21 @@
-import type React from 'react'
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
-import { ThemeProvider } from '@/components/theme-provider'
-import { SiteLayout } from '@/components/layout/site-layout'
-import { GoogleAnalytics } from '@/components/ui/google-analytics'
-import { FacebookPixel } from '@/components/ui/facebook-pixel'
-import { GoogleTagManager } from '@/components/ui/google-tag-manager'
-import { Analytics } from '@vercel/analytics/next'
-import { SpeedInsights } from '@vercel/speed-insights/next'
-import { UtmCapture } from '@/components/utm-capture'
+import type React from 'react';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { ThemeProvider } from '@/components/theme-provider';
+import { SiteLayout } from '@/components/layout/site-layout';
+import { GoogleAnalytics } from '@/components/ui/google-analytics';
+import { FacebookPixel } from '@/components/ui/facebook-pixel';
+import { GoogleTagManager } from '@/components/ui/google-tag-manager';
+import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+import { UtmCapture } from '@/components/utm-capture';
 
 // Inter - moderní a čitelný webový font
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
-})
+});
 
 export const metadata: Metadata = {
   title: 'SFERA - Klimatizace, Tepelná čerpadla, Rekuperace, Elektroinstalace',
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     shortcut: '/favicon/favicon-32x32.png',
     apple: '/favicon/apple-touch-icon.png',
   },
-}
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -44,5 +44,5 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }

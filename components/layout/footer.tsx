@@ -1,5 +1,5 @@
-import Link from 'next/link'
-import Image from 'next/image'
+import Link from 'next/link';
+import Image from 'next/image';
 import {
   Facebook,
   Instagram,
@@ -12,7 +12,7 @@ import {
   Users,
   CheckCircle,
   ArrowRight,
-} from 'lucide-react'
+} from 'lucide-react';
 
 export function Footer() {
   return (
@@ -264,5 +264,5 @@ export function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

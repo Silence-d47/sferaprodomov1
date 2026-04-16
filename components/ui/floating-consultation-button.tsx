@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { MessageSquare } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { useState, useEffect } from 'react';
+import { MessageSquare } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface FloatingConsultationButtonProps {
   onOpen: () => void
@@ -10,20 +10,20 @@ interface FloatingConsultationButtonProps {
 }
 
 export function FloatingConsultationButton({ onOpen, isVisible }: FloatingConsultationButtonProps) {
-  const [isHovered, setIsHovered] = useState(false)
-  const [isAnimating, setIsAnimating] = useState(false)
+  const [isHovered, setIsHovered] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
     if (isVisible) {
-      const timer = setTimeout(() => setIsAnimating(true), 100)
-      return () => clearTimeout(timer)
+      const timer = setTimeout(() => setIsAnimating(true), 100);
+      return () => clearTimeout(timer);
     } else {
-      setIsAnimating(false)
+      setIsAnimating(false);
     }
-  }, [isVisible])
+  }, [isVisible]);
 
   if (!isVisible) {
-    return null
+    return null;
   }
 
   return (
@@ -79,5 +79,5 @@ export function FloatingConsultationButton({ onOpen, isVisible }: FloatingConsul
         Konzultace
       </div>
     </div>
-  )
+  );
 }

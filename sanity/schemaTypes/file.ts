@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export default defineType({
   name: 'fileAsset',
@@ -9,7 +9,7 @@ export default defineType({
       name: 'title',
       title: 'Title',
       type: 'string',
-      validation: Rule => Rule.required(),
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'description',
@@ -31,13 +31,13 @@ export default defineType({
       type: 'string',
       options: {
         list: [
-          {title: 'Datasheet', value: 'datasheet'},
-          {title: 'Návod k instalaci', value: 'manual'},
-          {title: 'Katalog', value: 'catalog'},
-          {title: 'Certifikát', value: 'certificate'},
-          {title: 'Technický list', value: 'specification'},
-          {title: 'Záruční list', value: 'warranty'},
-          {title: 'Jiné', value: 'other'},
+          { title: 'Datasheet', value: 'datasheet' },
+          { title: 'Návod k instalaci', value: 'manual' },
+          { title: 'Katalog', value: 'catalog' },
+          { title: 'Certifikát', value: 'certificate' },
+          { title: 'Technický list', value: 'specification' },
+          { title: 'Záruční list', value: 'warranty' },
+          { title: 'Jiné', value: 'other' },
         ],
       },
     }),
@@ -49,4 +49,4 @@ export default defineType({
       media: 'file',
     },
   },
-})
+});

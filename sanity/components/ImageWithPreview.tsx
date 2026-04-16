@@ -1,18 +1,18 @@
-import { useClient } from 'sanity'
-import imageUrlBuilder from '@sanity/image-url'
-import type { ObjectInputProps } from 'sanity'
-import { useMemo } from 'react'
-import { Card, Flex, Stack, Text, Box } from '@sanity/ui'
+import { useClient } from 'sanity';
+import imageUrlBuilder from '@sanity/image-url';
+import type { ObjectInputProps } from 'sanity';
+import { useMemo } from 'react';
+import { Card, Flex, Stack, Text, Box } from '@sanity/ui';
 
 const PREVIEWS = [
   { label: 'Desktop', ratio: '16:9', width: 320, height: 180 },
   { label: 'Tablet', ratio: '4:3', width: 240, height: 180 },
   { label: 'Mobil', ratio: '1:1', width: 180, height: 180 },
-]
+];
 
 export function ImageWithPreview(props: ObjectInputProps) {
-  const client = useClient({ apiVersion: '2026-03-05' })
-  const builder = useMemo(() => imageUrlBuilder(client), [client])
+  const client = useClient({ apiVersion: '2026-03-05' });
+  const builder = useMemo(() => imageUrlBuilder(client), [client]);
 
   const value = props.value as
     | {
@@ -20,9 +20,9 @@ export function ImageWithPreview(props: ObjectInputProps) {
         crop?: { top: number; bottom: number; left: number; right: number }
         hotspot?: { x: number; y: number; width: number; height: number }
       }
-    | undefined
+    | undefined;
 
-  const hasAsset = Boolean(value?.asset?._ref)
+  const hasAsset = Boolean(value?.asset?._ref);
 
   return (
     <Stack space={4}>
@@ -83,5 +83,5 @@ export function ImageWithPreview(props: ObjectInputProps) {
         </Card>
       )}
     </Stack>
-  )
+  );
 }

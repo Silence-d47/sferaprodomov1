@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export default defineType({
   name: 'referencePageSettings',
@@ -37,7 +37,7 @@ export default defineType({
   ],
   preview: {
     prepare() {
-      return { title: 'Nastavení stránky Reference' }
+      return { title: 'Nastavení stránky Reference' };
     },
   },
-})
+});

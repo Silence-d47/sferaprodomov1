@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export default defineType({
   name: 'employee',
@@ -9,13 +9,13 @@ export default defineType({
       name: 'name',
       title: 'Jméno a příjmení',
       type: 'string',
-      validation: Rule => Rule.required(),
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'position',
       title: 'Pozice',
       type: 'string',
-      validation: Rule => Rule.required(),
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'image',
@@ -65,24 +65,24 @@ export default defineType({
       media: 'image',
     },
     prepare(selection) {
-      const {title, subtitle, media} = selection
+      const { title, subtitle, media } = selection;
       return {
         title: title,
         subtitle: subtitle,
         media: media,
-      }
+      };
     },
   },
   orderings: [
     {
       title: 'Pořadí zobrazení',
       name: 'orderAsc',
-      by: [{field: 'order', direction: 'asc'}],
+      by: [{ field: 'order', direction: 'asc' }],
     },
     {
       title: 'Jméno A-Z',
       name: 'nameAsc',
-      by: [{field: 'name', direction: 'asc'}],
+      by: [{ field: 'name', direction: 'asc' }],
     },
   ],
-})
+});

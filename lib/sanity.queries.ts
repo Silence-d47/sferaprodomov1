@@ -1,4 +1,4 @@
-import { groq } from 'next-sanity'
+import { groq } from 'next-sanity';
 
 // Shared GROQ projection for body blocks with image and YouTube support
 export const bodyProjection = `"body": body[]{
@@ -14,7 +14,7 @@ export const bodyProjection = `"body": body[]{
         "url": asset->url
       }
     }
-  }`
+  }`;
 
 export const heroSlidesQuery = groq`
   *[_type == "heroSlide" && isActive == true] | order(order asc) {
@@ -39,7 +39,7 @@ export const heroSlidesQuery = groq`
     order,
     isActive
   }
-`
+`;
 
 // Blog queries
 export const postsQuery = groq`
@@ -57,7 +57,7 @@ export const postsQuery = groq`
     readingTime,
     subtitle
   }
-`
+`;
 
 export const postQuery = groq`
   *[_type == "post" && slug.current == $slug][0] {
@@ -75,7 +75,7 @@ export const postQuery = groq`
     keywords,
     seo
   }
-`
+`;
 
 export const categoriesQuery = groq`
   *[_type == "category"] {
@@ -83,7 +83,7 @@ export const categoriesQuery = groq`
     title,
     description
   }
-`
+`;
 
 export const authorsQuery = groq`
   *[_type == "author"] {
@@ -93,7 +93,7 @@ export const authorsQuery = groq`
     image,
     bio
   }
-`
+`;
 
 // Reference queries
 export const projectReferencesQuery = groq`
@@ -121,7 +121,7 @@ export const projectReferencesQuery = groq`
     isTopReference,
     _createdAt
   }
-`
+`;
 
 export const featuredReferencesQuery = groq`
   *[_type == "projectReference" && isTopReference == true] | order(_createdAt desc)[0...6] {
@@ -148,7 +148,7 @@ export const featuredReferencesQuery = groq`
     isTopReference,
     _createdAt
   }
-`
+`;
 
 export const employeesQuery = groq`
   *[_type == "employee" && isActive == true] | order(order asc, name asc) {
@@ -160,7 +160,7 @@ export const employeesQuery = groq`
     email,
     isDirector
   }
-`
+`;
 
 export const productsByCategoryQuery = groq`
   *[_type == "product" && category->slug.current == $category] {
@@ -181,7 +181,7 @@ export const productsByCategoryQuery = groq`
       fileType
     }
   }
-`
+`;
 
 export const bestSellingProductsQuery = groq`
   *[_type == "product" && category->slug.current == $category && isBestSelling == true] | order(_createdAt desc)[0...12] {
@@ -200,7 +200,7 @@ export const bestSellingProductsQuery = groq`
       "fileUrl": file.asset->url
     }
   }
-`
+`;
 
 // Reference page hero video
 export const referenceHeroVideoQuery = groq`
@@ -210,7 +210,7 @@ export const referenceHeroVideoQuery = groq`
     "posterImage": posterImage.asset->url,
     videoOpacity
   }
-`
+`;
 
 export const productsByCategoryWithFilesQuery = groq`
   *[_type == "product" && category->slug.current == $category] {
@@ -236,7 +236,7 @@ export const productsByCategoryWithFilesQuery = groq`
       "fileUrl": file.asset->url
     }
   }
-`
+`;
 
 // Service catalog (PDF download from category)
 export const serviceCatalogQuery = groq`
@@ -244,4 +244,4 @@ export const serviceCatalogQuery = groq`
     "title": catalogButtonText,
     "fileUrl": catalogFile.asset->url
   }
-`
+`;
