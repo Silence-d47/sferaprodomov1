@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { useRef, useState, useEffect, useCallback } from 'react'
-import { Volume2, VolumeX, Maximize } from 'lucide-react'
+import { useRef, useState, useEffect, useCallback } from 'react';
+import { Volume2, VolumeX, Maximize } from 'lucide-react';
 
 interface YTPlayer {
   destroy: () => void
@@ -38,48 +38,48 @@ function extractYouTubeId(url: string): string | null {
     /youtube\.com\/watch\?v=([^&]+)/,
     /youtube\.com\/embed\/([^?]+)/,
     /youtu\.be\/([^?]+)/,
-  ]
+  ];
   for (const pattern of patterns) {
-    const match = url.match(pattern)
+    const match = url.match(pattern);
     if (match) {
-      return match[1]
+      return match[1];
     }
   }
-  return null
+  return null;
 }
 
-let apiLoaded = false
-let apiLoading = false
-const apiCallbacks: (() => void)[] = []
+let apiLoaded = false;
+let apiLoading = false;
+const apiCallbacks: (() => void)[] = [];
 
 function loadYouTubeAPI(): Promise<void> {
   if (apiLoaded) {
-    return Promise.resolve()
+    return Promise.resolve();
   }
   return new Promise((resolve) => {
-    apiCallbacks.push(resolve)
+    apiCallbacks.push(resolve);
     if (apiLoading) {
-      return
+      return;
     }
-    apiLoading = true
+    apiLoading = true;
 
-    const script = document.createElement('script')
-    script.src = 'https://www.youtube.com/iframe_api'
-    document.head.appendChild(script)
+    const script = document.createElement('script');
+    script.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(script);
 
-    const w = window as unknown as YTWindow
+    const w = window as unknown as YTWindow;
     w.onYouTubeIframeAPIReady = () => {
-      apiLoaded = true
-      apiCallbacks.forEach((cb) => cb())
-      apiCallbacks.length = 0
-    }
-  })
+      apiLoaded = true;
+      apiCallbacks.forEach((cb) => cb());
+      apiCallbacks.length = 0;
+    };
+  });
 }
 
 function formatTime(seconds: number): string {
-  const m = Math.floor(seconds / 60)
-  const s = Math.floor(seconds % 60)
-  return `${m}:${s.toString().padStart(2, '0')}`
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
 interface YouTubePlayerProps {
@@ -88,58 +88,58 @@ interface YouTubePlayerProps {
 }
 
 export function YouTubePlayer({ youtubeUrl, title = 'Video' }: YouTubePlayerProps) {
-  const wrapperRef = useRef<HTMLDivElement>(null)
-  const playerDivRef = useRef<HTMLDivElement>(null)
-  const playerRef = useRef<YTPlayer | null>(null)
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  const [muted, setMuted] = useState(true)
-  const [ready, setReady] = useState(false)
-  const [progress, setProgress] = useState(0)
-  const [duration, setDuration] = useState(0)
-  const [currentTime, setCurrentTime] = useState(0)
-  const [_isSeeking, setIsSeeking] = useState(false)
-  const videoId = extractYouTubeId(youtubeUrl)
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const playerDivRef = useRef<HTMLDivElement>(null);
+  const playerRef = useRef<YTPlayer | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [muted, setMuted] = useState(true);
+  const [ready, setReady] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [_isSeeking, setIsSeeking] = useState(false);
+  const videoId = extractYouTubeId(youtubeUrl);
 
   const startProgressTracking = useCallback(() => {
     if (intervalRef.current) {
-      return
+      return;
     }
     intervalRef.current = setInterval(() => {
-      const player = playerRef.current
+      const player = playerRef.current;
       if (!player) {
-        return
+        return;
       }
-      const dur = player.getDuration()
-      const cur = player.getCurrentTime()
+      const dur = player.getDuration();
+      const cur = player.getCurrentTime();
       if (dur > 0) {
-        setDuration(dur)
-        setCurrentTime(cur)
-        setProgress((cur / dur) * 100)
+        setDuration(dur);
+        setCurrentTime(cur);
+        setProgress((cur / dur) * 100);
       }
-    }, 250)
-  }, [])
+    }, 250);
+  }, []);
 
   const stopProgressTracking = useCallback(() => {
     if (intervalRef.current) {
-      clearInterval(intervalRef.current)
-      intervalRef.current = null
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (!videoId || !playerDivRef.current) {
-      return
+      return;
     }
-    let destroyed = false
+    let destroyed = false;
 
     loadYouTubeAPI().then(() => {
       if (destroyed || !playerDivRef.current) {
-        return
+        return;
       }
 
-      const w = window as unknown as YTWindow
+      const w = window as unknown as YTWindow;
       if (!w.YT) {
-        return
+        return;
       }
 
       playerRef.current = new w.YT.Player(playerDivRef.current, {
@@ -159,75 +159,75 @@ export function YouTubePlayer({ youtubeUrl, title = 'Video' }: YouTubePlayerProp
         events: {
           onReady: () => {
             if (!destroyed) {
-              setReady(true)
-              startProgressTracking()
+              setReady(true);
+              startProgressTracking();
             }
           },
           onStateChange: (e) => {
             if (destroyed) {
-              return
+              return;
             }
             // 0 = ended, 1 = playing
             if (e.data === 0) {
-              playerRef.current?.seekTo(0, true)
+              playerRef.current?.seekTo(0, true);
             } else if (e.data === 1) {
-              startProgressTracking()
+              startProgressTracking();
             } else {
-              stopProgressTracking()
+              stopProgressTracking();
             }
           },
         },
-      })
-    })
+      });
+    });
 
     return () => {
-      destroyed = true
-      stopProgressTracking()
-      playerRef.current?.destroy()
-      playerRef.current = null
-    }
-  }, [videoId, startProgressTracking, stopProgressTracking])
+      destroyed = true;
+      stopProgressTracking();
+      playerRef.current?.destroy();
+      playerRef.current = null;
+    };
+  }, [videoId, startProgressTracking, stopProgressTracking]);
 
   const toggleMute = () => {
-    const player = playerRef.current
+    const player = playerRef.current;
     if (!player) {
-      return
+      return;
     }
     if (muted) {
-      player.unMute()
-      player.setVolume(100)
+      player.unMute();
+      player.setVolume(100);
     } else {
-      player.mute()
+      player.mute();
     }
-    setMuted(!muted)
-  }
+    setMuted(!muted);
+  };
 
   const toggleFullscreen = () => {
-    const el = wrapperRef.current
+    const el = wrapperRef.current;
     if (!el) {
-      return
+      return;
     }
     if (document.fullscreenElement) {
-      document.exitFullscreen()
+      document.exitFullscreen();
     } else {
-      el.requestFullscreen()
+      el.requestFullscreen();
     }
-  }
+  };
 
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseFloat(e.target.value)
-    setProgress(value)
-    setCurrentTime((value / 100) * duration)
-  }
+    const value = parseFloat(e.target.value);
+    setProgress(value);
+    setCurrentTime((value / 100) * duration);
+  };
 
   const commitSeek = () => {
-    const seekTime = (progress / 100) * duration
-    playerRef.current?.seekTo(seekTime, true)
-    setIsSeeking(false)
-  }
+    const seekTime = (progress / 100) * duration;
+    playerRef.current?.seekTo(seekTime, true);
+    setIsSeeking(false);
+  };
 
   if (!videoId) {
-    return null
+    return null;
   }
 
   return (
@@ -290,5 +290,5 @@ export function YouTubePlayer({ youtubeUrl, title = 'Video' }: YouTubePlayerProp
         </>
       )}
     </div>
-  )
+  );
 }

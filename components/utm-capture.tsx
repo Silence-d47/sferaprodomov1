@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
-import { captureUtmParams } from '@/lib/utm-params'
+import { useEffect } from 'react';
+import { captureUtmParams } from '@/lib/utm-params';
 
 export function UtmCapture() {
   useEffect(() => {
-    captureUtmParams()
-  }, [])
+    captureUtmParams();
+  }, []);
 
-  return null
+  return null;
 }

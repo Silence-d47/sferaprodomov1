@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface ExpandableFeaturesProps {
   features: string[]
 }
 
 export function ExpandableFeatures({ features }: ExpandableFeaturesProps) {
-  const [showFeatures, setShowFeatures] = useState(false)
+  const [showFeatures, setShowFeatures] = useState(false);
 
   if (!features || features.length === 0) {
-    return null
+    return null;
   }
 
   return (
@@ -58,5 +58,5 @@ export function ExpandableFeatures({ features }: ExpandableFeaturesProps) {
         </div>
       )}
     </div>
-  )
+  );
 }

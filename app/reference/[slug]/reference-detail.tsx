@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent } from '@/components/ui/card'
-import { EnhancedSectionDivider } from '@/components/ui/enhanced-section-divider'
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { EnhancedSectionDivider } from '@/components/ui/enhanced-section-divider';
 import {
   ArrowLeft,
   Star,
@@ -20,11 +20,11 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
-} from 'lucide-react'
-import { CustomPortableText } from '@/lib/sanity.portableText'
-import { getCroppedImageUrl } from '@/lib/sanity.image-crops'
-import { YouTubePlayer } from '@/components/ui/youtube-player'
-import type { PortableTextBlock } from '@portabletext/types'
+} from 'lucide-react';
+import { CustomPortableText } from '@/lib/sanity.portableText';
+import { getCroppedImageUrl } from '@/lib/sanity.image-crops';
+import { YouTubePlayer } from '@/components/ui/youtube-player';
+import type { PortableTextBlock } from '@portabletext/types';
 
 export type ReferenceData = {
   title: string
@@ -64,16 +64,16 @@ interface Props {
 }
 
 export default function ReferenceDetail({ reference }: Props) {
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null)
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
-  const showReview = Boolean(reference.testimonial?.quote)
+  const showReview = Boolean(reference.testimonial?.quote);
   const handleNextImage = () => {
     if (selectedImageIndex !== null && reference.gallery) {
       setSelectedImageIndex((prevIndex) =>
         prevIndex === null ? 0 : (prevIndex + 1) % reference.gallery!.length,
-      )
+      );
     }
-  }
+  };
 
   const handlePrevImage = () => {
     if (selectedImageIndex !== null && reference.gallery) {
@@ -81,9 +81,9 @@ export default function ReferenceDetail({ reference }: Props) {
         prevIndex === null
           ? 0
           : (prevIndex - 1 + reference.gallery!.length) % reference.gallery!.length,
-      )
+      );
     }
-  }
+  };
 
   return (
     <div className="flex flex-col">
@@ -355,8 +355,8 @@ export default function ReferenceDetail({ reference }: Props) {
 
             <button
               onClick={(e) => {
-                e.stopPropagation()
-                handlePrevImage()
+                e.stopPropagation();
+                handlePrevImage();
               }}
               className="absolute left-4 top-1/2 -translate-y-1/2 text-white bg-black/50 rounded-full p-2 hover:bg-black/70 transition-colors z-50"
             >
@@ -365,8 +365,8 @@ export default function ReferenceDetail({ reference }: Props) {
 
             <button
               onClick={(e) => {
-                e.stopPropagation()
-                handleNextImage()
+                e.stopPropagation();
+                handleNextImage();
               }}
               className="absolute right-4 top-1/2 -translate-y-1/2 text-white bg-black/50 rounded-full p-2 hover:bg-black/70 transition-colors z-50"
             >
@@ -487,5 +487,5 @@ export default function ReferenceDetail({ reference }: Props) {
         </div>
       </section>
     </div>
-  )
+  );
 }

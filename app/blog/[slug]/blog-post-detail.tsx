@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import { Card, CardContent, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
+import { Card, CardContent, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import {
   ArrowLeft,
   ArrowRight,
@@ -28,13 +28,13 @@ import {
   Phone,
   Mail,
   MapPin,
-} from 'lucide-react'
-import Image from 'next/image'
-import { EnhancedSectionDivider } from '@/components/ui/enhanced-section-divider'
-import { Toaster, toast } from 'react-hot-toast'
-import { CustomPortableText } from '@/lib/sanity.portableText'
-import { getCroppedImageUrl } from '@/lib/sanity.image-crops'
-import type { PortableTextBlock } from '@portabletext/types'
+} from 'lucide-react';
+import Image from 'next/image';
+import { EnhancedSectionDivider } from '@/components/ui/enhanced-section-divider';
+import { Toaster, toast } from 'react-hot-toast';
+import { CustomPortableText } from '@/lib/sanity.portableText';
+import { getCroppedImageUrl } from '@/lib/sanity.image-crops';
+import type { PortableTextBlock } from '@portabletext/types';
 
 type CropData = { x: number; y: number; width: number; height: number }
 
@@ -123,10 +123,10 @@ const categoryConfig: Record<
     description: 'Řešení pro firmy a podniky',
     gradient: 'from-gray-500 to-slate-500',
   },
-}
+};
 
 export default function BlogPostDetail({ post, allPosts }: Props) {
-  const slug = post.slug.current
+  const slug = post.slug.current;
 
   const handleShare = () => {
     if (navigator.share) {
@@ -137,35 +137,35 @@ export default function BlogPostDetail({ post, allPosts }: Props) {
           url: window.location.href,
         })
         .then(() => toast.success('Článek úspěšně sdílen!'))
-        .catch((error) => console.error('Error sharing:', error))
+        .catch((error) => console.error('Error sharing:', error));
     } else {
-      toast.error('Sdílení není na tomto zařízení podporováno.')
+      toast.error('Sdílení není na tomto zařízení podporováno.');
     }
-  }
+  };
 
   const handleBookmark = () => {
-    toast.success('Článek byl uložen do záložek!')
-  }
+    toast.success('Článek byl uložen do záložek!');
+  };
 
   const handleGenericClick = () => {
     toast('Tato funkce se připravuje.', {
       icon: '🚧',
-    })
-  }
+    });
+  };
 
-  const currentIndex = allPosts.findIndex((p) => p.slug.current === slug)
-  const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null
-  const nextPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null
+  const currentIndex = allPosts.findIndex((p) => p.slug.current === slug);
+  const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
+  const nextPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
 
   const relatedPosts = allPosts
     .filter(
       (p) => p.slug.current !== slug && p.categories?.some((cat) => post.categories?.includes(cat)),
     )
-    .slice(0, 3)
+    .slice(0, 3);
 
   const getCategoryConfig = (category: string) => {
-    return categoryConfig[category] || categoryConfig['Klimatizace']
-  }
+    return categoryConfig[category] || categoryConfig['Klimatizace'];
+  };
 
   const getImageUrl = (p: PostData, cropKey: string, width: number) => {
     return (
@@ -176,8 +176,8 @@ export default function BlogPostDetail({ post, allPosts }: Props) {
       ) ||
       p.mainImage ||
       '/placeholder.svg'
-    )
-  }
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
@@ -374,8 +374,8 @@ export default function BlogPostDetail({ post, allPosts }: Props) {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
               {relatedPosts.map((relatedPost) => {
-                const category = relatedPost.categories?.[0] || 'Klimatizace'
-                const config = getCategoryConfig(category)
+                const category = relatedPost.categories?.[0] || 'Klimatizace';
+                const config = getCategoryConfig(category);
 
                 return (
                   <Card
@@ -425,7 +425,7 @@ export default function BlogPostDetail({ post, allPosts }: Props) {
                       </Link>
                     </CardContent>
                   </Card>
-                )
+                );
               })}
             </div>
           </div>
@@ -533,5 +533,5 @@ export default function BlogPostDetail({ post, allPosts }: Props) {
         </div>
       </section>
     </div>
-  )
+  );
 }

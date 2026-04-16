@@ -1,20 +1,21 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { ProductCard } from '@/components/ui/product-card'
-import { ContactFormSection } from '@/components/ui/contact-form-section'
-import { PDFDownloadButton } from '@/components/ui/pdf-download-button'
-import { Badge } from '@/components/ui/badge'
-import { ThemeProvider } from '@/components/theme-provider'
+import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { ProductCard } from '@/components/ui/product-card';
+import { ContactFormSection } from '@/components/ui/contact-form-section';
+import { PDFDownloadButton } from '@/components/ui/pdf-download-button';
+import { Badge } from '@/components/ui/badge';
+import { ThemeProvider } from '@/components/theme-provider';
+import { truncateText } from '@/lib/utils';
 
-import { groq } from 'next-sanity'
-import { serverClient } from '@/lib/sanity.client'
-import { serviceCatalogQuery } from '@/lib/sanity.queries'
-import { getCroppedImageUrl } from '@/lib/sanity.image-crops'
-import { CustomPortableText } from '@/lib/sanity.portableText'
-import { urlForImage } from '@/lib/sanity.image'
-import type { Image as SanityImage } from 'sanity'
-import type { PortableTextBlock } from '@portabletext/types'
+import { groq } from 'next-sanity';
+import { serverClient } from '@/lib/sanity.client';
+import { serviceCatalogQuery } from '@/lib/sanity.queries';
+import { getCroppedImageUrl } from '@/lib/sanity.image-crops';
+import { CustomPortableText } from '@/lib/sanity.portableText';
+import { urlForImage } from '@/lib/sanity.image';
+import type { Image as SanityImage } from 'sanity';
+import type { PortableTextBlock } from '@portabletext/types';
 import {
   Clock,
   CheckCircle,
@@ -27,7 +28,7 @@ import {
   Waves,
   Mountain,
   Wrench,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Důvody, proč si vybrat právě nás (v novém stylu)
 const whyChooseUs = [
@@ -51,7 +52,7 @@ const whyChooseUs = [
     title: 'Rychlá realizace',
     description: 'Od návrhu po spuštění systému do několika týdnů, bez zbytečného čekání.',
   },
-]
+];
 
 // Typy tepelných čerpadel (vylepšená sekce)
 const heatPumpTypes = [
@@ -91,7 +92,7 @@ const heatPumpTypes = [
       'Možnost pasivního chlazení',
     ],
   },
-]
+];
 
 // Interface pro produkty tepelných čerpadel
 interface Product {
@@ -137,7 +138,8 @@ type CropData = { x: number; y: number; width: number; height: number }
 type ReferenceCard = {
   id: string
   title: string
-  description: string
+  description?: string
+  bodyPreview?: string
   image: string
   imageRef?: string
   deviceCrops?: Record<string, CropData>
@@ -152,13 +154,14 @@ const faqsQuery = groq`
     question,
     answer
   }
-`
+`;
 
 const referencesQuery = groq`
   *[_type == "projectReference" && isActive != false && category == "tepelna-cerpadla"] | order(_createdAt desc)[0...9] {
     "id": slug.current,
     title,
     description,
+    "bodyPreview": pt::text(body),
     "image": image.asset->url,
     "imageRef": image.asset._ref,
     "deviceCrops": image.deviceCrops,
@@ -166,12 +169,12 @@ const referencesQuery = groq`
     location,
     isTopReference
   }
-`
+`;
 
-export const revalidate = 3600
+export const revalidate = 3600;
 
 export default async function TepelnaCerpadlaPage() {
-  const fetchOpts = { next: { tags: ['products', 'references'] } }
+  const fetchOpts = { next: { tags: ['products', 'references'] } };
 
   const [products, faqs, references, catalog] = await Promise.all([
     serverClient.fetch<Product[]>(
@@ -208,17 +211,17 @@ export default async function TepelnaCerpadlaPage() {
       { service: 'tepelna-cerpadla' },
       fetchOpts,
     ),
-  ])
+  ]);
 
-  const leftDynamicFaqs: FaqEntry[] = []
-  const rightDynamicFaqs: FaqEntry[] = []
+  const leftDynamicFaqs: FaqEntry[] = [];
+  const rightDynamicFaqs: FaqEntry[] = [];
   faqs?.forEach((item, index) => {
     if (index % 2 === 0) {
-      leftDynamicFaqs.push(item)
+      leftDynamicFaqs.push(item);
     } else {
-      rightDynamicFaqs.push(item)
+      rightDynamicFaqs.push(item);
     }
-  })
+  });
 
   return (
     <ThemeProvider theme="tepelna-cerpadla">
@@ -480,10 +483,10 @@ export default async function TepelnaCerpadlaPage() {
                         className="w-6 md:w-8 h-6 md:h-8 text-green-700/20 mb-3 md:mb-4 flex-shrink-0"
                         fill="currentColor"
                       />
-                      <p className="text-slate-600 italic mb-4 md:mb-6 flex-grow text-sm md:text-base">
-                        &ldquo;{ref.description}&rdquo;
+                      <p className="text-slate-600 italic text-sm md:text-base line-clamp-4">
+                        &ldquo;{truncateText(ref.bodyPreview || ref.description)}&rdquo;
                       </p>
-                      <div className="mt-auto pt-3 md:pt-5 border-t border-slate-200">
+                      <div className="mt-auto pt-4 md:pt-5 border-t border-slate-200">
                         <p className="font-bold text-slate-800 text-sm md:text-base">{ref.title}</p>
                         <p className="text-xs md:text-sm text-slate-500">
                           {ref.location || ref.category}
@@ -826,5 +829,5 @@ export default async function TepelnaCerpadlaPage() {
         </section>
       </div>
     </ThemeProvider>
-  )
+  );
 }

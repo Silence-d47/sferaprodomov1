@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import { Clock, Phone, MapPin, Menu } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
-import Image from 'next/image'
+import { Clock, Phone, MapPin, Menu } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import Image from 'next/image';
 
 export function TopBar() {
   return (
@@ -147,7 +147,7 @@ export function TopBar() {
             className="text-white sm:hidden"
             onClick={() => {
               if (typeof window !== 'undefined') {
-                ;(document.querySelector('[data-header-sheet-trigger]') as HTMLElement)?.click()
+                ;(document.querySelector('[data-header-sheet-trigger]') as HTMLElement)?.click();
               }
             }}
           >
@@ -160,5 +160,5 @@ export function TopBar() {
         </div>
       </div>
     </div>
-  )
+  );
 }

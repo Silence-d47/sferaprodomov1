@@ -1,19 +1,19 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { X, Phone, Mail, MapPin, MessageSquare, CheckCircle, Award } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { useConversionMetrics } from '@/hooks/use-conversion-metrics'
-import { appendUtmToFormData } from '@/lib/utm-params'
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { X, Phone, Mail, MapPin, MessageSquare, CheckCircle, Award } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useConversionMetrics } from '@/hooks/use-conversion-metrics';
+import { appendUtmToFormData } from '@/lib/utm-params';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/ui/select';
 
 interface WelcomePopupProps {
   isOpen: boolean
@@ -21,26 +21,26 @@ interface WelcomePopupProps {
 }
 
 export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isVisible, setIsVisible] = useState(false)
-  const { saveConversion } = useConversionMetrics()
-  const router = useRouter()
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const { saveConversion } = useConversionMetrics();
+  const router = useRouter();
 
   useEffect(() => {
     if (isOpen) {
-      const timer = setTimeout(() => setIsVisible(true), 100)
-      return () => clearTimeout(timer)
+      const timer = setTimeout(() => setIsVisible(true), 100);
+      return () => clearTimeout(timer);
     } else {
-      setIsVisible(false)
+      setIsVisible(false);
     }
-  }, [isOpen])
+  }, [isOpen]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+    e.preventDefault();
+    setIsSubmitting(true);
 
-    const formElement = e.currentTarget
-    const formData = new FormData(formElement)
+    const formElement = e.currentTarget;
+    const formData = new FormData(formElement);
     const data = {
       name: '', // Prázdné, protože jsme odstranili pole
       phone: formData.get('phone') as string,
@@ -48,50 +48,50 @@ export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
       zipCode: formData.get('zipCode') as string,
       service: formData.get('service') as string, // Přidáno pro sběr vybrané služby
       source: 'welcome-popup',
-    }
+    };
 
     // URL vašeho Google Apps Scriptu
     const scriptURL =
-      'https://script.google.com/macros/s/AKfycbx-qf_oc0ftJqcPvfZSsYhnm37vu89MDHKtKw2TdATRRGNrG8mXboPol4sWXV9JDBKigQ/exec'
+      'https://script.google.com/macros/s/AKfycbx-qf_oc0ftJqcPvfZSsYhnm37vu89MDHKtKw2TdATRRGNrG8mXboPol4sWXV9JDBKigQ/exec';
 
     try {
       // 1. Odeslání dat na Google Script
       // Vytvoříme FormData znovu, protože Google Script očekává tento formát.
       // Přidáme datum, pokud ho chceme poslat z frontendu (lepší je ale nechat ho generovat scriptem)
-      const googleFormData = new FormData()
-      googleFormData.append('email', data.email)
-      googleFormData.append('phone', data.phone)
-      googleFormData.append('zipCode', data.zipCode)
-      googleFormData.append('service', data.service)
-      googleFormData.append('source', data.source)
-      appendUtmToFormData(googleFormData)
+      const googleFormData = new FormData();
+      googleFormData.append('email', data.email);
+      googleFormData.append('phone', data.phone);
+      googleFormData.append('zipCode', data.zipCode);
+      googleFormData.append('service', data.service);
+      googleFormData.append('source', data.source);
+      appendUtmToFormData(googleFormData);
 
       const response = await fetch(scriptURL, {
         method: 'POST',
         body: googleFormData,
-      })
+      });
 
       if (!response.ok) {
-        throw new Error('Chyba při odesílání do Google Sheets.')
+        throw new Error('Chyba při odesílání do Google Sheets.');
       }
 
       // 2. Uložení konverze lokálně (best-effort — neblokuje redirect)
-      saveConversion(data)
+      saveConversion(data);
 
       // 3. Redirect na děkovnou stránku
-      formElement.reset()
-      onClose()
-      router.push('/dekujeme')
+      formElement.reset();
+      onClose();
+      router.push('/dekujeme');
     } catch (error) {
-      console.error('Chyba při odesílání:', error)
-      alert('Formulář se nepodařilo odeslat. Zkuste to prosím znovu.')
+      console.error('Chyba při odesílání:', error);
+      alert('Formulář se nepodařilo odeslat. Zkuste to prosím znovu.');
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   if (!isOpen) {
-    return null
+    return null;
   }
 
   return (
@@ -235,5 +235,5 @@ export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

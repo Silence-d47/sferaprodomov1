@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import React from 'react'
-import Image from 'next/image'
+import React from 'react';
+import Image from 'next/image';
 
 interface LogoCarouselProps {
   speed?: 'slow' | 'medium' | 'fast'
@@ -22,10 +22,10 @@ export function LogoCarousel({
     { name: 'Panasonic', src: '/labels/panasonic.svg' },
     { name: 'Samsung', src: '/labels/samsung.svg' },
     { name: 'Viessmann', src: '/labels/viessmann.svg' },
-  ]
+  ];
 
   // Duplicate logos multiple times for seamless infinite scroll
-  const duplicatedLogos = [...logos, ...logos, ...logos, ...logos, ...logos]
+  const duplicatedLogos = [...logos, ...logos, ...logos, ...logos, ...logos];
 
   return (
     <section className="carousel-section bg-gray-50 relative overflow-hidden">
@@ -111,5 +111,5 @@ export function LogoCarousel({
         </div>
       </div>
     </section>
-  )
+  );
 }

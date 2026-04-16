@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import Image from 'next/image'
-import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import Link from 'next/link';
+import Image from 'next/image';
+import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Calendar,
   User,
@@ -19,12 +19,12 @@ import {
   Wrench,
   Home,
   Building2,
-} from 'lucide-react'
-import { client } from '@/lib/sanity.client'
-import { postsQuery, categoriesQuery } from '@/lib/sanity.queries'
-import { getCroppedImageUrl } from '@/lib/sanity.image-crops'
-import { EnhancedSectionDivider } from '@/components/ui/enhanced-section-divider'
-import { useState, useEffect, useMemo } from 'react'
+} from 'lucide-react';
+import { client } from '@/lib/sanity.client';
+import { postsQuery, categoriesQuery } from '@/lib/sanity.queries';
+import { getCroppedImageUrl } from '@/lib/sanity.image-crops';
+import { EnhancedSectionDivider } from '@/components/ui/enhanced-section-divider';
+import { useState, useEffect, useMemo } from 'react';
 
 type CropData = { x: number; y: number; width: number; height: number }
 
@@ -108,7 +108,7 @@ const categoryConfig: Record<
     description: 'Řešení pro firmy a podniky',
     gradient: 'from-gray-500 to-slate-500',
   },
-}
+};
 
 // Fetch data from Sanity
 async function getBlogData() {
@@ -116,42 +116,42 @@ async function getBlogData() {
     const [posts, categories] = await Promise.all([
       client.fetch<Post[]>(postsQuery),
       client.fetch<Category[]>(categoriesQuery),
-    ])
+    ]);
 
-    return { posts, categories }
+    return { posts, categories };
   } catch (error) {
-    console.error('Error fetching blog data:', error)
-    return { posts: [], categories: [] }
+    console.error('Error fetching blog data:', error);
+    return { posts: [], categories: [] };
   }
 }
 
 export default function BlogPage() {
-  const [posts, setPosts] = useState<Post[]>([])
-  const [, setCategories] = useState<Category[]>([])
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
-  const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'popular'>('newest')
-  const [searchTerm, setSearchTerm] = useState<string>('')
-  const [isLoading, setIsLoading] = useState(true)
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [, setCategories] = useState<Category[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'popular'>('newest');
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(true);
 
   // Fetch data on component mount
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true)
-      const data = await getBlogData()
-      setPosts(data.posts)
-      setCategories(data.categories)
-      setIsLoading(false)
-    }
-    fetchData()
-  }, [])
+      setIsLoading(true);
+      const data = await getBlogData();
+      setPosts(data.posts);
+      setCategories(data.categories);
+      setIsLoading(false);
+    };
+    fetchData();
+  }, []);
 
   // Filtered and sorted posts
   const filteredPosts = useMemo(() => {
-    let filtered = posts
+    let filtered = posts;
 
     // Filter by category
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter((post) => post.categories?.some((cat) => cat === selectedCategory))
+      filtered = filtered.filter((post) => post.categories?.some((cat) => cat === selectedCategory));
     }
 
     // Filter by search term
@@ -161,38 +161,38 @@ export default function BlogPage() {
           post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
           post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
           post.categories?.some((cat) => cat.toLowerCase().includes(searchTerm.toLowerCase())),
-      )
+      );
     }
 
     // Sort posts
     filtered.sort((a, b) => {
       if (sortBy === 'newest') {
-        return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+        return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
       } else if (sortBy === 'oldest') {
-        return new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime()
+        return new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime();
       } else {
         // Popular - based on reading time (simulated)
-        return (b.readingTime || 0) - (a.readingTime || 0)
+        return (b.readingTime || 0) - (a.readingTime || 0);
       }
-    })
+    });
 
-    return filtered
-  }, [posts, selectedCategory, searchTerm, sortBy])
+    return filtered;
+  }, [posts, selectedCategory, searchTerm, sortBy]);
 
   // Featured posts (first 3)
-  const featuredPosts = filteredPosts.slice(0, 3)
+  const featuredPosts = filteredPosts.slice(0, 3);
   // Regular posts (all except featured to avoid duplication)
-  const regularPosts = filteredPosts.slice(3)
+  const regularPosts = filteredPosts.slice(3);
 
   // Show featured posts section only if there are posts
-  const showFeaturedSection = featuredPosts.length > 0
+  const showFeaturedSection = featuredPosts.length > 0;
   // Show regular posts section if there are posts beyond featured ones
-  const showRegularSection = regularPosts.length > 0
+  const showRegularSection = regularPosts.length > 0;
 
   // Get category config
   const getCategoryConfig = (category: string) => {
-    return categoryConfig[category] || categoryConfig['Klimatizace']
-  }
+    return categoryConfig[category] || categoryConfig['Klimatizace'];
+  };
 
   if (isLoading) {
     return (
@@ -202,7 +202,7 @@ export default function BlogPage() {
           <p className="text-gray-600 text-lg">Načítání odborných článků...</p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -285,8 +285,8 @@ export default function BlogPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {Object.entries(categoryConfig).map(([category, config]) => {
-              const IconComponent = config.icon
-              const isSelected = selectedCategory === category
+              const IconComponent = config.icon;
+              const isSelected = selectedCategory === category;
 
               return (
                 <button
@@ -323,7 +323,7 @@ export default function BlogPage() {
                     </div>
                   )}
                 </button>
-              )
+              );
             })}
           </div>
         </div>
@@ -349,8 +349,8 @@ export default function BlogPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
               {featuredPosts.map((post) => {
-                const category = post.categories?.[0] || 'Klimatizace'
-                const config = getCategoryConfig(category)
+                const category = post.categories?.[0] || 'Klimatizace';
+                const config = getCategoryConfig(category);
 
                 return (
                   <Card
@@ -432,7 +432,7 @@ export default function BlogPage() {
                       aria-label={post.title}
                     ></Link>
                   </Card>
-                )
+                );
               })}
             </div>
           </div>
@@ -472,8 +472,8 @@ export default function BlogPage() {
             {showRegularSection ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {regularPosts.map((post) => {
-                  const category = post.categories?.[0] || 'Klimatizace'
-                  const config = getCategoryConfig(category)
+                  const category = post.categories?.[0] || 'Klimatizace';
+                  const config = getCategoryConfig(category);
 
                   return (
                     <Card
@@ -551,7 +551,7 @@ export default function BlogPage() {
                         aria-label={post.title}
                       ></Link>
                     </Card>
-                  )
+                  );
                 })}
               </div>
             ) : (
@@ -617,5 +617,5 @@ export default function BlogPage() {
         </div>
       </section>
     </div>
-  )
+  );
 }

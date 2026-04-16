@@ -1,12 +1,12 @@
-import React from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { ReferenceSlider } from '@/components/ui/reference-slider'
-import { ContactFormSection } from '@/components/ui/contact-form-section'
-import { OrganicWaveDivider } from '@/components/ui/organic-wave-divider'
-import { UnifiedHero, type UnifiedHeroSlide } from '@/components/ui/unified-hero'
-import { LogoCarousel } from '@/components/ui/logo-carousel'
+import React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { ReferenceSlider } from '@/components/ui/reference-slider';
+import { ContactFormSection } from '@/components/ui/contact-form-section';
+import { OrganicWaveDivider } from '@/components/ui/organic-wave-divider';
+import { UnifiedHero, type UnifiedHeroSlide } from '@/components/ui/unified-hero';
+import { LogoCarousel } from '@/components/ui/logo-carousel';
 import {
   Clock,
   CheckCircle,
@@ -18,10 +18,10 @@ import {
   ArrowRight,
   Quote,
   Award,
-} from 'lucide-react'
+} from 'lucide-react';
 
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 // Data fetching is done inside the component using Sanity client
 
@@ -57,7 +57,7 @@ const featureCards = [
     description:
       'Zakládáme si na dlouhodobé důvěře. Proto jsme Vám k dispozici po celou dobu životnosti námi dodaných zařízení.',
   },
-]
+];
 
 // Services data (ponecháno staticky)
 const services = [
@@ -114,7 +114,7 @@ const services = [
     iconColor: 'text-yellow-600',
     cardColor: 'bg-yellow-50',
   },
-]
+];
 
 type TopReference = {
   id: string
@@ -126,8 +126,8 @@ type TopReference = {
   isTopReference?: boolean
 }
 export default async function HomePage() {
-  const { client } = await import('@/lib/sanity.client')
-  const { heroSlidesQuery, featuredReferencesQuery } = await import('@/lib/sanity.queries')
+  const { client } = await import('@/lib/sanity.client');
+  const { heroSlidesQuery, featuredReferencesQuery } = await import('@/lib/sanity.queries');
 
   const [slides, rawTopReferences] = await Promise.all([
     client.fetch<UnifiedHeroSlide[]>(heroSlidesQuery),
@@ -142,7 +142,7 @@ export default async function HomePage() {
         isTopReference?: boolean
       }[]
     >(featuredReferencesQuery),
-  ])
+  ]);
 
   // Map data to match TopReference interface
   const topReferences: TopReference[] = rawTopReferences.map((ref) => ({
@@ -153,7 +153,7 @@ export default async function HomePage() {
     category: ref.category || '',
     location: ref.location,
     isTopReference: ref.isTopReference,
-  }))
+  }));
 
   return (
     <>
@@ -625,5 +625,5 @@ export default async function HomePage() {
         </div>
       </section>
     </>
-  )
+  );
 }

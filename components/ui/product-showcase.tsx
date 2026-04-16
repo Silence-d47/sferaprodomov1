@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { ProductCard } from './product-card'
+import { ProductCard } from './product-card';
 
 // Ukázkové produkty pro demonstraci
 const sampleProducts = [
@@ -127,7 +127,7 @@ const sampleProducts = [
     warranty: 3,
     brand: 'Zehnder',
   },
-]
+];
 
 export function ProductShowcase() {
   return (
@@ -170,5 +170,5 @@ export function ProductShowcase() {
         </div>
       </div>
     </div>
-  )
+  );
 }

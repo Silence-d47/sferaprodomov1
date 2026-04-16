@@ -1,8 +1,8 @@
-import { groq } from 'next-sanity'
-import type { MetadataRoute } from 'next'
-import { client } from '@/lib/sanity.client'
+import { groq } from 'next-sanity';
+import type { MetadataRoute } from 'next';
+import { client } from '@/lib/sanity.client';
 
-const baseUrl = 'https://sfera-domov.cz'
+const baseUrl = 'https://sfera-domov.cz';
 
 type ChangeFrequency = 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never'
 
@@ -86,7 +86,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'yearly',
       priority: 0.1,
     },
-  ]
+  ];
 
   try {
     // Fetch blog posts
@@ -94,16 +94,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       _updatedAt,
       publishedAt,
       slug
-    }`
-    const blogPosts = await client.fetch<BlogPostSitemap[]>(blogQuery)
+    }`;
+    const blogPosts = await client.fetch<BlogPostSitemap[]>(blogQuery);
 
     // Fetch reference projects
     const referenceQuery = groq`*[_type == "projectReference" && defined(slug.current) && !(_id in path("drafts.**"))]{
       _updatedAt,
       _createdAt,
       slug
-    }`
-    const referencePages = await client.fetch<ReferencePageSitemap[]>(referenceQuery)
+    }`;
+    const referencePages = await client.fetch<ReferencePageSitemap[]>(referenceQuery);
 
     // Map blog posts to sitemap entries
     const blogEntries: SitemapEntry[] = blogPosts.map((post) => ({
@@ -111,7 +111,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(post._updatedAt || post.publishedAt || new Date().toISOString()),
       changeFrequency: 'weekly',
       priority: 0.6,
-    }))
+    }));
 
     // Map reference projects to sitemap entries
     const referenceEntries: SitemapEntry[] = referencePages.map((ref) => ({
@@ -119,14 +119,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(ref._updatedAt || ref._createdAt || new Date().toISOString()),
       changeFrequency: 'monthly',
       priority: 0.5,
-    }))
+    }));
 
-    return [...staticPages, ...blogEntries, ...referenceEntries]
+    return [...staticPages, ...blogEntries, ...referenceEntries];
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : String(error)
-    console.error('Error generating sitemap:', message)
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('Error generating sitemap:', message);
 
     // Return only static pages in case of error
-    return staticPages
+    return staticPages;
   }
 }

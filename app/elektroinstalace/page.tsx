@@ -1,14 +1,15 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { ContactFormSection } from '@/components/ui/contact-form-section'
-import { ThemeProvider } from '@/components/theme-provider'
-import { ReferenceSlider } from '@/components/ui/reference-slider'
-import { groq } from 'next-sanity'
-import { CustomPortableText } from '@/lib/sanity.portableText'
-import { serverClient } from '@/lib/sanity.client'
-import type { PortableTextBlock } from '@portabletext/types'
+import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { ContactFormSection } from '@/components/ui/contact-form-section';
+import { ThemeProvider } from '@/components/theme-provider';
+import { ReferenceSlider } from '@/components/ui/reference-slider';
+import { truncateText } from '@/lib/utils';
+import { groq } from 'next-sanity';
+import { CustomPortableText } from '@/lib/sanity.portableText';
+import { serverClient } from '@/lib/sanity.client';
+import type { PortableTextBlock } from '@portabletext/types';
 import {
   Shield,
   Clock,
@@ -25,7 +26,7 @@ import {
   ArrowRight,
   Phone,
   Mail,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Definice typů pro data ze Sanity
 type FaqEntry = {
@@ -36,7 +37,8 @@ type FaqEntry = {
 type ReferenceCard = {
   id: string
   title: string
-  description: string
+  description?: string
+  bodyPreview?: string
   image: string
   category: string
   location?: string
@@ -50,38 +52,39 @@ const faqsQuery = groq`
     question,
     answer
   }
-`
+`;
 
 const referencesQuery = groq`
   *[_type == "projectReference" && isActive != false && category == "elektroinstalace"] | order(_createdAt desc)[0...9] {
     "id": slug.current,
     title,
     description,
+    "bodyPreview": pt::text(body),
     "image": image.asset->url,
     category,
     location,
     isTopReference
   }
-`
+`;
 
-export const revalidate = 3600
+export const revalidate = 3600;
 
 export default async function ElektroinstalacePage() {
-  const fetchOpts = { next: { tags: ['products', 'references'] } }
+  const fetchOpts = { next: { tags: ['products', 'references'] } };
 
   const [faqs, references] = await Promise.all([
     serverClient.fetch<FaqEntry[]>(faqsQuery, {}, fetchOpts),
     serverClient.fetch<ReferenceCard[]>(referencesQuery, {}, fetchOpts),
-  ])
-  const leftDynamicFaqs: FaqEntry[] = []
-  const rightDynamicFaqs: FaqEntry[] = []
+  ]);
+  const leftDynamicFaqs: FaqEntry[] = [];
+  const rightDynamicFaqs: FaqEntry[] = [];
   faqs?.forEach((item, index) => {
     if (index % 2 === 0) {
-      leftDynamicFaqs.push(item)
+      leftDynamicFaqs.push(item);
     } else {
-      rightDynamicFaqs.push(item)
+      rightDynamicFaqs.push(item);
     }
-  })
+  });
 
   return (
     <ThemeProvider theme="elektroinstalace">
@@ -604,7 +607,12 @@ export default async function ElektroinstalacePage() {
             </div>
             <div className="rounded-3xl bg-white/60 p-2 shadow-2xl shadow-slate-900/10 ring-1 ring-gray-200 backdrop-blur-md">
               {references && references.length > 0 ? (
-                <ReferenceSlider references={references} />
+                <ReferenceSlider
+                  references={references.map((r) => ({
+                    ...r,
+                    description: truncateText(r.bodyPreview || r.description),
+                  }))}
+                />
               ) : (
                 <div className="text-center py-12 text-muted-foreground">
                   Zatím nemáme zveřejněné realizace v této kategorii.
@@ -956,5 +964,5 @@ export default async function ElektroinstalacePage() {
         </section>
       </div>
     </ThemeProvider>
-  )
+  );
 }

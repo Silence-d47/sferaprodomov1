@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { Menu } from 'lucide-react'
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Menu } from 'lucide-react';
 
 const navigation = [
   { name: 'Klimatizace', href: '/klimatizace' },
@@ -15,21 +15,21 @@ const navigation = [
   { name: 'Reference', href: '/reference' },
   { name: 'Blog', href: '/blog' },
   { name: 'Kontakt', href: '/kontakt' },
-]
+];
 
 export function Header() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   // Změna stylu po odscrollování hero sekce
   useEffect(() => {
     const onScroll = () => {
-      setScrolled(window.scrollY > 120)
-    }
-    onScroll()
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+      setScrolled(window.scrollY > 120);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
     <header
@@ -95,5 +95,5 @@ export function Header() {
         </div>
       </div>
     </header>
-  )
+  );
 }

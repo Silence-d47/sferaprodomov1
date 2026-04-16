@@ -244,5 +244,5 @@ export default function CookiesPage() {
         </div>
       </section>
     </div>
-  )
+  );
 }

@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { useState, useRef, useEffect } from 'react'
-import ReactDOM from 'react-dom'
+import { useState, useRef, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 
 interface BackgroundVideoProps {
   videoWebm?: string
@@ -16,37 +16,37 @@ export function BackgroundVideo({
   posterImage,
   opacity = 20,
 }: BackgroundVideoProps) {
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const [isVideoReady, setIsVideoReady] = useState(false)
-  const [hasError, setHasError] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isVideoReady, setIsVideoReady] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   // Preload poster image for fast LCP
-  ReactDOM.preload(posterImage, { as: 'image', fetchPriority: 'high' })
+  ReactDOM.preload(posterImage, { as: 'image', fetchPriority: 'high' });
 
   useEffect(() => {
-    const video = videoRef.current
+    const video = videoRef.current;
     if (!video) {
-      return
+      return;
     }
 
-    const handleCanPlay = () => setIsVideoReady(true)
-    const handleError = () => setHasError(true)
+    const handleCanPlay = () => setIsVideoReady(true);
+    const handleError = () => setHasError(true);
 
-    video.addEventListener('canplay', handleCanPlay)
-    video.addEventListener('error', handleError)
+    video.addEventListener('canplay', handleCanPlay);
+    video.addEventListener('error', handleError);
 
     if (video.readyState >= 3) {
-      handleCanPlay()
+      handleCanPlay();
     }
 
     return () => {
-      video.removeEventListener('canplay', handleCanPlay)
-      video.removeEventListener('error', handleError)
-    }
-  }, [])
+      video.removeEventListener('canplay', handleCanPlay);
+      video.removeEventListener('error', handleError);
+    };
+  }, []);
 
-  const hasVideo = videoWebm || videoMp4
-  const opacityValue = opacity / 100
+  const hasVideo = videoWebm || videoMp4;
+  const opacityValue = opacity / 100;
 
   if (!hasVideo || hasError) {
     return (
@@ -58,7 +58,7 @@ export function BackgroundVideo({
           style={{ opacity: opacityValue }}
         />
       </div>
-    )
+    );
   }
 
   return (
@@ -78,5 +78,5 @@ export function BackgroundVideo({
         {videoMp4 && <source src={videoMp4} type="video/mp4" />}
       </video>
     </div>
-  )
+  );
 }

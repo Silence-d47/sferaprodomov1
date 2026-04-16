@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import React from 'react';
 
@@ -36,10 +36,10 @@ const colorSchemes = {
 };
 
 export interface ShapedSectionHeaderProps {
-  title: string;
-  subtitle: string;
-  color?: keyof typeof colorSchemes | 'gray';
-  className?: string;
+  title: string
+  subtitle: string
+  color?: keyof typeof colorSchemes | 'gray'
+  className?: string
 }
 
 export function ShapedSectionHeader({
@@ -52,9 +52,7 @@ export function ShapedSectionHeader({
 
   return (
     <div className={`mb-8 md:mb-12 ${className}`}>
-      <p className={`text-sm font-bold uppercase tracking-wider ${theme.subtitle}`}>
-        {subtitle}
-      </p>
+      <p className={`text-sm font-bold uppercase tracking-wider ${theme.subtitle}`}>{subtitle}</p>
       <h2 className={`mt-2 text-3xl sm:text-4xl font-bold tracking-tight ${theme.title}`}>
         {title}
       </h2>

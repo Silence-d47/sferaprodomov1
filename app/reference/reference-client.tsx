@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import React, { useState } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { EnhancedSectionDivider } from '@/components/ui/enhanced-section-divider'
+import React, { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { EnhancedSectionDivider } from '@/components/ui/enhanced-section-divider';
 import {
   MapPin,
   Calendar,
@@ -17,11 +17,11 @@ import {
   ChevronLeft,
   ChevronRight,
   Phone,
-} from 'lucide-react'
-import Slider from 'react-slick'
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
-import { BackgroundVideo } from '@/components/ui/background-video'
+} from 'lucide-react';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import { BackgroundVideo } from '@/components/ui/background-video';
 
 export type FeaturedReference = {
   id: string
@@ -66,10 +66,10 @@ const CATEGORY_STYLES: Record<string, { bg: string; text: string }> = {
   'tepelna-cerpadla': { bg: 'bg-green-50', text: 'text-green-600' },
   rekuperace: { bg: 'bg-purple-50', text: 'text-purple-600' },
   elektroinstalace: { bg: 'bg-orange-50', text: 'text-orange-600' },
-}
+};
 
 const getCategoryStyle = (category: string) =>
-  CATEGORY_STYLES[category] ?? { bg: 'bg-gray-50', text: 'text-gray-700' }
+  CATEGORY_STYLES[category] ?? { bg: 'bg-gray-50', text: 'text-gray-700' };
 
 const CustomPrevArrow = ({ onClick }: { onClick?: () => void }) => (
   <button
@@ -78,7 +78,7 @@ const CustomPrevArrow = ({ onClick }: { onClick?: () => void }) => (
   >
     <ChevronLeft className="h-6 w-6 text-gray-700" />
   </button>
-)
+);
 
 const CustomNextArrow = ({ onClick }: { onClick?: () => void }) => (
   <button
@@ -87,10 +87,10 @@ const CustomNextArrow = ({ onClick }: { onClick?: () => void }) => (
   >
     <ChevronRight className="h-6 w-6 text-gray-700" />
   </button>
-)
+);
 
 export function ReferenceClient({ featuredReferences, otherReferences, heroVideo }: Props) {
-  const [currentSlide, setCurrentSlide] = useState(0)
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   const carouselSettings = {
     dots: true,
@@ -116,7 +116,7 @@ export function ReferenceClient({ featuredReferences, otherReferences, heroVideo
         <ul className="flex space-x-2">{dots}</ul>
       </div>
     ),
-  }
+  };
 
   return (
     <div className="flex flex-col">
@@ -491,7 +491,7 @@ export function ReferenceClient({ featuredReferences, otherReferences, heroVideo
                     {reference.title}
                   </h3>
                   {reference.description && (
-                    <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2 mb-3">
+                    <p className="text-muted-foreground text-sm leading-relaxed line-clamp-4 mb-3">
                       {reference.description}
                     </p>
                   )}
@@ -570,5 +570,5 @@ export function ReferenceClient({ featuredReferences, otherReferences, heroVideo
         </div>
       </section>
     </div>
-  )
+  );
 }

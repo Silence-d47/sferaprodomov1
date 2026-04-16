@@ -1,14 +1,14 @@
-import { defineField, defineType } from 'sanity'
+import { defineField, defineType } from 'sanity';
 import {
   createResponsiveImageInput,
   type CropConfig,
-} from '@/sanity/components/ResponsiveImageInput'
-import { deviceCropsField } from '@/sanity/fields/deviceCrops'
+} from '@/sanity/components/ResponsiveImageInput';
+import { deviceCropsField } from '@/sanity/fields/deviceCrops';
 
 const PRODUCT_IMAGE_CROPS: CropConfig[] = [
   { key: 'card', label: 'Karta', ratio: '4:3', aspect: 4 / 3 },
   { key: 'detail', label: 'Detail', ratio: '1:1', aspect: 1 },
-]
+];
 
 export default defineType({
   name: 'product',
@@ -214,4 +214,4 @@ export default defineType({
       media: 'image',
     },
   },
-})
+});

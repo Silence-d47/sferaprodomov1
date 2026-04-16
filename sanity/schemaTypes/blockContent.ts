@@ -1,4 +1,4 @@
-import { defineType, defineArrayMember } from 'sanity'
+import { defineType, defineArrayMember } from 'sanity';
 
 export default defineType({
   title: 'Text',
@@ -58,10 +58,10 @@ export default defineType({
               .uri({ scheme: ['https'] })
               .custom((url: string | undefined) => {
                 if (!url) {
-                  return true
+                  return true;
                 }
-                const pattern = /^https:\/\/(www\.)?(youtube\.com\/(watch\?v=|embed\/)|youtu\.be\/)/
-                return pattern.test(url) || 'Zadejte platný YouTube odkaz'
+                const pattern = /^https:\/\/(www\.)?(youtube\.com\/(watch\?v=|embed\/)|youtu\.be\/)/;
+                return pattern.test(url) || 'Zadejte platný YouTube odkaz';
               }),
         },
         {
@@ -75,9 +75,9 @@ export default defineType({
       preview: {
         select: { url: 'url' },
         prepare({ url }) {
-          return { title: 'YouTube video', subtitle: url }
+          return { title: 'YouTube video', subtitle: url };
         },
       },
     }),
   ],
-})
+});

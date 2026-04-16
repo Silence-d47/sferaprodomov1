@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 
 interface EnhancedSectionDividerProps {
   variant?: 'wave' | 'organic' | 'geometric'
@@ -19,24 +19,24 @@ export function EnhancedSectionDivider({
   toColor = 'to-white',
   particles = true,
 }: EnhancedSectionDividerProps) {
-  const [scrollY, setScrollY] = useState(0)
+  const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
     if (!animated) {
-      return
+      return;
     }
 
-    const handleScroll = () => setScrollY(window.scrollY)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [animated])
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [animated]);
 
   const heightClasses = {
     sm: 'h-16',
     md: 'h-24',
     lg: 'h-32',
     xl: 'h-40',
-  }
+  };
 
   const particleElements = particles
     ? Array.from({ length: 12 }, (_, i) => (
@@ -51,7 +51,7 @@ export function EnhancedSectionDivider({
           }}
         />
       ))
-    : null
+    : null;
 
   if (variant === 'organic') {
     return (
@@ -101,7 +101,7 @@ export function EnhancedSectionDivider({
           />
         </svg>
       </div>
-    )
+    );
   }
 
   if (variant === 'geometric') {
@@ -141,7 +141,7 @@ export function EnhancedSectionDivider({
           />
         </svg>
       </div>
-    )
+    );
   }
 
   // Default wave variant
@@ -232,5 +232,5 @@ export function EnhancedSectionDivider({
         />
       </svg>
     </div>
-  )
+  );
 }

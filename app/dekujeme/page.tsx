@@ -1,19 +1,19 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { CheckCircle, Phone, Mail, MapPin, ArrowRight } from "lucide-react"
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { CheckCircle, Phone, Mail, MapPin, ArrowRight } from 'lucide-react';
 
-import { Button } from "@/components/ui/button"
-import { AutoRedirect } from "@/components/ui/auto-redirect"
+import { Button } from '@/components/ui/button';
+import { AutoRedirect } from '@/components/ui/auto-redirect';
 
 export const metadata: Metadata = {
-  title: "Děkujeme za vaši poptávku | SFÉRA-DOMOV.CZ",
+  title: 'Děkujeme za vaši poptávku | SFÉRA-DOMOV.CZ',
   description:
-    "Vaše zpráva byla úspěšně odeslána. Do 24 hodin se vám ozveme s konkrétním řešením na míru.",
+    'Vaše zpráva byla úspěšně odeslána. Do 24 hodin se vám ozveme s konkrétním řešením na míru.',
   robots: {
     index: false,
     follow: true,
   },
-}
+};
 
 export default function DekujemePage() {
   return (
@@ -40,7 +40,9 @@ export default function DekujemePage() {
               </div>
 
               <div className="rounded-xl bg-slate-50/80 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/40 p-5 sm:p-6">
-                <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Co bude následovat?</h2>
+                <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-3">
+                  Co bude následovat?
+                </h2>
                 <ol className="list-decimal pl-5 space-y-2 text-slate-700 dark:text-slate-200">
                   <li>Ozveme se vám telefonicky nebo e-mailem</li>
                   <li>Upřesníme detaily a vaše požadavky</li>
@@ -60,7 +62,9 @@ export default function DekujemePage() {
                     className="flex items-center gap-3 rounded-lg border border-slate-200/70 dark:border-slate-700/50 bg-slate-50/70 dark:bg-slate-900/40 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-900/60 transition-colors"
                   >
                     <Phone className="h-5 w-5 text-blue-600" />
-                    <span className="font-semibold text-slate-800 dark:text-slate-100">+420 735 014 112</span>
+                    <span className="font-semibold text-slate-800 dark:text-slate-100">
+                      +420 735 014 112
+                    </span>
                   </a>
 
                   <a
@@ -68,7 +72,9 @@ export default function DekujemePage() {
                     className="flex items-center gap-3 rounded-lg border border-slate-200/70 dark:border-slate-700/50 bg-slate-50/70 dark:bg-slate-900/40 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-900/60 transition-colors"
                   >
                     <Mail className="h-5 w-5 text-blue-600" />
-                    <span className="font-semibold text-slate-800 dark:text-slate-100">info@sfera-domov.cz</span>
+                    <span className="font-semibold text-slate-800 dark:text-slate-100">
+                      info@sfera-domov.cz
+                    </span>
                   </a>
 
                   <div className="flex items-start gap-3 rounded-lg border border-slate-200/70 dark:border-slate-700/50 bg-slate-50/70 dark:bg-slate-900/40 px-4 py-3">
@@ -88,7 +94,8 @@ export default function DekujemePage() {
                       SFÉRA-DOMOV.CZ
                     </div>
                     <p className="mt-2 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                      Váš specialista na klimatizace, tepelná čerpadla, rekuperace a moderní elektroinstalace.
+                      Váš specialista na klimatizace, tepelná čerpadla, rekuperace a moderní
+                      elektroinstalace.
                     </p>
                     <p className="mt-3 text-slate-700 dark:text-slate-200 font-medium">
                       Děkujeme za důvěru. Ozveme se brzy.
@@ -117,6 +124,5 @@ export default function DekujemePage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
-

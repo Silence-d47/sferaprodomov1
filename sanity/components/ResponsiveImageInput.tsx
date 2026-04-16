@@ -1,10 +1,10 @@
-import { useClient, type ObjectInputProps, set } from 'sanity'
-import imageUrlBuilder from '@sanity/image-url'
-import ReactCrop, { type PercentCrop } from 'react-image-crop'
-import 'react-image-crop/dist/ReactCrop.css'
-import { useState, useMemo, useCallback } from 'react'
-import { Card, Flex, Stack, Text, Tab, TabList, Box, Button, Badge } from '@sanity/ui'
-import { CheckmarkCircleIcon, ResetIcon } from '@sanity/icons'
+import { useClient, type ObjectInputProps, set } from 'sanity';
+import imageUrlBuilder from '@sanity/image-url';
+import ReactCrop, { type PercentCrop } from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
+import { useState, useMemo, useCallback } from 'react';
+import { Card, Flex, Stack, Text, Tab, TabList, Box, Button, Badge } from '@sanity/ui';
+import { CheckmarkCircleIcon, ResetIcon } from '@sanity/icons';
 
 export interface CropConfig {
   key: string
@@ -26,24 +26,24 @@ interface ImageValue {
 }
 
 function parseDimensions(ref: string): { width: number; height: number } | null {
-  const match = ref.match(/-(\d+)x(\d+)-/)
+  const match = ref.match(/-(\d+)x(\d+)-/);
   if (!match) {
-    return null
+    return null;
   }
-  return { width: parseInt(match[1]), height: parseInt(match[2]) }
+  return { width: parseInt(match[1]), height: parseInt(match[2]) };
 }
 
 function getDefaultCrop(aspect: number, imgWidth: number, imgHeight: number): PercentCrop {
-  const imgAspect = imgWidth / imgHeight
+  const imgAspect = imgWidth / imgHeight;
 
   // Try filling 90% width, calculate height from that
-  let cropW = 90
-  let cropH = (cropW * imgAspect) / aspect
+  let cropW = 90;
+  let cropH = (cropW * imgAspect) / aspect;
 
   // If height overflows, constrain by height instead
   if (cropH > 90) {
-    cropH = 90
-    cropW = (cropH * aspect) / imgAspect
+    cropH = 90;
+    cropW = (cropH * aspect) / imgAspect;
   }
 
   return {
@@ -52,7 +52,7 @@ function getDefaultCrop(aspect: number, imgWidth: number, imgHeight: number): Pe
     width: cropW,
     height: cropH,
     unit: '%',
-  }
+  };
 }
 
 function savedToCrop(
@@ -62,9 +62,9 @@ function savedToCrop(
   imgHeight: number,
 ): PercentCrop {
   if (saved && saved.width > 0) {
-    return { x: saved.x, y: saved.y, width: saved.width, height: saved.height, unit: '%' }
+    return { x: saved.x, y: saved.y, width: saved.width, height: saved.height, unit: '%' };
   }
-  return getDefaultCrop(aspect, imgWidth, imgHeight)
+  return getDefaultCrop(aspect, imgWidth, imgHeight);
 }
 
 /**
@@ -75,44 +75,44 @@ function savedToCrop(
  */
 export function createResponsiveImageInput(configs: CropConfig[]) {
   return function ConfiguredResponsiveImageInput(props: ObjectInputProps) {
-    return <ResponsiveImageInputInner {...props} configs={configs} />
-  }
+    return <ResponsiveImageInputInner {...props} configs={configs} />;
+  };
 }
 
 function ResponsiveImageInputInner(props: ObjectInputProps & { configs: CropConfig[] }) {
-  const { value, onChange, renderDefault, configs } = props
-  const client = useClient({ apiVersion: '2026-03-05' })
-  const builder = useMemo(() => imageUrlBuilder(client), [client])
+  const { value, onChange, renderDefault, configs } = props;
+  const client = useClient({ apiVersion: '2026-03-05' });
+  const builder = useMemo(() => imageUrlBuilder(client), [client]);
 
-  const [activeTab, setActiveTab] = useState(configs[0].key)
-  const [pendingCrops, setPendingCrops] = useState<Record<string, PercentCrop>>({})
-  const [savedIndicator, setSavedIndicator] = useState<Record<string, boolean>>({})
+  const [activeTab, setActiveTab] = useState(configs[0].key);
+  const [pendingCrops, setPendingCrops] = useState<Record<string, PercentCrop>>({});
+  const [savedIndicator, setSavedIndicator] = useState<Record<string, boolean>>({});
 
-  const imageValue = value as ImageValue | undefined
-  const assetRef = imageValue?.asset?._ref
-  const hasAsset = Boolean(assetRef)
+  const imageValue = value as ImageValue | undefined;
+  const assetRef = imageValue?.asset?._ref;
+  const hasAsset = Boolean(assetRef);
 
   // Raw image URL, no Sanity crop/hotspot applied
-  const rawImageUrl = hasAsset ? builder.image(assetRef!).width(1200).auto('format').url() : null
+  const rawImageUrl = hasAsset ? builder.image(assetRef!).width(1200).auto('format').url() : null;
 
-  const originalDims = assetRef ? parseDimensions(assetRef) : null
+  const originalDims = assetRef ? parseDimensions(assetRef) : null;
 
-  const hasPendingChange = (key: string) => Boolean(pendingCrops[key])
-  const isSaved = (key: string) => Boolean(savedIndicator[key])
+  const hasPendingChange = (key: string) => Boolean(pendingCrops[key]);
+  const isSaved = (key: string) => Boolean(savedIndicator[key]);
 
   const handleCropChange = useCallback(
     (key: string, _pixelCrop: unknown, percentCrop: PercentCrop) => {
-      setPendingCrops((prev) => ({ ...prev, [key]: percentCrop }))
-      setSavedIndicator((prev) => ({ ...prev, [key]: false }))
+      setPendingCrops((prev) => ({ ...prev, [key]: percentCrop }));
+      setSavedIndicator((prev) => ({ ...prev, [key]: false }));
     },
     [],
-  )
+  );
 
   const handleSave = useCallback(
     (key: string) => {
-      const crop = pendingCrops[key]
+      const crop = pendingCrops[key];
       if (!crop) {
-        return
+        return;
       }
 
       const cropData: CropData = {
@@ -120,71 +120,71 @@ function ResponsiveImageInputInner(props: ObjectInputProps & { configs: CropConf
         y: Math.round(crop.y * 100) / 100,
         width: Math.round(crop.width * 100) / 100,
         height: Math.round(crop.height * 100) / 100,
-      }
-      const current = (imageValue?.deviceCrops || {}) as Record<string, CropData>
-      onChange(set({ ...current, [key]: cropData }, ['deviceCrops']))
+      };
+      const current = (imageValue?.deviceCrops || {}) as Record<string, CropData>;
+      onChange(set({ ...current, [key]: cropData }, ['deviceCrops']));
       setPendingCrops((prev) => {
-        const next = { ...prev }
-        delete next[key]
-        return next
-      })
-      setSavedIndicator((prev) => ({ ...prev, [key]: true }))
+        const next = { ...prev };
+        delete next[key];
+        return next;
+      });
+      setSavedIndicator((prev) => ({ ...prev, [key]: true }));
       setTimeout(() => {
-        setSavedIndicator((prev) => ({ ...prev, [key]: false }))
-      }, 2000)
+        setSavedIndicator((prev) => ({ ...prev, [key]: false }));
+      }, 2000);
     },
     [pendingCrops, onChange, imageValue],
-  )
+  );
 
   const handleReset = useCallback(
     (key: string) => {
-      const config = configs.find((c) => c.key === key)!
-      const w = originalDims?.width || 1200
-      const h = originalDims?.height || 800
-      setPendingCrops((prev) => ({ ...prev, [key]: getDefaultCrop(config.aspect, w, h) }))
-      setSavedIndicator((prev) => ({ ...prev, [key]: false }))
+      const config = configs.find((c) => c.key === key)!;
+      const w = originalDims?.width || 1200;
+      const h = originalDims?.height || 800;
+      setPendingCrops((prev) => ({ ...prev, [key]: getDefaultCrop(config.aspect, w, h) }));
+      setSavedIndicator((prev) => ({ ...prev, [key]: false }));
     },
     [configs, originalDims],
-  )
+  );
 
   const getCurrentCrop = useCallback(
     (key: string): PercentCrop => {
       if (pendingCrops[key]) {
-        return pendingCrops[key]
+        return pendingCrops[key];
       }
-      const config = configs.find((c) => c.key === key)!
-      const w = originalDims?.width || 1200
-      const h = originalDims?.height || 800
-      return savedToCrop(imageValue?.deviceCrops?.[key], config.aspect, w, h)
+      const config = configs.find((c) => c.key === key)!;
+      const w = originalDims?.width || 1200;
+      const h = originalDims?.height || 800;
+      return savedToCrop(imageValue?.deviceCrops?.[key], config.aspect, w, h);
     },
     [pendingCrops, imageValue, configs, originalDims],
-  )
+  );
 
   const getPreviewUrl = useCallback(
     (key: string, previewWidth: number) => {
       if (!assetRef || !originalDims) {
-        return null
+        return null;
       }
 
-      const saved = imageValue?.deviceCrops?.[key]
+      const saved = imageValue?.deviceCrops?.[key];
       if (!saved || saved.width <= 0) {
-        return null
+        return null;
       }
 
-      const left = Math.round((originalDims.width * saved.x) / 100)
-      const top = Math.round((originalDims.height * saved.y) / 100)
-      const width = Math.round((originalDims.width * saved.width) / 100)
-      const height = Math.round((originalDims.height * saved.height) / 100)
+      const left = Math.round((originalDims.width * saved.x) / 100);
+      const top = Math.round((originalDims.height * saved.y) / 100);
+      const width = Math.round((originalDims.width * saved.width) / 100);
+      const height = Math.round((originalDims.height * saved.height) / 100);
 
       return builder
         .image(assetRef)
         .rect(left, top, width, height)
         .width(previewWidth)
         .auto('format')
-        .url()
+        .url();
     },
     [assetRef, originalDims, imageValue, builder],
-  )
+  );
 
   return (
     <Stack space={4}>
@@ -212,15 +212,15 @@ function ResponsiveImageInputInner(props: ObjectInputProps & { configs: CropConf
 
             {configs.map((config) => {
               if (activeTab !== config.key) {
-                return null
+                return null;
               }
-              const crop = getCurrentCrop(config.key)
-              const pending = hasPendingChange(config.key)
-              const saved = isSaved(config.key)
+              const crop = getCurrentCrop(config.key);
+              const pending = hasPendingChange(config.key);
+              const saved = isSaved(config.key);
               const hasSavedCrop = Boolean(
                 imageValue?.deviceCrops?.[config.key]?.width &&
                 imageValue.deviceCrops![config.key].width > 0,
-              )
+              );
 
               return (
                 <Box key={config.key} id={`panel-${config.key}`}>
@@ -274,7 +274,7 @@ function ResponsiveImageInputInner(props: ObjectInputProps & { configs: CropConf
                     </Flex>
                   </Stack>
                 </Box>
-              )
+              );
             })}
 
             {/* Saved crop previews */}
@@ -284,13 +284,13 @@ function ResponsiveImageInputInner(props: ObjectInputProps & { configs: CropConf
               </Text>
               <Flex gap={3} wrap="wrap">
                 {configs.map((config) => {
-                  const previewUrl = getPreviewUrl(config.key, 400)
+                  const previewUrl = getPreviewUrl(config.key, 400);
                   const hasCrop = Boolean(
                     imageValue?.deviceCrops?.[config.key]?.width &&
                     imageValue.deviceCrops![config.key].width > 0,
-                  )
-                  const previewW = 180
-                  const previewH = Math.round(previewW / config.aspect)
+                  );
+                  const previewW = 180;
+                  const previewH = Math.round(previewW / config.aspect);
 
                   return (
                     <Card
@@ -339,7 +339,7 @@ function ResponsiveImageInputInner(props: ObjectInputProps & { configs: CropConf
                         </Flex>
                       </Stack>
                     </Card>
-                  )
+                  );
                 })}
               </Flex>
             </Stack>
@@ -347,5 +347,5 @@ function ResponsiveImageInputInner(props: ObjectInputProps & { configs: CropConf
         </Card>
       )}
     </Stack>
-  )
+  );
 }

@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { ContactForm } from '@/components/ui/contact-form'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import { EnhancedSectionDivider } from '@/components/ui/enhanced-section-divider'
-import { urlForImage } from '@/lib/sanity.image'
-import type { Image as SanityImage } from 'sanity'
-import { MapPin, Phone, Mail, CheckCircle, Briefcase, Wrench, Building } from 'lucide-react'
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { ContactForm } from '@/components/ui/contact-form';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { EnhancedSectionDivider } from '@/components/ui/enhanced-section-divider';
+import { urlForImage } from '@/lib/sanity.image';
+import type { Image as SanityImage } from 'sanity';
+import { MapPin, Phone, Mail, CheckCircle, Briefcase, Wrench, Building } from 'lucide-react';
 
 // --- TYPES ---
 interface Employee {
@@ -76,32 +76,32 @@ const TeamMemberCard = ({ member }: { member: Employee }) => (
       )}
     </CardContent>
   </Card>
-)
+);
 
 // --- MAIN COMPONENT ---
 export default function ContactPage() {
-  const [employees, setEmployees] = useState<Employee[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchEmployees() {
       try {
-        const { client } = await import('@/lib/sanity.client')
-        const { employeesQuery } = await import('@/lib/sanity.queries')
-        const data = await client.fetch(employeesQuery)
-        setEmployees(data)
+        const { client } = await import('@/lib/sanity.client');
+        const { employeesQuery } = await import('@/lib/sanity.queries');
+        const data = await client.fetch(employeesQuery);
+        setEmployees(data);
       } catch (error) {
-        console.error('Error fetching employees:', error)
+        console.error('Error fetching employees:', error);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     }
 
-    fetchEmployees()
-  }, [])
+    fetchEmployees();
+  }, []);
 
-  const director = employees.find((emp) => emp.isDirector)
-  const otherEmployees = employees.filter((emp) => !emp.isDirector)
+  const director = employees.find((emp) => emp.isDirector);
+  const otherEmployees = employees.filter((emp) => !emp.isDirector);
 
   const ContactInfoCard = ({
     icon,
@@ -134,7 +134,7 @@ export default function ContactPage() {
         </div>
       </Link>
     </div>
-  )
+  );
 
   return (
     <div className="bg-slate-50 text-slate-800">
@@ -373,5 +373,5 @@ export default function ContactPage() {
         </div>
       </section>
     </div>
-  )
+  );
 }

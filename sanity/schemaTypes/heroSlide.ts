@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export default defineType({
   name: 'heroSlide',
@@ -9,7 +9,7 @@ export default defineType({
       name: 'title',
       title: 'Název',
       type: 'string',
-      validation: Rule => Rule.required(),
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'subtitle',
@@ -36,10 +36,10 @@ export default defineType({
       type: 'string',
       options: {
         list: [
-          {title: 'Intro', value: 'intro'},
-          {title: 'Reference', value: 'reference'},
-          {title: 'Blog', value: 'blog'},
-          {title: 'Service', value: 'service'},
+          { title: 'Intro', value: 'intro' },
+          { title: 'Reference', value: 'reference' },
+          { title: 'Blog', value: 'blog' },
+          { title: 'Service', value: 'service' },
         ],
       },
       initialValue: 'intro',
@@ -48,7 +48,7 @@ export default defineType({
       name: 'features',
       title: 'Funkce',
       type: 'array',
-      of: [{type: 'string'}],
+      of: [{ type: 'string' }],
     }),
     defineField({
       name: 'primaryButton',
@@ -107,7 +107,7 @@ export default defineType({
     }),
     defineField({
       name: 'bgColor',
-        title: 'Barva pozadí (tailwind)',
+      title: 'Barva pozadí (tailwind)',
       type: 'string',
       description: 'Tailwind gradient classes for background',
     }),
@@ -115,7 +115,7 @@ export default defineType({
       name: 'order',
       title: 'Pořadí',
       type: 'number',
-      validation: Rule => Rule.required(),
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'isActive',
@@ -126,12 +126,10 @@ export default defineType({
   ],
   orderings: [
     {
-        title: 'Sestupné pořadí',
+      title: 'Sestupné pořadí',
       name: 'orderAsc',
-      by: [
-        {field: 'order', direction: 'asc'}
-      ]
-    }
+      by: [{ field: 'order', direction: 'asc' }],
+    },
   ],
   preview: {
     select: {
@@ -140,4 +138,4 @@ export default defineType({
       media: 'bgImage',
     },
   },
-})
+});

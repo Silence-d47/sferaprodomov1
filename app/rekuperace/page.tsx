@@ -1,20 +1,21 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { ProductCard } from '@/components/ui/product-card'
-import { ContactFormSection } from '@/components/ui/contact-form-section'
-import { PDFDownloadButton } from '@/components/ui/pdf-download-button'
-import { Badge } from '@/components/ui/badge'
-import { ThemeProvider } from '@/components/theme-provider'
+import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { ProductCard } from '@/components/ui/product-card';
+import { ContactFormSection } from '@/components/ui/contact-form-section';
+import { PDFDownloadButton } from '@/components/ui/pdf-download-button';
+import { Badge } from '@/components/ui/badge';
+import { ThemeProvider } from '@/components/theme-provider';
+import { truncateText } from '@/lib/utils';
 
-import { groq } from 'next-sanity'
-import { serverClient } from '@/lib/sanity.client'
-import { serviceCatalogQuery } from '@/lib/sanity.queries'
-import { getCroppedImageUrl } from '@/lib/sanity.image-crops'
-import { CustomPortableText } from '@/lib/sanity.portableText'
-import { urlForImage } from '@/lib/sanity.image'
-import type { Image as SanityImage } from 'sanity'
-import type { PortableTextBlock } from '@portabletext/types'
+import { groq } from 'next-sanity';
+import { serverClient } from '@/lib/sanity.client';
+import { serviceCatalogQuery } from '@/lib/sanity.queries';
+import { getCroppedImageUrl } from '@/lib/sanity.image-crops';
+import { CustomPortableText } from '@/lib/sanity.portableText';
+import { urlForImage } from '@/lib/sanity.image';
+import type { Image as SanityImage } from 'sanity';
+import type { PortableTextBlock } from '@portabletext/types';
 
 import {
   CheckCircle,
@@ -28,7 +29,7 @@ import {
   Building,
   Factory,
   Wrench,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // Důvody, proč si vybrat rekuperaci (v novém stylu)
 const whyChooseUs = [
@@ -52,7 +53,7 @@ const whyChooseUs = [
     title: 'Komfort bez kompromisů',
     description: 'Stále čerstvý vzduch bez nutnosti větrání, průvanu a hluku z ulice.',
   },
-]
+];
 
 // Typy rekuperačních systémů
 const recuperationTypes = [
@@ -92,7 +93,7 @@ const recuperationTypes = [
       'Výrazná úspora provozních nákladů',
     ],
   },
-]
+];
 
 // Interface pro produkty rekuperace
 interface Product {
@@ -138,7 +139,8 @@ type CropData = { x: number; y: number; width: number; height: number }
 type ReferenceCard = {
   id: string
   title: string
-  description: string
+  description?: string
+  bodyPreview?: string
   image: string
   imageRef?: string
   deviceCrops?: Record<string, CropData>
@@ -153,13 +155,14 @@ const faqsQuery = groq`
     question,
     answer
   }
-`
+`;
 
 const referencesQuery = groq`
   *[_type == "projectReference" && isActive != false && category == "rekuperace"] | order(_createdAt desc)[0...9] {
     "id": slug.current,
     title,
     description,
+    "bodyPreview": pt::text(body),
     "image": image.asset->url,
     "imageRef": image.asset._ref,
     "deviceCrops": image.deviceCrops,
@@ -167,12 +170,12 @@ const referencesQuery = groq`
     location,
     isTopReference
   }
-`
+`;
 
-export const revalidate = 3600
+export const revalidate = 3600;
 
 export default async function RekuperacePage() {
-  const fetchOpts = { next: { tags: ['products', 'references'] } }
+  const fetchOpts = { next: { tags: ['products', 'references'] } };
 
   const [products, faqs, references, catalog] = await Promise.all([
     serverClient.fetch<Product[]>(
@@ -209,17 +212,17 @@ export default async function RekuperacePage() {
       { service: 'rekuperace' },
       fetchOpts,
     ),
-  ])
+  ]);
 
-  const leftDynamicFaqs: FaqEntry[] = []
-  const rightDynamicFaqs: FaqEntry[] = []
+  const leftDynamicFaqs: FaqEntry[] = [];
+  const rightDynamicFaqs: FaqEntry[] = [];
   faqs?.forEach((item, index) => {
     if (index % 2 === 0) {
-      leftDynamicFaqs.push(item)
+      leftDynamicFaqs.push(item);
     } else {
-      rightDynamicFaqs.push(item)
+      rightDynamicFaqs.push(item);
     }
-  })
+  });
   return (
     <ThemeProvider theme="rekuperace">
       <div className="bg-white text-purple-800">
@@ -479,8 +482,8 @@ export default async function RekuperacePage() {
                         className="w-8 h-8 text-primary/20 mb-4 flex-shrink-0"
                         fill="currentColor"
                       />
-                      <p className="text-slate-600 italic mb-6 flex-grow">
-                        &ldquo;{ref.description}&rdquo;
+                      <p className="text-slate-600 italic line-clamp-4">
+                        &ldquo;{truncateText(ref.bodyPreview || ref.description)}&rdquo;
                       </p>
                       <div className="mt-auto pt-5 border-t border-slate-200">
                         <p className="font-bold text-slate-800">{ref.title}</p>
@@ -973,5 +976,5 @@ export default async function RekuperacePage() {
         </section>
       </div>
     </ThemeProvider>
-  )
+  );
 }

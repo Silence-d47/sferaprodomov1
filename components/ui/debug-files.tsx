@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button';
 
 interface DebugFilesProps {
   product: {
@@ -61,5 +61,5 @@ export function DebugFiles({ product }: DebugFilesProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

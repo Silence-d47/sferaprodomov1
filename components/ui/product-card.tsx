@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
 // components/ui/product-card.tsx
-import Image from 'next/image'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { MessageCircle, Eye, X, Shield, Check, Zap, Volume2, Leaf, FileDown } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { MessageCircle, Eye, X, Shield, Check, Zap, Volume2, Leaf, FileDown } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 export interface ProductCardProps {
   title: string
@@ -53,56 +53,56 @@ export function ProductCard({
   brand,
   files,
 }: ProductCardProps) {
-  const placeholder = '/placeholder.jpg'
+  const placeholder = '/placeholder.jpg';
   const safe = (src?: string | null) =>
-    typeof src === 'string' && src.trim() !== '' ? src : placeholder
-  const safeImage = safe(image)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isAnimating, setIsAnimating] = useState(false)
-  const [mainImage, setMainImage] = useState(safeImage)
+    typeof src === 'string' && src.trim() !== '' ? src : placeholder;
+  const safeImage = safe(image);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [mainImage, setMainImage] = useState(safeImage);
 
   useEffect(() => {
-    setMainImage(safeImage)
-  }, [safeImage])
+    setMainImage(safeImage);
+  }, [safeImage]);
 
   // Animace při otevírání/zavírání modálu
   useEffect(() => {
     if (isModalOpen) {
-      setIsAnimating(true)
-      document.body.style.overflow = 'hidden'
+      setIsAnimating(true);
+      document.body.style.overflow = 'hidden';
     } else {
-      setIsAnimating(false)
-      document.body.style.overflow = 'unset'
+      setIsAnimating(false);
+      document.body.style.overflow = 'unset';
     }
-  }, [isModalOpen])
+  }, [isModalOpen]);
 
   // Zavření modálu pomocí ESC klávesy
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && isModalOpen) {
-        handleClose()
+        handleClose();
       }
-    }
+    };
 
     if (isModalOpen) {
-      document.addEventListener('keydown', handleKeyDown)
+      document.addEventListener('keydown', handleKeyDown);
     }
 
     return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [isModalOpen])
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isModalOpen]);
 
   const handleClose = () => {
-    setIsModalOpen(false)
-  }
+    setIsModalOpen(false);
+  };
 
   // Zavření modálu při kliknutí na overlay
   const handleOverlayClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
-      handleClose()
+      handleClose();
     }
-  }
+  };
 
   return (
     <>
@@ -411,5 +411,5 @@ export function ProductCard({
         </div>
       )}
     </>
-  )
+  );
 }

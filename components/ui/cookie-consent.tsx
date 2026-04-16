@@ -1,47 +1,47 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
+import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
-const STORAGE_KEY = 'cookie-consent-v1'
+const STORAGE_KEY = 'cookie-consent-v1';
 
 export function CookieConsent() {
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     try {
-      const value = window.localStorage.getItem(STORAGE_KEY)
+      const value = window.localStorage.getItem(STORAGE_KEY);
       if (!value) {
-        setVisible(true)
+        setVisible(true);
       }
     } catch {
-      setVisible(true)
+      setVisible(true);
     }
-  }, [])
+  }, []);
 
   const acceptAll = () => {
     try {
       window.localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify({ necessary: true, analytics: true, marketing: true }),
-      )
+      );
     } catch {}
-    setVisible(false)
-  }
+    setVisible(false);
+  };
 
   const acceptNecessary = () => {
     try {
       window.localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify({ necessary: true, analytics: false, marketing: false }),
-      )
+      );
     } catch {}
-    setVisible(false)
-  }
+    setVisible(false);
+  };
 
   if (!visible) {
-    return null
+    return null;
   }
 
   return (
@@ -67,5 +67,5 @@ export function CookieConsent() {
         </div>
       </div>
     </div>
-  )
+  );
 }

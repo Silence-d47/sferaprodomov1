@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import { WelcomePopup } from '@/components/ui/welcome-popup'
-import { FloatingConsultationButton } from '@/components/ui/floating-consultation-button'
-import { useWelcomePopup } from '@/hooks/use-welcome-popup'
+import { WelcomePopup } from '@/components/ui/welcome-popup';
+import { FloatingConsultationButton } from '@/components/ui/floating-consultation-button';
+import { useWelcomePopup } from '@/hooks/use-welcome-popup';
 
 interface WelcomePopupProviderProps {
   children: React.ReactNode
@@ -16,7 +16,7 @@ export function WelcomePopupProvider({ children }: WelcomePopupProviderProps) {
     closePopup,
     resetPopup,
     showPopupImmediately,
-  } = useWelcomePopup()
+  } = useWelcomePopup();
 
   // Pro vývojáře - přidání funkcí do window objektu pro testování
   if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
@@ -27,13 +27,13 @@ export function WelcomePopupProvider({ children }: WelcomePopupProviderProps) {
         reset: () => void
         showImmediately: () => void
       }
-    }
+    };
     w.welcomePopup = {
       open: openPopup,
       close: closePopup,
       reset: resetPopup,
       showImmediately: showPopupImmediately,
-    }
+    };
   }
 
   return (
@@ -46,5 +46,5 @@ export function WelcomePopupProvider({ children }: WelcomePopupProviderProps) {
       {/* Plovoucí tlačítko pro konzultaci */}
       <FloatingConsultationButton onOpen={openPopup} isVisible={showFloatingButton} />
     </>
-  )
+  );
 }
