@@ -25,7 +25,9 @@ export default defineConfig({
   schema,
   document: {
     newDocumentOptions: (prev) =>
-      prev.filter((item) => item.templateId !== 'referencePageSettings'),
+      prev.filter(
+        (item) => item.templateId !== 'referencePageSettings' && item.templateId !== 'lead',
+      ),
   },
   plugins: [
     structureTool({ structure }),
