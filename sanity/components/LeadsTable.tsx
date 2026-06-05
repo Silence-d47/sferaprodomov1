@@ -35,9 +35,14 @@ const SERVICE_LABELS: Record<string, string> = {
   jine: 'Jiný dotaz',
 };
 
-const LEADS_QUERY = `*[_type == "lead"] | order(submittedAt desc){
-  _id, submittedAt, name, phone, email, zipCode, service, source, status, message, note,
-  utmSource, utmMedium, utmCampaign, utmTerm, utmContent
+const PAGE_SIZE = 20;
+
+const LEADS_QUERY = `{
+  "items": *[_type == "lead" && ($status == "all" || status == $status)] | order(submittedAt desc)[$start...$end]{
+    _id, submittedAt, name, phone, email, zipCode, service, source, status, message, note,
+    utmSource, utmMedium, utmCampaign, utmTerm, utmContent
+  },
+  "total": count(*[_type == "lead" && ($status == "all" || status == $status)])
 }`;
 
 interface Lead {
@@ -240,28 +245,47 @@ function LeadCard({
   );
 }
 
+interface LeadsPage {
+  items: Lead[];
+  total: number;
+}
+
 export function LeadsTable() {
   const client = useClient({ apiVersion: API_VERSION });
   const toast = useToast();
-  const [leads, setLeads] = useState<Lead[] | null>(null);
+  const [data, setData] = useState<LeadsPage | null>(null);
   const [failed, setFailed] = useState(false);
   const [filter, setFilter] = useState('all');
+  const [page, setPage] = useState(0);
 
   const load = useCallback(() => {
     setFailed(false);
     client
-      .fetch<Lead[]>(LEADS_QUERY)
-      .then(setLeads)
+      .fetch<LeadsPage>(LEADS_QUERY, {
+        status: filter,
+        start: page * PAGE_SIZE,
+        end: page * PAGE_SIZE + PAGE_SIZE,
+      })
+      .then(setData)
       .catch(() => setFailed(true));
-  }, [client]);
+  }, [client, filter, page]);
 
   useEffect(() => {
     load();
   }, [load]);
 
+  const selectFilter = (next: string) => {
+    setPage(0);
+    setFilter(next);
+  };
+
   const handlePatch = useCallback(
     (id: string, fields: Partial<Lead>, successTitle?: string) => {
-      setLeads((prev) => (prev ? prev.map((l) => (l._id === id ? { ...l, ...fields } : l)) : prev));
+      setData((prev) =>
+        prev
+          ? { ...prev, items: prev.items.map((l) => (l._id === id ? { ...l, ...fields } : l)) }
+          : prev,
+      );
       client
         .patch(id)
         .set(fields)
@@ -284,14 +308,14 @@ export function LeadsTable() {
       client
         .delete(id)
         .then(() => {
-          setLeads((prev) => (prev ? prev.filter((l) => l._id !== id) : prev));
           toast.push({ status: 'success', title: 'Poptávka smazána' });
+          load();
         })
         .catch(() => {
           toast.push({ status: 'error', title: 'Smazání se nepodařilo' });
         });
     },
-    [client, toast],
+    [client, toast, load],
   );
 
   if (failed) {
@@ -305,7 +329,7 @@ export function LeadsTable() {
     );
   }
 
-  if (!leads) {
+  if (!data) {
     return (
       <Flex align="center" justify="center" padding={5}>
         <Spinner muted />
@@ -313,22 +337,21 @@ export function LeadsTable() {
     );
   }
 
-  const visible =
-    filter === 'all' ? leads : leads.filter((lead) => (lead.status ?? 'new') === filter);
+  const totalPages = Math.max(1, Math.ceil(data.total / PAGE_SIZE));
 
   return (
     <Box padding={4}>
       <Stack space={4}>
         <Stack space={3}>
           <Flex align="center" justify="space-between">
-            <Text weight="semibold">Počet poptávek: {visible.length}</Text>
+            <Text weight="semibold">Počet poptávek: {data.total}</Text>
             <Button text="Obnovit" mode="ghost" onClick={load} />
           </Flex>
           <Flex gap={2} wrap="wrap">
             <Button
               text="Vše"
               mode={filter === 'all' ? 'default' : 'ghost'}
-              onClick={() => setFilter('all')}
+              onClick={() => selectFilter('all')}
             />
             {STATUS_OPTIONS.map((option) => (
               <Button
@@ -336,18 +359,42 @@ export function LeadsTable() {
                 text={option.label}
                 tone={option.tone}
                 mode={filter === option.value ? 'default' : 'ghost'}
-                onClick={() => setFilter(option.value)}
+                onClick={() => selectFilter(option.value)}
               />
             ))}
           </Flex>
         </Stack>
-        {visible.length === 0 ? (
+        {data.total === 0 ? (
           <Text muted>Žádné poptávky.</Text>
         ) : (
-          <Stack space={2}>
-            {visible.map((lead) => (
-              <LeadCard key={lead._id} lead={lead} onPatch={handlePatch} onDelete={handleDelete} />
-            ))}
+          <Stack space={3}>
+            <Stack space={2}>
+              {data.items.map((lead) => (
+                <LeadCard
+                  key={lead._id}
+                  lead={lead}
+                  onPatch={handlePatch}
+                  onDelete={handleDelete}
+                />
+              ))}
+            </Stack>
+            <Flex align="center" justify="space-between">
+              <Button
+                text="Předchozí"
+                mode="ghost"
+                disabled={page === 0}
+                onClick={() => setPage(page - 1)}
+              />
+              <Text size={1} muted>
+                Stránka {page + 1} z {totalPages}
+              </Text>
+              <Button
+                text="Další"
+                mode="ghost"
+                disabled={page + 1 >= totalPages}
+                onClick={() => setPage(page + 1)}
+              />
+            </Flex>
           </Stack>
         )}
       </Stack>
