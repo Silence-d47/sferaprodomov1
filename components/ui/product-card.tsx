@@ -9,34 +9,34 @@ import { MessageCircle, Eye, X, Shield, Check, Zap, Volume2, Leaf, FileDown } fr
 import { useState, useEffect } from 'react';
 
 export interface ProductCardProps {
-  title: string
-  description: string
-  image: string
-  gallery?: { url: string; alt?: string }[]
-  features: string[]
-  isRecommended?: boolean
-  isBestSelling?: boolean
-  catalogUrl?: string
-  energyClass?: string
+  title: string;
+  description: string;
+  image: string;
+  gallery?: { url: string; alt?: string }[];
+  features: string[];
+  isRecommended?: boolean;
+  isBestSelling?: boolean;
+  catalogUrl?: string;
+  energyClass?: string;
   specifications?: {
-    powerRange?: { min?: number; max?: number }
-    coolingCapacityRange?: { min?: number; max?: number }
-    heatingCapacityRange?: { min?: number; max?: number }
-    noiseLevel?: number
-  }
+    powerRange?: { min?: number; max?: number };
+    coolingCapacityRange?: { min?: number; max?: number };
+    heatingCapacityRange?: { min?: number; max?: number };
+    noiseLevel?: number;
+  };
   price?: {
-    basePrice?: number
-    installationPrice?: number
-    showPrice?: boolean
-  }
-  warranty?: number
-  brand?: string
+    basePrice?: number;
+    installationPrice?: number;
+    showPrice?: boolean;
+  };
+  warranty?: number;
+  brand?: string;
   files?: Array<{
-    _id: string
-    title: string
-    fileUrl: string
-    fileType: string
-  }>
+    _id: string;
+    title: string;
+    fileUrl: string;
+    fileType: string;
+  }>;
 }
 
 export function ProductCard({

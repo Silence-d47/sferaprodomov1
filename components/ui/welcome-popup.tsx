@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useConversionMetrics } from '@/hooks/use-conversion-metrics';
 import { appendUtmToFormData } from '@/lib/utm-params';
+import { submitLeadToSanity } from '@/lib/submit-lead';
 import {
   Select,
   SelectContent,
@@ -16,8 +17,8 @@ import {
 } from '@/components/ui/select';
 
 interface WelcomePopupProps {
-  isOpen: boolean
-  onClose: () => void
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
@@ -65,6 +66,8 @@ export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
       googleFormData.append('service', data.service);
       googleFormData.append('source', data.source);
       appendUtmToFormData(googleFormData);
+
+      void submitLeadToSanity(data);
 
       const response = await fetch(scriptURL, {
         method: 'POST',

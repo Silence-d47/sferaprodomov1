@@ -36,10 +36,10 @@ const colorSchemes = {
 };
 
 export interface ShapedSectionHeaderProps {
-  title: string
-  subtitle: string
-  color?: keyof typeof colorSchemes | 'gray'
-  className?: string
+  title: string;
+  subtitle: string;
+  color?: keyof typeof colorSchemes | 'gray';
+  className?: string;
 }
 
 export function ShapedSectionHeader({

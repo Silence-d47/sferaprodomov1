@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
 /**
  * This configuration is used to for the Sanity Studio that’s mounted on the `\app\studio\[[...tool]]\page.tsx` route
  */
 
-import { defineConfig } from 'sanity'
-import { structureTool } from 'sanity/structure'
-import { visionTool } from '@sanity/vision'
-import { csCZLocale } from '@sanity/locale-cs-cz'
+import { defineConfig } from 'sanity';
+import { structureTool } from 'sanity/structure';
+import { visionTool } from '@sanity/vision';
+import { csCZLocale } from '@sanity/locale-cs-cz';
 
 // Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
-import { apiVersion, dataset, projectId } from './sanity/env'
-import { schema } from './sanity/schemaTypes'
-import { structure } from './sanity/structure'
+import { apiVersion, dataset, projectId } from './sanity/env';
+import { schema } from './sanity/schemaTypes';
+import { structure } from './sanity/structure';
 
 export default defineConfig({
   name: 'default',
@@ -25,7 +25,9 @@ export default defineConfig({
   schema,
   document: {
     newDocumentOptions: (prev) =>
-      prev.filter((item) => item.templateId !== 'referencePageSettings'),
+      prev.filter(
+        (item) => item.templateId !== 'referencePageSettings' && item.templateId !== 'lead',
+      ),
   },
   plugins: [
     structureTool({ structure }),
@@ -34,4 +36,4 @@ export default defineConfig({
     visionTool(),
     csCZLocale(),
   ],
-})
+});

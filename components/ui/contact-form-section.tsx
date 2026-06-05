@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { appendUtmToFormData } from '@/lib/utm-params';
+import { submitLeadToSanity } from '@/lib/submit-lead';
 import { Loader2, Clock, Award, CheckCircle, Mail, Phone, MapPin, ArrowRight } from 'lucide-react';
 
 const colorThemes = {
@@ -72,7 +73,7 @@ const colorThemes = {
   },
 } as const;
 
-type ColorTheme = keyof typeof colorThemes
+type ColorTheme = keyof typeof colorThemes;
 
 function TrustBadge({
   icon: Icon,
@@ -80,10 +81,10 @@ function TrustBadge({
   subtitle,
   gradient,
 }: {
-  icon: React.ComponentType<{ className?: string }>
-  title: string
-  subtitle: string
-  gradient: string
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  subtitle: string;
+  gradient: string;
 }) {
   return (
     <div className="flex items-center gap-4">
@@ -101,10 +102,10 @@ function TrustBadge({
 }
 
 interface ContactFormSectionProps {
-  source?: string
-  customHeading?: string
-  showTrustBadges?: boolean
-  color?: ColorTheme
+  source?: string;
+  customHeading?: string;
+  showTrustBadges?: boolean;
+  color?: ColorTheme;
 }
 
 export function ContactFormSection({
@@ -147,6 +148,8 @@ export function ContactFormSection({
       googleFormData.append('message', data.message);
       googleFormData.append('source', data.source);
       appendUtmToFormData(googleFormData);
+
+      void submitLeadToSanity(data);
 
       const response = await fetch(scriptURL, {
         method: 'POST',

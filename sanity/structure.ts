@@ -1,9 +1,14 @@
 import type { StructureResolver } from 'sanity/structure';
+import { LeadsTable } from './components/LeadsTable';
 
 export const structure: StructureResolver = (S) =>
   S.list()
     .title('Content')
     .items([
+      S.listItem()
+        .title('Poptávky')
+        .child(S.component(LeadsTable).id('leads-table').title('Poptávky')),
+      S.divider(),
       // Blog
       S.listItem()
         .title('Blog')
@@ -61,8 +66,13 @@ export const structure: StructureResolver = (S) =>
       // Regular document types (excluding manually defined ones)
       ...S.documentTypeListItems().filter(
         (listItem) =>
-          !['post', 'author', 'category', 'projectReference', 'referencePageSettings'].includes(
-            listItem.getId() as string,
-          ),
+          ![
+            'post',
+            'author',
+            'category',
+            'projectReference',
+            'referencePageSettings',
+            'lead',
+          ].includes(listItem.getId() as string),
       ),
     ]);

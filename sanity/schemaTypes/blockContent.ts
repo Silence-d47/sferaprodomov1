@@ -60,7 +60,8 @@ export default defineType({
                 if (!url) {
                   return true;
                 }
-                const pattern = /^https:\/\/(www\.)?(youtube\.com\/(watch\?v=|embed\/)|youtu\.be\/)/;
+                const pattern =
+                  /^https:\/\/(www\.)?(youtube\.com\/(watch\?v=|embed\/)|youtu\.be\/)/;
                 return pattern.test(url) || 'Zadejte platný YouTube odkaz';
               }),
         },

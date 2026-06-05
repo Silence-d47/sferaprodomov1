@@ -36,43 +36,43 @@ import { CustomPortableText } from '@/lib/sanity.portableText';
 import { getCroppedImageUrl } from '@/lib/sanity.image-crops';
 import type { PortableTextBlock } from '@portabletext/types';
 
-type CropData = { x: number; y: number; width: number; height: number }
+type CropData = { x: number; y: number; width: number; height: number };
 
 export interface PostData {
-  _id: string
-  title: string
-  subtitle?: string
-  excerpt: string
-  slug: { current: string }
-  categories: string[]
-  author: string
-  publishedAt: string
-  mainImage: string | null
-  mainImageRef?: string
-  mainImageCrops?: Record<string, CropData>
-  body: PortableTextBlock[]
-  readingTime?: number
-  keywords?: string[]
+  _id: string;
+  title: string;
+  subtitle?: string;
+  excerpt: string;
+  slug: { current: string };
+  categories: string[];
+  author: string;
+  publishedAt: string;
+  mainImage: string | null;
+  mainImageRef?: string;
+  mainImageCrops?: Record<string, CropData>;
+  body: PortableTextBlock[];
+  readingTime?: number;
+  keywords?: string[];
   seo?: {
-    metaTitle?: string
-    metaDescription?: string
-  }
+    metaTitle?: string;
+    metaDescription?: string;
+  };
 }
 
 interface Props {
-  post: PostData
-  allPosts: PostData[]
+  post: PostData;
+  allPosts: PostData[];
 }
 
 const categoryConfig: Record<
   string,
   {
-    bg: string
-    text: string
-    border: string
-    icon: React.ComponentType<{ className?: string }>
-    description: string
-    gradient: string
+    bg: string;
+    text: string;
+    border: string;
+    icon: React.ComponentType<{ className?: string }>;
+    description: string;
+    gradient: string;
   }
 > = {
   Klimatizace: {

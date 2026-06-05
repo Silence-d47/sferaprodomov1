@@ -6,13 +6,20 @@ interface OrganicWaveDividerProps {
   className?: string;
 }
 
-export function OrganicWaveDivider({ position = 'bottom', color = '#f8f9fa', className = '' }: OrganicWaveDividerProps) {
+export function OrganicWaveDivider({
+  position = 'bottom',
+  color = '#f8f9fa',
+  className = '',
+}: OrganicWaveDividerProps) {
   const style = {
     transform: position === 'top' ? 'scaleY(-1)' : 'none',
   };
 
   return (
-    <div className={`relative w-full h-20 md:h-28 lg:h-32 overflow-hidden ${className}`} style={style}>
+    <div
+      className={`relative w-full h-20 md:h-28 lg:h-32 overflow-hidden ${className}`}
+      style={style}
+    >
       <svg
         className="absolute top-0 left-0 w-full h-full"
         viewBox="0 0 1200 120"

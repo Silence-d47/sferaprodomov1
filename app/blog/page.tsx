@@ -26,38 +26,38 @@ import { getCroppedImageUrl } from '@/lib/sanity.image-crops';
 import { EnhancedSectionDivider } from '@/components/ui/enhanced-section-divider';
 import { useState, useEffect, useMemo } from 'react';
 
-type CropData = { x: number; y: number; width: number; height: number }
+type CropData = { x: number; y: number; width: number; height: number };
 
 interface Post {
-  _id: string
-  title: string
-  excerpt: string
-  slug: { current: string }
-  categories: string[]
-  author: string
-  publishedAt: string
-  mainImage: string | null
-  mainImageRef?: string
-  mainImageCrops?: Record<string, CropData>
-  readingTime?: number
+  _id: string;
+  title: string;
+  excerpt: string;
+  slug: { current: string };
+  categories: string[];
+  author: string;
+  publishedAt: string;
+  mainImage: string | null;
+  mainImageRef?: string;
+  mainImageCrops?: Record<string, CropData>;
+  readingTime?: number;
 }
 
 interface Category {
-  _id: string
-  title: string
-  description?: string
+  _id: string;
+  title: string;
+  description?: string;
 }
 
 // Category mapping with icons and colors
 const categoryConfig: Record<
   string,
   {
-    bg: string
-    text: string
-    border: string
-    icon: React.ComponentType<{ className?: string }>
-    description: string
-    gradient: string
+    bg: string;
+    text: string;
+    border: string;
+    icon: React.ComponentType<{ className?: string }>;
+    description: string;
+    gradient: string;
   }
 > = {
   Klimatizace: {
@@ -151,7 +151,9 @@ export default function BlogPage() {
 
     // Filter by category
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter((post) => post.categories?.some((cat) => cat === selectedCategory));
+      filtered = filtered.filter((post) =>
+        post.categories?.some((cat) => cat === selectedCategory),
+      );
     }
 
     // Filter by search term

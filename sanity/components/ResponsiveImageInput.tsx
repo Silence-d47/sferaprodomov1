@@ -7,22 +7,22 @@ import { Card, Flex, Stack, Text, Tab, TabList, Box, Button, Badge } from '@sani
 import { CheckmarkCircleIcon, ResetIcon } from '@sanity/icons';
 
 export interface CropConfig {
-  key: string
-  label: string
-  ratio: string
-  aspect: number
+  key: string;
+  label: string;
+  ratio: string;
+  aspect: number;
 }
 
 interface CropData {
-  x: number
-  y: number
-  width: number
-  height: number
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 }
 
 interface ImageValue {
-  asset?: { _ref?: string }
-  deviceCrops?: Record<string, CropData>
+  asset?: { _ref?: string };
+  deviceCrops?: Record<string, CropData>;
 }
 
 function parseDimensions(ref: string): { width: number; height: number } | null {

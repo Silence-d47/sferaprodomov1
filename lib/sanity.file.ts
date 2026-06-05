@@ -1,18 +1,18 @@
 import { client } from './sanity.client';
 
 export interface SanityFile {
-  _id: string
-  title: string
-  fileUrl: string
-  fileType: string
+  _id: string;
+  title: string;
+  fileUrl: string;
+  fileType: string;
 }
 
 interface SanityFileReference {
   file?: {
     asset?: {
-      url?: string
-    }
-  }
+      url?: string;
+    };
+  };
 }
 
 export function getFileUrl(fileAsset: SanityFileReference | null | undefined): string | null {

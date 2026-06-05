@@ -16,25 +16,25 @@ import {
 // ISR fallback if webhook fails
 export const revalidate = 3600;
 
-type CropData = { x: number; y: number; width: number; height: number }
+type CropData = { x: number; y: number; width: number; height: number };
 
 interface SanityRef {
-  _id: string
-  slug?: { current: string }
-  title: string
-  description?: string
-  bodyPreview?: string
-  image: string
-  imageRef?: string
-  deviceCrops?: Record<string, CropData>
-  gallery?: Array<{ url: string; alt?: string }>
-  category: string
-  location?: string
-  year?: string
-  rating?: number
-  highlights?: string[]
-  savings?: string
-  _createdAt?: string
+  _id: string;
+  slug?: { current: string };
+  title: string;
+  description?: string;
+  bodyPreview?: string;
+  image: string;
+  imageRef?: string;
+  deviceCrops?: Record<string, CropData>;
+  gallery?: Array<{ url: string; alt?: string }>;
+  category: string;
+  location?: string;
+  year?: string;
+  rating?: number;
+  highlights?: string[];
+  savings?: string;
+  _createdAt?: string;
 }
 
 export default async function ReferencePage() {

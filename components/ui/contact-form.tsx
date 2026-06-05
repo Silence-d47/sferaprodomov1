@@ -17,11 +17,12 @@ import {
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { appendUtmToFormData } from '@/lib/utm-params';
+import { submitLeadToSanity } from '@/lib/submit-lead';
 import { Loader2, ArrowRight } from 'lucide-react';
 
 // Props jsou zjednodušené. Komponenta se stará pouze o formulář.
 interface ContactFormProps {
-  source?: string
+  source?: string;
 }
 
 export function ContactForm({ source = 'general' }: ContactFormProps) {
@@ -60,6 +61,8 @@ export function ContactForm({ source = 'general' }: ContactFormProps) {
       googleFormData.append('message', data.message);
       googleFormData.append('source', data.source);
       appendUtmToFormData(googleFormData);
+
+      void submitLeadToSanity(data);
 
       const response = await fetch(scriptURL, {
         method: 'POST',

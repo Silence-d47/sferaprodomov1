@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface ExpandableFeaturesProps {
-  features: string[]
+  features: string[];
 }
 
 export function ExpandableFeatures({ features }: ExpandableFeaturesProps) {

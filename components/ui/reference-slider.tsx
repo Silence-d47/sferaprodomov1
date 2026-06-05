@@ -6,18 +6,18 @@ import { Badge } from '@/components/ui/badge';
 import { MapPin, Star } from 'lucide-react';
 
 interface Reference {
-  id: string
-  title: string
-  description: string
-  image: string
-  logo?: string
-  category: string
-  location?: string
-  isTopReference?: boolean
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  logo?: string;
+  category: string;
+  location?: string;
+  isTopReference?: boolean;
 }
 
 interface ReferenceSliderProps {
-  references: Reference[]
+  references: Reference[];
 }
 
 export function ReferenceSlider({ references }: ReferenceSliderProps) {

@@ -16,9 +16,9 @@ export function ImageWithPreview(props: ObjectInputProps) {
 
   const value = props.value as
     | {
-        asset?: { _ref?: string }
-        crop?: { top: number; bottom: number; left: number; right: number }
-        hotspot?: { x: number; y: number; width: number; height: number }
+        asset?: { _ref?: string };
+        crop?: { top: number; bottom: number; left: number; right: number };
+        hotspot?: { x: number; y: number; width: number; height: number };
       }
     | undefined;
 

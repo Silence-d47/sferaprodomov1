@@ -147,7 +147,7 @@ export function TopBar() {
             className="text-white sm:hidden"
             onClick={() => {
               if (typeof window !== 'undefined') {
-                ;(document.querySelector('[data-header-sheet-trigger]') as HTMLElement)?.click();
+                (document.querySelector('[data-header-sheet-trigger]') as HTMLElement)?.click();
               }
             }}
           >

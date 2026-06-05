@@ -27,40 +27,40 @@ import { YouTubePlayer } from '@/components/ui/youtube-player';
 import type { PortableTextBlock } from '@portabletext/types';
 
 export type ReferenceData = {
-  title: string
-  subtitle?: string
-  description?: string
-  body?: PortableTextBlock[]
-  category: string
-  location?: string
-  year?: string
-  mainImage?: string
-  mainImageRef?: string
-  mainImageCrops?: Record<string, { x: number; y: number; width: number; height: number }>
-  youtubeUrl?: string
-  gallery?: string[]
-  rating?: number
-  highlights?: string[]
+  title: string;
+  subtitle?: string;
+  description?: string;
+  body?: PortableTextBlock[];
+  category: string;
+  location?: string;
+  year?: string;
+  mainImage?: string;
+  mainImageRef?: string;
+  mainImageCrops?: Record<string, { x: number; y: number; width: number; height: number }>;
+  youtubeUrl?: string;
+  gallery?: string[];
+  rating?: number;
+  highlights?: string[];
   projectDetails?: {
-    clientType?: string
-    projectSize?: number
-    duration?: number
-    teamSize?: number
-  }
+    clientType?: string;
+    projectSize?: number;
+    duration?: number;
+    teamSize?: number;
+  };
   testimonial?: {
-    quote?: string
-    clientName?: string
-    clientTitle?: string
-  }
-  technicalSpecs?: { label: string; value: string }[]
+    quote?: string;
+    clientName?: string;
+    clientTitle?: string;
+  };
+  technicalSpecs?: { label: string; value: string }[];
   seo?: {
-    metaTitle?: string
-    metaDescription?: string
-  }
-}
+    metaTitle?: string;
+    metaDescription?: string;
+  };
+};
 
 interface Props {
-  reference: ReferenceData
+  reference: ReferenceData;
 }
 
 export default function ReferenceDetail({ reference }: Props) {

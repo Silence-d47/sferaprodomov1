@@ -5,12 +5,12 @@ import { Download } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface PDFDownloadButtonProps {
-  url: string
-  filename: string
-  title?: string
-  className?: string
-  onClick?: () => void
-  height?: string
+  url: string;
+  filename: string;
+  title?: string;
+  className?: string;
+  onClick?: () => void;
+  height?: string;
 }
 
 export function PDFDownloadButton({

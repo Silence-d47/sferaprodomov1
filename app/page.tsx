@@ -117,14 +117,14 @@ const services = [
 ];
 
 type TopReference = {
-  id: string
-  title: string
-  description: string
-  image: string
-  category: string
-  location?: string
-  isTopReference?: boolean
-}
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  category: string;
+  location?: string;
+  isTopReference?: boolean;
+};
 export default async function HomePage() {
   const { client } = await import('@/lib/sanity.client');
   const { heroSlidesQuery, featuredReferencesQuery } = await import('@/lib/sanity.queries');
@@ -133,13 +133,13 @@ export default async function HomePage() {
     client.fetch<UnifiedHeroSlide[]>(heroSlidesQuery),
     client.fetch<
       {
-        slug: { current: string }
-        title: string
-        description?: string
-        image?: string
-        category?: string
-        location?: string
-        isTopReference?: boolean
+        slug: { current: string };
+        title: string;
+        description?: string;
+        image?: string;
+        category?: string;
+        location?: string;
+        isTopReference?: boolean;
       }[]
     >(featuredReferencesQuery),
   ]);

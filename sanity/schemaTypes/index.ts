@@ -11,6 +11,7 @@ import referencePageSettings from './referencePageSettings';
 import fileAsset from './file';
 import employee from './employee';
 import brands from './brands';
+import lead from './lead';
 
 export const schema = {
   types: [
@@ -27,5 +28,6 @@ export const schema = {
     fileAsset,
     employee,
     brands,
+    lead,
   ],
 };

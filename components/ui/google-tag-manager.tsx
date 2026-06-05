@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import Script from 'next/script';
 
@@ -17,7 +17,7 @@ export function GoogleTagManager() {
           })(window,document,'script','dataLayer','${gtmId}');
         `}
       </Script>
-      
+
       {/* Google Tag Manager (noscript) */}
       <noscript>
         <iframe
