@@ -5,8 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import useEmblaCarousel from 'embla-carousel-react';
 
-type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
-type CarouselOptions = UseCarouselParameters[0]
+type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
+type CarouselOptions = UseCarouselParameters[0];
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import Autoplay from 'embla-carousel-autoplay';
 import { Button } from '@/components/ui/button';
@@ -16,20 +16,20 @@ import { cn } from '@/lib/utils'; // Pomocná funkce pro spojování classNames 
 
 // Interface zůstává stejný
 export interface UnifiedHeroSlide {
-  id: string
-  title: string
-  subtitle?: string
-  description?: string
-  bgImage?: string
-  features?: string[]
-  phoneNumber?: string
-  primaryButton?: { text: string; link: string; isActive: boolean }
-  secondaryButton?: { text: string; link: string; isActive: boolean }
+  id: string;
+  title: string;
+  subtitle?: string;
+  description?: string;
+  bgImage?: string;
+  features?: string[];
+  phoneNumber?: string;
+  primaryButton?: { text: string; link: string; isActive: boolean };
+  secondaryButton?: { text: string; link: string; isActive: boolean };
 }
 
 interface UnifiedHeroProps {
-  slides: UnifiedHeroSlide[]
-  options?: CarouselOptions
+  slides: UnifiedHeroSlide[];
+  options?: CarouselOptions;
 }
 
 // Vylepšené varianty animací pro Framer Motion s profesionálními přechody
@@ -172,7 +172,7 @@ export function UnifiedHero({ slides, options }: UnifiedHeroProps) {
       containScroll: 'trimSnaps',
       ...options,
     } as unknown as CarouselOptions & { watchDrag?: boolean } & { watchResize?: boolean } & {
-      watchSlides?: boolean
+      watchSlides?: boolean;
     } & { watchFocus?: boolean },
     [autoplay],
   );

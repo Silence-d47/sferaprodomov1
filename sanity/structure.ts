@@ -1,5 +1,5 @@
-import type { StructureResolver } from 'sanity/structure'
-import { LeadsTable } from './components/LeadsTable'
+import type { StructureResolver } from 'sanity/structure';
+import { LeadsTable } from './components/LeadsTable';
 
 export const structure: StructureResolver = (S) =>
   S.list()
@@ -75,4 +75,4 @@ export const structure: StructureResolver = (S) =>
             'lead',
           ].includes(listItem.getId() as string),
       ),
-    ])
+    ]);

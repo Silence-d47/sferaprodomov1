@@ -5,8 +5,8 @@ import { MessageSquare } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface FloatingConsultationButtonProps {
-  onOpen: () => void
-  isVisible: boolean
+  onOpen: () => void;
+  isVisible: boolean;
 }
 
 export function FloatingConsultationButton({ onOpen, isVisible }: FloatingConsultationButtonProps) {

@@ -2,8 +2,8 @@ import type { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ServiceIconProps {
-  icon: LucideIcon
-  className?: string
+  icon: LucideIcon;
+  className?: string;
 }
 
 export function ServiceIcon({ icon: Icon, className }: ServiceIconProps) {

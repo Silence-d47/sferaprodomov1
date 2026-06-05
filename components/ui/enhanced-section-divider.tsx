@@ -3,12 +3,12 @@
 import React, { useEffect, useState } from 'react';
 
 interface EnhancedSectionDividerProps {
-  variant?: 'wave' | 'organic' | 'geometric'
-  animated?: boolean
-  height?: 'sm' | 'md' | 'lg' | 'xl'
-  fromColor?: string
-  toColor?: string
-  particles?: boolean
+  variant?: 'wave' | 'organic' | 'geometric';
+  animated?: boolean;
+  height?: 'sm' | 'md' | 'lg' | 'xl';
+  fromColor?: string;
+  toColor?: string;
+  particles?: boolean;
 }
 
 export function EnhancedSectionDivider({

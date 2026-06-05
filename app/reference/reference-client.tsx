@@ -24,41 +24,41 @@ import 'slick-carousel/slick/slick-theme.css';
 import { BackgroundVideo } from '@/components/ui/background-video';
 
 export type FeaturedReference = {
-  id: string
-  title: string
-  description?: string
-  image: string
-  category: string
-  location?: string
-  year?: string
-  rating?: number
-  highlights?: string[]
-  savings?: string
-}
+  id: string;
+  title: string;
+  description?: string;
+  image: string;
+  category: string;
+  location?: string;
+  year?: string;
+  rating?: number;
+  highlights?: string[];
+  savings?: string;
+};
 
 export type ListReference = {
-  id: string
-  title: string
-  description?: string
-  image: string
-  category: string
-  location?: string
-  year?: string
-  createdAt?: string
-  rating?: number
-}
+  id: string;
+  title: string;
+  description?: string;
+  image: string;
+  category: string;
+  location?: string;
+  year?: string;
+  createdAt?: string;
+  rating?: number;
+};
 
 export type HeroVideo = {
-  videoWebm?: string
-  videoMp4?: string
-  posterImage?: string
-  videoOpacity?: number
-}
+  videoWebm?: string;
+  videoMp4?: string;
+  posterImage?: string;
+  videoOpacity?: number;
+};
 
 interface Props {
-  featuredReferences: FeaturedReference[]
-  otherReferences: ListReference[]
-  heroVideo: HeroVideo | null
+  featuredReferences: FeaturedReference[];
+  otherReferences: ListReference[];
+  heroVideo: HeroVideo | null;
 }
 
 const CATEGORY_STYLES: Record<string, { bg: string; text: string }> = {

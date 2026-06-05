@@ -30,20 +30,20 @@ import {
 
 // Definice typů pro data ze Sanity
 type FaqEntry = {
-  question: string
-  answer: PortableTextBlock[]
-}
+  question: string;
+  answer: PortableTextBlock[];
+};
 
 type ReferenceCard = {
-  id: string
-  title: string
-  description?: string
-  bodyPreview?: string
-  image: string
-  category: string
-  location?: string
-  isTopReference?: boolean
-}
+  id: string;
+  title: string;
+  description?: string;
+  bodyPreview?: string;
+  image: string;
+  category: string;
+  location?: string;
+  isTopReference?: boolean;
+};
 
 // GROQ dotazy zůstávají stejné
 const faqsQuery = groq`

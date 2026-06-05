@@ -2,15 +2,15 @@ import { Button } from '@/components/ui/button';
 
 interface DebugFilesProps {
   product: {
-    title: string
-    catalogUrl?: string
+    title: string;
+    catalogUrl?: string;
     files?: Array<{
-      _id: string
-      title: string
-      fileUrl: string
-      fileType: string
-    }>
-  }
+      _id: string;
+      title: string;
+      fileUrl: string;
+      fileType: string;
+    }>;
+  };
 }
 
 export function DebugFiles({ product }: DebugFilesProps) {

@@ -11,22 +11,22 @@ export const client = createClient({
 
 // Types
 export interface SanityDocument {
-  _id: string
-  _type: string
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
+  _id: string;
+  _type: string;
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
 }
 
 export interface BlogPost extends SanityDocument {
-  _type: 'post'
-  slug: { current: string }
-  publishedAt?: string
-  title: string
+  _type: 'post';
+  slug: { current: string };
+  publishedAt?: string;
+  title: string;
 }
 
 export interface ProjectReference extends SanityDocument {
-  _type: 'projectReference'
-  slug: { current: string }
-  title: string
+  _type: 'projectReference';
+  slug: { current: string };
+  title: string;
 }

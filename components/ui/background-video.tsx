@@ -4,10 +4,10 @@ import { useState, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
 interface BackgroundVideoProps {
-  videoWebm?: string
-  videoMp4?: string
-  posterImage: string
-  opacity?: number
+  videoWebm?: string;
+  videoMp4?: string;
+  posterImage: string;
+  opacity?: number;
 }
 
 export function BackgroundVideo({

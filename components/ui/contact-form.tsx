@@ -1,41 +1,41 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import type React from 'react'
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import type React from 'react';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { useToast } from '@/hooks/use-toast'
-import { appendUtmToFormData } from '@/lib/utm-params'
-import { submitLeadToSanity } from '@/lib/submit-lead'
-import { Loader2, ArrowRight } from 'lucide-react'
+} from '@/components/ui/select';
+import { useToast } from '@/hooks/use-toast';
+import { appendUtmToFormData } from '@/lib/utm-params';
+import { submitLeadToSanity } from '@/lib/submit-lead';
+import { Loader2, ArrowRight } from 'lucide-react';
 
 // Props jsou zjednodušené. Komponenta se stará pouze o formulář.
 interface ContactFormProps {
-  source?: string
+  source?: string;
 }
 
 export function ContactForm({ source = 'general' }: ContactFormProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const { toast } = useToast()
-  const router = useRouter()
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+    e.preventDefault();
+    setIsSubmitting(true);
 
-    const form = e.currentTarget
-    const formData = new FormData(form)
+    const form = e.currentTarget;
+    const formData = new FormData(form);
     const data = {
       name: formData.get('name') as string,
       phone: formData.get('phone') as string,
@@ -44,53 +44,53 @@ export function ContactForm({ source = 'general' }: ContactFormProps) {
       service: (formData.get('service') as string) || source,
       message: (formData.get('message') as string) || '',
       source: source,
-    }
+    };
 
     // URL vašeho Google Apps Scriptu - stejný jako u welcome popupu
     const scriptURL =
-      'https://script.google.com/macros/s/AKfycbx-qf_oc0ftJqcPvfZSsYhnm37vu89MDHKtKw2TdATRRGNrG8mXboPol4sWXV9JDBKigQ/exec'
+      'https://script.google.com/macros/s/AKfycbx-qf_oc0ftJqcPvfZSsYhnm37vu89MDHKtKw2TdATRRGNrG8mXboPol4sWXV9JDBKigQ/exec';
 
     try {
       // Vytvoříme FormData pro odeslání na Google Script
-      const googleFormData = new FormData()
-      googleFormData.append('email', data.email)
-      googleFormData.append('phone', data.phone)
-      googleFormData.append('name', data.name)
-      googleFormData.append('zipCode', data.zipCode)
-      googleFormData.append('service', data.service)
-      googleFormData.append('message', data.message)
-      googleFormData.append('source', data.source)
-      appendUtmToFormData(googleFormData)
+      const googleFormData = new FormData();
+      googleFormData.append('email', data.email);
+      googleFormData.append('phone', data.phone);
+      googleFormData.append('name', data.name);
+      googleFormData.append('zipCode', data.zipCode);
+      googleFormData.append('service', data.service);
+      googleFormData.append('message', data.message);
+      googleFormData.append('source', data.source);
+      appendUtmToFormData(googleFormData);
 
-      void submitLeadToSanity(data)
+      void submitLeadToSanity(data);
 
       const response = await fetch(scriptURL, {
         method: 'POST',
         body: googleFormData,
-      })
+      });
 
       if (!response.ok) {
-        throw new Error('Chyba při odesílání na server.')
+        throw new Error('Chyba při odesílání na server.');
       }
 
       // Úspěšné odeslání
       toast({
         title: 'Poptávka úspěšně odeslána!',
         description: 'Děkujeme, brzy se vám ozveme s dalšími kroky.',
-      })
-      form.reset()
-      router.push('/dekujeme')
+      });
+      form.reset();
+      router.push('/dekujeme');
     } catch (error) {
-      console.error('Chyba při odesílání:', error)
+      console.error('Chyba při odesílání:', error);
       toast({
         title: 'Něco se pokazilo',
         description: 'Formulář se nepodařilo odeslat. Zkuste to prosím znovu.',
         variant: 'destructive',
-      })
+      });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   // Komponenta nyní vrací přímo formulář, bez nadbytečných obalů.
   return (
@@ -174,5 +174,5 @@ export function ContactForm({ source = 'general' }: ContactFormProps) {
         .
       </p>
     </form>
-  )
+  );
 }

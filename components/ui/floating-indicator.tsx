@@ -4,9 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { Phone, Activity } from 'lucide-react';
 
 interface FloatingIndicatorProps {
-  phoneNumber?: string
-  service?: string
-  location?: string
+  phoneNumber?: string;
+  service?: string;
+  location?: string;
 }
 
 const FloatingIndicator: React.FC<FloatingIndicatorProps> = ({

@@ -4,16 +4,16 @@ import { client } from './sanity.client';
 const builder = imageUrlBuilder(client);
 
 interface CropData {
-  x: number
-  y: number
-  width: number
-  height: number
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 }
 
 interface ImageWithCrops {
-  url?: string
-  ref?: string
-  deviceCrops?: Record<string, CropData>
+  url?: string;
+  ref?: string;
+  deviceCrops?: Record<string, CropData>;
 }
 
 function parseDimensions(ref: string): { width: number; height: number } | null {

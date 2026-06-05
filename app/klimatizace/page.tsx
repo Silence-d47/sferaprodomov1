@@ -29,52 +29,52 @@ import {
 } from 'lucide-react';
 
 interface Product {
-  _id: string
-  title: string
-  description: string
-  image: SanityImage | null
-  imageRef?: string
-  imageCrops?: Record<string, CropData>
-  features: string[]
-  isRecommended?: boolean
-  isBestSelling?: boolean
-  catalogUrl?: string
-  energyClass?: string
+  _id: string;
+  title: string;
+  description: string;
+  image: SanityImage | null;
+  imageRef?: string;
+  imageCrops?: Record<string, CropData>;
+  features: string[];
+  isRecommended?: boolean;
+  isBestSelling?: boolean;
+  catalogUrl?: string;
+  energyClass?: string;
   specifications?: {
-    powerRange?: { min?: number; max?: number }
-    coolingCapacityRange?: { min?: number; max?: number }
-    heatingCapacityRange?: { min?: number; max?: number }
-    noiseLevel?: number
-  }
+    powerRange?: { min?: number; max?: number };
+    coolingCapacityRange?: { min?: number; max?: number };
+    heatingCapacityRange?: { min?: number; max?: number };
+    noiseLevel?: number;
+  };
   price?: {
-    basePrice?: number
-    installationPrice?: number
-    showPrice?: boolean
-  }
-  warranty?: number
-  brand?: string
+    basePrice?: number;
+    installationPrice?: number;
+    showPrice?: boolean;
+  };
+  warranty?: number;
+  brand?: string;
   files?: Array<{
-    _id: string
-    title: string
-    fileUrl: string
-    fileType: string
-  }>
+    _id: string;
+    title: string;
+    fileUrl: string;
+    fileType: string;
+  }>;
 }
 
-type CropData = { x: number; y: number; width: number; height: number }
+type CropData = { x: number; y: number; width: number; height: number };
 
 type ReferenceCard = {
-  id: string
-  title: string
-  description?: string
-  bodyPreview?: string
-  image: string
-  imageRef?: string
-  deviceCrops?: Record<string, CropData>
-  category: string
-  location?: string
-  isTopReference?: boolean
-}
+  id: string;
+  title: string;
+  description?: string;
+  bodyPreview?: string;
+  image: string;
+  imageRef?: string;
+  deviceCrops?: Record<string, CropData>;
+  category: string;
+  location?: string;
+  isTopReference?: boolean;
+};
 
 const referencesQuery = groq`
   *[_type == "projectReference" && isActive != false && category == "klimatizace"] | order(_createdAt desc)[0...9] {
@@ -92,9 +92,9 @@ const referencesQuery = groq`
 `;
 
 type FaqEntry = {
-  question: string
-  answer: PortableTextBlock[]
-}
+  question: string;
+  answer: PortableTextBlock[];
+};
 
 const faqsQuery = groq`
   *[_type == "faq" && isActive == true && category in ["klimatizace", "obecne"]]

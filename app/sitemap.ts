@@ -4,29 +4,29 @@ import { client } from '@/lib/sanity.client';
 
 const baseUrl = 'https://sfera-domov.cz';
 
-type ChangeFrequency = 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never'
+type ChangeFrequency = 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
 
 interface SitemapEntry {
-  url: string
-  lastModified: Date | string
-  changeFrequency: ChangeFrequency
-  priority: number
+  url: string;
+  lastModified: Date | string;
+  changeFrequency: ChangeFrequency;
+  priority: number;
 }
 
 interface BlogPostSitemap {
-  _updatedAt: string
-  publishedAt?: string
+  _updatedAt: string;
+  publishedAt?: string;
   slug: {
-    current: string
-  }
+    current: string;
+  };
 }
 
 interface ReferencePageSitemap {
-  _updatedAt: string
-  _createdAt: string
+  _updatedAt: string;
+  _createdAt: string;
   slug: {
-    current: string
-  }
+    current: string;
+  };
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

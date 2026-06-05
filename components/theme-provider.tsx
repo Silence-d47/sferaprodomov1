@@ -54,19 +54,19 @@ export const themeColors = {
   },
 } as const;
 
-export type ThemeName = keyof typeof themeColors
+export type ThemeName = keyof typeof themeColors;
 
 interface ThemeContextType {
-  theme: ThemeName
-  colors: (typeof themeColors)[ThemeName]
-  setTheme: (theme: ThemeName) => void
+  theme: ThemeName;
+  colors: (typeof themeColors)[ThemeName];
+  setTheme: (theme: ThemeName) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 interface ThemeProviderProps {
-  children: React.ReactNode
-  theme: ThemeName
+  children: React.ReactNode;
+  theme: ThemeName;
 }
 
 export function ThemeProvider({ children, theme }: ThemeProviderProps) {

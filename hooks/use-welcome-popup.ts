@@ -1,43 +1,43 @@
-"use client"
+'use client';
 
-import { useState, useEffect } from "react"
+import { useState, useEffect } from 'react';
 
 export function useWelcomePopup() {
-  const [isPopupOpen, setIsPopupOpen] = useState(false)
-  const [showFloatingButton, setShowFloatingButton] = useState(false)
-  const [hasShownPopup, setHasShownPopup] = useState(false)
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [showFloatingButton, setShowFloatingButton] = useState(false);
+  const [hasShownPopup, setHasShownPopup] = useState(false);
 
   useEffect(() => {
     // Zobrazit plovoucí tlačítko vždy po načtení stránky
-    setShowFloatingButton(true)
-  }, [])
+    setShowFloatingButton(true);
+  }, []);
 
   const openPopup = () => {
-    setIsPopupOpen(true)
-    setHasShownPopup(true)
-    sessionStorage.setItem("welcome-popup-shown", "true")
-  }
+    setIsPopupOpen(true);
+    setHasShownPopup(true);
+    sessionStorage.setItem('welcome-popup-shown', 'true');
+  };
 
   const closePopup = () => {
-    setIsPopupOpen(false)
+    setIsPopupOpen(false);
     // Po zavření popupu zůstane plovoucí tlačítko viditelné
-    setShowFloatingButton(true)
-  }
+    setShowFloatingButton(true);
+  };
 
   // Funkce pro resetování (užitečné pro testování)
   const resetPopup = () => {
-    sessionStorage.removeItem("welcome-popup-shown")
-    setIsPopupOpen(false)
-    setShowFloatingButton(false)
-    setHasShownPopup(false)
-  }
+    sessionStorage.removeItem('welcome-popup-shown');
+    setIsPopupOpen(false);
+    setShowFloatingButton(false);
+    setHasShownPopup(false);
+  };
 
   // Funkce pro okamžité zobrazení popupu (užitečné pro testování)
   const showPopupImmediately = () => {
-    setIsPopupOpen(true)
-    setHasShownPopup(true)
-    sessionStorage.setItem("welcome-popup-shown", "true")
-  }
+    setIsPopupOpen(true);
+    setHasShownPopup(true);
+    sessionStorage.setItem('welcome-popup-shown', 'true');
+  };
 
   return {
     isPopupOpen,
@@ -46,6 +46,6 @@ export function useWelcomePopup() {
     openPopup,
     closePopup,
     resetPopup,
-    showPopupImmediately
-  }
+    showPopupImmediately,
+  };
 }

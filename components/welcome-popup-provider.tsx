@@ -5,7 +5,7 @@ import { FloatingConsultationButton } from '@/components/ui/floating-consultatio
 import { useWelcomePopup } from '@/hooks/use-welcome-popup';
 
 interface WelcomePopupProviderProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export function WelcomePopupProvider({ children }: WelcomePopupProviderProps) {
@@ -22,11 +22,11 @@ export function WelcomePopupProvider({ children }: WelcomePopupProviderProps) {
   if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
     const w = window as Window & {
       welcomePopup?: {
-        open: () => void
-        close: () => void
-        reset: () => void
-        showImmediately: () => void
-      }
+        open: () => void;
+        close: () => void;
+        reset: () => void;
+        showImmediately: () => void;
+      };
     };
     w.welcomePopup = {
       open: openPopup,

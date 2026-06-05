@@ -4,9 +4,9 @@ import React from 'react';
 import Image from 'next/image';
 
 interface LogoCarouselProps {
-  speed?: 'slow' | 'medium' | 'fast'
-  direction?: 'left' | 'right'
-  pauseOnHover?: boolean
+  speed?: 'slow' | 'medium' | 'fast';
+  direction?: 'left' | 'right';
+  pauseOnHover?: boolean;
 }
 
 export function LogoCarousel({

@@ -1,29 +1,29 @@
-import { type NextRequest, NextResponse } from 'next/server'
-import { client } from '@/app/lib/sanity.client'
+import { type NextRequest, NextResponse } from 'next/server';
+import { client } from '@/app/lib/sanity.client';
 
 function cleanString(value: unknown, maxLength: number): string | undefined {
   if (typeof value !== 'string') {
-    return undefined
+    return undefined;
   }
-  const trimmed = value.trim().slice(0, maxLength)
-  return trimmed || undefined
+  const trimmed = value.trim().slice(0, maxLength);
+  return trimmed || undefined;
 }
 
 export async function POST(req: NextRequest) {
   if (!process.env.SANITY_API_TOKEN) {
-    return NextResponse.json({ message: 'Server misconfigured' }, { status: 500 })
+    return NextResponse.json({ message: 'Server misconfigured' }, { status: 500 });
   }
 
-  const body = await req.json().catch(() => null)
+  const body = await req.json().catch(() => null);
   if (!body || typeof body !== 'object') {
-    return NextResponse.json({ message: 'Invalid body' }, { status: 400 })
+    return NextResponse.json({ message: 'Invalid body' }, { status: 400 });
   }
 
-  const email = cleanString(body.email, 200)
-  const phone = cleanString(body.phone, 50)
+  const email = cleanString(body.email, 200);
+  const phone = cleanString(body.phone, 50);
 
   if (!email && !phone) {
-    return NextResponse.json({ message: 'Missing contact' }, { status: 400 })
+    return NextResponse.json({ message: 'Missing contact' }, { status: 400 });
   }
 
   const lead = {
@@ -42,13 +42,13 @@ export async function POST(req: NextRequest) {
     utmTerm: cleanString(body.utm_term, 200),
     utmContent: cleanString(body.utm_content, 200),
     status: 'new',
-  }
+  };
 
   try {
-    await client.create(lead)
-    return NextResponse.json({ ok: true })
+    await client.create(lead);
+    return NextResponse.json({ ok: true });
   } catch (error) {
-    console.error('[Sféra] Uložení poptávky do Sanity selhalo:', error)
-    return NextResponse.json({ message: 'Create failed' }, { status: 502 })
+    console.error('[Sféra] Uložení poptávky do Sanity selhalo:', error);
+    return NextResponse.json({ message: 'Create failed' }, { status: 502 });
   }
 }

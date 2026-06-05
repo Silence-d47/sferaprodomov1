@@ -1,11 +1,11 @@
-import { defineField, defineType } from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 const STATUS_LABELS: Record<string, string> = {
   new: 'Nová',
   contacted: 'Kontaktováno',
   won: 'Vyhráno',
   lost: 'Ztraceno',
-}
+};
 
 export default defineType({
   name: 'lead',
@@ -148,12 +148,12 @@ export default defineType({
             month: 'numeric',
             year: 'numeric',
           })
-        : ''
-      const parts = [date, service, STATUS_LABELS[status] || status].filter(Boolean)
+        : '';
+      const parts = [date, service, STATUS_LABELS[status] || status].filter(Boolean);
       return {
         title: name || email || 'Neznámý kontakt',
         subtitle: parts.join(' · '),
-      }
+      };
     },
   },
   orderings: [
@@ -168,4 +168,4 @@ export default defineType({
       by: [{ field: 'submittedAt', direction: 'asc' }],
     },
   ],
-})
+});

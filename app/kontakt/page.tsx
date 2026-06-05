@@ -15,13 +15,13 @@ import { MapPin, Phone, Mail, CheckCircle, Briefcase, Wrench, Building } from 'l
 
 // --- TYPES ---
 interface Employee {
-  _id: string
-  name: string
-  position: string
-  image?: SanityImage | null
-  phone?: string
-  email?: string
-  isDirector: boolean
+  _id: string;
+  name: string;
+  position: string;
+  image?: SanityImage | null;
+  phone?: string;
+  email?: string;
+  isDirector: boolean;
 }
 
 // --- SUB-KOMPONENTY ---
@@ -109,10 +109,10 @@ export default function ContactPage() {
     value,
     href,
   }: {
-    icon: React.ReactNode
-    title: string
-    value: string
-    href: string
+    icon: React.ReactNode;
+    title: string;
+    value: string;
+    href: string;
   }) => (
     <div>
       <Link

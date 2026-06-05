@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface AutoRedirectProps {
-  to: string
-  seconds: number
+  to: string;
+  seconds: number;
 }
 
 export function AutoRedirect({ to, seconds }: AutoRedirectProps) {

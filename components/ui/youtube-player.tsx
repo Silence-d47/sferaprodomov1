@@ -4,14 +4,14 @@ import { useRef, useState, useEffect, useCallback } from 'react';
 import { Volume2, VolumeX, Maximize } from 'lucide-react';
 
 interface YTPlayer {
-  destroy: () => void
-  mute: () => void
-  unMute: () => void
-  setVolume: (vol: number) => void
-  getCurrentTime: () => number
-  getDuration: () => number
-  seekTo: (seconds: number, allowSeekAhead: boolean) => void
-  getPlayerState: () => number
+  destroy: () => void;
+  mute: () => void;
+  unMute: () => void;
+  setVolume: (vol: number) => void;
+  getCurrentTime: () => number;
+  getDuration: () => number;
+  seekTo: (seconds: number, allowSeekAhead: boolean) => void;
+  getPlayerState: () => number;
 }
 
 interface YTWindow extends Window {
@@ -19,18 +19,18 @@ interface YTWindow extends Window {
     Player: new (
       el: HTMLDivElement,
       config: {
-        videoId: string
-        playerVars: Record<string, number>
-        events: { onReady: () => void; onStateChange?: (e: { data: number }) => void }
+        videoId: string;
+        playerVars: Record<string, number>;
+        events: { onReady: () => void; onStateChange?: (e: { data: number }) => void };
       },
-    ) => YTPlayer
+    ) => YTPlayer;
     PlayerState: {
-      PLAYING: number
-      PAUSED: number
-      ENDED: number
-    }
-  }
-  onYouTubeIframeAPIReady?: () => void
+      PLAYING: number;
+      PAUSED: number;
+      ENDED: number;
+    };
+  };
+  onYouTubeIframeAPIReady?: () => void;
 }
 
 function extractYouTubeId(url: string): string | null {
@@ -83,8 +83,8 @@ function formatTime(seconds: number): string {
 }
 
 interface YouTubePlayerProps {
-  youtubeUrl: string
-  title?: string
+  youtubeUrl: string;
+  title?: string;
 }
 
 export function YouTubePlayer({ youtubeUrl, title = 'Video' }: YouTubePlayerProps) {

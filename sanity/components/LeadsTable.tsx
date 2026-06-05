@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from 'react'
-import { useClient } from 'sanity'
-import { useIntentLink } from 'sanity/router'
+import { useCallback, useEffect, useState } from 'react';
+import { useClient } from 'sanity';
+import { useIntentLink } from 'sanity/router';
 import {
   Box,
   Button,
@@ -13,17 +13,17 @@ import {
   Text,
   TextArea,
   useToast,
-} from '@sanity/ui'
-import { TrashIcon } from '@sanity/icons'
+} from '@sanity/ui';
+import { TrashIcon } from '@sanity/icons';
 
-const API_VERSION = '2026-03-05'
+const API_VERSION = '2026-03-05';
 
 const STATUS_OPTIONS = [
   { value: 'new', label: 'Nová', tone: 'primary', color: '#3b82f6' },
   { value: 'contacted', label: 'Kontaktováno', tone: 'caution', color: '#eab308' },
   { value: 'won', label: 'Vyhráno', tone: 'positive', color: '#22c55e' },
   { value: 'lost', label: 'Ztraceno', tone: 'critical', color: '#ef4444' },
-] as const
+] as const;
 
 const SERVICE_LABELS: Record<string, string> = {
   klimatizace: 'Klimatizace',
@@ -33,35 +33,35 @@ const SERVICE_LABELS: Record<string, string> = {
   fotovoltaika: 'Fotovoltaika',
   servis: 'Servis a revize',
   jine: 'Jiný dotaz',
-}
+};
 
 const LEADS_QUERY = `*[_type == "lead"] | order(submittedAt desc){
   _id, submittedAt, name, phone, email, zipCode, service, source, status, message, note,
   utmSource, utmMedium, utmCampaign, utmTerm, utmContent
-}`
+}`;
 
 interface Lead {
-  _id: string
-  submittedAt?: string
-  name?: string
-  phone?: string
-  email?: string
-  zipCode?: string
-  service?: string
-  source?: string
-  status?: string
-  message?: string
-  note?: string
-  utmSource?: string
-  utmMedium?: string
-  utmCampaign?: string
-  utmTerm?: string
-  utmContent?: string
+  _id: string;
+  submittedAt?: string;
+  name?: string;
+  phone?: string;
+  email?: string;
+  zipCode?: string;
+  service?: string;
+  source?: string;
+  status?: string;
+  message?: string;
+  note?: string;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  utmTerm?: string;
+  utmContent?: string;
 }
 
 function formatDate(value?: string): string {
   if (!value) {
-    return ''
+    return '';
   }
   return new Date(value).toLocaleString('cs-CZ', {
     day: 'numeric',
@@ -69,11 +69,11 @@ function formatDate(value?: string): string {
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
-  })
+  });
 }
 
 function statusColor(status?: string): string {
-  return STATUS_OPTIONS.find((option) => option.value === status)?.color ?? STATUS_OPTIONS[0].color
+  return STATUS_OPTIONS.find((option) => option.value === status)?.color ?? STATUS_OPTIONS[0].color;
 }
 
 function utmFields(lead: Lead): { label: string; value?: string }[] {
@@ -83,7 +83,7 @@ function utmFields(lead: Lead): { label: string; value?: string }[] {
     { label: 'UTM Campaign', value: lead.utmCampaign },
     { label: 'UTM Term', value: lead.utmTerm },
     { label: 'UTM Content', value: lead.utmContent },
-  ]
+  ];
 }
 
 function Field({ label, value, href }: { label: string; value?: string; href?: string }) {
@@ -92,14 +92,14 @@ function Field({ label, value, href }: { label: string; value?: string; href?: s
       <Text size={1} muted style={{ textDecoration: 'line-through' }}>
         {label}
       </Text>
-    )
+    );
   }
   return (
     <Text size={1}>
       <span style={{ opacity: 0.55 }}>{label}: </span>
       {href ? <a href={href}>{value}</a> : value}
     </Text>
-  )
+  );
 }
 
 function DeleteDialog({ onConfirm, onClose }: { onConfirm: () => void; onClose: () => void }) {
@@ -120,7 +120,7 @@ function DeleteDialog({ onConfirm, onClose }: { onConfirm: () => void; onClose: 
         <Text>Opravdu chcete trvale smazat tuto poptávku? Akci nelze vrátit zpět.</Text>
       </Box>
     </Dialog>
-  )
+  );
 }
 
 function LeadCard({
@@ -128,21 +128,21 @@ function LeadCard({
   onPatch,
   onDelete,
 }: {
-  lead: Lead
-  onPatch: (id: string, fields: Partial<Lead>, successTitle?: string) => void
-  onDelete: (id: string) => void
+  lead: Lead;
+  onPatch: (id: string, fields: Partial<Lead>, successTitle?: string) => void;
+  onDelete: (id: string) => void;
 }) {
-  const detail = useIntentLink({ intent: 'edit', params: { id: lead._id, type: 'lead' } })
-  const service = SERVICE_LABELS[lead.service ?? ''] ?? lead.service
-  const utm = utmFields(lead)
-  const [note, setNote] = useState(lead.note ?? '')
-  const [confirmingDelete, setConfirmingDelete] = useState(false)
+  const detail = useIntentLink({ intent: 'edit', params: { id: lead._id, type: 'lead' } });
+  const service = SERVICE_LABELS[lead.service ?? ''] ?? lead.service;
+  const utm = utmFields(lead);
+  const [note, setNote] = useState(lead.note ?? '');
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
 
   const saveNote = () => {
     if (note !== (lead.note ?? '')) {
-      onPatch(lead._id, { note }, 'Poznámka uložena')
+      onPatch(lead._id, { note }, 'Poznámka uložena');
     }
-  }
+  };
 
   return (
     <Card
@@ -231,68 +231,68 @@ function LeadCard({
         <DeleteDialog
           onClose={() => setConfirmingDelete(false)}
           onConfirm={() => {
-            setConfirmingDelete(false)
-            onDelete(lead._id)
+            setConfirmingDelete(false);
+            onDelete(lead._id);
           }}
         />
       )}
     </Card>
-  )
+  );
 }
 
 export function LeadsTable() {
-  const client = useClient({ apiVersion: API_VERSION })
-  const toast = useToast()
-  const [leads, setLeads] = useState<Lead[] | null>(null)
-  const [failed, setFailed] = useState(false)
-  const [filter, setFilter] = useState('all')
+  const client = useClient({ apiVersion: API_VERSION });
+  const toast = useToast();
+  const [leads, setLeads] = useState<Lead[] | null>(null);
+  const [failed, setFailed] = useState(false);
+  const [filter, setFilter] = useState('all');
 
   const load = useCallback(() => {
-    setFailed(false)
+    setFailed(false);
     client
       .fetch<Lead[]>(LEADS_QUERY)
       .then(setLeads)
-      .catch(() => setFailed(true))
-  }, [client])
+      .catch(() => setFailed(true));
+  }, [client]);
 
   useEffect(() => {
-    load()
-  }, [load])
+    load();
+  }, [load]);
 
   const handlePatch = useCallback(
     (id: string, fields: Partial<Lead>, successTitle?: string) => {
-      setLeads((prev) => (prev ? prev.map((l) => (l._id === id ? { ...l, ...fields } : l)) : prev))
+      setLeads((prev) => (prev ? prev.map((l) => (l._id === id ? { ...l, ...fields } : l)) : prev));
       client
         .patch(id)
         .set(fields)
         .commit()
         .then(() => {
           if (successTitle) {
-            toast.push({ status: 'success', title: successTitle })
+            toast.push({ status: 'success', title: successTitle });
           }
         })
         .catch(() => {
-          toast.push({ status: 'error', title: 'Změnu se nepodařilo uložit' })
-          load()
-        })
+          toast.push({ status: 'error', title: 'Změnu se nepodařilo uložit' });
+          load();
+        });
     },
     [client, toast, load],
-  )
+  );
 
   const handleDelete = useCallback(
     (id: string) => {
       client
         .delete(id)
         .then(() => {
-          setLeads((prev) => (prev ? prev.filter((l) => l._id !== id) : prev))
-          toast.push({ status: 'success', title: 'Poptávka smazána' })
+          setLeads((prev) => (prev ? prev.filter((l) => l._id !== id) : prev));
+          toast.push({ status: 'success', title: 'Poptávka smazána' });
         })
         .catch(() => {
-          toast.push({ status: 'error', title: 'Smazání se nepodařilo' })
-        })
+          toast.push({ status: 'error', title: 'Smazání se nepodařilo' });
+        });
     },
     [client, toast],
-  )
+  );
 
   if (failed) {
     return (
@@ -302,7 +302,7 @@ export function LeadsTable() {
           <Button text="Zkusit znovu" onClick={load} />
         </Flex>
       </Box>
-    )
+    );
   }
 
   if (!leads) {
@@ -310,11 +310,11 @@ export function LeadsTable() {
       <Flex align="center" justify="center" padding={5}>
         <Spinner muted />
       </Flex>
-    )
+    );
   }
 
   const visible =
-    filter === 'all' ? leads : leads.filter((lead) => (lead.status ?? 'new') === filter)
+    filter === 'all' ? leads : leads.filter((lead) => (lead.status ?? 'new') === filter);
 
   return (
     <Box padding={4}>
@@ -352,5 +352,5 @@ export function LeadsTable() {
         )}
       </Stack>
     </Box>
-  )
+  );
 }
