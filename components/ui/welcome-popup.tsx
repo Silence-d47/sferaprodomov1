@@ -6,8 +6,7 @@ import { X, Phone, Mail, MapPin, MessageSquare, CheckCircle, Award } from 'lucid
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useConversionMetrics } from '@/hooks/use-conversion-metrics';
-import { appendUtmToFormData } from '@/lib/utm-params';
-import { submitLeadToSanity } from '@/lib/submit-lead';
+import { submitWebsiteLead } from '@/lib/submit-lead';
 import {
   Select,
   SelectContent,
@@ -51,32 +50,8 @@ export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
       source: 'welcome-popup',
     };
 
-    // URL vašeho Google Apps Scriptu
-    const scriptURL =
-      'https://script.google.com/macros/s/AKfycbx-qf_oc0ftJqcPvfZSsYhnm37vu89MDHKtKw2TdATRRGNrG8mXboPol4sWXV9JDBKigQ/exec';
-
     try {
-      // 1. Odeslání dat na Google Script
-      // Vytvoříme FormData znovu, protože Google Script očekává tento formát.
-      // Přidáme datum, pokud ho chceme poslat z frontendu (lepší je ale nechat ho generovat scriptem)
-      const googleFormData = new FormData();
-      googleFormData.append('email', data.email);
-      googleFormData.append('phone', data.phone);
-      googleFormData.append('zipCode', data.zipCode);
-      googleFormData.append('service', data.service);
-      googleFormData.append('source', data.source);
-      appendUtmToFormData(googleFormData);
-
-      void submitLeadToSanity(data);
-
-      const response = await fetch(scriptURL, {
-        method: 'POST',
-        body: googleFormData,
-      });
-
-      if (!response.ok) {
-        throw new Error('Chyba při odesílání do Google Sheets.');
-      }
+      await submitWebsiteLead(formElement, data);
 
       // 2. Uložení konverze lokálně (best-effort — neblokuje redirect)
       saveConversion(data);
