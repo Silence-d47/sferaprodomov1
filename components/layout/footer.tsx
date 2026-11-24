@@ -1,3 +1,7 @@
+'use client';
+
+import { useState } from 'react';
+import { submitWebsiteLead } from '@/lib/submit-lead';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -15,6 +19,22 @@ import {
 } from 'lucide-react';
 
 export function Footer() {
+  const [subscription, setSubscription] = useState<'idle' | 'sending' | 'saved' | 'error'>('idle');
+
+  async function subscribe(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const email = String(new FormData(form).get('email') || '').trim();
+    setSubscription('sending');
+    try {
+      await submitWebsiteLead(form, { email, source: 'footer-newsletter', service: 'Odběr novinek' });
+      form.reset();
+      setSubscription('saved');
+    } catch {
+      setSubscription('error');
+    }
+  }
+
   return (
     <footer className="bg-[#123e61] text-gray-300">
       {' '}
@@ -124,19 +144,25 @@ export function Footer() {
             <p className="text-xs md:text-sm text-gray-400 mb-3 md:mb-4">
               Získejte slevy a tipy z oboru. Žádný spam, slibujeme.
             </p>
-            <form action="/dekujeme" className="flex flex-col sm:flex-row gap-2">
+            <form onSubmit={subscribe} className="flex flex-col sm:flex-row gap-2">
               <input
                 type="email"
+                name="email"
+                required
+                aria-label="E-mail pro odběr novinek"
                 placeholder="Váš e-mail"
                 className="flex-1 bg-white/5 border border-white/20 px-3 md:px-4 py-2 rounded-md text-xs md:text-sm placeholder-gray-400 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all"
               />
               <button
                 type="submit"
+                disabled={subscription === 'sending'}
                 className="bg-blue-600 text-white py-2 px-3 md:px-4 rounded-md font-medium hover:bg-blue-500 transition-colors flex-shrink-0 text-xs md:text-sm"
               >
                 Odebírat
               </button>
             </form>
+            {subscription === 'saved' && <p role="status">Děkujeme, zaznamenali jsme váš zájem o novinky.</p>}
+            {subscription === 'error' && <p role="alert">E-mail se nepodařilo uložit. Zkuste to prosím znovu.</p>}
             {/* Sociální sítě */}
             <div className="mt-6 md:mt-8">
               <h5 className="text-sm md:text-base font-semibold text-white mb-2 md:mb-3">
