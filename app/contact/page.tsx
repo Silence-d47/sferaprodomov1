@@ -13,6 +13,8 @@ import {
 } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
+import { submitWebsiteLead } from '@/lib/submit-lead';
+import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -30,6 +32,7 @@ const formSchema = z.object({
 
 export default function ContactPage() {
   const router = useRouter();
+  const formElement = useRef<HTMLFormElement>(null);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,9 +42,16 @@ export default function ContactPage() {
     },
   });
 
-  function onSubmit() {
-    // TODO: Send form data to API
-    router.push('/dekujeme');
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!formElement.current) {
+      return;
+    }
+    try {
+      await submitWebsiteLead(formElement.current, { ...values, service: 'jine', source: 'contact-page' });
+      router.push('/dekujeme');
+    } catch {
+      form.setError('root', { message: 'Formulář se nepodařilo odeslat. Zkuste to prosím znovu.' });
+    }
   }
 
   return (
@@ -58,7 +68,7 @@ export default function ContactPage() {
           </CardHeader>
           <CardContent>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <form ref={formElement} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <FormField
                   control={form.control}
                   name="name"
@@ -105,7 +115,8 @@ export default function ContactPage() {
                   )}
                 />
 
-                <Button type="submit" className="w-full" size="lg">
+                {form.formState.errors.root && <p role="alert">{form.formState.errors.root.message}</p>}
+                <Button type="submit" disabled={form.formState.isSubmitting} className="w-full" size="lg">
                   Odeslat zprávu
                 </Button>
               </form>

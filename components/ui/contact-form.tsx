@@ -16,8 +16,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { appendUtmToFormData } from '@/lib/utm-params';
-import { submitLeadToSanity } from '@/lib/submit-lead';
+import { submitWebsiteLead } from '@/lib/submit-lead';
 import { Loader2, ArrowRight } from 'lucide-react';
 
 // Props jsou zjednodušené. Komponenta se stará pouze o formulář.
@@ -46,32 +45,8 @@ export function ContactForm({ source = 'general' }: ContactFormProps) {
       source: source,
     };
 
-    // URL vašeho Google Apps Scriptu - stejný jako u welcome popupu
-    const scriptURL =
-      'https://script.google.com/macros/s/AKfycbx-qf_oc0ftJqcPvfZSsYhnm37vu89MDHKtKw2TdATRRGNrG8mXboPol4sWXV9JDBKigQ/exec';
-
     try {
-      // Vytvoříme FormData pro odeslání na Google Script
-      const googleFormData = new FormData();
-      googleFormData.append('email', data.email);
-      googleFormData.append('phone', data.phone);
-      googleFormData.append('name', data.name);
-      googleFormData.append('zipCode', data.zipCode);
-      googleFormData.append('service', data.service);
-      googleFormData.append('message', data.message);
-      googleFormData.append('source', data.source);
-      appendUtmToFormData(googleFormData);
-
-      void submitLeadToSanity(data);
-
-      const response = await fetch(scriptURL, {
-        method: 'POST',
-        body: googleFormData,
-      });
-
-      if (!response.ok) {
-        throw new Error('Chyba při odesílání na server.');
-      }
+      await submitWebsiteLead(form, data);
 
       // Úspěšné odeslání
       toast({
