@@ -43,7 +43,9 @@ export default function ContactPage() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!formElement.current) return;
+    if (!formElement.current) {
+      return;
+    }
     try {
       await submitWebsiteLead(formElement.current, { ...values, service: 'jine', source: 'contact-page' });
       router.push('/dekujeme');
