@@ -183,7 +183,7 @@ export function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
 
               <div className="relative animate-fade-in-up animation-delay-900 group">
                 <Input
-                  name="zipCode"
+                  name="zipCode" autoComplete="postal-code" inputMode="numeric" pattern="[0-9]{3} ?[0-9]{2}" title="Zadejte PSČ ve tvaru 746 01 nebo 74601"
                   placeholder="PSČ (pro ověření lokality)*"
                   required
                   className="h-9 sm:h-10 text-xs sm:text-sm bg-white border-slate-200 focus:border-blue-500 focus:ring-blue-500/50 transition-all duration-300 group-hover:scale-105 group-hover:shadow-md"

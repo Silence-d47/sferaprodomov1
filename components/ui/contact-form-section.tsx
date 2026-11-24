@@ -258,7 +258,7 @@ export function ContactFormSection({
                 <Label htmlFor="zipCode">PSČ</Label>
                 <Input
                   id="zipCode"
-                  name="zipCode"
+                  name="zipCode" autoComplete="postal-code" inputMode="numeric" pattern="[0-9]{3} ?[0-9]{2}" title="Zadejte PSČ ve tvaru 746 01 nebo 74601"
                   required
                   placeholder="746 01"
                   className={theme.focus}
