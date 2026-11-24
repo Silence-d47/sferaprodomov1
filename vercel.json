@@ -17,5 +17,11 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/website-inquiry",
+      "destination": "https://crm.sfera-domov.cz/api/website-inquiry"
+    }
   ]
 }
