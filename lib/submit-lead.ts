@@ -71,17 +71,26 @@ export async function submitWebsiteLead(form: HTMLFormElement, lead: LeadInput):
         data.append(key, value);
       }
     }
-    const response = await fetch(sheetEndpoint, { method: 'POST', body: data, keepalive: true });
-    if (!response.ok) {
+    const response = await fetch(sheetEndpoint, { method: 'POST', body: data, keepalive: true, signal: AbortSignal.timeout(12000) });
+    const receipt = await response.json().catch(() => null);
+    if (!response.ok || receipt?.result !== 'success') {
       throw new Error('Nepodařilo se uložit poptávku do tabulky.');
     }
     attempt.sheetSaved = true;
   }
 
-  attempt.inFlight = Promise.allSettled([saveContact(), saveSheet()]).then(results => {
-    const failure = results.find(result => result.status === 'rejected');
-    if (failure?.status === 'rejected') {
-      throw failure.reason;
+  attempt.inFlight = Promise.allSettled([saveContact(), saveSheet()]).then(async ([crm, sheet]) => {
+    if (crm.status === 'rejected') {
+      throw crm.reason;
+    }
+    if (sheet.status === 'rejected') {
+      // The inquiry is already in CRM. Preserve the missing mirror for the operator.
+      const report = { ...post, body: JSON.stringify({ ...fields, requestId: attempt.id, sheetUnconfirmed: true }) };
+      await fetch('/api/website-inquiry', report).then(response => {
+        if (!response.ok) {
+          throw new Error('Nepodařilo se zaznamenat stav tabulky.');
+        }
+      }).catch(() => console.error('[Sféra] Nepotvrzený zápis poptávky do tabulky.', attempt.id));
     }
     attempts.delete(form);
   }).finally(() => { attempt.inFlight = undefined; });
