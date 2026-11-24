@@ -35,7 +35,7 @@ export async function submitWebsiteLead(form: HTMLFormElement, lead: LeadInput):
 
   const body = JSON.stringify({ ...fields, requestId: attempt.id });
   const post = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body, keepalive: true };
-  if (!attempt.backupStarted) {
+  if (!attempt.backupStarted && lead.source !== 'footer-newsletter') {
     attempt.backupStarted = true;
     void fetch('/api/lead', post).then(response => {
       if (!response.ok) {
