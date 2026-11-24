@@ -25,6 +25,7 @@ const formSchema = z.object({
   email: z.string().email({
     message: 'Zadejte platnou emailovou adresu.',
   }),
+  zipCode: z.string().trim().regex(/^[0-9]{3} ?[0-9]{2}$/, 'Zadejte pětimístné PSČ, například 746 01.'),
   message: z.string().min(10, {
     message: 'Zpráva musí mít alespoň 10 znaků.',
   }),
@@ -38,6 +39,7 @@ export default function ContactPage() {
     defaultValues: {
       name: '',
       email: '',
+      zipCode: '',
       message: '',
     },
   });
@@ -92,6 +94,18 @@ export default function ContactPage() {
                       <FormControl>
                         <Input placeholder="vas@email.cz" type="email" {...field} />
                       </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="zipCode"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>PSČ</FormLabel>
+                      <FormControl><Input required autoComplete="postal-code" inputMode="numeric" placeholder="746 01" {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
