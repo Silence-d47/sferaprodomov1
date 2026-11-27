@@ -5,13 +5,13 @@ export type ClimateIndexRow = {id:string; brand:string; series:string; model:str
 const crm='https://crm.sfera-domov.cz/api/';
 export const climateIndex=cache(async ():Promise<ClimateIndexRow[]>=>{
   const response=await fetch(crm+'modely-klimatizaci',{next:{revalidate:60}});
-  if(!response.ok)throw new Error('Katalog klimatizací je dočasně nedostupný.');
+  if(!response.ok){throw new Error('Katalog klimatizací je dočasně nedostupný.');}
   return response.json();
 });
 export const climateVariant=cache(async (id:string):Promise<Variant|null>=>{
   const response=await fetch(crm+'karta-klimatizace/'+encodeURIComponent(id),{next:{revalidate:60}});
-  if(response.status===404)return null;
-  if(!response.ok)throw new Error('Karta zařízení je dočasně nedostupná.');
+  if(response.status===404){return null;}
+  if(!response.ok){throw new Error('Karta zařízení je dočasně nedostupná.');}
   return response.json();
 });
 export function normalized(value:string){

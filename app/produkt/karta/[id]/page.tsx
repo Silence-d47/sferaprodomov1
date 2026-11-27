@@ -8,12 +8,12 @@ import styles from '../../[slug]/product.module.css';
 type Props={params:Promise<{id:string}>};
 export async function generateMetadata({params}:Props){
   const v=await climateVariant((await params).id);
-  if(!v?.climate)return {};
+  if(!v?.climate){return {};}
   return {title:[v.climate.brand,v.series,v.model,'| Sfera pro domov'].join(' '),description:v.climate.description.slice(0,170)};
 }
 export default async function Page({params}:Props){
   const v=await climateVariant((await params).id);
-  if(!v?.climate)notFound();
+  if(!v?.climate){notFound();}
   const card=v.climate;
   return <main className={styles.page}>
     <nav className={styles.crumb}><Link href="/produkt/karta">Katalog klimatizací</Link></nav>
