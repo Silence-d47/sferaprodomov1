@@ -9,11 +9,14 @@ export const climateIndex=cache(async ():Promise<ClimateIndexRow[]>=>{
   return response.json();
 });
 export const climateVariant=cache(async (id:string):Promise<Variant|null>=>{
-  const response=await fetch(crm+'karta-klimatizace/'+encodeURIComponent(id),{next:{revalidate:60}});
+  const response=await fetch(crm+'karta-klimatizace/'+encodeURIComponent(id)+'?dokumenty=archiv',{next:{revalidate:60}});
   if(response.status===404){return null;}
   if(!response.ok){throw new Error('Karta zařízení je dočasně nedostupná.');}
-  return response.json();
+  return publishedVariant(await response.json());
 });
+export function publishedVariant(row:Variant):Variant{
+  return {...row,documents:row.documents.filter(([,url])=>url.startsWith('https://crm.sfera-domov.cz/katalogy/'))};
+}
 export function normalized(value:string){
   return value.toLowerCase().normalize('NFD').replace(/\p{M}/gu,'').replace(/[^a-z0-9+]+/g,' ').trim();
 }

@@ -3,19 +3,19 @@ import { cache } from 'react';
 import { notFound } from 'next/navigation';
 import { productFamilies, isFamily, type FamilySlug, type Variant } from '@/lib/product-families';
 import ProductDetail from './product-detail';
-import {climateVariant} from '@/lib/climate-catalog';
+import {climateVariant,publishedVariant} from '@/lib/climate-catalog';
 
 type Props = {params:Promise<{slug:string}>;searchParams:Promise<{varianta?:string|string[]}>};
 const site='https://www.sfera-domov.cz';
 
 const variantsFor = cache(async (slug:FamilySlug):Promise<Variant[]>=>{
-  const response=await fetch('https://crm.sfera-domov.cz/api/verejne-produkty/'+slug,{next:{revalidate:60}});
+  const response=await fetch('https://crm.sfera-domov.cz/api/verejne-produkty/'+slug+'?dokumenty=archiv',{next:{revalidate:60}});
   if (!response.ok) { throw new Error('Katalog klimatizací je dočasně nedostupný.'); }
   const data=await response.json();
   if (data.slug !== slug || !Array.isArray(data.variants) || !data.variants.length) {
     throw new Error('Chybějí varianty této řady.');
   }
-  const variants:Variant[]=data.variants;
+  const variants:Variant[]=data.variants.map(publishedVariant);
   return Promise.all(variants.map(async variant=>{
     if((variant.climate?.description.trim().length??0)>=700){return variant;}
     const card=await climateVariant(variant.id);
