@@ -197,12 +197,12 @@ export default async function KlimatizacePageRefined() {
       { service: 'klimatizace' },
       fetchOpts,
     ),
-    climateIndex(),
+    climateIndex().catch(()=>[]),
   ]);
   const catalogCards=await Promise.all(products.map(async product=>{
     const family=familyForTitle(product.title,product.brand);
     const id=matchingModel(index,product.title,product.brand||'')?.id||(family?productFamilies[family].preferred:null);
-    return {product,family,variant:id?await climateVariant(id):null};
+    return {product,family,variant:index.length&&id?await climateVariant(id).catch(()=>null):null};
   }));
 
   const leftDynamicFaqs: FaqEntry[] = [];
@@ -360,7 +360,7 @@ export default async function KlimatizacePageRefined() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
               {catalogCards.map(({product,family,variant})=>{
                 const card=variant?.climate;
-                if(!card||!variant)return <Link key={product._id} className="rounded-xl border p-5" href={'/produkt/karta?q='+encodeURIComponent(product.brand||product.title)}>{product.title} · otevřít katalog</Link>;
+                if(!card||!variant)return <Link key={product._id} className="rounded-xl border p-5" href={family?'/produkt/'+family:'/produkt/karta?q='+encodeURIComponent(product.brand||product.title)}>{product.title} · otevřít katalog</Link>;
                 return <ProductCard key={product._id}
                   family={family?family+'?varianta='+encodeURIComponent(variant.id):'karta/'+encodeURIComponent(variant.id)}
                   title={card.brand+' '+card.series} description={card.description} image={variant.images[0]?.url||''}
