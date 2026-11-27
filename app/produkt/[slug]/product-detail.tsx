@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { productFamilies,kindNames,type FamilySlug,type Kind,type Variant } from '@/lib/product-families';
 import styles from './product.module.css';
@@ -32,7 +33,7 @@ export default function ProductDetail({slug,variants,defaultId}:{slug:FamilySlug
   }
   function switchGroup(rows:Variant[]){
     const nearest=[...rows].sort((a,b)=>Number(b.kind===v.kind)-Number(a.kind===v.kind)||Math.abs(cooling(a)-cooling(v))-Math.abs(cooling(b)-cooling(v)));
-    if(nearest.length)select(nearest[0]);
+    if (nearest.length) { select(nearest[0]); }
   }
   const ret=back?'#navrat='+encodeURIComponent(back.token):'';
   const quote=(back?.url||defaultCalculator)+'?varianta='+encodeURIComponent(v.id)+ret;
@@ -40,14 +41,14 @@ export default function ProductDetail({slug,variants,defaultId}:{slug:FamilySlug
     <nav aria-label="Drobečková navigace" className={styles.crumb}><Link href="/klimatizace#modely">Klimatizace</Link><span>/</span><span>{family.name}</span></nav>
     <div className={styles.hero}><div className={styles.visual}>
       {image&&<figure className={styles.figure}><a href={image.url} target="_blank" rel="noopener noreferrer" aria-label={'Zvětšit fotografii: '+image.caption}>
-        <img src={image.url} alt={image.caption} fetchPriority="high" className={styles.mainPhoto}/></a><figcaption>{image.caption}</figcaption></figure>}
+        <Image src={image.url} alt={image.caption} width={1100} height={800} unoptimized={!image.url.startsWith('https://cdn.sanity.io/')} sizes="(max-width: 760px) 100vw, 52vw" priority className={styles.mainPhoto}/></a><figcaption>{image.caption}</figcaption></figure>}
       {v.images.length>1&&<div className={styles.thumbs} aria-label="Fotogalerie">{v.images.map((item,i)=><button type="button" key={item.url} onClick={()=>setPhoto(i)}
-        aria-label={'Zobrazit fotografii: '+item.caption} aria-pressed={photo===i}><img src={item.url} alt="" loading="lazy"/></button>)}</div>}
+        aria-label={'Zobrazit fotografii: '+item.caption} aria-pressed={photo===i}><Image src={item.url} alt="" width={90} height={68} unoptimized={!item.url.startsWith('https://cdn.sanity.io/')} loading="lazy"/></button>)}</div>}
     </div><div className={styles.intro}><h1>{family.name}</h1><p className={styles.lead}>{family.description}</p>
       <div className={styles.filters}>
         {series.length>1&&<label>Modelová řada<select value={v.series} onChange={e=>switchGroup(variants.filter(r=>r.series===e.target.value))}>{series.map(s=><option key={s}>{s}</option>)}</select></label>}
         <label>Provedení<select value={v.kind} onChange={e=>switchGroup(seriesVariants.filter(r=>r.kind===e.target.value))}>{kinds.map(k=><option value={k} key={k}>{kindNames[k]}</option>)}</select></label>
-        <label>Výkon a varianta<select value={v.id} onChange={e=>{const row=choices.find(r=>r.id===e.target.value);if(row)select(row)}}>{choices.map(r=><option key={r.id} value={r.id}>{label(r)}</option>)}</select></label>
+        <label>Výkon a varianta<select value={v.id} onChange={e=>{const row=choices.find(r=>r.id===e.target.value);if (row) { select(row); }}}>{choices.map(r=><option key={r.id} value={r.id}>{label(r)}</option>)}</select></label>
       </div>
       <div className={styles.actions}><a className={styles.cta} href={quote}>{back?'Vybrat do nabídky':'Spočítat cenu s montáží'}</a>
         {back&&<a href={back.url+ret}>Zpět do rozpracované nabídky</a>}</div>

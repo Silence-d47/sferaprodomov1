@@ -26,7 +26,7 @@ export function isFamily(value:string):value is FamilySlug {
 }
 export function familyForTitle(title:string,brand=''):FamilySlug | undefined {
   const name=(brand+' '+title).toLowerCase();
-  if(name.includes('panasonic') && /\btz\b/.test(name))return 'panasonic-tz';
-  if(name.includes('panasonic') && name.includes('etherea'))return 'panasonic-etherea';
-  if(name.includes('midea') && name.includes('breezeless'))return 'midea-breezeless';
+  if(name.includes('panasonic') && /\btz\b/.test(name)) { return 'panasonic-tz'; }
+  if(name.includes('panasonic') && name.includes('etherea')) { return 'panasonic-etherea'; }
+  if(name.includes('midea') && name.includes('breezeless')) { return 'midea-breezeless'; }
 }

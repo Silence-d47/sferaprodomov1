@@ -9,15 +9,17 @@ const site='https://www.sfera-domov.cz';
 
 const variantsFor = cache(async (slug:FamilySlug):Promise<Variant[]>=>{
   const response=await fetch('https://crm.sfera-domov.cz/api/verejne-produkty/'+slug,{next:{revalidate:600}});
-  if(!response.ok)throw new Error('Katalog klimatizací je dočasně nedostupný.');
+  if (!response.ok) { throw new Error('Katalog klimatizací je dočasně nedostupný.'); }
   const data=await response.json();
-  if(data.slug!==slug||!Array.isArray(data.variants)||!data.variants.length)throw new Error('Chybějí varianty této řady.');
+  if (data.slug !== slug || !Array.isArray(data.variants) || !data.variants.length) {
+    throw new Error('Chybějí varianty této řady.');
+  }
   return data.variants;
 });
 
 export async function generateMetadata({params,searchParams}:Props):Promise<Metadata> {
   const {slug}=await params;
-  if(!isFamily(slug))notFound();
+  if (!isFamily(slug)) { notFound(); }
   const family=productFamilies[slug],url=site+'/produkt/'+slug;
   const rows=await variantsFor(slug), id=(await searchParams).varianta;
   const selected=rows.find(row=>row.id===id)||rows.find(row=>row.id===family.preferred)||rows[0];
@@ -28,7 +30,7 @@ export async function generateMetadata({params,searchParams}:Props):Promise<Meta
 
 export default async function ProductPage({params,searchParams}:Props){
   const {slug}=await params;
-  if(!isFamily(slug))notFound();
+  if (!isFamily(slug)) { notFound(); }
   const family=productFamilies[slug],rows=await variantsFor(slug),id=(await searchParams).varianta;
   const chosen=rows.find(v=>v.id===id) || rows.find(v=>v.id===family.preferred) || rows[0];
   const url=site+'/produkt/'+slug;
