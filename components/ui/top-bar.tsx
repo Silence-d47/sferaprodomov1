@@ -11,25 +11,18 @@ export function TopBar() {
       <div className="container mx-auto px-4 md:px-8 flex items-center justify-between h-full max-w-7xl overflow-hidden">
         {/* Left side - Logo and Contact Info */}
         <div className="flex items-center justify-start space-x-4 md:space-x-6 flex-1 min-w-0">
-          {/* Text - SFÉRA a PRO DOMOV */}
-          <div className="flex flex-col justify-center items-start gap-0">
-            <span className="text-white text-sm md:text-xl font-semibold drop-shadow-lg leading-tight">
-              S F E R A
-            </span>
-            <span className="text-white text-sm md:text-sm font-light drop-shadow-lg leading-none">
-              PRO DOMOV
-            </span>
-          </div>
-
-          {/* Logo - vedle textu */}
-          <Link href="/" className="flex justify-start items-center flex-shrink-0">
+          <Link href="/" aria-label="Sfera pro domov" className="flex shrink-0 items-center gap-2 md:gap-3">
             <Image
               src="/logo-sfera.svg"
-              alt="Sfera"
+              alt=""
               width={120}
               height={60}
               className="h-8 md:h-12 w-auto filter brightness-0 invert"
             />
+            <span className="flex flex-col items-start text-white drop-shadow-lg">
+              <span className="text-sm md:text-xl font-semibold tracking-[0.2em] leading-tight">SFERA</span>
+              <span className="text-sm font-light leading-none">PRO DOMOV</span>
+            </span>
           </Link>
 
           {/* Mobile: Opening hours and phone stacked */}
