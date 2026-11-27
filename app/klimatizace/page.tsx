@@ -1,4 +1,5 @@
-import { familyForTitle } from '@/lib/product-families';
+import {familyForTitle,productFamilies} from '@/lib/product-families';
+import {climateIndex,climateVariant,matchingModel} from '@/lib/climate-catalog';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -11,7 +12,6 @@ import { ProductCard } from '@/components/ui/product-card';
 import { PDFDownloadButton } from '@/components/ui/pdf-download-button';
 import { groq } from 'next-sanity';
 import { serverClient } from '@/lib/sanity.client';
-import { urlForImage } from '@/lib/sanity.image';
 import { productsByCategoryWithFilesQuery, serviceCatalogQuery } from '@/lib/sanity.queries';
 import { getCroppedImageUrl } from '@/lib/sanity.image-crops';
 import type { Image as SanityImage } from 'sanity';
@@ -184,7 +184,7 @@ export const revalidate = 3600;
 export default async function KlimatizacePageRefined() {
   const fetchOpts = { next: { tags: ['products', 'references'] } };
 
-  const [products, references, faqs, catalog] = await Promise.all([
+  const [products, references, faqs, catalog, index] = await Promise.all([
     serverClient.fetch<Product[]>(
       productsByCategoryWithFilesQuery,
       { category: 'klimatizace' },
@@ -197,7 +197,13 @@ export default async function KlimatizacePageRefined() {
       { service: 'klimatizace' },
       fetchOpts,
     ),
+    climateIndex(),
   ]);
+  const catalogCards=await Promise.all(products.map(async product=>{
+    const family=familyForTitle(product.title,product.brand);
+    const id=matchingModel(index,product.title,product.brand||'')?.id||(family?productFamilies[family].preferred:null);
+    return {product,family,variant:id?await climateVariant(id):null};
+  }));
 
   const leftDynamicFaqs: FaqEntry[] = [];
   const rightDynamicFaqs: FaqEntry[] = [];
@@ -352,32 +358,17 @@ export default async function KlimatizacePageRefined() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-              {products.map((product) => (
-                <ProductCard
-                  key={product._id}
-                  family={familyForTitle(product.title,product.brand)}
-                  title={product.title}
-                  description={product.description}
-                  image={
-                    getCroppedImageUrl(
-                      { ref: product.imageRef, deviceCrops: product.imageCrops },
-                      'card',
-                      600,
-                    ) || (product.image ? urlForImage(product.image).url() : '')
-                  }
-                  features={product.features || []}
-                  isRecommended={product.isRecommended}
-                  isBestSelling={product.isBestSelling}
-                  catalogUrl={product.catalogUrl}
-                  energyClass={product.energyClass}
-                  specifications={product.specifications}
-                  price={product.price}
-                  warranty={product.warranty}
-                  brand={product.brand}
-                  files={product.files}
-                />
-              ))}
+              {catalogCards.map(({product,family,variant})=>{
+                const card=variant?.climate;
+                if(!card||!variant)return <Link key={product._id} className="rounded-xl border p-5" href={'/produkt/karta?q='+encodeURIComponent(product.brand||product.title)}>{product.title} · otevřít katalog</Link>;
+                return <ProductCard key={product._id}
+                  family={family?family+'?varianta='+encodeURIComponent(variant.id):'karta/'+encodeURIComponent(variant.id)}
+                  title={card.brand+' '+card.series} description={card.description} image={variant.images[0]?.url||''}
+                  features={card.features} isRecommended={product.isRecommended} isBestSelling={product.isBestSelling}
+                  energyClass={card.facts.find(([k])=>k==='Třída chlazení')?.[1]} brand={card.brand}/>;
+              })}
             </div>
+            <p className="mt-8 text-center"><Link className="underline" href="/produkt/karta">Všechny modely klimatizací</Link></p>
             {catalog?.fileUrl && (
               <div className="mt-8 md:mt-16 text-center">
                 <PDFDownloadButton
