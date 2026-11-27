@@ -35,7 +35,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const response = await fetch('https://crm.sfera-domov.cz/api/verejne-produkty/index', { next: { revalidate: 300 } });
     if (response.ok) {
       const catalog = await response.json();
-      if (Array.isArray(catalog.slugs)) slugs = catalog.slugs.filter((slug: unknown) => typeof slug === 'string');
+      if (Array.isArray(catalog.slugs)) {
+        slugs = catalog.slugs.filter((slug: unknown) => typeof slug === 'string');
+      }
     }
   } catch (error) {
     console.error('Product sitemap unavailable', error);

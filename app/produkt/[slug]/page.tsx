@@ -7,12 +7,12 @@ import ProductDetail from './product-detail';
 type Props={params:Promise<{slug:string}>,searchParams:Promise<{varianta?:string|string[]}>};
 const site='https://www.sfera-domov.cz';
 const familyRows=cache(async(slug:string):Promise<Variant[]>=>{
-  if(!/^[a-z0-9-]{1,100}$/.test(slug))notFound();
+  if(!/^[a-z0-9-]{1,100}$/.test(slug)) { notFound(); }
   const response=await fetch('https://crm.sfera-domov.cz/api/verejne-produkty/'+slug,{cache:'no-store'});
-  if(response.status===404)notFound();
-  if(!response.ok)throw Error('Katalog klimatizací je dočasně nedostupný.');
+  if(response.status===404) { notFound(); }
+  if (!response.ok) { throw Error('Katalog klimatizací je dočasně nedostupný.'); }
   const data=await response.json();
-  if(data.slug!==slug||!Array.isArray(data.variants)||!data.variants.length)notFound();
+  if(data.slug!==slug||!Array.isArray(data.variants)||!data.variants.length) { notFound(); }
   return data.variants;
 });
 async function selection({params,searchParams}:Props){

@@ -11,8 +11,8 @@ export function familyForTitle(title:string,brand=''):string | undefined {
   if(name.includes('panasonic') && /\btz\b/.test(name)) { return 'panasonic-tz'; }
   if(name.includes('panasonic') && name.includes('etherea')) { return 'panasonic-etherea'; }
   if(name.includes('midea') && name.includes('breezeless')){
-    if(/breezeless\s*e\b/.test(name))return 'midea-breezeless-e';
-    if(/breezeless\s*\+/.test(name))return 'midea-breezeless-plus';
+    if(/breezeless\s*e\b/.test(name)) { return 'midea-breezeless-e'; }
+    if(/breezeless\s*\+/.test(name)) { return 'midea-breezeless-plus'; }
     return 'midea-breezeless';
   }
 }
