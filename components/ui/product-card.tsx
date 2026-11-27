@@ -9,6 +9,7 @@ import { MessageCircle, Eye, X, Shield, Check, Zap, Volume2, Leaf, FileDown } fr
 import { useState, useEffect } from 'react';
 
 export interface ProductCardProps {
+  family?: string;
   title: string;
   description: string;
   image: string;
@@ -40,6 +41,7 @@ export interface ProductCardProps {
 }
 
 export function ProductCard({
+  family,
   title,
   description,
   image,
@@ -111,7 +113,7 @@ export function ProductCard({
         {/* Obrázek s badge */}
         <div
           className="relative w-full overflow-hidden aspect-[4/3] bg-gray-50 cursor-pointer"
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => family ? window.location.assign('/produkt/'+family) : setIsModalOpen(true)}
         >
           <Image
             src={safeImage}
@@ -168,6 +170,7 @@ export function ProductCard({
 
           {/* Tlačítka - lepší design a spacing */}
           <div className="mt-auto space-y-3 pt-3">
+            {family ? <Button asChild variant="outline"><Link href={'/produkt/'+family}>Zobrazit produkt</Link></Button> : (
             <Button
               onClick={() => setIsModalOpen(true)}
               variant="outline"
@@ -175,7 +178,7 @@ export function ProductCard({
             >
               <Eye className="mr-2 h-4 w-4" />
               Zobrazit detaily
-            </Button>
+            </Button>)}
 
             <Button
               asChild

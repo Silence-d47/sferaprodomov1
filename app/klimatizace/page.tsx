@@ -1,3 +1,4 @@
+import { familyForTitle } from '@/lib/product-families';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -354,6 +355,7 @@ export default async function KlimatizacePageRefined() {
               {products.map((product) => (
                 <ProductCard
                   key={product._id}
+                  family={familyForTitle(product.title,product.brand)}
                   title={product.title}
                   description={product.description}
                   image={
