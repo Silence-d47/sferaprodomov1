@@ -1,7 +1,7 @@
 'use client';
 import ClimateDetails from '../ClimateDetails';
 import Link from 'next/link';
-import Image from 'next/image';
+import ProductGallery from '../ProductGallery';
 import { useEffect, useState } from 'react';
 import { productFamilies,kindNames,type FamilySlug,type Kind,type Variant } from '@/lib/product-families';
 import styles from './product.module.css';
@@ -14,14 +14,13 @@ const defaultCalculator='https://crm.sfera-domov.cz/poptavka';
 
 export default function ProductDetail({slug,variants,defaultId}:{slug:FamilySlug;variants:Variant[];defaultId:string}){
   const family=productFamilies[slug];
-  const [id,setId]=useState(defaultId),[photo,setPhoto]=useState(0);
+  const [id,setId]=useState(defaultId);
   const [back,setBack]=useState<{url:string;token:string}|null>(null);
   const v=variants.find(row=>row.id===id)||variants[0];
   const series=Array.from(new Set(variants.map(row=>row.series)));
   const seriesVariants=variants.filter(row=>row.series===v.series);
   const kinds=(Object.keys(kindNames) as Kind[]).filter(kind=>seriesVariants.some(row=>row.kind===kind));
   const choices=seriesVariants.filter(row=>row.kind===v.kind).sort((a,b)=>cooling(a)-cooling(b)||a.model.localeCompare(b.model,'cs',{numeric:true}));
-  const image=v.images[photo]||v.images[0];
   useEffect(()=>{
     const hash=new URLSearchParams(location.hash.slice(1)),token=hash.get('navrat');
     if(token && /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i.test(token)){
@@ -29,7 +28,7 @@ export default function ProductDetail({slug,variants,defaultId}:{slug:FamilySlug
     }
   },[]);
   function select(row:Variant){
-    setId(row.id);setPhoto(0);
+    setId(row.id);
     const url=new URL(location.href);url.searchParams.set('varianta',row.id);history.replaceState(history.state,'',url);
   }
   function switchGroup(rows:Variant[]){
@@ -40,12 +39,7 @@ export default function ProductDetail({slug,variants,defaultId}:{slug:FamilySlug
   const quote=(back?.url||defaultCalculator)+'?varianta='+encodeURIComponent(v.id)+ret;
   return <main className={styles.page}>
     <nav aria-label="Drobečková navigace" className={styles.crumb}><Link href="/klimatizace#modely">Klimatizace</Link><span>/</span><span>{family.name}</span></nav>
-    <div className={styles.hero}><div className={styles.visual}>
-      {image&&<figure className={styles.figure}><a href={image.url} target="_blank" rel="noopener noreferrer" aria-label={'Zvětšit fotografii: '+image.caption}>
-        <Image src={image.url} alt={image.caption} width={1100} height={800} unoptimized={!image.url.startsWith('https://cdn.sanity.io/')} sizes="(max-width: 760px) 100vw, 52vw" priority className={styles.mainPhoto}/></a><figcaption>{image.caption}</figcaption></figure>}
-      {v.images.length>1&&<div className={styles.thumbs} aria-label="Fotogalerie">{v.images.map((item,i)=><button type="button" key={item.url} onClick={()=>setPhoto(i)}
-        aria-label={'Zobrazit fotografii: '+item.caption} aria-pressed={photo===i}><Image src={item.url} alt="" width={90} height={68} unoptimized={!item.url.startsWith('https://cdn.sanity.io/')} loading="lazy"/></button>)}</div>}
-    </div><div className={styles.intro}><h1>{v.climate?[v.climate.brand,v.climate.series].join(' '):family.name}</h1><p className={styles.lead}>{v.climate?v.climate.model:family.description}</p>
+    <div className={styles.hero}><ProductGallery key={v.id} images={v.images}/><div className={styles.intro}><h1>{v.climate?[v.climate.brand,v.climate.series].join(' '):family.name}</h1><p className={styles.lead}>{v.climate?v.climate.model:family.description}</p>
       <div className={styles.filters}>
         {series.length>1&&<label>Modelová řada<select value={v.series} onChange={e=>switchGroup(variants.filter(r=>r.series===e.target.value))}>{series.map(s=><option key={s}>{s}</option>)}</select></label>}
         <label>Provedení<select value={v.kind} onChange={e=>switchGroup(seriesVariants.filter(r=>r.kind===e.target.value))}>{kinds.map(k=><option value={k} key={k}>{kindNames[k]}</option>)}</select></label>

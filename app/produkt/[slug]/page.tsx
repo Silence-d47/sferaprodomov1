@@ -3,6 +3,7 @@ import { cache } from 'react';
 import { notFound } from 'next/navigation';
 import { productFamilies, isFamily, type FamilySlug, type Variant } from '@/lib/product-families';
 import ProductDetail from './product-detail';
+import {climateVariant} from '@/lib/climate-catalog';
 
 type Props = {params:Promise<{slug:string}>;searchParams:Promise<{varianta?:string|string[]}>};
 const site='https://www.sfera-domov.cz';
@@ -14,7 +15,12 @@ const variantsFor = cache(async (slug:FamilySlug):Promise<Variant[]>=>{
   if (data.slug !== slug || !Array.isArray(data.variants) || !data.variants.length) {
     throw new Error('Chybějí varianty této řady.');
   }
-  return data.variants;
+  const variants:Variant[]=data.variants;
+  return Promise.all(variants.map(async variant=>{
+    if((variant.climate?.description.trim().length??0)>=700)return variant;
+    const card=await climateVariant(variant.id);
+    return card?.climate ? {...variant,climate:card.climate} : variant;
+  }));
 });
 
 export async function generateMetadata({params,searchParams}:Props):Promise<Metadata> {
@@ -25,7 +31,7 @@ export async function generateMetadata({params,searchParams}:Props):Promise<Meta
   const selected=rows.find(row=>row.id===id)||rows.find(row=>row.id===family.preferred)||rows[0];
   const title=family.name+' – varianty, technické údaje a návody | Sfera pro domov';
   return {title,description:family.description,alternates:{canonical:url},openGraph:{type:'website',locale:'cs_CZ',url,
-    title:id===selected.id?family.name+' · '+selected.model:title,description:family.description,images:selected.images.slice(0,1).map(image=>({url:image.url,alt:image.caption}))}};
+    title:id===selected.id?family.name+' · '+selected.model:title,description:family.description,images:selected.images.filter(({url})=>{const size=url.match(/-(\d+)x(\d+)\.[a-z]+(?:\?|$)/i);return size&&Number(size[1])>Number(size[2]);}).slice(0,1).map(image=>({url:image.url,alt:image.caption}))}};
 }
 
 export default async function ProductPage({params,searchParams}:Props){
