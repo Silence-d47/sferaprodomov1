@@ -46,7 +46,7 @@ export function Footer() {
           <div className="md:col-span-2 lg:col-span-1">
             <Link href="/" className="inline-block mb-3 md:mb-4">
               <h3 className="text-xl md:text-2xl font-bold text-white hover:text-gray-200 transition-colors">
-                SFÉRA - DOMOV.CZ
+                SFERA - DOMOV.CZ
               </h3>
             </Link>
             <p className="text-sm text-gray-400 mb-3 md:mb-4">
@@ -265,7 +265,7 @@ export function Footer() {
         <div className="container px-4 md:px-6">
           <div className="flex flex-col sm:flex-row justify-between items-center text-xs md:text-sm text-gray-400 gap-2 md:gap-4">
             <p className="text-center sm:text-left">
-              @fsk &copy; {new Date().getFullYear()} SFÉRA PRO DOMOV s.r.o. | IČO: 21089230
+              @fsk &copy; {new Date().getFullYear()} SFERA PRO DOMOV s.r.o. | IČO: 21089230
             </p>
             <div className="flex items-center gap-x-2 md:gap-x-4 text-xs md:text-sm">
               <Link
