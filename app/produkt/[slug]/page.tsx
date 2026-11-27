@@ -19,7 +19,7 @@ async function selection({params,searchParams}:Props){
   const {slug}=await params,id=(await searchParams).varianta,rows=await familyRows(slug);
   const selected=rows.find(v=>v.id===id)||rows.find(v=>v.kind==='split')||rows[0];
   if(slug==='midea-breezeless'){
-    const target=selected.series==='Breezeless+'?'midea-breezeless-plus':selected.series==='Breezeless S'?'midea-breezeless-s':'midea-breezeless-e';
+    const target=selected.series==='Breezeless+'?'midea-breezeless-plus':'midea-breezeless-e';
     permanentRedirect('/produkt/'+target+(id===selected.id?'?varianta='+encodeURIComponent(selected.id):''));
   }
   return {rows,selected,url:site+'/produkt/'+slug};
