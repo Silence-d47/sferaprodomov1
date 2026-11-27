@@ -15,11 +15,12 @@ export default function ProductGallery({images}:{images:Variant['images']}){
   useEffect(()=>{
     let active=true;
     for(const {url} of images){
-      if(knownOrientation(url)!==undefined)continue;
+      if(knownOrientation(url)!==undefined){continue;}
       const probe=new window.Image();
       probe.onload=()=>{
-        if(active && probe.naturalWidth>probe.naturalHeight)
+        if(active && probe.naturalWidth>probe.naturalHeight){
           setVerified(prev=>prev.includes(url)?prev:[...prev,url]);
+        }
       };
       probe.src=url;
     }
@@ -27,7 +28,7 @@ export default function ProductGallery({images}:{images:Variant['images']}){
   },[images]);
   const gallery=images.filter(({url})=>knownOrientation(url)??verified.includes(url));
   const photo=gallery.find(item=>item.url===selected)??gallery[0];
-  if(!photo)return null;
+  if(!photo){return null;}
   return <div className={styles.visual}><figure className={styles.figure}>
     <a href={photo.url} target="_blank" rel="noopener noreferrer">
       <Image src={photo.url} alt={photo.caption} width={1100} height={800} unoptimized priority className={styles.mainPhoto}/>

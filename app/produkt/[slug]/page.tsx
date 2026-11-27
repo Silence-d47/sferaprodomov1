@@ -17,7 +17,7 @@ const variantsFor = cache(async (slug:FamilySlug):Promise<Variant[]>=>{
   }
   const variants:Variant[]=data.variants;
   return Promise.all(variants.map(async variant=>{
-    if((variant.climate?.description.trim().length??0)>=700)return variant;
+    if((variant.climate?.description.trim().length??0)>=700){return variant;}
     const card=await climateVariant(variant.id);
     return card?.climate ? {...variant,climate:card.climate} : variant;
   }));
