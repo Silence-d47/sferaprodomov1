@@ -8,7 +8,7 @@ type Props = {params:Promise<{slug:string}>;searchParams:Promise<{varianta?:stri
 const site='https://www.sfera-domov.cz';
 
 const variantsFor = cache(async (slug:FamilySlug):Promise<Variant[]>=>{
-  const response=await fetch('https://crm.sfera-domov.cz/api/verejne-produkty/'+slug,{next:{revalidate:600}});
+  const response=await fetch('https://crm.sfera-domov.cz/api/verejne-produkty/'+slug,{next:{revalidate:60}});
   if (!response.ok) { throw new Error('Katalog klimatizací je dočasně nedostupný.'); }
   const data=await response.json();
   if (data.slug !== slug || !Array.isArray(data.variants) || !data.variants.length) {

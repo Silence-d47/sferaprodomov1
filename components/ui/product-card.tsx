@@ -117,6 +117,7 @@ export function ProductCard({
         >
           <Image
             src={safeImage}
+            unoptimized={!!family && !safeImage.startsWith('https://cdn.sanity.io/')}
             alt={title}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"

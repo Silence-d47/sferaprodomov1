@@ -14,13 +14,14 @@ export const productFamilies = {
 } as const;
 
 export type FamilySlug = keyof typeof productFamilies;
-export type Kind = 'split' | 'indoor' | 'outdoor';
+export type Kind = 'split' | 'indoor' | 'outdoor' | 'mono';
 export interface Variant {
   id: string; model: string; series: string; kind: Kind; color: string; form: string;
+  climate?: {kind:Kind;brand:string;series:string;model:string;cool?:number;facts:[string,string][];reasons:string[];features:string[];description:string;sources:string[]};
   facts: [string,string | number][]; images: {url:string;caption:string}[];
   documents: [string,string][]; reference?:[string,string];
 }
-export const kindNames: Record<Kind,string> = {split:'Splitová sestava',indoor:'Vnitřní jednotka',outdoor:'Venkovní jednotka'};
+export const kindNames: Record<Kind,string> = {mono:'Monoblok',split:'Splitová sestava',indoor:'Vnitřní jednotka',outdoor:'Venkovní jednotka'};
 export function isFamily(value:string):value is FamilySlug {
   return Object.prototype.hasOwnProperty.call(productFamilies,value);
 }
