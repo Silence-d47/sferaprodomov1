@@ -1,4 +1,3 @@
-import { productFamilies } from '@/lib/product-families';
 import { groq } from 'next-sanity';
 import type { MetadataRoute } from 'next';
 import { client } from '@/lib/sanity.client';
@@ -31,9 +30,19 @@ interface ReferencePageSitemap {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  let slugs: string[] = [];
+  try {
+    const response = await fetch('https://crm.sfera-domov.cz/api/verejne-produkty/index', { next: { revalidate: 300 } });
+    if (response.ok) {
+      const catalog = await response.json();
+      if (Array.isArray(catalog.slugs)) slugs = catalog.slugs.filter((slug: unknown) => typeof slug === 'string');
+    }
+  } catch (error) {
+    console.error('Product sitemap unavailable', error);
+  }
   // Static pages with their respective priorities and change frequencies
   const staticPages: SitemapEntry[] = [
-    ...Object.keys(productFamilies).map(slug=>({url:'https://www.sfera-domov.cz/produkt/'+slug,lastModified:new Date(),changeFrequency:'weekly' as const,priority:0.8})),
+    ...slugs.map(slug=>({url:'https://www.sfera-domov.cz/produkt/'+slug,lastModified:new Date(),changeFrequency:'weekly' as const,priority:0.8})),
     {
       url: `${baseUrl}`,
       lastModified: new Date(),
