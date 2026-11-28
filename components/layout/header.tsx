@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu } from 'lucide-react';
@@ -21,6 +22,9 @@ export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  const lightSurface = usePathname().startsWith('/produkt');
+  const darkText = scrolled || lightSurface;
+
   // Změna stylu po odscrollování hero sekce
   useEffect(() => {
     const onScroll = () => {
@@ -33,7 +37,7 @@ export function Header() {
 
   return (
     <header
-      className={`${scrolled ? 'bg-white/30 backdrop-blur-md backdrop-saturate-120 shadow-xl' : 'bg-transparent backdrop-blur-lg'} hidden lg:block fixed top-[70px] md:top-[70px] z-40 left-0 right-0 transition-all duration-300`}
+      className={`${lightSurface ? 'bg-white shadow-sm' : scrolled ? 'bg-white/30 backdrop-blur-md backdrop-saturate-120 shadow-xl' : 'bg-transparent backdrop-blur-lg'} hidden lg:block fixed top-[70px] md:top-[70px] z-40 left-0 right-0 transition-all duration-300`}
     >
       <div className="container mx-auto px-2 md:px-4 flex h-12 md:h-16 items-center justify-between max-w-7xl">
         {/* Desktop Navigation - Right side */}
@@ -43,11 +47,11 @@ export function Header() {
               <div key={item.name} className="flex items-center">
                 <Link
                   href={item.href}
-                  className={`text-sm font-normal px-1 py-1 rounded-lg whitespace-nowrap transition-all duration-300 hover:scale-105 ${scrolled ? 'text-gray-900 hover:text-blue-800' : 'text-white drop-shadow-lg hover:text-blue-200'}`}
+                  className={`text-sm font-normal px-1 py-1 rounded-lg whitespace-nowrap transition-all duration-300 hover:scale-105 ${darkText ? 'text-gray-900 hover:text-blue-800' : 'text-white drop-shadow-lg hover:text-blue-200'}`}
                 >
                   {item.name}
                 </Link>
-                {index < navigation.length - 1 && <span className="text-white/60 mx-1">|</span>}
+                {index < navigation.length - 1 && <span className={`mx-1 ${darkText?'text-slate-300':'text-white/60'}`}>|</span>}
               </div>
             ))}
           </nav>
@@ -60,7 +64,7 @@ export function Header() {
               <Button
                 variant="ghost"
                 size="icon"
-                className={`${scrolled ? 'text-gray-900' : 'text-white drop-shadow-lg'}`}
+                className={`${darkText ? 'text-gray-900' : 'text-white drop-shadow-lg'}`}
               >
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle menu</span>
