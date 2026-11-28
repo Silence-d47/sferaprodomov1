@@ -27,11 +27,12 @@ export default function ProductGallery({images}:{images:Variant['images']}){
     return ()=>{active=false;};
   },[images]);
   const gallery=images.filter(({url})=>knownOrientation(url)??verified.includes(url));
-  const photo=gallery.find(item=>item.url===selected)??gallery[0];
-  if(!photo){return null;}
+  const primary=gallery.find(({url,caption})=>/katalogové vyobrazení/i.test(caption)||url.includes('/api/klimatizace-foto/'));
+  const photo=gallery.find(item=>item.url===selected)??primary??gallery[0];
+  if(!photo){return <div className={styles.visual} />;}
   return <div className={styles.visual}><figure className={styles.figure}>
     <a href={photo.url} target="_blank" rel="noopener noreferrer">
-      <Image src={photo.url} alt={photo.caption} width={1100} height={800} unoptimized priority className={styles.mainPhoto}/>
+      <Image src={photo.url} alt={photo.caption} width={1100} height={800} unoptimized sizes="(max-width: 760px) 92vw, 48vw" priority className={styles.mainPhoto}/>
     </a><figcaption>{photo.caption}</figcaption></figure>
     {gallery.length>1&&<div className={styles.thumbs} aria-label="Fotogalerie">{gallery.map(item=>
       <button type="button" key={item.url} aria-label={item.caption} aria-pressed={photo.url===item.url} onClick={()=>setSelected(item.url)}>

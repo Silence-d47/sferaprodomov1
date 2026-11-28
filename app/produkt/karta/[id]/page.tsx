@@ -1,9 +1,7 @@
 import {notFound} from 'next/navigation';
-import Link from 'next/link';
-import ProductGallery from '../../ProductGallery';
 import {climateVariant} from '@/lib/climate-catalog';
-import ClimateDetails from '../../ClimateDetails';
-import styles from '../../[slug]/product.module.css';
+
+import ProductDetail from '../../[slug]/product-detail';
 
 type Props={params:Promise<{id:string}>};
 export async function generateMetadata({params}:Props){
@@ -14,14 +12,5 @@ export async function generateMetadata({params}:Props){
 export default async function Page({params}:Props){
   const v=await climateVariant((await params).id);
   if(!v?.climate){notFound();}
-  const card=v.climate;
-  return <main className={styles.page}>
-    <nav className={styles.crumb}><Link href="/produkt/karta">Katalog klimatizací</Link></nav>
-    <div className={styles.hero}><ProductGallery images={v.images}/>
-      <div className={styles.intro}><h1>{card.brand} {card.series}</h1><p>{card.model}</p>
-      <Link href={'/produkt/karta?q='+encodeURIComponent(card.brand+' '+card.series)}>Další varianty této řady</Link></div></div>
-    <div className={styles.columns}><ClimateDetails card={card}/><div>
-      {v.documents.length>0&&<section className={styles.panel}><h2>Dokumenty ke stažení</h2><ul className={styles.docs}>{v.documents.map(([name,url])=><li key={url}><a href={url} target="_blank" rel="noopener noreferrer">{name}</a></li>)}</ul></section>}
-      {v.reference&&<section className={styles.panel}><h2>Naše realizace</h2><a href={v.reference[1]}>{v.reference[0]}</a></section>}
-    </div></div></main>;
+  return <ProductDetail variants={[v]} defaultId={v.id}/>;
 }
