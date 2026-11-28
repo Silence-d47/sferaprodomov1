@@ -15,7 +15,7 @@ export const climateVariant=cache(async (id:string):Promise<Variant|null>=>{
   return publishedVariant(await response.json());
 });
 export function publishedVariant(row:Variant):Variant{
-  return {...row,documents:row.documents.filter(([,url])=>url.startsWith('https://crm.sfera-domov.cz/katalogy/'))};
+  return {...row,documents:row.documents.filter(([,url])=>/^https:\/\/crm\.sfera-domov\.cz\/katalogy\/(?:panasonic-rac-2026|midea-rac-2026)\.pdf(?:#page=\d+)?$/.test(url))};
 }
 export function normalized(value:string){
   return value.toLowerCase().normalize('NFD').replace(/\p{M}/gu,'').replace(/[^a-z0-9+]+/g,' ').trim();
