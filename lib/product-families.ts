@@ -19,7 +19,7 @@ export interface Variant {
   id: string; model: string; series: string; kind: Kind; color: string; form: string;
   climate?: {kind:Kind;brand:string;series:string;model:string;cool?:number;facts:[string,string][];reasons:string[];features:string[];description:string;sources:string[]};
   facts: [string,string | number][]; images: {url:string;caption:string}[];
-  documents: [string,string][]; reference?:[string,string];
+  documents: [string,string][]; reference?:[string,string]; referenceCover?:string;
 }
 export const kindNames: Record<Kind,string> = {mono:'Monoblok',split:'Splitová sestava',indoor:'Vnitřní jednotka',outdoor:'Venkovní jednotka'};
 export function isFamily(value:string):value is FamilySlug {
