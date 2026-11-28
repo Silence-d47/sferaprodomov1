@@ -57,7 +57,7 @@
   .note { margin: 0; }
 }
 @media print {
-  body > * { visibility: hidden; }
+  :global(body):has(.page) > * { visibility: hidden; }
   .page, .page * { visibility: visible; }
   .page { position: absolute; inset: 0 auto auto 0; width: 100%; padding: 0; }
   .page::before { content: 'Sfera pro domov'; display: block; color: #1b5d93; font-size: 15pt; margin-bottom: 12pt; }
